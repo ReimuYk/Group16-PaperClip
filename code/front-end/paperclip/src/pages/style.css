@@ -17,3 +17,51 @@
 .nav2>li:nth-child(1){
 	border-right: 1px solid #ddd; 
 }
+#u{
+	background-color: #ddd;
+	height: 100%;
+	width: 100%;
+}
+#u1{
+	display: inline-block;
+	height: 30%;
+	width: 90%;
+	background-color: #ddd;
+}
+
+#u1-1{
+	display: inline-block;
+	height: 100%;
+	width: 20%;
+}
+#u1-2{
+	display: inline-block;
+	height: 100%;
+	width: 40%;
+}
+#u1-3{
+	display: inline-block;
+	height: 100%;
+	width: 40%;
+}
+
+#u2{
+	display: inline-block;
+	height: 70%;
+	width: 90%;
+	background-color: #ddd;
+}
+
+#u2-1{
+	display: inline-block;
+	background-color: aquamarine;
+	height: 100%;
+	width: 70%;
+}
+
+#u2-2{
+	display: inline-block;
+	background-color: #ddd;
+	height: 100%;
+	width: 30%;
+}
