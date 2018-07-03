@@ -3,7 +3,9 @@ import {Link} from 'react-router-dom';
 import { Input, Button , Select, Carousel, List, Avatar } from 'antd';
 import { Row, Col } from 'antd';
 import logo from '.././logo.svg';
+import NavBar from '.././components/nav-bar'
 
+const Search = Input.Search;
 const Option = Select.Option;
 
 class Home extends Component{
@@ -33,7 +35,6 @@ class Home extends Component{
 
 
     renderNav(){
-        console.log(this.state.isLog);
         if(this.state.isLog){
             return(
                 <Row type="flex" align="middle" justify="center">
@@ -62,16 +63,14 @@ class Home extends Component{
             </Select>
         );
         const buttonAfter = (
-            <Link to="/search">
-                <Button type="primary" size="large">Search</Button>
-            </Link>
+            <Link to={"/search/"+this.state.searchIdx}>Search</Link>
         )        
         return(
             <div id="search">
-                <Input
+                <Search
                 addonBefore={selectBefore}
                 placeholder="input search text"
-                suffix={buttonAfter}
+                enterButton={buttonAfter}
                 size="large"
                 onChange={this.changeSearchIdx}
                 />
@@ -129,6 +128,7 @@ class Home extends Component{
         const recomment = this.renderRecomment();
         return(
             <div>
+                <NavBar isLog={this.state.isLog} />
                 {nav}
                 {search}
                 {recomment}

@@ -64,7 +64,7 @@ class App extends Component {
               <Route path='/login' component={Login} />
               <Route path='/note' component={Note} />
               <Route path='/paper' component={Paper} />
-              <Route path='/search' component={Search} />
+              <Route path='/search/:data' component={Search} />
               <Route path='/user' component={User} />
             </Switch>
             </div>
