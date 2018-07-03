@@ -12,7 +12,7 @@ import Note from './pages/notepage';
 import Paper from './pages/paperpage';
 import Search from './pages/searchpage';
 import User from './pages/userpage';
-
+import Register from './pages/RegisterPage'
 class App extends Component {
     render() {
         return (
@@ -66,6 +66,7 @@ class App extends Component {
                             <Route path='/paper' component={Paper} />
                             <Route path='/search' component={Search} />
                             <Route path='/user' component={User} />
+                            <Route path='/register' component={Register} />
                         </Switch>
                     </div>
                 </BrowserRouter>

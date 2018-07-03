@@ -31,35 +31,37 @@ class RegisterPage extends Component {
     render() {
         return (
             <section id='login-page'>
-                <div class="Card SignContainer-content">
-                    <div class="SignContainer-inner">
-                        <div class="Login-content">
-                            <form novalidate class="SignFlow">
-                                <div class="SignFlow-email">
-                                    <div class="SignFlowInput">
-                                        <div class="Input-wrapper">
-                                            <input type="email" id="email" name="email" class="Input" placeholder="邮箱"></input>
+                <div class="SignFlowHomepage">
+                    <div class="Card SignContainer-content">
+                        <div class="SignContainer-inner">
+                            <div class="Login-content">
+                                <form novalidate class="SignFlow">
+                                    <div class="SignFlow-email">
+                                        <div class="SignFlowInput">
+                                            <div class="Input-wrapper">
+                                                <input type="email" id="email" name="email" class="Input" placeholder="邮箱"></input>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="SignFlow-account">
-                                    <div class="SignFlowInput SignFlow-accountInputContainer">
-                                        <div class="SignFlow-accountInput Input-wrapper">
-                                            <input type="text" id="username" name="username" class="Input" placeholder="用户名"></input>
+                                    <div class="SignFlow-account">
+                                        <div class="SignFlowInput SignFlow-accountInputContainer">
+                                            <div class="SignFlow-accountInput Input-wrapper">
+                                                <input type="text" id="username" name="username" class="Input" placeholder="用户名"></input>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="SignFlow-password">
-                                    <div class="SignFlowInput">
-                                        <div class="Input-wrapper">
-                                            <input type="password" id="password" name="password" class="Input" placeholder="密码"></input>
+                                    <div class="SignFlow-password">
+                                        <div class="SignFlowInput">
+                                            <div class="Input-wrapper">
+                                                <input type="password" id="password" name="password" class="Input" placeholder="密码"></input>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <button type="submit" onClick={this.checkRegister} class="Button SignFlow-submitButton Button--primary Button--blue">注册</button>
-                            </form>
+                                    <button type="submit" onClick={this.checkRegister} class="Button SignFlow-submitButton Button--primary Button--blue">注册</button>
+                                </form>
+                            </div>
+                            <div class="SignContainer-switch">已有帐号？<span>登录</span></div>
                         </div>
-                        <div class="SignContainer-switch">已有帐号？<span>登录</span></div>
                     </div>
                 </div>
             </section>
