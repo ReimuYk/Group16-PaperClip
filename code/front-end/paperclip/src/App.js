@@ -13,6 +13,7 @@ import Paper from './pages/paperpage';
 import Search from './pages/searchpage';
 import User from './pages/userpage';
 import Register from './pages/RegisterPage'
+import FindBack from './pages/findbackpage'
 class App extends Component {
     render() {
         return (
@@ -67,6 +68,7 @@ class App extends Component {
                             <Route path='/search' component={Search} />
                             <Route path='/user' component={User} />
                             <Route path='/register' component={Register} />
+                            <Route path='/findback' component={FindBack} />
                         </Switch>
                     </div>
                 </BrowserRouter>

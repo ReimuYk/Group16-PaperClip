@@ -30,7 +30,7 @@ class RegisterPage extends Component {
     }
     render() {
         return (
-            <section id='login-page'>
+            <section id='register-page'>
                 <div class="SignFlowHomepage">
                     <div class="Card SignContainer-content">
                         <div class="SignContainer-inner">
