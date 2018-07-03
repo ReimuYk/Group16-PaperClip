@@ -15,10 +15,10 @@
 }
  
 .nav2>li:nth-child(1){
-	border-right: 1px solid #ddd; 
+	border-right: 1px solid#ffffff; 
 }
 #u{
-	background-color: #ddd;
+	background-color: #ffffff;
 	height: 100%;
 	width: 100%;
 }
@@ -26,18 +26,24 @@
 	display: inline-block;
 	height: 30%;
 	width: 90%;
-	background-color: #ddd;
+	background-color: #ffffff;
 }
 
 #u1-1{
 	display: inline-block;
 	height: 100%;
-	width: 20%;
+	width: 10%;
+	position: relative;
+	top:10%;
+	bottom: 0%;
 }
 #u1-2{
 	display: inline-block;
 	height: 100%;
 	width: 40%;
+	position: relative;
+	top:20%;
+	bottom: 0%;
 }
 #u1-3{
 	display: inline-block;
@@ -49,19 +55,22 @@
 	display: inline-block;
 	height: 70%;
 	width: 90%;
-	background-color: #ddd;
+	background-color: #ffffff;
 }
 
 #u2-1{
 	display: inline-block;
-	background-color: aquamarine;
+	background-color: #d9dfde;
 	height: 100%;
 	width: 70%;
+	position: relative;
+	top:0;
+	bottom: 0;
 }
 
 #u2-2{
 	display: inline-block;
-	background-color: #ddd;
+	background-color: #cce7ee;
 	height: 100%;
 	width: 30%;
 }
