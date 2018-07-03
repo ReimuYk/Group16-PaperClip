@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../css/LoginPage.css'
+import { Link } from 'react-router-dom';
 
 class Login extends Component {
     constructor(props){
@@ -35,10 +36,14 @@ class Login extends Component {
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="Login-options">
+                                        <button type="button" class="Button Login-cannotLogin Button--plain"><Link to="/findback">忘记密码？</Link></button>
+                                    </div>
                                     <button type="submit" onClick={this.login} class="Button SignFlow-submitButton Button--primary Button--blue">登录</button>
                                 </form>
                             </div>
-                            <div class="SignContainer-switch">没有帐号？<span>注册</span></div>
+                            <div class="SignContainer-switch">没有帐号？
+                                <span><Link to="/register">注册</Link></span></div>
                         </div>
                     </div>
                 </div>

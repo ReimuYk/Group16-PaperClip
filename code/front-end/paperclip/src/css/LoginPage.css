@@ -166,18 +166,7 @@ input.Input {
     border-color: #0084ff;
 }
 
-.Button {
-    display: inline-block;
-    padding: 0 16px;
-    font-size: 14px;
-    line-height: 32px;
-    color: #8590a6;
-    text-align: center;
-    cursor: pointer;
-    background: none;
-    border: 1px solid;
-    border-radius: 3px;
-}
+
 .SignContainer-switch {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -191,7 +180,6 @@ input.Input {
     width: 100%;
     background-color: #f6f6f6;
     height: 58px;
-    border-top: 1px solid #ebebeb;
     font-size: 16px;
 }
 .SignContainer-switch span {
@@ -205,18 +193,6 @@ pre {
     margin: 0;
 }
 
-button {
-    padding: 0;
-    font: inherit;
-    color: inherit;
-    cursor: pointer;
-    background: none;
-    border: none;
-    outline: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-}
 .Login-options {
     margin-top: 12px;
     height: 20px;
@@ -228,18 +204,7 @@ button {
     justify-content: space-between;
     background: #fff;
 }
-.Login-cannotLogin {
-    float: right;
-}
 
-.Button--link, .Button--plain {
-    height: auto;
-    padding: 0;
-    line-height: inherit;
-    background-color: transparent;
-    border: none;
-    border-radius: 0;
-}
 .SignFlowHomepage {
     background-image: url(https://static.zhihu.com/heifetz/sign_bg.db29b0fbd2f78dd8c1b7.png);
     background-repeat: no-repeat;

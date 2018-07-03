@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../css/LoginPage.css'
+import { Link } from 'react-router-dom';
 
 class RegisterPage extends Component {
     constructor(props){
@@ -60,7 +61,8 @@ class RegisterPage extends Component {
                                     <button type="submit" onClick={this.checkRegister} class="Button SignFlow-submitButton Button--primary Button--blue">注册</button>
                                 </form>
                             </div>
-                            <div class="SignContainer-switch">已有帐号？<span>登录</span></div>
+                            <div class="SignContainer-switch">已有帐号？
+                                <span><Link to="/login">登录</Link></span></div>
                         </div>
                     </div>
                 </div>

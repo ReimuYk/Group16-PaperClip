@@ -120,7 +120,6 @@ input.Input {
     text-align: center;
     cursor: pointer;
     background: none;
-    border: 1px solid;
     border-radius: 3px;
 }
 body, button, p, pre {
