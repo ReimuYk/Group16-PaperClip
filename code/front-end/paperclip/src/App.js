@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {BrowserRouter} from 'react-router-dom'
 import { Switch, Route, Link } from 'react-router-dom'
-import page1 from './pages/page1'
+import Home from './pages/homepage'
 
 import logo from './logo.svg';
 import './App.css';
@@ -24,14 +24,14 @@ class App extends Component {
                 </Link>
             </li>
             <li>
-                <Link tag="div" class="tab-item" to="/page1" >
-                <span>page1</span>
+                <Link tag="div" class="tab-item" to="/home" >
+                <span>首页</span>
                 </Link>
             </li>
             </ul>
             
             <Switch>
-              <Route path='/page1' component={page1}/>
+              <Route path='/home' component={Home}/>
               {/* <Route path='/index' component={index}/> */}
             </Switch>
             </div>
