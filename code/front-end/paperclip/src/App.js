@@ -17,7 +17,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
+        {/*<header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
         </header>
@@ -55,8 +55,9 @@ class App extends Component {
                 <span>我的</span>
                 </Link>
               </li>
-            </ul>
-            
+    </ul>*/}
+          <BrowserRouter>
+            <div>
             <Switch>
               <Route exact path='/' component={Home} />
               <Route path='/home' component={Home} />
@@ -69,7 +70,6 @@ class App extends Component {
             </div>
           </BrowserRouter>
           
-          </div>
       </div>
     );
   }
