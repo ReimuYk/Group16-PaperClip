@@ -46,7 +46,7 @@ class NavBar extends Component{
                         <Col span={5}><Link to="/"><img src={logo} width="60px" height="60px" alt="logo"/>Paperclip</Link></Col>
                         <Col span={8}>{search}</Col>
                         <Col span={1} offset={9}>
-                            <Link to="user"><Avatar style={{ backgroundColor: '#87d068' }} icon="user" /></Link>
+                            <Link to="/user"><Avatar style={{ backgroundColor: '#87d068' }} icon="user" /></Link>
                         </Col>
                         <Col span={1}>user</Col>
                     </Row>

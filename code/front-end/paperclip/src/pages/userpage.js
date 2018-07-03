@@ -3,7 +3,7 @@ import { Icon, Divider } from 'antd';
 import '../css/style.css';
 
 /* should get from server */
-//import uh1 from './../statics/uh.jpg';
+import uh1 from '.././statics/uh.jpg';
 const followno = 233;
 const fensno   = 23;
 
@@ -14,7 +14,7 @@ class User extends Component{
                 <div>
                 <div id='u1'>
                     <div id='u1-1'>
-                        <img alt='' src=""
+                        <img alt='' src={uh1}
                         style={{width:130,height:'130px',borderRadius:'50%',margin:'0 auto',display:'block'}}
                         />
                     </div>
