@@ -7,7 +7,7 @@ import './App.css';
 import 'antd/dist/antd.css';
 
 import Home from './pages/homepage';
-import Login from './pages/loginpage';
+import Login from './pages/LoginPage';
 import Note from './pages/notepage';
 import Paper from './pages/paperpage';
 import Search from './pages/searchpage';
@@ -69,10 +69,10 @@ class App extends Component {
             </Switch>
             </div>
           </BrowserRouter>
-          
+
       </div>
-    );
-  }
+        );
+    }
 }
 
 export default App;

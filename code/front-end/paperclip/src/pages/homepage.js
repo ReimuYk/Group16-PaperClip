@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import { Input, Button , Select, Carousel, List, Avatar } from 'antd';
+import { Input, Select, Carousel, List, Avatar } from 'antd';
 import { Row, Col } from 'antd';
+import { Anchor } from 'antd';
 import logo from '.././logo.svg';
 import NavBar from '.././components/nav-bar'
 
@@ -18,13 +19,16 @@ class Home extends Component{
        
         this.state = {
             isLog:false,
-            searchIdx: ""
+            searchIdx: "empty"
         }
     }
 
     changeSearchIdx(e){
-        this.setState({searchIdx:e.target.value});
-        console.log("search : " + e.target.value);
+        var idx = e.target.value;
+        if(idx == ""){
+            idx = "empty";
+        }
+        this.setState({searchIdx:idx});
     }
     selectChange(value){
         console.log("select idx: " + value);
@@ -37,20 +41,24 @@ class Home extends Component{
     renderNav(){
         if(this.state.isLog){
             return(
+                <Anchor>
                 <Row type="flex" align="middle" justify="center">
                     <Col span={5}><img src={logo} width="60px" height="60px" alt="logo"/>Paperclip</Col>
                     <Col span={1} offset={17}><Avatar style={{ backgroundColor: '#87d068' }} icon="user" /></Col>
                     <Col span={1}>user</Col>
                 </Row>
+                </Anchor>
             )
         }
         else{
             return(
+                <Anchor>
                 <Row type="flex" align="middle" justify="center">
                     <Col span={5}><img src={logo} width="60px" height="60px" alt="logo"/>Paperclip</Col>
                     <Col span={1} offset={17}><Avatar icon="user" /></Col>
                     <Col span={1}><Link to="/login">Log in</Link></Col>
                 </Row>
+                </Anchor>
             )
         }
     }
@@ -128,7 +136,6 @@ class Home extends Component{
         const recomment = this.renderRecomment();
         return(
             <div>
-                <NavBar isLog={this.state.isLog} />
                 {nav}
                 {search}
                 {recomment}

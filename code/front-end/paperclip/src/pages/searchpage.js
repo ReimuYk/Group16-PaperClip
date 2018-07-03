@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Input, Icon, Button, Table } from 'antd';
+import NavBar from '.././components/nav-bar';
 
 /* fake data...
  * 
@@ -61,6 +62,7 @@ class Search extends Component{
         }]
         return(
             <div>
+                <NavBar />
                 <Table columns={columns} dataSource={paper} />
             </div>
         )
