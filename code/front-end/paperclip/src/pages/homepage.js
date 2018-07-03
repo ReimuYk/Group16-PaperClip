@@ -4,7 +4,8 @@ import { Input, Select, Carousel, List, Avatar } from 'antd';
 import { Row, Col } from 'antd';
 import { Anchor } from 'antd';
 import logo from '.././logo.svg';
-import NavBar from '.././components/nav-bar'
+import {log} from '../pages/loginpage';
+import {log1} from '../pages/RegisterPage';
 
 const Search = Input.Search;
 const Option = Select.Option;
@@ -15,14 +16,12 @@ class Home extends Component{
 
         this.changeSearchIdx = this.changeSearchIdx.bind(this);
         this.selectChange = this.selectChange.bind(this);
-        this.click = this.click.bind(this);
        
         this.state = {
-            isLog:false,
             searchIdx: "empty"
         }
     }
-
+    
     changeSearchIdx(e){
         var idx = e.target.value;
         if(idx == ""){
@@ -33,18 +32,16 @@ class Home extends Component{
     selectChange(value){
         console.log("select idx: " + value);
     }
-    click(e){
-        this.setState({isLog:true});
-    }
-
 
     renderNav(){
-        if(this.state.isLog){
+        if(log||log1){
             return(
                 <Anchor>
                 <Row type="flex" align="middle" justify="center">
                     <Col span={5}><img src={logo} width="60px" height="60px" alt="logo"/>Paperclip</Col>
-                    <Col span={1} offset={17}><Avatar style={{ backgroundColor: '#87d068' }} icon="user" /></Col>
+                    <Col span={1} offset={17}>
+                        <Link to="user"><Avatar style={{ backgroundColor: '#87d068' }} icon="user" /></Link>
+                    </Col>
                     <Col span={1}>user</Col>
                 </Row>
                 </Anchor>
@@ -145,3 +142,4 @@ class Home extends Component{
 }
 
 export default Home;
+

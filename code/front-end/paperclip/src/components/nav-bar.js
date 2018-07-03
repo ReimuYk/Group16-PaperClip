@@ -4,6 +4,8 @@ import { Input,Icon, Avatar } from 'antd';
 import { Row, Col } from 'antd';
 import { Anchor } from 'antd';
 import {Link} from 'react-router-dom';
+import {log} from '../pages/loginpage';
+import {log1} from '../pages/RegisterPage';
 const Search = Input.Search;
 
 class NavBar extends Component{
@@ -37,13 +39,15 @@ class NavBar extends Component{
                 onChange={this.changeSearchIdx}
                 />
         )
-        if(this.state.isLog){
+        if(log||log1){
             return(
                 <Anchor>
                     <Row type="flex" align="middle" justify="center">
                         <Col span={5}><Link to="/"><img src={logo} width="60px" height="60px" alt="logo"/>Paperclip</Link></Col>
                         <Col span={8}>{search}</Col>
-                        <Col span={1} offset={9}><Avatar style={{ backgroundColor: '#87d068' }} icon="user" /></Col>
+                        <Col span={1} offset={9}>
+                            <Link to="user"><Avatar style={{ backgroundColor: '#87d068' }} icon="user" /></Link>
+                        </Col>
                         <Col span={1}>user</Col>
                     </Row>
                 </Anchor>
