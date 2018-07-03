@@ -41,7 +41,7 @@ class NavBar extends Component{
             return(
                 <Anchor>
                     <Row type="flex" align="middle" justify="center">
-                        <Col span={5}><img src={logo} width="60px" height="60px" alt="logo"/>Paperclip</Col>
+                        <Col span={5}><Link to="/"><img src={logo} width="60px" height="60px" alt="logo"/>Paperclip</Link></Col>
                         <Col span={8}>{search}</Col>
                         <Col span={1} offset={9}><Avatar style={{ backgroundColor: '#87d068' }} icon="user" /></Col>
                         <Col span={1}>user</Col>
@@ -53,7 +53,7 @@ class NavBar extends Component{
             return(
                 <Anchor>
                     <Row type="flex" align="middle" justify="center">
-                        <Col span={5}><img src={logo} width="60px" height="60px" alt="logo"/>Paperclip</Col>
+                        <Col span={5}><Link to="/"><img src={logo} width="60px" height="60px" alt="logo"/>Paperclip</Link></Col>
                         <Col span={8}>{search}</Col>
                         <Col span={1} offset={9}><Avatar icon="user" /></Col>
                         <Col span={1}><Link to="/login">Log in</Link></Col>
