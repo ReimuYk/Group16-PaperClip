@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+<<<<<<< HEAD
 import {Link} from 'react-router-dom';
 import { Input, Select, Carousel, List } from 'antd';
 import { Row, Col } from 'antd';
@@ -91,18 +92,29 @@ class homepage extends Component{
         )
     }
     
+=======
+class Home extends Component{
+>>>>>>> 8b749d689aa7bc1af8cdf6aa518f30d79b024e59
     render(){
         const nav = this.renderNav();
         const search = this.renderSearch();
         const recomment = this.renderRecomment();
         return(
             <div>
+<<<<<<< HEAD
                 {nav}
                 {search}
                 {recomment}
+=======
+                page home
+>>>>>>> 8b749d689aa7bc1af8cdf6aa518f30d79b024e59
             </div>
         )
     }
 }
 
+<<<<<<< HEAD
 export default homepage;
+=======
+export default Home;
+>>>>>>> 8b749d689aa7bc1af8cdf6aa518f30d79b024e59
