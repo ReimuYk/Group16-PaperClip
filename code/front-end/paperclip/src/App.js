@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
-import {BrowserRouter} from 'react-router-dom'
-import { Switch, Route, Link } from 'react-router-dom'
-import Home from './pages/homepage'
+import {BrowserRouter} from 'react-router-dom';
+import { Switch, Route, Link } from 'react-router-dom';
 
 import logo from './logo.svg';
 import './App.css';
+import 'antd/dist/antd.css';
+
+import Home from './pages/homepage';
+import Login from './pages/loginpage';
+import Note from './pages/notepage';
+import Paper from './pages/paperpage';
+import Search from './pages/searchpage';
+import User from './pages/userpage';
 
 class App extends Component {
   render() {
@@ -18,21 +25,46 @@ class App extends Component {
           <BrowserRouter>
             <div>
             <ul>
-            <li>
-                <Link tag="div" class="tab-item" to="/index" >
+              <li>
+                <Link to="/home" >
                 <span>首页</span>
                 </Link>
-            </li>
-            <li>
-                <Link tag="div" class="tab-item" to="/home" >
-                <span>首页</span>
+              </li>
+              <li>
+                <Link to="/login" >
+                <span>登录</span>
                 </Link>
-            </li>
+              </li>
+              <li>
+                <Link to="/note" >
+                <span>笔记</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/paper" >
+                <span>论文</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/search" >
+                <span>搜索</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/user" >
+                <span>我的</span>
+                </Link>
+              </li>
             </ul>
             
             <Switch>
-              <Route path='/home' component={Home}/>
-              {/* <Route path='/index' component={index}/> */}
+              <Route exact path='/' component={Home} />
+              <Route path='/home' component={Home} />
+              <Route path='/login' component={Login} />
+              <Route path='/note' component={Note} />
+              <Route path='/paper' component={Paper} />
+              <Route path='/search' component={Search} />
+              <Route path='/user' component={User} />
             </Switch>
             </div>
           </BrowserRouter>
