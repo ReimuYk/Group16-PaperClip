@@ -1,8 +1,5 @@
 import React, {Component} from 'react';
 import PDF from 'react-pdf-js';
-import PDFJS from 'pdfjs-dist'
-import {Page} from 'react-pdf'
-import { Document } from 'react-pdf';
 import { Button, Popover} from 'antd'
 import 'antd/dist/antd.css';
 
