@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {BrowserRouter} from 'react-router-dom';
 import { Switch, Route, Link } from 'react-router-dom';
 
-import logo from './logo.svg';
+
 import './App.css';
 import 'antd/dist/antd.css';
 
@@ -21,8 +21,9 @@ import UserComment from './pages/UserCommentPage';
 import UserDoc from './pages/userDocPage';
 import UserNote from './pages/userNotePage';
 import UserFens from './pages/userFensPage';
-import Register from './pages/RegisterPage'
-import Discover from './pages/discoverPage'
+import Register from './pages/RegisterPage';
+import Discover from './pages/discoverPage';
+import WriteDoc from './pages/writeDocPage';
 
 class App extends Component {
   render() {
@@ -49,6 +50,7 @@ class App extends Component {
               <Route path='/user/userfens' component={UserFens} />
               <Route path='/user' component={User} />
               <Route path='/discover' component={Discover} />
+              <Route path='/writedoc' component={WriteDoc} />
             </Switch>
           </BrowserRouter>
 

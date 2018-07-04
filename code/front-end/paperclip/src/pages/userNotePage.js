@@ -11,8 +11,8 @@ class UserNote extends Component{
     }
     render(){
         return(
-            <div>
-                这是用户笔记
+            <div>                
+                这是用户笔记               
             </div>
         )
     }
