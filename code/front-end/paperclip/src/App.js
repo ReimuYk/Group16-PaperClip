@@ -14,6 +14,8 @@ import Search from './pages/searchpage';
 import User from './pages/userpage';
 import Register from './pages/RegisterPage'
 import FindBack from './pages/findbackpage'
+import Discover from './pages/discoverPage'
+
 class App extends Component {
   render() {
     return (
@@ -29,6 +31,7 @@ class App extends Component {
               <Route path='/paper' component={Paper} />
               <Route path='/search/:data' component={Search} />
               <Route path='/user' component={User} />
+              <Route path='/discover' component={Discover} />
             </Switch>
           </BrowserRouter>
 

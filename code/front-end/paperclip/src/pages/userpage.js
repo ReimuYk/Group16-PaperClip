@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Icon, Divider } from 'antd';
 import '../css/style.css';
+import NavBar from '.././components/nav-bar';
 
 /* should get from server */
 import uh1 from '.././statics/uh.jpg';
@@ -11,6 +12,7 @@ class User extends Component{
     render() {
         return(
             <div id='u'>
+            <NavBar />
                 <div>
                 <div id='u1'>
                     <div id='u1-1'>
