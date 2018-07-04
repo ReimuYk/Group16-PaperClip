@@ -5,9 +5,7 @@ import NavBar from '../components/nav-bar';
 
 /* should get from server */
 import book1 from '../statics/book1.jpg';
-const userID = 1;
-const userName = '用户名';
-const userIntro = '用户描述';
+
 const data = [{
     key: 1,
     title: 'doc 1',
