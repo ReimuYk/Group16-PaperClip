@@ -1,0 +1,219 @@
+.SignFlowHomepage-content {
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    border-radius: 2px;
+    min-height: 688px;
+    height: calc(100% - 42px);
+    box-sizing: border-box;
+}
+
+.SignFlowHomepage .Card {
+    overflow: visible;
+}
+
+.SignContainer-content {
+    width: 432px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.Card {
+    margin-bottom: 10px;
+    background: #fff;
+    overflow: hidden;
+    border-radius: 2px;
+    box-shadow: 0 1px 3px rgba(26, 26, 26, .1);
+    box-sizing: border-box;
+}
+
+.SignContainer-inner {
+    position: relative;
+    margin-top: 25%;
+}
+
+.Login-content {
+    padding: 0 40px 36px;
+}
+
+.SignFlow {
+    overflow: hidden;
+}
+
+.SignFlow-account {
+    margin-top: 16px;
+    border-bottom: 1px solid #ebebeb;
+    border-radius: 0;
+}
+
+.SignFlow-accountInputContainer {
+    overflow: hidden;
+}
+
+.SignFlowInput {
+    position: relative;
+}
+
+.SignContainer-content .SignFlow-accountInput.Input-wrapper,
+.SignContainer-content .SignFlow-accountInput.Input-wrapper.is-focus {
+    border: none;
+}
+
+.SignFlow .SignFlow-accountInput,
+.SignFlow .SignFlow-smsInput {
+    width: auto;
+}
+
+.SignContainer-content .Input-wrapper {
+    width: 100%;
+    height: 48px;
+    padding: 0;
+    color: #8590a6;
+    border: none;
+    border-bottom: 1px solid #ebebeb;
+    border-radius: 0;
+}
+
+.SignFlowInput .Input-wrapper {
+    width: 100%;
+    height: 48px;
+    padding: 0;
+    color: #8590a6;
+}
+
+.Input-wrapper {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    width: 180px;
+    height: 34px;
+    padding: 4px 10px;
+    font-size: 14px;
+    background: #fff;
+    border: 1px solid #ebebeb;
+    border-radius: 3px;
+    box-sizing: border-box;
+    transition: background .2s, border .2s;
+}
+
+.SignFlowInput input.Input {
+    height: 48px;
+}
+
+.SignFlow input {
+    height: 48px;
+}
+
+input.Input {
+    color: #1a1a1a;
+    height: 24px;
+    line-height: 24px;
+}
+
+.Input {
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    padding: 0;
+    overflow: hidden;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    background: transparent;
+    border: none;
+    outline: none;
+    resize: none;
+}
+
+.SignContainer-content .SignFlow-captchaContainer:not(.Captcha-chinese),
+.SignContainer-content .SignFlow-password,
+.SignContainer-content .SignFlow-username {
+    border-bottom: 1px solid #ebebeb;
+}
+
+.SignFlow-password {
+    position: relative;
+    margin-top: 12px;
+}
+
+.Button--primary.Button--blue {
+    color: #fff;
+    background-color: #0084ff;
+}
+
+.SignFlow-submitButton {
+    width: 100%;
+    margin-top: 30px;
+    height: 36px;
+}
+
+.Button--blue {
+    color: #0084ff;
+    border-color: #0084ff;
+}
+
+
+.SignContainer-switch {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    width: 100%;
+    background-color: #f6f6f6;
+    height: 58px;
+    font-size: 16px;
+}
+.SignContainer-switch span {
+    color: #175199;
+    cursor: pointer;
+}
+body,
+button,
+p,
+pre {
+    margin: 0;
+}
+
+.Login-options {
+    margin-top: 12px;
+    height: 20px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    background: #fff;
+}
+
+.SignFlowHomepage {
+    background-image: url(https://static.zhihu.com/heifetz/sign_bg.db29b0fbd2f78dd8c1b7.png);
+    background-repeat: no-repeat;
+    background-color: #b8e5f8;
+    background-size: cover;
+    width: 100%;
+    height: 100vh;
+    overflow: auto;
+    padding-right: 15px;
+    position: absolute;
+}
+
