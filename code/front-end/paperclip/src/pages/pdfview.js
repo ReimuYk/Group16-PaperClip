@@ -17,8 +17,8 @@ class PDFView extends Component{
         selectid:[1],
         selectRender:null,
         marked:[
-            {id:[2],content:'this is id 2 block'},
-            {id:[3],content:'this is id 3 block'}
+            {id:[2],content:'this is id 2 block',visible:false},
+            {id:[3],content:'this is id 3 block',visible:false}
         ],
         sel_content:[
             {ids:[2],like:11,dislike:22,marked:false,content:'this is an unmarked',user:'user1',time:'2019.01.01'}
@@ -116,7 +116,8 @@ class PDFView extends Component{
                 top:item.start[1]+this.state.pageloc[1]+document.documentElement.scrollTop,
                 minHeight:h,
                 minWidth:w,
-                opacity:0.6
+                opacity:0.6,
+                pointerEvents:'none'
             }
             res.push(
             <div key={i} width={w} height={h} style={stl}/>
@@ -147,7 +148,8 @@ class PDFView extends Component{
                     top:bitem.start[1]+this.state.pageloc[1]+document.documentElement.scrollTop,
                     minHeight:h,
                     minWidth:w,
-                    opacity:0.6
+                    opacity:0.6,
+                    pointerEvents: 'none'
                 }
                 rend.push(
                     <div key={rend.length+1} width={w} height={h} style={stl}/>
@@ -186,7 +188,7 @@ class PDFView extends Component{
             }
             rend.push(
                 <div key={rend.length+1} style={btn_stl}>
-                    <Popover placement="bottomLeft" content={<a>{mitem.content}</a>} trigger="click">
+                    <Popover placement="bottomLeft" content={<a>{mitem.content}</a>} trigger='click'>
                         <Button shape='circle'>{i+1}</Button>
                     </Popover>
                 </div>
@@ -197,20 +199,11 @@ class PDFView extends Component{
         this.setState({commRender:cr})
     }
     render(){
-        // const { pageNumber, numPages } = this.state;
-        // this.showPdf()
         return(
             <div style={{margin:'auto',backgroundColor:'gray'}}>
                 <Button onClick={this.handlePrevious}>prev page</Button>
                 <Button onClick={this.handleNext}>next page</Button>
                 <Button onClick={this.allocComm}>allocComm</Button>
-                {/* <Document
-                file={require("./hw-2-4.pdf")}
-                onLoadSuccess={this.onDocumentLoad}
-                >
-                <Page pageNumber={pageNumber} />
-                </Document>
-                <p>Page {pageNumber} of {numPages}</p> */}
                 <div id="pdf-canvas" 
                 onMouseDown={this.mouseDown} 
                 onMouseUp={this.mouseUp} 
@@ -228,29 +221,6 @@ class PDFView extends Component{
             </div>
         )
     }
-
-    // showPdf = () => {
-    //     var container = document.getElementById("container");
-    //     container.style.display = "block";
-    //     var url = 'Scripts/jQuery经典入门教程(绝对详细).pdf';
-    //     url = ''
-    //     PDFJS.workerSrc = 'Scripts/pdf.worker.js';
-    //     PDFJS.getDocument(url).then(function getPdfHelloWorld(pdf) {
-    //         pdf.getPage(1).then(function getPageHelloWorld(page) {
-    //             var scale = 1;
-    //             var viewport = page.getViewport(scale);
-    //             var canvas = document.getElementById('the-canvas');
-    //             var context = canvas.getContext('2d');
-    //             canvas.height = viewport.height;
-    //             canvas.width = viewport.width;
-    //             var renderContext = {
-    //                 canvasContext: context,
-    //                 viewport: viewport
-    //             };
-    //             page.render(renderContext);
-    //         });
-    //     });
-    // }
 }
 
 export default PDFView;
