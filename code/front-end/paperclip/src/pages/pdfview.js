@@ -7,7 +7,7 @@ import { Button, Popover} from 'antd'
 import 'antd/dist/antd.css';
 
 
-class pdfview extends Component{
+class PDFView extends Component{
     state = {
         //page state
         pageloc: null,
@@ -256,4 +256,4 @@ class pdfview extends Component{
     // }
 }
 
-export default pdfview;
+export default PDFView;

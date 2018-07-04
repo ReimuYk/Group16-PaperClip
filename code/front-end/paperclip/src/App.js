@@ -22,6 +22,7 @@ import UserNote from './pages/userNotePage';
 import UserFens from './pages/userFensPage';
 import Register from './pages/RegisterPage'
 import Discover from './pages/discoverPage'
+import PDFView from './pages/pdfview'
 
 class App extends Component {
   render() {
@@ -47,6 +48,7 @@ class App extends Component {
               <Route path='/user/userfens' component={UserFens} />
               <Route path='/user' component={User} />
               <Route path='/discover' component={Discover} />
+              <Route path='/pdfview' component={PDFView} />
             </Switch>
           </BrowserRouter>
 
