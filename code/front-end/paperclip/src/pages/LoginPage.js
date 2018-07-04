@@ -1,20 +1,30 @@
 import React, { Component } from 'react';
 import '../css/LoginPage.css'
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+
+export var log = false;
 
 class Login extends Component {
     constructor(props){
         super(props);
         this.login = this.login.bind(this);
+        this.state={
+            isLog:false
+        }
     }
     login(){
         var username = document.getElementById("username").value;
         var password = document.getElementById("password").value;
-        alert(username);
-        alert(password);
-        return true;
+        //alert(username);
+        //alert(password);
+        this.setState({isLog:true}); 
+
+        log = true;
     }
     render() {
+        if(this.state.isLog){
+            return <Redirect to="/"/>;
+        }
         return (
             <section id='login-page'>
                 <div class="SignFlowHomepage">
