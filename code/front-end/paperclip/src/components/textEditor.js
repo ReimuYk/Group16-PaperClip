@@ -15,13 +15,18 @@ class Editor extends React.Component {
      }
     this.handleChange = this.handleChange.bind(this)
   }
-  
+
+  componentDidMount(){
+    this.setState({textHtml:this.props.initText});
+  }
+
   handleChange(content, delta, source, editor) {
       this.setState({
            textContent: editor.getText(),
            textHtml:content
         });
       console.log(editor.getText());
+      console.log(content);
   }
     
   render () {
@@ -31,6 +36,7 @@ class Editor extends React.Component {
           onChange={this.handleChange}
           modules={Editor.modules}
           formats={Editor.formats}
+          value={this.state.textHtml}
           bounds={'.app'}
           placeholder="请输入内容"
          />
@@ -67,5 +73,6 @@ Editor.formats = [
   'list', 'bullet', 'indent',
   'link', 'image', 'video'
 ]
+
 
 export default Editor;

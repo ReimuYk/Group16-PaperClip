@@ -146,7 +146,7 @@ class WriteDoc extends Component{
                     style={{fontSize:"35px",fontWeight:"bolder",border:"none",outline:"none"}} 
                     placeholder="请输入标题"
                 />                
-                <Editor />
+                <Editor initText="<p>空行考核会计</p><p>哈哈</p>"/>
                 </div>
                 <Anchor style={{float:"right",marginRight:"8%",marginTop:"4%"}}>
                     {side}
