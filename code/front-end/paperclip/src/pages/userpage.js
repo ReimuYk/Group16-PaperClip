@@ -1,14 +1,34 @@
 import React, { Component } from 'react';
-import { Icon, Divider } from 'antd';
+import { Icon, Divider, Menu } from 'antd';
+import { Link } from 'react-router-dom';
 import '../css/style.css';
 import NavBar from '.././components/nav-bar';
 
+import StarPaper from './starPaperPage';
+import StarNote from './starNotePage';
+import StarDoc from './starDocPage';
+import StarUser from './StarUserPage';
+import UserComment from './UserCommentPage';
+import UserDoc from './userDocPage';
+import UserNote from './userNotePage';
+import UserFens from './userFensPage';
+
 /* should get from server */
-import uh1 from '.././statics/uh.jpg';
+import uh1 from '../statics/uh.jpg';
 const followno = 233;
 const fensno   = 23;
+const userName = '用户名';
+const userIntro = '用户描述';
+
+const SubMenu = Menu.SubMenu;
+const MenuItemGroup = Menu.ItemGroup;
 
 class User extends Component{
+    componentWillMount = () => {
+        /* get user info ?? */
+        /* like star papers, notes... */
+        /* set data */
+    }
     render() {
         return(
             <div id='u'>
@@ -22,18 +42,26 @@ class User extends Component{
                     </div>
                     
                     <div id='u1-2'>
-                        <h6>这是用户名</h6> 
-                        <p>这是用户的描述</p>  
+                        <br />
+                        <br />
+                        <br />
+                        <h6>{ userName }</h6> 
+                        <p>{ userIntro }</p>  
                     </div>
                     <div id='u1-3'>
-                        <p>
-                        <a>专注:</a>
+                        <br />
+                        <br />
+                        <p style={{textAlign:'center'}}>
+                        <Link to='/user/staruser'>
+                        <a>关注:</a>
                         <a>{ followno }</a>
-                        <a>     </a>
-                        <a>  粉丝:</a>
+                        </Link>
+                        <Link to='/user/userfens'>
+                        <a>   粉丝:</a>
                         <a>{ fensno }</a>
-
-                        <div></div>
+                        </Link>
+                        
+                        <br />
 
                         </p>
                         <span>
@@ -60,13 +88,41 @@ class User extends Component{
                         <p>动态3</p>
                         <p>动态4</p>
                         <p>动态5</p>
+                        <p>动态6</p>
                     </div>
                     <div id='u2-2'>
-                        <p>收藏论文</p>
-                        <p>收藏的笔记</p>
-                        <p>写过的笔记</p>
-                        <p>写过的文档</p>
-                        <p>写过的批注</p>
+                        <Menu>
+                        <Menu.Item>
+                            <Link to='/user/starpaper'>
+                            <span>收藏的论文</span>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item>
+                            <Link to='/user/starnote'>
+                            <span>收藏的笔记</span>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item>
+                            <Link to='/user/stardoc'>
+                            <span>收藏的文档</span>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item>
+                            <Link to='/user/usernote'>
+                            <span>写过的笔记</span>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item>
+                            <Link to='/user/userdoc'>
+                            <span>写过的文档</span>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item>
+                            <Link to='/user/usercomment'>
+                            <span>写过的批注</span>
+                            </Link>
+                        </Menu.Item>
+                        </Menu>
                     </div>
                 </div>
                 </div>

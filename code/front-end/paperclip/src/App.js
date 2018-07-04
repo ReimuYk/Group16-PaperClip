@@ -12,9 +12,22 @@ import Note from './pages/notepage';
 import Paper from './pages/paperpage';
 import Search from './pages/searchpage';
 import User from './pages/userpage';
+<<<<<<< HEAD
+import Register from './pages/RegisterPage';
+import FindBack from './pages/findbackpage';
+import StarNote from './pages/starNotePage';
+import StarPaper from './pages/starPaperPage';
+import StarDoc from './pages/starDocPage';
+import StarUser from './pages/StarUserPage';
+import UserComment from './pages/UserCommentPage';
+import UserDoc from './pages/userDocPage';
+import UserNote from './pages/userNotePage';
+import UserFens from './pages/userFensPage';
+=======
 import Register from './pages/RegisterPage'
 import FindBack from './pages/findbackpage'
 import Discover from './pages/discoverPage'
+>>>>>>> c225377cae3617a6f41a1846d24ad181efb2164b
 
 class App extends Component {
   render() {
@@ -30,8 +43,20 @@ class App extends Component {
               <Route path='/note' component={Note} />
               <Route path='/paper' component={Paper} />
               <Route path='/search/:data' component={Search} />
+<<<<<<< HEAD
+              <Route exact path='/user' component={User} />
+              <Route path='/user/starpaper' component={StarPaper} />
+              <Route path='/user/starnote' component={StarNote} />
+              <Route path='/user/stardoc' component={StarDoc} />
+              <Route path='/user/staruser' component={StarUser} />
+              <Route path='/user/usercomment' component={UserComment} />
+              <Route path='/user/userdoc' component={UserDoc} />
+              <Route path='/user/usernote' component={UserNote} />
+              <Route path='/user/userfens' component={UserFens} />
+=======
               <Route path='/user' component={User} />
               <Route path='/discover' component={Discover} />
+>>>>>>> c225377cae3617a6f41a1846d24ad181efb2164b
             </Switch>
           </BrowserRouter>
 
