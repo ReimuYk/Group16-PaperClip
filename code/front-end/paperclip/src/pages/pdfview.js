@@ -20,7 +20,8 @@ class pdfview extends Component{
         selectid:[1],
         selectRender:null,
         marked:[
-            {id:[1],content:'this is id 1 block'}
+            {id:[2],content:'this is id 2 block'},
+            {id:[3],content:'this is id 3 block'}
         ],
         sel_content:[
             {ids:[2],like:11,dislike:22,marked:false,content:'this is an unmarked',user:'user1',time:'2019.01.01'}
@@ -189,7 +190,7 @@ class pdfview extends Component{
             rend.push(
                 <div key={rend.length+1} style={btn_stl}>
                     <Popover placement="bottomLeft" content={<a>{mitem.content}</a>} trigger="click">
-                        <Button shape='circle'>1</Button>
+                        <Button shape='circle'>{i+1}</Button>
                     </Popover>
                 </div>
             )
@@ -224,10 +225,9 @@ class pdfview extends Component{
                     />
                 </div>
                 {this.state.selectRender}
-                <div style={{transform: "rotate(-20deg)",position:'absolute',left:500,top:500,minWidth:100}}>
-                    <hr height={10}/>
-                </div>
-                {this.state.commRender[0].render}
+                {this.state.commRender.map((cr)=>(
+                    <div>{cr.render}</div>
+                ))}
             </div>
         )
     }
