@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {BrowserRouter} from 'react-router-dom'
 import { Switch, Route, Link } from 'react-router-dom'
 import page1 from './pages/page1'
+import pdfview from './pages/pdfview'
 
 import logo from './logo.svg';
 import './App.css';
@@ -28,10 +29,16 @@ class App extends Component {
                 <span>page1</span>
                 </Link>
             </li>
+            <li>
+                <Link tag="div" class="tab-item" to="/pdfview" >
+                <span>pdfview</span>
+                </Link>
+            </li>
             </ul>
             
             <Switch>
               <Route path='/page1' component={page1}/>
+              <Route path='/pdfview' component={pdfview}/>
               {/* <Route path='/index' component={index}/> */}
             </Switch>
             </div>

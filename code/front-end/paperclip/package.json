@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "antd": "^3.6.5",
+    "pdfjs-dist": "^2.0.489",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
+    "react-pdf": "^3.0.5",
     "react-scripts": "1.1.4"
   },
   "scripts": {
@@ -14,6 +17,7 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
+    "react-pdf-js": "^4.0.0-alpha.6",
     "react-router-dom": "^4.3.1"
   }
 }
