@@ -15,8 +15,8 @@ class Login extends Component {
     login(){
         var username = document.getElementById("username").value;
         var password = document.getElementById("password").value;
-        alert(username);
-        alert(password);
+        //alert(username);
+        //alert(password);
         this.setState({isLog:true}); 
 
         log = true;
