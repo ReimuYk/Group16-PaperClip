@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Icon, Divider, Menu } from 'antd';
+import { Icon, Divider, Menu, List, Avatar } from 'antd';
 import { Link } from 'react-router-dom';
 import '../css/style.css';
 import NavBar from '.././components/nav-bar';
@@ -8,18 +8,52 @@ import StarPaper from './starPaperPage';
 import StarNote from './starNotePage';
 import StarDoc from './starDocPage';
 import StarUser from './StarUserPage';
-import UserComment from './UserCommentPage';
 import UserDoc from './userDocPage';
 import UserNote from './userNotePage';
 import UserFens from './userFensPage';
 
 /* should get from server */
 import uh1 from '../statics/uh.jpg';
-const followno = 233;
-const fensno   = 23;
+const followno = 8;
+const fensno   = 8;
+const userID = 1;
 const userName = '用户名';
 const userIntro = '用户描述';
+const data = [{
+    key: 1,
+    title: '动态 1',
+    discription: 'discription of 动态 1',
+},{
+    key: 2,
+    title: '动态 2',
+    discription: 'discription of 动态 2',
+},{
+    key: 3,
+    title: '动态 3',
+    discription: 'discription of 动态 3',
+},{
+    key: 4,
+    title: '动态 4',
+    discription: 'discription of 动态 4',
+},{
+    key: 5,
+    title: '动态 5',
+    discription: 'discription of 动态 5',
+},{
+    key: 6,
+    title: '动态 6',
+    discription: 'discription of 动态 6',
+},{
+    key: 7,
+    title: '动态 7',
+    discription: 'discription of 动态 7',
+},{
+    key: 8,
+    title: '动态 8',
+    discription: 'discription of 动态 8',
+}]
 
+/* DON'T DELETE follow const vars! */
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 
@@ -29,10 +63,18 @@ class User extends Component{
         /* like star papers, notes... */
         /* set data */
     }
+    sendMail = () => {
+        console.log('want to send mail to user id(key):', userID);
+    }
+    followUser = () => {
+        console.log('want to follow user id(key):', userID);
+    }
     render() {
+        
         return(
-            <div id='u'>
+            <div>
             <NavBar />
+            <div id='u'>
                 <div>
                 <div id='u1'>
                     <div id='u1-1'>
@@ -56,26 +98,26 @@ class User extends Component{
                         <a>关注:</a>
                         <a>{ followno }</a>
                         </Link>
+                        <a style={{width:'80px',marginLeft:'20px'}}></a>
                         <Link to='/user/userfens'>
-                        <a>   粉丝:</a>
+                        <a>粉丝:</a>
                         <a>{ fensno }</a>
                         </Link>
-                        
                         <br />
-
                         </p>
+                        <p>
                         <span>
-                        <Icon type='mail' style={{ fontSize: 30, color: '#08c' }} />
+                        <Icon  onClick={this.sendMail} type='mail' style={{ fontSize: 30, color: '#08c' }} />
+                        </span>
+                        <a style={{width:'80px',marginLeft:'20px'}}></a>
                         <span>
-                            发私信
+                        <Icon  onClick={this.sendMail} type="plus-square-o" style={{ fontSize: 30, color: '#08c' }} />
                         </span>
-                        </span>
-                        <span>
-                        <Icon type="plus-square-o" style={{ fontSize: 30, color: '#08c' }} />
-                        <span>
-                            关注
-                        </span>
-                        </span>
+                        <br />
+                        <a onClick={this.sendMail}>发私信</a>
+                        <a style={{width:'80px',marginLeft:'20px'}}></a>
+                        <a onClick={this.followUser}>关注</a>
+                        </p>
                     </div>
                 </div>
                 </div>
@@ -83,12 +125,21 @@ class User extends Component{
                 <div>
                 <div id='u2'>
                     <div id='u2-1'>
-                        <p>动态1</p>
-                        <p>动态2</p>
-                        <p>动态3</p>
-                        <p>动态4</p>
-                        <p>动态5</p>
-                        <p>动态6</p>
+                        <List
+                            style={{textAlign:'left'}}
+                            itemLayout="horizontal"
+                            dataSource={data}
+                            renderItem={item => (
+                            <List.Item>
+                                <List.Item.Meta
+                                avatar={<Avatar src={uh1} />}
+                                /* 论文显示页 */
+                                title={<a href="/home">{item.title}</a>}
+                                description={item.discription}
+                                />
+                            </List.Item>
+                            )}
+                        />
                     </div>
                     <div id='u2-2'>
                         <Menu>
@@ -117,15 +168,11 @@ class User extends Component{
                             <span>写过的文档</span>
                             </Link>
                         </Menu.Item>
-                        <Menu.Item>
-                            <Link to='/user/usercomment'>
-                            <span>写过的批注</span>
-                            </Link>
-                        </Menu.Item>
                         </Menu>
                     </div>
                 </div>
                 </div>
+            </div>
             </div>
         )
     }

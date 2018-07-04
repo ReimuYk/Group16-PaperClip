@@ -47,9 +47,10 @@ class StarNote extends Component{
     }
     render(){
         return(
+            <div>
+            <NavBar />
             <div style={{width:'70%',display:'inline-block'}}>
-                <NavBar />
-                这是收藏笔记页
+            
                 <List
                     style={{textAlign:'left'}}
                     itemLayout="horizontal"
@@ -65,6 +66,7 @@ class StarNote extends Component{
                     </List.Item>
                     )}
                 />
+            </div>
             </div>
         )
     }

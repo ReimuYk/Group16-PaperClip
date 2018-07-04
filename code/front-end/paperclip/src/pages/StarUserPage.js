@@ -8,36 +8,36 @@ const userName = '用户名';
 const userIntro = '用户描述';
 const data = [{
     key: 1,
-    title: 'note 1',
-    discription: 'discription of note 1',
+    userName: 'user 1',
+    description: 'description of user 1',
 },{
     key: 2,
-    title: 'note 2',
-    discription: 'discription of note 2',
+    userName: 'user 2',
+    description: 'description of user 2',
 },{
     key: 3,
-    title: 'note 3',
-    discription: 'discription of note 3',
+    userName: 'user 3',
+    description: 'description of user 3',
 },{
     key: 4,
-    title: 'note 4',
-    discription: 'discription of note 4',
+    userName: 'user 4',
+    description: 'description of user 4',
 },{
     key: 5,
-    title: 'note 5',
-    discription: 'discription of note 5',
+    userName: 'user 5',
+    description: 'description of user 5',
 },{
     key: 6,
-    title: 'note 6',
-    discription: 'discription of note 6',
+    userName: 'user 6',
+    description: 'description of user 6',
 },{
     key: 7,
-    title: 'note 7',
-    discription: 'discription of note 7',
+    userName: 'user 7',
+    description: 'description of user 7',
 },{
     key: 8,
-    title: 'note 8',
-    discription: 'discription of note 8',
+    userName: 'user 8',
+    description: 'description of user 8',
 }]
 
 class StarUser extends Component{
@@ -47,29 +47,32 @@ class StarUser extends Component{
     componentWillMount = () => {
         /* get specific info of papers */
     }
-    quitFollow = (e) => {
-        console.log('e',e);
+    quitFollow = (item, record) => {
+        console.log('want to quit follow user: key(id):',item.key);
+        /* tell the server to do something */
     }
     render(){
         return(
             <div>
-                <NavBar />
-                这是关注用户
+            <NavBar />
+            <div style={{width:'70%',display:'inline-block'}}>
+       
                 <List
+                    style={{textAlign:'left'}}
                     className="demo-loadmore-list"
                     itemLayout="horizontal"
                     dataSource={data}
                     renderItem={item => (
-                    <List.Item actions={[<a onClick={this.quitFollow}>取消关注</a>]}>
+                    <List.Item actions={[<a onClick={this.quitFollow.bind(this, item)}>取消关注</a>]}>
                         <List.Item.Meta
                         avatar={<Avatar src={ uh } />}
-                        title={<a href="https://ant.design">{item.name.last}</a>}
-                        description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                        title={<a href="https://ant.design">{item.userName}</a>}
+                        description={item.description}
                         />
-                        <div>content</div>
                     </List.Item>
                     )}
                 />
+            </div>
             </div>
         )
     }

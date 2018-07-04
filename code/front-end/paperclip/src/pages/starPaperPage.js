@@ -48,9 +48,10 @@ class StarPaper extends Component{
     }
     render(){
         return(
-            <div style={{width:'70%',display:'inline-block'}}>
+            <div>
                 <NavBar />
-                这是收藏论文页
+                <div style={{width:'70%',display:'inline-block'}}>
+       
                 <List
                     style={{textAlign:'left'}}
                     itemLayout="horizontal"
@@ -66,6 +67,7 @@ class StarPaper extends Component{
                     </List.Item>
                     )}
                 />
+                </div>
             </div>
         )
     }

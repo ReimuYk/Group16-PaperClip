@@ -17,7 +17,6 @@ import StarNote from './pages/starNotePage';
 import StarPaper from './pages/starPaperPage';
 import StarDoc from './pages/starDocPage';
 import StarUser from './pages/StarUserPage';
-import UserComment from './pages/UserCommentPage';
 import UserDoc from './pages/userDocPage';
 import UserNote from './pages/userNotePage';
 import UserFens from './pages/userFensPage';
@@ -43,7 +42,6 @@ class App extends Component {
               <Route path='/user/starnote' component={StarNote} />
               <Route path='/user/stardoc' component={StarDoc} />
               <Route path='/user/staruser' component={StarUser} />
-              <Route path='/user/usercomment' component={UserComment} />
               <Route path='/user/userdoc' component={UserDoc} />
               <Route path='/user/usernote' component={UserNote} />
               <Route path='/user/userfens' component={UserFens} />
