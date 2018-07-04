@@ -3,7 +3,7 @@ import PDF from 'react-pdf-js';
 import PDFJS from 'pdfjs-dist'
 import {Page} from 'react-pdf'
 import { Document } from 'react-pdf';
-import {Button} from 'antd'
+import { Button, Popover} from 'antd'
 import 'antd/dist/antd.css';
 
 
@@ -11,7 +11,7 @@ class pdfview extends Component{
     state = {
         //page state
         pageloc: null,
-        pagesize:[1262,892],
+        pagesize:[892,1262],
         blocklist:[
             {id:1,start:[130,271],end:[383,295]},
             {id:2,start:[131,366],end:[385,388]},
@@ -28,9 +28,14 @@ class pdfview extends Component{
         //mouse state
         mousePressing: false,
         mouseStart: null,
+        //comment state
+        commRender:[
+            {cid:1,tag:'1',render:[]}
+        ],
     };
     onDocumentComplete = (pages) => {
         this.setState({ page: 1, pages });
+        setTimeout("this.allocComm()",1000)
     }
     handlePrevious = () => {
         if (this.state.page==1) return
@@ -121,14 +126,86 @@ class pdfview extends Component{
         }
         this.setState({selectRender:res})
     }
+    allocComm = () => {
+        let cr=[]
+        for (var i=0;i<this.state.marked.length;i++){
+            let mitem = this.state.marked[i]
+            let rend = []
+            //add block div(Red)
+            let bitem = null
+            for (var j=0;j<mitem.id.length;j++){
+                for (var k=0;k<this.state.blocklist.length;k++){
+                    if (mitem.id[j]==this.state.blocklist[k].id){
+                        bitem = this.state.blocklist[k]
+                        break
+                    }
+                }
+                var w = bitem.end[0]-bitem.start[0]
+                var h = bitem.end[1]-bitem.start[1]
+                var stl = {
+                    backgroundColor:'red',
+                    position: 'absolute',
+                    left:bitem.start[0]+this.state.pageloc[0]+document.documentElement.scrollLeft,
+                    top:bitem.start[1]+this.state.pageloc[1]+document.documentElement.scrollTop,
+                    minHeight:h,
+                    minWidth:w,
+                    opacity:0.6
+                }
+                rend.push(
+                    <div key={rend.length+1} width={w} height={h} style={stl}/>
+                )
+            }
+            //add line div
+            var w = this.state.pagesize[0]-bitem.end[0]-71
+            var line_stl = {
+                // transform:'rotate(-10deg)',
+                // transformOrigin:'0 0',
+                position: 'absolute',
+                left:bitem.end[0]+this.state.pageloc[0]+document.documentElement.scrollLeft,
+                top:bitem.end[1]+this.state.pageloc[1]+document.documentElement.scrollTop-3,
+                minWidth:w,
+                minHeight:3,
+                backgroundColor: 'red',
+                opacity: 0.6,
+            }
+            rend.push(<div key={rend.length+1} width={w} height={3} style={line_stl}/>)
+            var line_stl2 = {
+                transform:'rotate(-45deg)',
+                transformOrigin:'0 0',
+                position: 'absolute',
+                left:this.state.pagesize[0]+this.state.pageloc[0]+document.documentElement.scrollLeft-73,
+                top:bitem.end[1]+this.state.pageloc[1]+document.documentElement.scrollTop-3,
+                minWidth:100,
+                minHeight:3,
+                backgroundColor: 'red',
+                opacity: 0.6,
+            }
+            rend.push(<div key={rend.length+1} width={40} height={3} style={line_stl2}/>)
+            var btn_stl = {
+                position: 'absolute',
+                left:this.state.pagesize[0]+this.state.pageloc[0]+document.documentElement.scrollLeft-73+73,
+                top:bitem.end[1]+this.state.pageloc[1]+document.documentElement.scrollTop-3-73-15,
+            }
+            rend.push(
+                <div key={rend.length+1} style={btn_stl}>
+                    <Popover placement="bottomLeft" content={<a>{mitem.content}</a>} trigger="click">
+                        <Button shape='circle'>1</Button>
+                    </Popover>
+                </div>
+            )
+
+            cr.push({cid:cr.length+1,tag:(cr.length+1).toString(),render:rend})
+        }
+        this.setState({commRender:cr})
+    }
     render(){
         // const { pageNumber, numPages } = this.state;
         // this.showPdf()
-        
         return(
-            <div sytle={{margin:'auto',background:'gray'}}>
+            <div style={{margin:'auto',backgroundColor:'gray'}}>
                 <Button onClick={this.handlePrevious}>prev page</Button>
                 <Button onClick={this.handleNext}>next page</Button>
+                <Button onClick={this.allocComm}>allocComm</Button>
                 {/* <Document
                 file={require("./hw-2-4.pdf")}
                 onLoadSuccess={this.onDocumentLoad}
@@ -147,6 +224,10 @@ class pdfview extends Component{
                     />
                 </div>
                 {this.state.selectRender}
+                <div style={{transform: "rotate(-20deg)",position:'absolute',left:500,top:500,minWidth:100}}>
+                    <hr height={10}/>
+                </div>
+                {this.state.commRender[0].render}
             </div>
         )
     }
