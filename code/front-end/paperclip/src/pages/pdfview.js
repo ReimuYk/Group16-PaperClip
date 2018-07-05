@@ -12,7 +12,10 @@ class PDFView extends Component{
         blocklist:[
             {id:1,start:[130,271],end:[383,295]},
             {id:2,start:[131,366],end:[385,388]},
-            {id:3,start:[128,485],end:[384,507]}
+            {id:3,start:[128,485],end:[384,507]},
+            {id:4,start:[130,532],end:[198,550]},
+            {id:5,start:[198,532],end:[243,550]},
+            {id:6,start:[243,532],end:[327,550]}
         ],
         selectid:[1],
         selectRender:null,
@@ -45,10 +48,17 @@ class PDFView extends Component{
     }
     mouseDown = (e) => {
         console.log('mouse down')
+        let loc = [e.clientX-e.target.getBoundingClientRect().left,e.clientY-e.target.getBoundingClientRect().top]
+        let tid = this.findItemId(loc)
         this.setState({
             mousePressing:true,
-            mouseStart:(e.clientX-e.target.getBoundingClientRect().left,e.clientY-e.target.getBoundingClientRect().top)
+            mouseStart:tid
         })
+        if (tid!=null){
+            this.putSelect([tid])
+        }else{
+            this.putSelect([])
+        }
         console.log(e.target)
         console.log(e.target.height)
         console.log('screenX',e.screenX)
@@ -57,14 +67,6 @@ class PDFView extends Component{
         console.log('scroll top',document.documentElement.scrollTop)
         console.log('clienty-objx',e.clientX-e.target.getBoundingClientRect().left)
         console.log('clienty-objy',e.clientY-e.target.getBoundingClientRect().top)
-        // let ctx = e.target.getContext('2d')
-        // let img = new Image()
-        // var data = ctx.getImageData(0,0,e.target.width,e.target.height)
-        // img.src = e.target.toDataURL('image/png')
-        // console.log(img.src)
-        // e.target.width=700
-        // console.log(data)
-        // e.target.getContext('2d').drawImage(img,0,0,700,1000)
     }
     mouseUp = (e) => {
         console.log('mouse up')
@@ -83,18 +85,46 @@ class PDFView extends Component{
             pageloc:[e.target.getBoundingClientRect().left,e.target.getBoundingClientRect().top]
         })
         let loc = [e.clientX-e.target.getBoundingClientRect().left,e.clientY-e.target.getBoundingClientRect().top]        
+        let tid = this.findItemId(loc)
+        // if (tid!=null){
+        //     this.putSelect([tid])
+        // }else{
+        //     this.putSelect([])
+        // }
+        if (!this.state.mousePressing) return
+        if (tid!=null){
+            if (this.state.mouseStart==null){
+                this.setState({mouseStart:tid})
+                return
+            }
+            // console.log(this.state.mouseStart)
+            let selected = []
+            let flag = false
+            for (var i=0;i<this.state.blocklist.length;i++){
+                console.log(this.state.blocklist[i].id,this.state.mouseStart)
+                if (this.state.blocklist[i].id==this.state.mouseStart){
+                    // console.log('flag')
+                    flag = true
+                }
+                if (flag){
+                    selected.push(this.state.blocklist[i].id)
+                }
+                if (this.state.blocklist[i].id==tid){
+                    this.putSelect(selected)
+                    break
+                }
+            }
+        }
+        console.log(loc)
+    }
+    findItemId = (loc) => {
         for (var i=0;i<this.state.blocklist.length;i++){
             let obj = this.state.blocklist[i]
             if (obj.start[0]<=loc[0] && loc[0]<=obj.end[0] && obj.start[1]<=loc[1] && loc[1]<=obj.end[1]){
-                this.putSelect([obj.id])
-                break
-            }else{
-                this.putSelect([])
+                return obj.id  
             }
         }
-        // console.log(this.state.selectid)
-        if (!this.state.mousePressing) return
-        console.log(loc)
+        return null
     }
     putSelect = (idlist) => {
         this.setState({selectid:idlist})
