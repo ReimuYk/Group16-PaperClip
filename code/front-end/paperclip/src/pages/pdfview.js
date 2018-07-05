@@ -14,14 +14,14 @@ class PDFView extends Component{
     state = {
         //page state
         pageloc: null,
-        pagesize:[892,1262],
+        pagesize:[600,900],
         blocklist:[
-            {id:1,start:[130,271],end:[383,295]},
-            {id:2,start:[131,366],end:[385,388]},
-            {id:3,start:[128,485],end:[384,507]},
-            {id:4,start:[130,532],end:[198,550]},
-            {id:5,start:[198,532],end:[243,550]},
-            {id:6,start:[243,532],end:[327,550]}
+            {id:1,start:[124,121],end:[278,136]},
+            {id:2,start:[126,152],end:[206,165]},
+            {id:3,start:[127,182],end:[239,196]},
+            {id:4,start:[127,215],end:[169,227]},
+            {id:5,start:[169,215],end:[190,227]},
+            {id:6,start:[190,215],end:[276,227]}
         ],
         selectid:[1],
         selectRender:null,
@@ -403,16 +403,21 @@ class PDFView extends Component{
                     <Button onClick={this.handlePrevious}>prev page</Button>
                     <Button onClick={this.handleNext}>next page</Button>
                     <Button onClick={this.allocComm}>展示批注&笔记</Button>
+                    <div>
                     <div id="pdf-canvas" 
                     onMouseDown={this.mouseDown} 
                     onMouseUp={this.mouseUp} 
                     onMouseMove={this.mouseMove}
+                    style={{width:'600px',margin:'auto'}}
+                    // style={{float:'left'}}
                     >
-                        <PDF page={this.state.page}
+                        {/* <PDF page={this.state.page}
                             file={require("./hw-2-4.pdf")}
                             onDocumentComplete={this.onDocumentComplete}
                             width={900}
-                        />
+                        /> */}
+                        <img src={require("./page.jpg")} width={600} style={{pointerEvents: 'none',userSelect:'none',mozUserSelect:'-moz-none'}}/>
+                    </div>
                     </div>
                     {this.state.selectRender}
                     {this.state.commRender.map((cr)=>(
