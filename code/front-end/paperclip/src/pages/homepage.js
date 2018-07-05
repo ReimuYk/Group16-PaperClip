@@ -1,14 +1,84 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import { Input, Select, Carousel, List, Avatar, Button, Spin } from 'antd';
-import { Row, Col } from 'antd';
+import { Input, Select, List, Avatar, Button, Spin, Icon, Menu, Anchor } from 'antd';
 import NavBar from '../components/nav-bar';
 import reqwest from 'reqwest';
 
-const Search = Input.Search;
-const Option = Select.Option;
-
 const fakeDataUrl = 'https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo';
+const MenuItemGroup = Menu.ItemGroup;
+
+class Sider extends React.Component {
+    state = {
+        userID: 0,
+    }
+    componentWillMount = () => {
+        /* ask for userID  */
+    }
+    handleClick = (e) => {
+        console.log('click ', e);
+    }
+
+    renderFooter(){
+        return(
+            <div className="footer" style={{marginTop:"50px"}}>
+                <footer className="Footer">
+                    <a className="Footer-item" target="_blank" rel="noopener noreferrer" href="//liukanshan.zhihu.com/">刘看山</a>
+                    <Icon type="minus" />
+                    <a className="Footer-item" target="_blank" rel="noopener noreferrer" href="/question/19581624">知乎指南</a>
+                    <Icon type="minus" />
+                    <a className="Footer-item" target="_blank" rel="noopener noreferrer" href="/terms">知乎协议</a>
+                    <Icon type="minus" />
+                    <a className="Footer-item" target="_blank" rel="noopener noreferrer" href="/terms/privacy">隐私政策</a><br></br>
+                    <a className="Footer-item" target="_blank" href="/app">应用</a>
+                    <Icon type="minus" />
+                    <a className="Footer-item" target="_blank" rel="noopener noreferrer" href="https://app.mokahr.com/apply/zhihu">工作</a>
+                    <Icon type="minus" />
+                    <button type="button" class="Button OrgCreateButton">申请开通知乎机构号</button><br></br>
+                    <a className="Footer-item" target="_blank" rel="noopener noreferrer" href="https://zhuanlan.zhihu.com/p/28561671">侵权举报</a>
+                    <Icon type="minus" />
+                    <a className="Footer-item" target="_blank" rel="noopener noreferrer" href="http://www.12377.cn">网上有害信息举报专区</a><br></br>
+                    <span className="Footer-item">违法和不良信息举报：010-82716601</span><br></br>
+                    <a className="Footer-item" target="_blank" href="/jubao">儿童色情信息举报专区</a><br></br>
+                    <a className="Footer-item" target="_blank" href="/contact">联系我们</a>
+                    <span> © 2018 知乎</span>
+                </footer>
+            </div>
+        )
+    }
+    render() {
+        const renderFooter = this.renderFooter();
+        return (
+            <div>
+            <Anchor style={{float:'right',marginRight:'10%',marginTop:'5%',width:'500px'}}>
+            <div className="menu" style={{float: "right", marginRight: "10%", textAlign:"left"}}>
+                <Menu
+                    onClick={this.handleClick}
+                    style={{ width: 300 }}
+                >
+                    <MenuItemGroup key="g1" title="消息提示">
+                       
+                        <Menu.Item key="1">
+                        <Link to={'/user/starpaper?userID='+this.state.userID}>
+                            <Icon type="book" />我收藏的论文<span class="GlobalSideBar-navNumber">2,576</span>
+                        </Link>
+                        </Menu.Item>
+                        <Menu.Item key="2">
+                        <Link to={'/user/staruser?userID='+this.state.userID}>
+                            <Icon type="team" />我关注的用户<span class="GlobalSideBar-navNumber">2,576</span>
+                        </Link>
+                        </Menu.Item>
+                        <Menu.Item key="3"><Icon type="user-add" />我的邀请<span class="GlobalSideBar-navNumber">2,576</span></Menu.Item>
+                        <Menu.Item key="4"><Icon type="message" />我的私信<span class="GlobalSideBar-navNumber">2,576</span></Menu.Item>
+                        <Menu.Item key="5"><Icon type="customer-service" />社区服务中心</Menu.Item>
+                    </MenuItemGroup>
+                </Menu>
+                {renderFooter}
+            </div>
+            </Anchor>
+            </div>
+        );
+    }
+}
 
 class LoadMoreList extends React.Component {
     state = {
@@ -91,6 +161,43 @@ class Home extends Component{
         super(props);       
         
     }
+    renderSideBar(){
+        const data = [
+            {
+                title: 'Ant Design Title 1',
+            },
+            {
+                title: 'Ant Design Title 2',
+            },
+            {
+                title: 'Ant Design Title 3',
+            },
+            {
+                title: 'Ant Design Title 4',
+            },
+        ];
+        return(
+            <div class="sidebar" style={{width: "20%", float: "right", marginRight: "10%"}}>
+                <div class="icon" style={{width: "130px", marginBottom: "30px"}}>
+                    <Icon type="bars" />
+                    <span style={{marginLeft: "20px"}}>我关注的话题</span>
+                </div>
+                <List
+                    itemLayout="horizontal"
+                    dataSource={data}
+                    renderItem={item => (
+                        <List.Item actions={[<a>删除</a>]}>
+                            <List.Item.Meta
+                                avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                                title={<a href="https://ant.design">{item.title}</a>}
+                                description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                            />
+                        </List.Item>
+                    )}
+                />
+            </div>
+        )
+    }
     render(){
         return(
             <div>
@@ -110,6 +217,9 @@ class Home extends Component{
                         </div>
                         <LoadMoreList/>
                     </div>
+                </div>
+                <div className="Menu" style={{marginTop:"150px"}}>
+                    <Sider/>
                 </div>
             </div>
         )

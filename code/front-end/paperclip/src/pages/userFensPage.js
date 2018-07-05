@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { List, Avatar } from 'antd';
+import { List, Avatar, Menu, Anchor } from 'antd';
+import { Link } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 /* should get from server */
 import uh from '../statics/uh.jpg'
-
+const userID=1;
 const data = [{
     key: 1,
     fensName: 'fens 1',
@@ -53,8 +54,36 @@ class UserFens extends Component{
         return(
             <div>
             <NavBar />
-            <div style={{width:'70%',display:'inline-block'}}>
-         
+            <Anchor style={{float:'right',marginRight:'10%',marginTop:'5%'}}>
+                <Menu>
+                    <Menu.Item>
+                        <Link to={'/user/starpaper?userID='+userID}>
+                        <span>收藏的论文</span>
+                        </Link>
+                    </Menu.Item>
+                    <Menu.Item>
+                        <Link to={'/user/starnote?userID='+userID}>
+                        <span>收藏的笔记</span>
+                        </Link>
+                    </Menu.Item>
+                    <Menu.Item>
+                        <Link to={'/user/stardoc?uesrID='+userID}>
+                        <span>收藏的文档</span>
+                        </Link>
+                    </Menu.Item>
+                    <Menu.Item>
+                        <Link to={'/user/usernote?userID='+userID}>
+                        <span>写过的笔记</span>
+                        </Link>
+                    </Menu.Item>
+                    <Menu.Item>
+                        <Link to={'/user/userdoc?userID='+userID}>
+                        <span>写过的文档</span>
+                        </Link>
+                    </Menu.Item>
+                </Menu>
+            </Anchor>
+            <div style={{width:'60%',marginLeft:'200px'}}>
                 <List
                     style={{textAlign:'left'}}
                     className="demo-loadmore-list"
