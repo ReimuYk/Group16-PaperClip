@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Collapse ,List,Input,Icon,Button,Avatar,Divider} from 'antd';
+import { Collapse ,List,Input,Icon,Button,Avatar,Divider,Anchor} from 'antd';
 const Panel = Collapse.Panel;
 const Search = Input.Search;
 const ButtonGroup = Button.Group;
@@ -179,7 +179,18 @@ class Postil extends Component{
         const postils = this.state.postils;
         const comments = this.state.comments; 
         return(
-            <div style={{width:"30%"}}>
+            <div id="postil" style={{width:"20%",float:"right", marginRight:"2%",marginTop:"0"}}>
+                <Anchor  offsetTop={60}>
+                    <Search
+                    type="textarea"
+                    placeholder="input text"
+                    enterButton={<Icon type="enter" />}
+                    size="default"
+                    value={this.state.inputValue}
+                    onChange={this.changeInputValue}
+                    onSearch={this.handleInput}
+                    />   
+                </Anchor>
                 <Collapse accordion bordered={false} onChange={this.setPostilIdx}>
                 {
                     postils.map((postil,idx)=>{
@@ -193,15 +204,7 @@ class Postil extends Component{
                     },this)
                 }
                 </Collapse>
-                <Search
-                type="textarea"
-                placeholder="input text"
-                enterButton={<Icon type="enter" />}
-                size="default"
-                value={this.state.inputValue}
-                onChange={this.changeInputValue}
-                onSearch={this.handleInput}
-                />                
+                             
           </div>
         );
     }
