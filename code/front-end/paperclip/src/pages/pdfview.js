@@ -295,13 +295,21 @@ class PDFView extends Component{
                     </Popover>
                 </div>
             )
+            var lt = bitem.end[1]+this.state.pageloc[1]+document.documentElement.scrollTop-3
+            console.log(lt,tt)
+            var deg = Math.atan((tt+15-lt)/73)*180/3.14
+            deg = Math.round(deg)
+            var le = Math.sqrt(73*73+(lt-tt-15)*(lt-tt-15))
+            console.log(lt,tt,le,73*73+(lt-tt-15)*(lt-tt-15))
+            le = Math.round(le)
+            console.log(deg,le,Math.atan(1))
             var line_stl2 = {
-                transform:'rotate(-45deg)',
+                transform:'rotate('+deg.toString()+'deg)',
                 transformOrigin:'0 0',
                 position: 'absolute',
                 left:this.state.pagesize[0]+this.state.pageloc[0]+document.documentElement.scrollLeft-73,
-                top:bitem.end[1]+this.state.pageloc[1]+document.documentElement.scrollTop-3,
-                minWidth:100,
+                top:lt,
+                minWidth:le,
                 minHeight:3,
                 backgroundColor: 'red',
                 opacity: 0.6,
