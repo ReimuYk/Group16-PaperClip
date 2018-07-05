@@ -178,7 +178,7 @@ class Postil extends Component{
         const comments = this.state.comments; 
         return(
             <div id="postil" 
-            style={{width:"20%",height:"500px",float:"right",
+            style={{width:"20%",height:"550px",float:"right",
              marginRight:"2%",marginTop:"0",overflowY:"scroll",}}>
                 <Anchor style={{position:"fixed",zIndex:"1",backgroundColor:"#FFFFFF"}}>
                     <Search
@@ -205,7 +205,7 @@ class Postil extends Component{
                     },this)
                 }
                 </Collapse>                             
-          </div>
+          </div>          
         );
     }
 }

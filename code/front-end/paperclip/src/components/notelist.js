@@ -64,8 +64,9 @@ class NoteList extends Component{
         const keys = this.renderKey();
         const notes = this.renderNotes();
         return(
-            <div id="postil" 
-            style={{width:"20%",height:"500px",float:"left", marginLeft:"2%",marginTop:"0",overflowY:"scroll"}}>
+            <div id="notelist" 
+            style={{width:"20%",height:"500px",float:"left", marginLeft:"2%",
+            marginTop:"0",overflowY:"hidden"}}>
                 <Anchor style={{position:"fixed",zIndex:"1",backgroundColor:"#FFFFFF"}}>
                     <Search
                     type="textarea"
