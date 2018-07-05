@@ -174,7 +174,7 @@ class StarDoc extends Component{
                         <List.Item.Meta
                         avatar={<Avatar src={item.cover} />}
                         /* 论文显示页 */
-                        title={<a href="https://ant.design">{item.title}</a>}
+                        title={<a href={"/viewdoc?docID="+item.key}>{item.title}</a>}
                         description={item.description}
                         />
                         <a style={{width:'80px',marginLeft:'20px'}}>{item.author}</a>

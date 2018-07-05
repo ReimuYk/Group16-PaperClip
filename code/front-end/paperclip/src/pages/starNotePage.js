@@ -163,7 +163,7 @@ class StarNote extends Component{
                         <List.Item.Meta
                         avatar={<Avatar src={item.cover} />}
                         /* 笔记显示页 */
-                        title={<a href="https://ant.design">{item.title}</a>}
+                        title={<a href={'/viewnote?noteID='+item.key}>{item.title}</a>}
                         description={item.discription}
                         />
                         <a style={{width:'80px',marginLeft:'20px'}}>{item.author}</a>

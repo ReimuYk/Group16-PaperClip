@@ -14,14 +14,15 @@ class PDFView extends Component{
     state = {
         //page state
         pageloc: null,
-        pagesize:[892,1262],
+        pagesize:[600,900],
         blocklist:[
-            {id:1,start:[130,271],end:[383,295]},
-            {id:2,start:[131,366],end:[385,388]},
-            {id:3,start:[128,485],end:[384,507]},
-            {id:4,start:[130,532],end:[198,550]},
-            {id:5,start:[198,532],end:[243,550]},
-            {id:6,start:[243,532],end:[327,550]}
+            {id:1,start:[124,121],end:[278,136]},
+            {id:2,start:[126,152],end:[206,165]},
+            {id:3,start:[127,182],end:[239,196]},
+            {id:4,start:[127,215],end:[169,227]},
+            {id:5,start:[169,215],end:[190,227]},
+            {id:6,start:[190,215],end:[276,227]},
+            {id:7,start:[89,385],end:[509,582]}
         ],
         selectid:[1],
         selectRender:null,
@@ -32,7 +33,8 @@ class PDFView extends Component{
             {id:[6],content:'拥挤的第二个批注',visible:false}
         ],
         marked_note:[
-            {id:[4],title:'note4',content:'this is id 4 note addr',visible:false}
+            {id:[4],title:'note4',content:'this is id 4 note addr',visible:false},
+            {id:[5],title:'note5',content:'int stands integer',visible:false}
         ],
         sel_content:[
             {ids:[2],like:11,dislike:22,marked:false,content:'this is an unmarked',user:'user1',time:'2019.01.01'}
@@ -296,13 +298,10 @@ class PDFView extends Component{
                 </div>
             )
             var lt = bitem.end[1]+this.state.pageloc[1]+document.documentElement.scrollTop-3
-            console.log(lt,tt)
             var deg = Math.atan((tt+15-lt)/73)*180/3.14
             deg = Math.round(deg)
             var le = Math.sqrt(73*73+(lt-tt-15)*(lt-tt-15))
-            console.log(lt,tt,le,73*73+(lt-tt-15)*(lt-tt-15))
             le = Math.round(le)
-            console.log(deg,le,Math.atan(1))
             var line_stl2 = {
                 transform:'rotate('+deg.toString()+'deg)',
                 transformOrigin:'0 0',
@@ -367,11 +366,11 @@ class PDFView extends Component{
                 opacity: 0.4,
             }
             rend.push(<div key={rend.length+1} width={w} height={3} style={line_stl}/>)
-            
+            var tt = this.getTop('l',bitem.end[1]+this.state.pageloc[1]+document.documentElement.scrollTop-3-73-15)
             var btn_stl = {
                 position: 'absolute',
                 left:this.state.pageloc[0]+document.documentElement.scrollLeft+73-73-30,
-                top:bitem.end[1]+this.state.pageloc[1]+document.documentElement.scrollTop-3-73-15,
+                top:tt
             }
             rend.push(
                 <div key={rend.length+1} style={btn_stl}>
@@ -380,13 +379,18 @@ class PDFView extends Component{
                     </Popover>
                 </div>
             )
+            var lt = bitem.end[1]+this.state.pageloc[1]+document.documentElement.scrollTop-3
+            var deg = Math.atan((tt+15-lt)/71)*180/3.14
+            deg = -Math.round(deg)
+            var le = Math.sqrt(71*71+(lt-tt-15)*(lt-tt-15))
+            le = Math.round(le)
             var line_stl2 = {
-                transform:'rotate(45deg)',
+                transform:'rotate('+deg.toString()+'deg)',
                 transformOrigin:'100% 100%',
                 position: 'absolute',
-                left:this.state.pageloc[0]+document.documentElement.scrollLeft-30,
-                top:bitem.end[1]+this.state.pageloc[1]+document.documentElement.scrollTop-3,
-                minWidth:100,
+                left:this.state.pageloc[0]+document.documentElement.scrollLeft+71-le,
+                top:lt,
+                minWidth:le,
                 minHeight:3,
                 backgroundColor: 'blue',
                 opacity: 0.4,
@@ -403,16 +407,21 @@ class PDFView extends Component{
                     <Button onClick={this.handlePrevious}>prev page</Button>
                     <Button onClick={this.handleNext}>next page</Button>
                     <Button onClick={this.allocComm}>展示批注&笔记</Button>
+                    <div>
                     <div id="pdf-canvas" 
                     onMouseDown={this.mouseDown} 
                     onMouseUp={this.mouseUp} 
                     onMouseMove={this.mouseMove}
+                    style={{width:'600px',margin:'auto'}}
+                    // style={{float:'left'}}
                     >
-                        <PDF page={this.state.page}
+                        {/* <PDF page={this.state.page}
                             file={require("./hw-2-4.pdf")}
                             onDocumentComplete={this.onDocumentComplete}
-                            width={800}
-                        />
+                            width={900}
+                        /> */}
+                        <img src={require("./page.jpg")} width={600} style={{pointerEvents: 'none',userSelect:'none',mozUserSelect:'-moz-none'}}/>
+                    </div>
                     </div>
                     {this.state.selectRender}
                     {this.state.commRender.map((cr)=>(
