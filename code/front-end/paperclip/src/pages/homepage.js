@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import { Input, Select, List, Avatar, Button, Spin, Icon, Menu } from 'antd';
+import { Input, Select, List, Avatar, Button, Spin, Icon, Menu, Anchor } from 'antd';
 import NavBar from '../components/nav-bar';
 import reqwest from 'reqwest';
 
@@ -8,6 +8,12 @@ const fakeDataUrl = 'https://randomuser.me/api/?results=5&inc=name,gender,email,
 const MenuItemGroup = Menu.ItemGroup;
 
 class Sider extends React.Component {
+    state = {
+        userID: 0,
+    }
+    componentWillMount = () => {
+        /* ask for userID  */
+    }
     handleClick = (e) => {
         console.log('click ', e);
     }
@@ -42,20 +48,33 @@ class Sider extends React.Component {
     render() {
         const renderFooter = this.renderFooter();
         return (
+            <div>
+            <Anchor style={{float:'right',marginRight:'10%',marginTop:'5%',width:'500px'}}>
             <div className="menu" style={{float: "right", marginRight: "10%", textAlign:"left"}}>
                 <Menu
                     onClick={this.handleClick}
                     style={{ width: 300 }}
                 >
                     <MenuItemGroup key="g1" title="消息提示">
-                        <Menu.Item key="1"><Icon type="book" />我收藏的论文<span class="GlobalSideBar-navNumber">2,576</span></Menu.Item>
-                        <Menu.Item key="2"><Icon type="team" />我关注的用户<span class="GlobalSideBar-navNumber">2,576</span></Menu.Item>
+                       
+                        <Menu.Item key="1">
+                        <Link to={'/user/starpaper?userID='+this.state.userID}>
+                            <Icon type="book" />我收藏的论文<span class="GlobalSideBar-navNumber">2,576</span>
+                        </Link>
+                        </Menu.Item>
+                        <Menu.Item key="2">
+                        <Link to={'/user/staruser?userID='+this.state.userID}>
+                            <Icon type="team" />我关注的用户<span class="GlobalSideBar-navNumber">2,576</span>
+                        </Link>
+                        </Menu.Item>
                         <Menu.Item key="3"><Icon type="user-add" />我的邀请<span class="GlobalSideBar-navNumber">2,576</span></Menu.Item>
                         <Menu.Item key="4"><Icon type="message" />我的私信<span class="GlobalSideBar-navNumber">2,576</span></Menu.Item>
                         <Menu.Item key="5"><Icon type="customer-service" />社区服务中心</Menu.Item>
                     </MenuItemGroup>
                 </Menu>
                 {renderFooter}
+            </div>
+            </Anchor>
             </div>
         );
     }

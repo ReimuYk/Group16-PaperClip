@@ -145,7 +145,7 @@ class UserNote extends Component{
                 </Menu>
             </Anchor>
             <div style={{width:'60%',marginLeft:'200px'}}>
-            <p style={{marginLeft:'490px'}}>上次修改日期</p>
+            <p style={{marginLeft:'465px'}}>上次修改日期</p>
                 <List
                     style={{textAlign:'left'}}
                     className="demo-loadmore-list"
