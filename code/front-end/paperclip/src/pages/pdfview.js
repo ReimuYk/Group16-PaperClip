@@ -1,10 +1,16 @@
 import React, {Component} from 'react';
 import PDF from 'react-pdf-js';
-import { Button, Popover} from 'antd'
+import { Button, Popover, Affix, Row, Col, Card} from 'antd'
 import 'antd/dist/antd.css';
 
 
+let leftplace = []
+let rightplace = []
 class PDFView extends Component{
+    // constructor(props){
+    //     super(props)
+    //     this.allocComm()
+    // }
     state = {
         //page state
         pageloc: null,
@@ -21,7 +27,12 @@ class PDFView extends Component{
         selectRender:null,
         marked:[
             {id:[2],content:'this is id 2 block',visible:false},
-            {id:[3],content:'this is id 3 block',visible:false}
+            {id:[3],content:'this is id 3 block',visible:false},
+            {id:[5],content:'拥挤的两个批注',visible:false},
+            {id:[6],content:'拥挤的第二个批注',visible:false}
+        ],
+        marked_note:[
+            {id:[4],title:'note4',content:'this is id 4 note addr',visible:false}
         ],
         sel_content:[
             {ids:[2],like:11,dislike:22,marked:false,content:'this is an unmarked',user:'user1',time:'2019.01.01'}
@@ -33,10 +44,16 @@ class PDFView extends Component{
         commRender:[
             {cid:1,tag:'1',render:[]}
         ],
+        noteRender:[
+            {nid:1,tag:'1',render:[]}
+        ],
+        leftplace:[],
+        rightplace:[]
     };
     onDocumentComplete = (pages) => {
         this.setState({ page: 1, pages });
-        setTimeout("this.allocComm()",1000)
+        // while (this.state.pageloc==null){}
+        // this.allocComm()
     }
     handlePrevious = () => {
         if (this.state.page==1) return
@@ -86,24 +103,16 @@ class PDFView extends Component{
         })
         let loc = [e.clientX-e.target.getBoundingClientRect().left,e.clientY-e.target.getBoundingClientRect().top]        
         let tid = this.findItemId(loc)
-        // if (tid!=null){
-        //     this.putSelect([tid])
-        // }else{
-        //     this.putSelect([])
-        // }
         if (!this.state.mousePressing) return
         if (tid!=null){
             if (this.state.mouseStart==null){
                 this.setState({mouseStart:tid})
                 return
             }
-            // console.log(this.state.mouseStart)
             let selected = []
             let flag = false
             for (var i=0;i<this.state.blocklist.length;i++){
-                console.log(this.state.blocklist[i].id,this.state.mouseStart)
                 if (this.state.blocklist[i].id==this.state.mouseStart){
-                    // console.log('flag')
                     flag = true
                 }
                 if (flag){
@@ -155,7 +164,83 @@ class PDFView extends Component{
         }
         this.setState({selectRender:res})
     }
+    getTop = (lr,h) => {
+        if (lr=='l'){
+            var ll=leftplace
+            var bh = h//button height
+            var count = 0
+            while (true){
+                count += 1
+                if (count>100) return bh
+                var flag = false
+                if (ll.length==0){
+                    flag = true
+                }
+                var less = null
+                var more = null
+                for (var i=0;i<ll.length;i++){
+                    if (ll[i]<=bh && (less==null || less<ll[i])){
+                        less = ll[i]
+                    }
+                    if (ll[i]>bh && (more==null || more>ll[i])){
+                        more = ll[i]
+                    }
+                }
+                if (!(less==null||bh-less>=30)){
+                    bh = less+30
+                }
+                else if (!(more==null||more-bh>=30)){
+                    bh = more+30
+                }else{
+                    flag = true
+                }
+                if (flag==true){
+                    leftplace.push(bh)
+                    return bh
+                }
+                console.log(bh)
+            }
+        }
+        if (lr=='r'){
+            var ll=rightplace
+            var bh = h//button height
+            var count = 0
+            while (true){
+                count += 1
+                if (count>100) return bh
+                var flag = false
+                if (rightplace.length==0){
+                    flag = true
+                }
+                var less = null
+                var more = null
+                for (var i=0;i<ll.length;i++){
+                    if (ll[i]<=bh && (less==null || less<ll[i])){
+                        less = ll[i]
+                    }
+                    if (ll[i]>bh && (more==null || more>ll[i])){
+                        more = ll[i]
+                    }
+                }
+                if (!(less==null||bh-less>=30)){
+                    bh = less+30
+                }
+                else if (!(more==null||more-bh>=30)){
+                    bh = more+30
+                }else{
+                    flag = true
+                }
+                if (flag==true){
+                    rightplace.push(bh)
+                    return bh
+                }
+                console.log(bh)
+            }
+        }
+    }
     allocComm = () => {
+        leftplace = []
+        rightplace = []
         let cr=[]
         for (var i=0;i<this.state.marked.length;i++){
             let mitem = this.state.marked[i]
@@ -188,8 +273,6 @@ class PDFView extends Component{
             //add line div
             var w = this.state.pagesize[0]-bitem.end[0]-71
             var line_stl = {
-                // transform:'rotate(-10deg)',
-                // transformOrigin:'0 0',
                 position: 'absolute',
                 left:bitem.end[0]+this.state.pageloc[0]+document.documentElement.scrollLeft,
                 top:bitem.end[1]+this.state.pageloc[1]+document.documentElement.scrollTop-3,
@@ -199,6 +282,19 @@ class PDFView extends Component{
                 opacity: 0.6,
             }
             rend.push(<div key={rend.length+1} width={w} height={3} style={line_stl}/>)
+            var tt = this.getTop('r',bitem.end[1]+this.state.pageloc[1]+document.documentElement.scrollTop-3-73-15)
+            var btn_stl = {
+                position: 'absolute',
+                left:this.state.pagesize[0]+this.state.pageloc[0]+document.documentElement.scrollLeft-73+73,
+                top:tt,
+            }
+            rend.push(
+                <div key={rend.length+1} style={btn_stl}>
+                    <Popover placement="bottomLeft" content={<a>{mitem.content}</a>} trigger='click'>
+                        <Button shape='circle'>{i+1}</Button>
+                    </Popover>
+                </div>
+            )
             var line_stl2 = {
                 transform:'rotate(-45deg)',
                 transformOrigin:'0 0',
@@ -211,43 +307,112 @@ class PDFView extends Component{
                 opacity: 0.6,
             }
             rend.push(<div key={rend.length+1} width={40} height={3} style={line_stl2}/>)
-            var btn_stl = {
-                position: 'absolute',
-                left:this.state.pagesize[0]+this.state.pageloc[0]+document.documentElement.scrollLeft-73+73,
-                top:bitem.end[1]+this.state.pageloc[1]+document.documentElement.scrollTop-3-73-15,
-            }
-            rend.push(
-                <div key={rend.length+1} style={btn_stl}>
-                    <Popover placement="bottomLeft" content={<a>{mitem.content}</a>} trigger='click'>
-                        <Button shape='circle'>{i+1}</Button>
-                    </Popover>
-                </div>
-            )
 
             cr.push({cid:cr.length+1,tag:(cr.length+1).toString(),render:rend})
         }
         this.setState({commRender:cr})
+        console.log(rightplace)
+        this.allocNote()
+    }
+    allocNote = () => {
+        let cr=[]
+        for (var i=0;i<this.state.marked_note.length;i++){
+            let mitem = this.state.marked_note[i]
+            let rend = []
+            //add block div(Red)
+            let bitem = null
+            for (var j=0;j<mitem.id.length;j++){
+                for (var k=0;k<this.state.blocklist.length;k++){
+                    if (mitem.id[j]==this.state.blocklist[k].id){
+                        bitem = this.state.blocklist[k]
+                        break
+                    }
+                }
+                var w = bitem.end[0]-bitem.start[0]
+                var h = bitem.end[1]-bitem.start[1]
+                var stl = {
+                    backgroundColor:'blue',
+                    position: 'absolute',
+                    left:bitem.start[0]+this.state.pageloc[0]+document.documentElement.scrollLeft,
+                    top:bitem.start[1]+this.state.pageloc[1]+document.documentElement.scrollTop,
+                    minHeight:h,
+                    minWidth:w,
+                    opacity:0.4,
+                    pointerEvents: 'none'
+                }
+                rend.push(
+                    <div key={rend.length+1} width={w} height={h} style={stl}/>
+                )
+            }
+            //add line div
+            // var w = this.state.pagesize[0]-bitem.end[0]-71
+            var w = bitem.start[0]-71
+            var line_stl = {
+                // transform:'rotate(-10deg)',
+                // transformOrigin:'0 0',
+                position: 'absolute',
+                left:this.state.pageloc[0]+document.documentElement.scrollLeft+71,
+                top:bitem.end[1]+this.state.pageloc[1]+document.documentElement.scrollTop-3,
+                minWidth:w,
+                minHeight:3,
+                backgroundColor: 'blue',
+                opacity: 0.4,
+            }
+            rend.push(<div key={rend.length+1} width={w} height={3} style={line_stl}/>)
+            
+            var btn_stl = {
+                position: 'absolute',
+                left:this.state.pageloc[0]+document.documentElement.scrollLeft+73-73-30,
+                top:bitem.end[1]+this.state.pageloc[1]+document.documentElement.scrollTop-3-73-15,
+            }
+            rend.push(
+                <div key={rend.length+1} style={btn_stl}>
+                    <Popover placement="bottomRight" content={<Card title={mitem.title} bordered={false}><a>{mitem.content}</a></Card>} trigger='click'>
+                        <Button shape='circle'>{i+1}</Button>
+                    </Popover>
+                </div>
+            )
+            var line_stl2 = {
+                transform:'rotate(45deg)',
+                transformOrigin:'100% 100%',
+                position: 'absolute',
+                left:this.state.pageloc[0]+document.documentElement.scrollLeft-30,
+                top:bitem.end[1]+this.state.pageloc[1]+document.documentElement.scrollTop-3,
+                minWidth:100,
+                minHeight:3,
+                backgroundColor: 'blue',
+                opacity: 0.4,
+            }
+            rend.push(<div key={rend.length+1} width={40} height={3} style={line_stl2}/>)
+
+            cr.push({nid:cr.length+1,tag:(cr.length+1).toString(),render:rend})
+        }
+        this.setState({noteRender:cr})
     }
     render(){
         return(
             <div style={{margin:'auto',backgroundColor:'gray'}}>
-                <Button onClick={this.handlePrevious}>prev page</Button>
-                <Button onClick={this.handleNext}>next page</Button>
-                <Button onClick={this.allocComm}>allocComm</Button>
-                <div id="pdf-canvas" 
-                onMouseDown={this.mouseDown} 
-                onMouseUp={this.mouseUp} 
-                onMouseMove={this.mouseMove}>
-                    <PDF page={this.state.page}
-                        file={require("./hw-2-4.pdf")}
-                        onDocumentComplete={this.onDocumentComplete}
-                        width={900}
-                    />
-                </div>
-                {this.state.selectRender}
-                {this.state.commRender.map((cr)=>(
-                    <div>{cr.render}</div>
-                ))}
+                    <Button onClick={this.handlePrevious}>prev page</Button>
+                    <Button onClick={this.handleNext}>next page</Button>
+                    <Button onClick={this.allocComm}>展示批注&笔记</Button>
+                    <div id="pdf-canvas" 
+                    onMouseDown={this.mouseDown} 
+                    onMouseUp={this.mouseUp} 
+                    onMouseMove={this.mouseMove}
+                    >
+                        <PDF page={this.state.page}
+                            file={require("./hw-2-4.pdf")}
+                            onDocumentComplete={this.onDocumentComplete}
+                            width={900}
+                        />
+                    </div>
+                    {this.state.selectRender}
+                    {this.state.commRender.map((cr)=>(
+                        <div>{cr.render}</div>
+                    ))}
+                    {this.state.noteRender.map((cr)=>(
+                        <div>{cr.render}</div>
+                    ))}
             </div>
         )
     }
