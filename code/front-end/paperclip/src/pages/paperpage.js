@@ -12,7 +12,7 @@ class Paper extends Component{
             <div>
                 <NavBar />
                 <NoteList />
-                <PDFView />
+        {/*<PDFView />*/}
                 <Postil />
             </div>
         )

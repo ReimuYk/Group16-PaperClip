@@ -411,7 +411,7 @@ class PDFView extends Component{
                         <PDF page={this.state.page}
                             file={require("./hw-2-4.pdf")}
                             onDocumentComplete={this.onDocumentComplete}
-                            width={900}
+                            width={800}
                         />
                     </div>
                     {this.state.selectRender}

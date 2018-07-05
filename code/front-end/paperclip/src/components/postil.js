@@ -105,8 +105,7 @@ class Postil extends Component{
                     <Avatar shape="square" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
                     {item.user}
                 </p>
-                <Divider />
-                <p>{item.content}</p>  
+                <p style={{marginTop:"7%"}}>{item.content}</p>  
                 <Divider />  
                 <ButtonGroup>
                     <Button type={this.state.agreeList[idx].agreed?"primary":"default"} icon="like" value={idx} onClick={this.agree}>{item.agree}</Button>
@@ -121,10 +120,9 @@ class Postil extends Component{
         if(!comment) return null;
         return(
             <List
-                footer={<div>Footer</div>}
-                bordered
+                bordered={false}
                 dataSource={comment}
-                renderItem={item => (<List.Item>{item.user}<br/>{item.content}</List.Item>)}
+                renderItem={item => (<List.Item><Icon type="user" />{item.user}<br/>{item.content}</List.Item>)}
             />
         )
     }
@@ -179,8 +177,10 @@ class Postil extends Component{
         const postils = this.state.postils;
         const comments = this.state.comments; 
         return(
-            <div id="postil" style={{width:"20%",float:"right", marginRight:"2%",marginTop:"0"}}>
-                <Anchor  offsetTop={60}>
+            <div id="postil" 
+            style={{width:"20%",height:"500px",float:"right",
+             marginRight:"2%",marginTop:"0",overflowY:"scroll",}}>
+                <Anchor style={{position:"fixed",zIndex:"1",backgroundColor:"#FFFFFF"}}>
                     <Search
                     type="textarea"
                     placeholder="input text"
@@ -191,7 +191,8 @@ class Postil extends Component{
                     onSearch={this.handleInput}
                     />   
                 </Anchor>
-                <Collapse accordion bordered={false} onChange={this.setPostilIdx}>
+                <Collapse accordion bordered={false} onChange={this.setPostilIdx}
+                 style={{marginTop:"14%"}}>
                 {
                     postils.map((postil,idx)=>{
                         var postil = this.getPostil(postil,idx);
@@ -203,8 +204,7 @@ class Postil extends Component{
                         );
                     },this)
                 }
-                </Collapse>
-                             
+                </Collapse>                             
           </div>
         );
     }
