@@ -79,75 +79,90 @@ const paper = [{
     title: 'title 1',
     author: 'author 1',
     keyWord: 'key word 1',
-    readno: '233',
-    noteno: '5',
+    readno: 233,
+    noteno: 5,
 },{
     key: '2',
     title: 'title 2',
     author: 'author 2',
     keyWord: 'key word 2, key word 3',
-    readno: '555',
-    noteno: '42',
+    readno: 555,
+    noteno: 42,
 },{
     key: '3',
     title :'title 3',
     author: 'author 1',
     keyWord: 'key word 1, key word 2',
-    readno: '123',
-    noteno: '2',
+    readno: 123,
+    noteno: 2,
 },{
     key: '4',
     title :'title 4',
     author: 'author 1',
     keyWord: 'key word 1, key word 2',
-    readno: '123',
-    noteno: '2',
+    readno: 123,
+    noteno: 2,
 },{
     key: '5',
     title :'title 5',
     author: 'author 1',
     keyWord: 'key word 1, key word 2',
-    readno: '123',
-    noteno: '2',
+    readno: 123,
+    noteno: 2,
 },{
     key: '6',
     title :'title 6',
     author: 'author 1',
     keyWord: 'key word 1, key word 2',
-    readno: '123',
-    noteno: '2',
+    readno: 123,
+    noteno: 2,
 }]
 class Search extends Component{
-    constructor(props){
+    constructor(props) {
         super(props);
         this.readnoDESC = this.readnoDESC.bind(this);
         this.readnoASC = this.readnoASC.bind(this);
         this.notenoDESC = this.notenoDESC.bind(this);
         this.notenoASC = this.notenoASC.bind(this);
+        this.state = {paperData: paper};
     }
     readnoDESC(){
         var compare = function(obj1, obj2) {
             var val1 = obj1.readno;
             var val2 = obj2.readno;
-            if(val1 < val2){ return -1;}
-            else if( val1 > val2) {return 1;}
+            if(val1 < val2){ return 1;}
+            else if( val1 > val2) {return -1;}
             else return 0;
         }
-        paper.sort(compare);
-        alert(1);
+        this.setState({
+            paperData: paper.sort(compare)
+        })
     }
     readnoASC(){
         var compare = function(obj1, obj2) {
             var val1 = obj1.readno;
             var val2 = obj2.readno;
+            if(val1 < val2){ return -1;}
+            else if( val1 > val2) {return 1;}
+            else return 0;
+        }
+        this.setState({
+            paperData: paper.sort(compare)
+        })
+    }
+    notenoDESC(){
+        var compare = function(obj1, obj2) {
+            var val1 = obj1.noteno;
+            var val2 = obj2.noteno;
             if(val1 < val2){ return 1;}
             else if( val1 > val2) {return -1;}
             else return 0;
         }
-        alert(2);
-        paper.sort(compare);
+        this.setState({
+            paperData: paper.sort(compare)
+        })
     }
-    notenoDESC(){
+    notenoASC(){
         var compare = function(obj1, obj2) {
             var val1 = obj1.noteno;
             var val2 = obj2.noteno;
@@ -155,17 +170,9 @@ class Search extends Component{
             else if( val1 > val2) {return 1;}
             else return 0;
         }
-        paper.sort(compare);
-    }
-    notenoASC(){
-        var compare = function(obj1, obj2) {
-            var val1 = obj1.noteno;
-            var val2 = obj2.noteno;
-            if(val1 < val2){ return 1;}
-            else if( val1 > val2) {return -1;}
-            else return 0;
-        }
-        paper.sort(compare);
+        this.setState({
+            paperData: paper.sort(compare)
+        })
     }
     renderSideBar(){
         const data = [
@@ -208,7 +215,7 @@ class Search extends Component{
         return(
             <List
                 grid={{ gutter: 16, column: 3 }}
-                dataSource={paper}
+                dataSource={this.state.paperData}
                 renderItem={item => (
                     <List.Item>
                         <Card

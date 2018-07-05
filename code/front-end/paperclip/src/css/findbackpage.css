@@ -146,3 +146,23 @@ button {
     margin: 0 auto;
     margin-top: 10%;
 }
+
+.GlobalSideBar-navNumber {
+    padding: 0px 10px;
+    background: #f6f6f6;
+    color: #8590a6;
+    font-size: 12px;
+    float: right;
+}
+.GlobalSideBar .Footer {
+    padding: 0 0 0 5px;
+}
+.Footer {
+    padding: 10px 0 10px 5px;
+    font-size: 13px;
+    line-height: 2;
+    color: #8590a6;
+}
+.Footer-item {
+    display: inline-block;
+}

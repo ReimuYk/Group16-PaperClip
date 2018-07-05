@@ -3,8 +3,42 @@ import NavBar from '.././components/nav-bar';
 import Editor from '.././components/textEditor';
 import {Anchor, Popover,Icon,Button,Tag, Input, Tooltip,List,Avatar} from 'antd';
 const Search = Input.Search;
+/* fake data */
+const data = [{
+    key: 1,
+    title: 'doc 1',
+    description: 'description of doc 1',
+},{
+    key: 2,
+    title: 'doc 2',
+    description: 'description of doc 2',
+},{
+    key: 3,
+    title: 'doc 3',
+    description: 'description of doc 3',
+},{
+    key: 4,
+    title: 'doc 4',
+    description: 'description of doc 4',
+},{
+    key: 5,
+    title: 'doc 5',
+    description: 'description of doc 5',
+},{
+    key: 6,
+    title: 'doc 6',
+    description: 'description of doc 6',
+},{
+    key: 7,
+    title: 'doc 7',
+    description: 'description of doc 7',
+},{
+    key: 8,
+    title: 'doc 8',
+    description: 'description of doc 8',
+}]
 
-class WriteDoc extends Component{
+class ModifyDoc extends Component{
     constructor(props){
         super(props);
         this.state = {
@@ -13,6 +47,8 @@ class WriteDoc extends Component{
             inputVisible: false,
             colors:["red","magenta","green","blue","geekblue"],
             invitor:["大哥"],
+            title: '',
+            description: '',
         }
         this.showInput = this.showInput.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -20,7 +56,26 @@ class WriteDoc extends Component{
         this.handleClose = this.handleClose.bind(this);
         this.addInvitor = this.addInvitor.bind(this);
     }
-
+    componentWillMount = () => {
+        var url = window.location.href; 
+        var theRequest = new Object();
+        if ( url.indexOf( "?" ) != -1 ) {
+            var str = url.substr( 1 ); //substr()方法返回从参数值开始到结束的字符串；
+            var strs = str.split( "&" );
+            for ( var i = 0; i < strs.length; i++ ) {
+                theRequest[ strs[ i ].split( "=" )[ 0 ] ] = ( strs[ i ].split( "=" )[ 1 ] );
+            }
+            var noteKey = this.props.location.search.substring(5);
+            console.log('substring', noteKey);//5 == 'key='.length+1 (url: .../modifynote?key=xxx)
+            console.log('data[noteKey-1]',data[noteKey-1]);
+            /* get content of that note */
+            /* here we use fake data */
+            this.setState({
+                title: data[noteKey-1].title,
+                description: data[noteKey-1].description,
+            })
+        }
+    }
     handleClose(removedTag){
         const tags = this.state.tags.filter(tag => tag !== removedTag);
         console.log(tags);
@@ -131,8 +186,8 @@ class WriteDoc extends Component{
                 <Popover placement="right" title="关键词" content={keyTags} trigger="click">
                     <Button style={{width:150}}><Icon type="plus" />添加关键词</Button>
                 </Popover>
-                <Button style={{width:150}}>{"保存为草稿"}<Icon type="edit" /></Button>
-                <Button style={{width:150}}>{"发布文档"}<Icon type="check" /></Button>
+                <Button style={{width:150}}><Icon type="edit" />{"保存为草稿"}</Button>
+                <Button style={{width:150}}><Icon type="check" />{"发布文档"}</Button>
             </div>
         );
     }
@@ -143,10 +198,10 @@ class WriteDoc extends Component{
                 <NavBar />
                 <div className="textEditor" style={{width:"60%",marginLeft:"11%",margintop:"10%",float:"left"}}>
                 <input 
-                    style={{fontSize:"35px",fontWeight:"bolder",border:"none",outline:"none"}} 
-                    placeholder="请输入标题"
+                    style={{fontSize:"35px",fontWeight:"bolder",border:"none",outline:"none",textAlign:'center'}} 
+                    defaultValue={this.state.title}
                 />                
-                <Editor initText="<p>空行考核会计哈哈</p>"/>
+                <Editor initText={this.state.description} initTitle={this.state.title} />
                 </div>
                 <Anchor style={{float:"right",marginRight:"8%",marginTop:"4%"}}>
                     {side}
@@ -156,4 +211,4 @@ class WriteDoc extends Component{
     }
 }
 
-export default WriteDoc;
+export default ModifyDoc;
