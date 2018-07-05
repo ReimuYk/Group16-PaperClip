@@ -197,31 +197,31 @@ class User extends Component{
                    
                     <Anchor style={{float:'right',marginRight:'10%',marginTop:'5%'}}>
                         <Menu>
-                        <Menu.Item>
-                            <Link to='/user/starpaper'>
-                            <span>收藏的论文</span>
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item>
-                            <Link to='/user/starnote'>
-                            <span>收藏的笔记</span>
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item>
-                            <Link to='/user/stardoc'>
-                            <span>收藏的文档</span>
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item>
-                            <Link to='/user/usernote'>
-                            <span>写过的笔记</span>
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item>
-                            <Link to='/user/userdoc'>
-                            <span>写过的文档</span>
-                            </Link>
-                        </Menu.Item>
+                            <Menu.Item>
+                                <Link to={'/user/starpaper?userID='+userID}>
+                                <span>收藏的论文</span>
+                                </Link>
+                            </Menu.Item>
+                            <Menu.Item>
+                                <Link to={'/user/starnote?userID='+userID}>
+                                <span>收藏的笔记</span>
+                                </Link>
+                            </Menu.Item>
+                            <Menu.Item>
+                                <Link to={'/user/stardoc?uesrID='+userID}>
+                                <span>收藏的文档</span>
+                                </Link>
+                            </Menu.Item>
+                            <Menu.Item>
+                                <Link to={'/user/usernote?userID='+userID}>
+                                <span>写过的笔记</span>
+                                </Link>
+                            </Menu.Item>
+                            <Menu.Item>
+                                <Link to={'/user/userdoc?userID='+userID}>
+                                <span>写过的文档</span>
+                                </Link>
+                            </Menu.Item>
                         </Menu>
                     </Anchor>
                     

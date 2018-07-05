@@ -210,7 +210,7 @@ class ModifyNote extends Component{
                 <NavBar />
                 <div className="textEditor" style={{width:"60%",marginLeft:"11%",margintop:"10%",float:"left"}}>
                 <input 
-                    style={{fontSize:"35px",fontWeight:"bolder",border:"none",outline:"none"}} 
+                    style={{fontSize:"35px",fontWeight:"bolder",border:"none",outline:"none",textAlign:'center'}} 
                     defaultValue={this.state.title}
                 />                
                 <Editor initText={this.state.description} initTitle={this.state.title} />

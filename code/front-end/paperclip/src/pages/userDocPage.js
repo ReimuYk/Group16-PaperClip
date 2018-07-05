@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { List, Avatar, Popconfirm } from 'antd';
+import { List, Avatar, Popconfirm, Menu, Anchor } from 'antd';
+import { Link } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 /* should get from server */
 import book1 from '../statics/book1.jpg';
-
+const userID = 1;
 const data = [{
     key: 1,
     title: 'doc 1',
@@ -37,6 +38,7 @@ const data = [{
     title: 'doc 8',
     description: 'description of doc 8',
 }]
+
 class UserDoc extends Component{
     componentWillMount = () => {
         /* get specific info of papers */
@@ -49,7 +51,36 @@ class UserDoc extends Component{
         return(
             <div>
             <NavBar />
-            <div style={{width:'70%',display:'inline-block'}}>
+            <Anchor style={{float:'right',marginRight:'10%',marginTop:'5%'}}>
+                <Menu>
+                    <Menu.Item>
+                        <Link to={'/user/starpaper?userID='+userID}>
+                        <span>收藏的论文</span>
+                        </Link>
+                    </Menu.Item>
+                    <Menu.Item>
+                        <Link to={'/user/starnote?userID='+userID}>
+                        <span>收藏的笔记</span>
+                        </Link>
+                    </Menu.Item>
+                    <Menu.Item>
+                        <Link to={'/user/stardoc?uesrID='+userID}>
+                        <span>收藏的文档</span>
+                        </Link>
+                    </Menu.Item>
+                    <Menu.Item>
+                        <Link to={'/user/usernote?userID='+userID}>
+                        <span>写过的笔记</span>
+                        </Link>
+                    </Menu.Item>
+                    <Menu.Item>
+                        <Link to={'/user/userdoc?userID='+userID}>
+                        <span>写过的文档</span>
+                        </Link>
+                    </Menu.Item>
+                </Menu>
+            </Anchor>
+            <div style={{width:'60%',marginLeft:'200px'}}>
             <List
                 style={{textAlign:'left'}}
                 itemLayout="horizontal"
