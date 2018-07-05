@@ -10,7 +10,7 @@ const constDocTitle = '文档标题';
 const constDocContent = '一次坐葡萄牙TAP航空从里斯本飞卡萨布兰卡，是那种螺旋桨小飞机，我选到了第一排紧急出口旁边的座位，登机之后正对面就坐着一个空少小哥。在候机厅的时候口渴在自动售货机里吗买了一小听类似芬达的碳酸饮料，后来广播登机了没来得及打开就放到了冲锋衣的兜里登机了。后来飞机升空平稳解开安全带之后我想起来了还有一听饮料准备喝，正好这时候空少小哥在后面，我当时脑子不知道怎么想的鬼使神差的把那听饮料藏在了我那件比较宽大的冲锋衣的袖子里面。小哥回来坐下了之后，我慢慢把袖子竖起来，另一只手伸进去扣住拉环，“呲”的一声拉开了拉环，同时还冒出来一股白烟，之后举起来喝了一口。短短的五秒之内，我观察空少小哥的面部表情至少经历了“疑惑—诧异/恐惧/绝望—劫后余生的喜悦与放松”三种状态。后来一想，要是对面坐的不是空少是空警，我应该已经被当场击毙了吧……'
 
 const { TextArea } = Input;
-class ViewDoc extends Component{
+class ViewNote extends Component{
     state = {
         uh: '',
         userID: 0,
@@ -161,4 +161,4 @@ class ViewDoc extends Component{
 }
 
 
-export default ViewDoc;
+export default ViewNote;

@@ -23,6 +23,7 @@ import UserFens from './pages/userFensPage';
 import ModifyNote from './pages/userModifyNotePage';
 import ModifyDoc  from './pages/userModifyDocPage';
 import ViewDoc from './pages/viewDocPage';
+import ViewNote from './pages/viewNotePage';
 import Register from './pages/RegisterPage';
 import Discover from './pages/discoverPage';
 import WriteDoc from './pages/writeDocPage';
@@ -52,8 +53,9 @@ class App extends Component {
               <Route path='/user/userfens' component={UserFens} />
               <Route path='/user/modifynote' component={ModifyNote} />
               <Route path='/user/modifydoc'  component={ModifyDoc} />
-              <Route path='/user/viewdoc' component={ViewDoc} />
-              <Route path='/user' component={User} />
+              <Route path='/viewdoc' component={ViewDoc} />
+              <Route path='/viewnote' component={ViewNote} />
+              <Route path='/user' component={User} /> 
               <Route path='/discover' component={Discover} />
               <Route path='/writedoc' component={WriteDoc} />
               <Route path='/pdfview' component={PDFView} />
