@@ -21,7 +21,8 @@ class PDFView extends Component{
             {id:3,start:[127,182],end:[239,196]},
             {id:4,start:[127,215],end:[169,227]},
             {id:5,start:[169,215],end:[190,227]},
-            {id:6,start:[190,215],end:[276,227]}
+            {id:6,start:[190,215],end:[276,227]},
+            {id:7,start:[89,385],end:[509,582]}
         ],
         selectid:[1],
         selectRender:null,
@@ -379,9 +380,9 @@ class PDFView extends Component{
                 </div>
             )
             var lt = bitem.end[1]+this.state.pageloc[1]+document.documentElement.scrollTop-3
-            var deg = Math.atan((tt+15-lt)/73)*180/3.14
+            var deg = Math.atan((tt+15-lt)/71)*180/3.14
             deg = -Math.round(deg)
-            var le = Math.sqrt(73*73+(lt-tt-15)*(lt-tt-15))
+            var le = Math.sqrt(71*71+(lt-tt-15)*(lt-tt-15))
             le = Math.round(le)
             var line_stl2 = {
                 transform:'rotate('+deg.toString()+'deg)',
