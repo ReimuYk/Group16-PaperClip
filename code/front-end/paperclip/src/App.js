@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {BrowserRouter} from 'react-router-dom';
 import { Switch, Route, Link } from 'react-router-dom';
 
-import logo from './logo.svg';
+
 import './App.css';
 import 'antd/dist/antd.css';
 
@@ -20,9 +20,12 @@ import StarUser from './pages/StarUserPage';
 import UserDoc from './pages/userDocPage';
 import UserNote from './pages/userNotePage';
 import UserFens from './pages/userFensPage';
-import Register from './pages/RegisterPage'
-import Discover from './pages/discoverPage'
-import PDFView from './pages/pdfview'
+import ModifyNote from './pages/userModifyNotePage';
+import ModifyDoc  from './pages/userModifyDocPage';
+import Register from './pages/RegisterPage';
+import Discover from './pages/discoverPage';
+import WriteDoc from './pages/writeDocPage';
+import PDFView from './pages/pdfview';
 
 class App extends Component {
   render() {
@@ -46,8 +49,11 @@ class App extends Component {
               <Route path='/user/userdoc' component={UserDoc} />
               <Route path='/user/usernote' component={UserNote} />
               <Route path='/user/userfens' component={UserFens} />
+              <Route path='/user/modifynote' component={ModifyNote} />
+              <Route path='/user/modifydoc'  component={ModifyDoc} />
               <Route path='/user' component={User} />
               <Route path='/discover' component={Discover} />
+              <Route path='/writedoc' component={WriteDoc} />
               <Route path='/pdfview' component={PDFView} />
             </Switch>
           </BrowserRouter>

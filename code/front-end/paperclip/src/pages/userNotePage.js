@@ -3,9 +3,7 @@ import { List, Avatar, Popconfirm } from 'antd';
 import NavBar from '../components/nav-bar';
 /* should get from server */
 import book1 from '../statics/book1.jpg';
-const userID = 1;
-const userName = '用户名';
-const userIntro = '用户描述';
+
 const data = [{
     key: 1,
     title: 'note 1',
@@ -75,7 +73,7 @@ class UserNote extends Component{
                     dataSource={data}
                     renderItem={item => (
                     <List.Item actions={[<p>
-                                            <a style={{width:'75px'}} href="/home">编辑笔记</a> 
+                                            <a style={{width:'75px'}} href={"modifyNote?key="+item.key}>编辑笔记</a> 
                                             <Popconfirm title="确定删除吗？" onConfirm={() => this.deleteNote(this, item)}>
                                                 <a style={{width:'75px',marginLeft:'20px'}}>删除笔记</a>
                                             </Popconfirm>

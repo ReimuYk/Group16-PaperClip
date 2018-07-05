@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import { List, Avatar, Button, Spin } from 'antd';
+import { List, Avatar } from 'antd';
 import NavBar from '../components/nav-bar';
 /* should get from server */
 import uh from '../statics/uh.jpg'
-const userID = 1;
-const userName = '用户名';
-const userIntro = '用户描述';
+
 const data = [{
     key: 1,
     userName: 'user 1',

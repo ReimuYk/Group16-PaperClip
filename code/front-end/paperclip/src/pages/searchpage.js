@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Icon, Button, Table, Tag } from 'antd';
+import { Menu, Icon, Dropdown, Tag, Card, List, Avatar } from 'antd';
 import NavBar from '../components/nav-bar'
 
 const { CheckableTag } = Tag;
@@ -71,6 +71,9 @@ class MyTag extends React.Component {
  * 
  * should get 'paper' from server
  */
+
+const { Meta } = Card;
+
 const paper = [{
     key: '1',
     title: 'title 1',
@@ -92,93 +95,183 @@ const paper = [{
     keyWord: 'key word 1, key word 2',
     readno: '123',
     noteno: '2',
+},{
+    key: '4',
+    title :'title 4',
+    author: 'author 1',
+    keyWord: 'key word 1, key word 2',
+    readno: '123',
+    noteno: '2',
+},{
+    key: '5',
+    title :'title 5',
+    author: 'author 1',
+    keyWord: 'key word 1, key word 2',
+    readno: '123',
+    noteno: '2',
+},{
+    key: '6',
+    title :'title 6',
+    author: 'author 1',
+    keyWord: 'key word 1, key word 2',
+    readno: '123',
+    noteno: '2',
 }]
-
 class Search extends Component{
-    // state = {
-    //     filterDropdownVisible: false,
-    //     searchText: '',
-    //     filtered: false,
-    // }
-    componentWillMount = () => {
-        /* get data ( paper ) from backend */
+    constructor(props){
+        super(props);
+        this.readnoDESC = this.readnoDESC.bind(this);
+        this.readnoASC = this.readnoASC.bind(this);
+        this.notenoDESC = this.notenoDESC.bind(this);
+        this.notenoASC = this.notenoASC.bind(this);
     }
-    // onInputChange = (e) => {
-    //     this.setState({ searchText: e.target.value });
-    // }
-    // onSearch = () => {
-    //     const { searchText } = this.state;
-    //     console.log('search:', searchText);
-    //     const reg = new RegExp(searchText, 'gi');
-    //     this.setState({
-    //       filterDropdownVisible: false,
-    //       filtered: !!searchText,
-    //       paper: paper.map((record) => {
-    //         const match = record.keyWord.match(reg);
-    //         if (!match) {
-    //           return null;
-    //         }
-    //         return {
-    //           ...record,
-    //           name: (
-    //             <span>
-    //               {record.keyWord.split(reg).map((text, i) => (
-    //                 i > 0 ? [<span className="highlight">{match[0]}</span>, text] : text
-    //               ))}
-    //             </span>
-    //           ),
-    //         };
-    //       }).filter(record => !!record),
-    //     });
-    // }
+    readnoDESC(){
+        var compare = function(obj1, obj2) {
+            var val1 = obj1.readno;
+            var val2 = obj2.readno;
+            if(val1 < val2){ return -1;}
+            else if( val1 > val2) {return 1;}
+            else return 0;
+        }
+        paper.sort(compare);
+        alert(1);
+    }
+    readnoASC(){
+        var compare = function(obj1, obj2) {
+            var val1 = obj1.readno;
+            var val2 = obj2.readno;
+            if(val1 < val2){ return 1;}
+            else if( val1 > val2) {return -1;}
+            else return 0;
+        }
+        alert(2);
+        paper.sort(compare);
+    }
+    notenoDESC(){
+        var compare = function(obj1, obj2) {
+            var val1 = obj1.noteno;
+            var val2 = obj2.noteno;
+            if(val1 < val2){ return -1;}
+            else if( val1 > val2) {return 1;}
+            else return 0;
+        }
+        paper.sort(compare);
+    }
+    notenoASC(){
+        var compare = function(obj1, obj2) {
+            var val1 = obj1.noteno;
+            var val2 = obj2.noteno;
+            if(val1 < val2){ return 1;}
+            else if( val1 > val2) {return -1;}
+            else return 0;
+        }
+        paper.sort(compare);
+    }
+    renderSideBar(){
+        const data = [
+            {
+                title: 'Ant Design Title 1',
+            },
+            {
+                title: 'Ant Design Title 2',
+            },
+            {
+                title: 'Ant Design Title 3',
+            },
+            {
+                title: 'Ant Design Title 4',
+            },
+        ];
+        return(
+            <div class="sidebar" style={{width: "20%", float: "right", marginRight: "10%"}}>
+                <div class="icon" style={{width: "130px", marginBottom: "30px"}}>
+                    <Icon type="bars" />
+                    <span style={{marginLeft: "20px"}}>你可能感兴趣:</span>
+                </div>
+                <List
+                    itemLayout="horizontal"
+                    dataSource={data}
+                    renderItem={item => (
+                        <List.Item>
+                            <List.Item.Meta
+                                avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                                title={<a href="https://ant.design">{item.title}</a>}
+                                description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                            />
+                        </List.Item>
+                    )}
+                />
+            </div>
+        )
+    }
+    renderList(){
+        return(
+            <List
+                grid={{ gutter: 16, column: 3 }}
+                dataSource={paper}
+                renderItem={item => (
+                    <List.Item>
+                        <Card
+                            style={{ width: 200 }}
+                            cover={<img alt="example" src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" />}
+                            actions={[<span>阅读量：{item.readno}</span>, <span>笔记数：{item.noteno}</span>]}
+                        >
+                            <Meta
+                                title={item.title}
+                                description={item.keyWord}
+                            />
+                        </Card>
+                    </List.Item>
+                )}
+            />
+        )
+    }
+    renderMenu(){
+        const menu = (
+            <Menu>
+                <Menu.Item>
+                    <a onClick={this.readnoDESC}>按阅读量降序</a>
+                </Menu.Item>
+                <Menu.Item>
+                    <a onClick={this.readnoASC}>按阅读量升序</a>
+                </Menu.Item>
+                <Menu.Item>
+                    <a onClick={this.notenoDESC}>按笔记量降序</a>
+                </Menu.Item>
+                <Menu.Item>
+                    <a onClick={this.notenoASC}>按笔记量升序</a>
+                </Menu.Item>
+            </Menu>
+        );
+        return(
+            <Dropdown overlay={menu}>
+                <a className="ant-dropdown-link" href="#">
+                    请选择排序方式 <Icon type="down" />
+                </a>
+            </Dropdown>
+        )
+    }
     render() {
-        const columns = [{
-            title: '标题',
-            dataIndex: 'title',
-            key: 'title',
-        },{
-            title: '作者',
-            dataIndex: 'author',
-            key: 'author',
-        },{
-            title: '关键词',
-            dataIndex: 'keyWord',
-            key: 'keyWord',
-            // filterDropdown: (
-            //     <div className="custom-filter-dropdown">
-            //       <Input
-            //         ref={ele => this.searchInput = ele}
-            //         placeholder="输入关键字查询"
-            //         value={this.state.searchText}
-            //         onChange={this.onInputChange}
-            //         onPressEnter={this.onSearch}
-            //       />
-            //       <Button type="primary" onClick={this.onSearch}>Search</Button>
-            //     </div>
-            // ),
-            // filterIcon: <Icon type="smile-o" style={{ color: this.state.filtered ? '#108ee9' : '#aaa' }} />,
-            // filterDropdownVisible: this.state.filterDropdownVisible,
-            // onFilterDropdownVisibleChange: (visible) => {
-            //     this.setState({
-            //         filterDropdownVisible: visible,
-            //     }, () => this.searchInput && this.searchInput.focus());
-            // },
-        },{
-            title: '阅读量',
-            dataIndex: 'readno',
-            key: 'readno',
-            sorter: (a, b) => a.readno - b.readno,
-        },{
-            title: '笔记量',
-            dataIndex: 'noteno',
-            key: 'noteno',
-            sorter: (a, b) => a.noteno - b.noteno,
-        }]
+        const renderList = this.renderList();
+        const renderMenu = this.renderMenu();
+        const renderSideBar = this.renderSideBar();
         return(
             <div>
                 <NavBar />
-                <MyTag />
-                <Table columns={columns} dataSource={paper} />
+                <div className="content" style={{display:"inline"}}>
+                    <div className="search" style={{float:"left", width:"60%", marginLeft: "50px", marginTop:"30px"}}>
+                        <div className="tag" style={{marginLeft:"0px", width:"300px"}}>
+                            <MyTag />
+                        </div>
+                        <div className="menu" style={{marginLeft: "0px", width:"150px", marginTop: "10px", marginBottom:"50px"}}>
+                            {renderMenu}
+                        </div>
+                        {renderList}
+                    </div>
+                    <div className="sidebar" style={{marginTop: "70px"}}>
+                        {renderSideBar}
+                    </div>
+                </div>
             </div>
         )
     }
