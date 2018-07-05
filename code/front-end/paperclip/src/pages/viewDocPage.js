@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { Divider, Input, Modal, Icon } from 'antd';
-import { Link } from 'react-router-dom';
-import NavBar from '../components/nav-bar';
+import { Divider, Input, Modal, Icon, Button } from 'antd';
 import '../css/style.css'
 import constuh from '../statics/uh.jpg'
 const constUserID = 0;
@@ -63,10 +61,53 @@ class ViewDoc extends Component{
     clearInput = () => {
         this.setState({ mailContent: '' });
     }
-    render(){
+    renderTopNav = () =>{
         return(
-            <div>
-                <NavBar />
+        <div className="navbartop">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="#">Navbar</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Link</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Dropdown
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#">Disabled</a>
+                        </li>
+                    </ul>
+                    <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"></input>
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                </div>
+            </nav>
+        </div>
+        )
+    }
+
+    render(){
+        const topNav = this.renderTopNav();
+        return(
+            <div className="content" style={{width:"690px", margin:"auto"}}>
+                {topNav}
                 <Modal
                     style={{height:'500px'}}
                     width={500}
@@ -79,9 +120,9 @@ class ViewDoc extends Component{
                     <TextArea rows={5} value={this.state.mailContent} onChange={this.handleMailChange} placeholder='私信内容' />
                 </Modal>
                 <div>
-                    <h1>{this.state.docTitle}</h1>
+                    <h1 class="Post-Title" style={{ fontWeight: "600", fontSize: "36px", textAlign:"left"}}> {this.state.docTitle} </h1>
                     <Divider />
-                    <div style={{width:'50%', textAlign:'center',marginLeft:'25%'}}>
+                    <div style={{textAlign:'left'}}>
                         <div id='u1-1'>
                             <img alt='' src={this.state.uh}
                             style={{width:'80px',height:'80px',borderRadius:'50%',margin:'0 auto',display:'block'}}
@@ -98,15 +139,8 @@ class ViewDoc extends Component{
                         <div id='u1-3'>
                             <br />
                             <p>
-                            <span>
-                            <Icon  onClick={this.sendMail} type='mail' style={{ fontSize: 30, color: '#08c' }} />
-                            </span>
-                            <span style={{width:'80px',marginLeft:'20px'}}>
-                            <Icon  onClick={this.showModal} type="plus-square-o" style={{ fontSize: 30, color: '#08c' }} />
-                            </span>
-                            <br />
-                            <a onClick={this.showModal}>发私信</a>
-                            <a style={{width:'80px',marginLeft:'20px'}} onClick={this.followUser}>关注</a>
+                                <Button style={{width:"100px"}} size="large" type="primary" onClick={this.showModal}><Icon type='mail' />发私信</Button>
+                                <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary" onClick={this.followUser}><Icon type='plus-square-o' />关注</Button>
                             </p>
                             <br />
                         </div>
@@ -114,8 +148,8 @@ class ViewDoc extends Component{
                     </div>
                     
                 </div>
-                <div style={{display:'inline-block',width:'50%',textAlign:'left'}}>
-                    <p>{this.state.docContent}</p>
+                <div style={{display:'inline-block', textAlign:'left'}}>
+                    <p style={{fontSize:"18px"}}>{this.state.docContent}</p>
                 </div>
             </div>
         )
