@@ -48,8 +48,6 @@ class Sider extends React.Component {
     render() {
         const renderFooter = this.renderFooter();
         return (
-            <div>
-            <Anchor style={{float:'right',marginRight:'10%',marginTop:'5%',width:'500px'}}>
             <div className="menu" style={{float: "right", marginRight: "10%", textAlign:"left"}}>
                 <Menu
                     onClick={this.handleClick}
@@ -63,7 +61,7 @@ class Sider extends React.Component {
                         </Link>
                         </Menu.Item>
                         <Menu.Item key="2">
-                        <Link to={'/user/staruser?userID='+this.state.userID}>
+                        <Link to={'/user?userID='+this.state.userID}>
                             <Icon type="team" />我关注的用户<span class="GlobalSideBar-navNumber">2,576</span>
                         </Link>
                         </Menu.Item>
@@ -73,8 +71,6 @@ class Sider extends React.Component {
                     </MenuItemGroup>
                 </Menu>
                 {renderFooter}
-            </div>
-            </Anchor>
             </div>
         );
     }
