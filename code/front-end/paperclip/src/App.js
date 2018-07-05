@@ -20,6 +20,7 @@ import StarUser from './pages/StarUserPage';
 import UserDoc from './pages/userDocPage';
 import UserNote from './pages/userNotePage';
 import UserFens from './pages/userFensPage';
+import UserSetting from './pages/userSettingPage';
 import ModifyNote from './pages/userModifyNotePage';
 import ModifyDoc  from './pages/userModifyDocPage';
 import ViewDoc from './pages/viewDocPage';
@@ -53,6 +54,7 @@ class App extends Component {
               <Route path='/user/userfens' component={UserFens} />
               <Route path='/user/modifynote' component={ModifyNote} />
               <Route path='/user/modifydoc'  component={ModifyDoc} />
+              <Route path='/user/setting' component={UserSetting} />
               <Route path='/viewdoc' component={ViewDoc} />
               <Route path='/viewnote' component={ViewNote} />
               <Route path='/user' component={User} /> 

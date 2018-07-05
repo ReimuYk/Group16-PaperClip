@@ -25,17 +25,18 @@ class ViewNote extends Component{
     }
     componentWillMount = () => {
         /* get docID from url */
-        var urlDocID = this.props.location.search.substring(7);//7 == 'docID='.length+1
+        var urlNoteID = this.props.location.search.substring(7);//7 == 'docID='.length+1
          /* get info from server */
-         this.setState({
+        this.setState({
             uh: constuh,
             userID: constUserID,
             userDescription: constUserDescription,
             userName: constUserName,
-            docID: urlDocID,
+            docID: urlNoteID,
             docTitle: constDocTitle,
             docContent: constDocContent,
         })
+        console.log('url note id', urlNoteID);
     }
     showModal = () => {
         this.setState({
