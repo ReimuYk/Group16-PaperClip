@@ -150,7 +150,7 @@ class UserDoc extends Component{
                     <List.Item.Meta
                     avatar={<Avatar src={item.cover} />}
                     /* 论文显示页 */
-                    title={<a href="https://ant.design">{item.title}</a>}
+                    title={<a href={"/user/viewdoc?docID="+item.key}>{item.title}</a>}
                     description={item.description}
                     />
                     <p>{item.date}</p>

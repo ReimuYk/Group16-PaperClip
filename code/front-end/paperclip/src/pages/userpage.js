@@ -78,6 +78,7 @@ const data = [{
 }]
 
 
+const { TextArea } = Input;
 class User extends Component{
     state = {
         visible: false,
@@ -122,13 +123,15 @@ class User extends Component{
             <div>
             <NavBar />
             <Modal
+                style={{height:'500px'}}
+                width={500}
                 title='私信'
                 visible={this.state.visible}
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
                 afterClose={this.clearInput}
                 >
-                <Input value={this.state.mailContent} onChange={this.handleMailChange} placeholder='私信内容' />
+                <TextArea rows={5} value={this.state.mailContent} onChange={this.handleMailChange} placeholder='私信内容' />
             </Modal>
             <div id='u'>
                 <div>
