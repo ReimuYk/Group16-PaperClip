@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { List, Avatar, Anchor, Menu } from 'antd';
+import { List, Avatar, Anchor, Menu, Popconfirm } from 'antd';
 import { Link } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 
 /* should get from server */
 import book1 from '../statics/book1.jpg';
 const userID=1;
-const data = [{
+const notes = [{
     key: 1,
     cover: book1,
     title: 'note 1',
@@ -81,8 +81,31 @@ const data = [{
 }]
 
 class StarNote extends Component{
+    state = {
+        data: [],
+    }
     componentWillMount = () => {
+        /* notes should get from server */
+        this.setState({
+            data: notes,
+        })
         /* get specific info of notes */
+    }
+    quitStar = (record, item) => {
+        var that = this;
+        var tmpdata = that.state.data;
+        var dataLen = tmpdata.length;
+        for(let i=0; i<dataLen; i++){
+            if(tmpdata[i].key == item.key){
+                tmpdata.splice(i, 1);
+                break;
+            }
+        }
+        console.log('want to quit star paper: id(key): ', item.key-1);
+        that.setState({
+            data: tmpdata,
+        })
+        /* send to server, refresh this page in get/post request */
     }
     render(){
         return(
@@ -120,17 +143,23 @@ class StarNote extends Component{
             <div style={{width:'60%',marginLeft:'200px'}}>
                 <p style={{textAlign:'left'}}>
                     <a style={{width:'100px',marginLeft:'48px'}}>笔记名称/描述</a>
-                    <a style={{width:'40px',marginLeft:'420px'}}>作者</a>
+                    <a style={{width:'40px',marginLeft:'300px'}}>作者</a>
                     <a style={{width:'40px',marginLeft:'53px'}}>阅读量</a>
-                    <a style={{width:'40px',marginLeft:'53px'}}>赞</a>
-                    <a style={{marginLeft:'53px'}}>创作日期</a>
+                    <a style={{width:'40px',marginLeft:'63px'}}>赞</a>
+                    <a style={{width:'70px',marginLeft:'80px'}}>创作日期</a>
+                    <a style={{wdith:'50px',marginLeft:'90px'}}>操作</a>
                 </p>
                 <List
                     style={{textAlign:'left'}}
                     itemLayout="horizontal"
-                    dataSource={data}
+                    dataSource={this.state.data}
                     renderItem={item => (
-                    <List.Item>
+                    <List.Item
+                        actions={[<p> 
+                            <Popconfirm title="确定取消收藏吗？" onConfirm={() => this.quitStar(this, item)}>
+                                <a style={{width:'75px',marginLeft:'20px'}}>取消收藏</a>
+                            </Popconfirm>
+                        </p>]}>
                         <List.Item.Meta
                         avatar={<Avatar src={item.cover} />}
                         /* 笔记显示页 */
@@ -140,7 +169,8 @@ class StarNote extends Component{
                         <a style={{width:'80px',marginLeft:'20px'}}>{item.author}</a>
                         <a style={{width:'80px',marginLeft:'20px'}}>{item.readno}</a>
                         <a style={{width:'80px',marginLeft:'20px'}}>{item.starno}</a>
-                        <a style={{width:'80px',marginLeft:'20px'}}>{item.date}</a>
+                        <a style={{width:'80px',marginLeft:'0px'}}>{item.date}</a>
+                        
                     </List.Item>
                     )}
                 />
