@@ -5,47 +5,99 @@ import NavBar from '../components/nav-bar';
 /* should get from server */
 import book1 from '../statics/book1.jpg';
 const userID = 1;
-const data = [{
+const docs = [{
     key: 1,
     title: 'doc 1',
+    cover: book1,
+    date: '2018-07-01',
     description: 'description of doc 1',
 },{
     key: 2,
     title: 'doc 2',
+    cover: book1,
+    date: '2018-07-01',
     description: 'description of doc 2',
 },{
     key: 3,
     title: 'doc 3',
+    cover: book1,
+    date: '2018-07-01',
     description: 'description of doc 3',
 },{
     key: 4,
     title: 'doc 4',
+    cover: book1,
+    date: '2018-07-01',
     description: 'description of doc 4',
 },{
     key: 5,
     title: 'doc 5',
+    cover: book1,
+    date: '2018-07-01',
     description: 'description of doc 5',
 },{
     key: 6,
     title: 'doc 6',
+    cover: book1,
+    date: '2018-07-01',
     description: 'description of doc 6',
 },{
     key: 7,
     title: 'doc 7',
+    cover: book1,
+    date: '2018-07-01',
     description: 'description of doc 7',
 },{
     key: 8,
     title: 'doc 8',
+    cover: book1,
+    date: '2018-07-01',
     description: 'description of doc 8',
 }]
 
 class UserDoc extends Component{
+    state = {
+        data: [],
+        userID: 0,
+    }
     componentWillMount = () => {
-        /* get specific info of papers */
+        /* get userID */
+        var that = this;
+        var url = window.location.href; 
+        var theRequest = new Object();
+        if ( url.indexOf( "?" ) != -1 ) {
+            var str = url.substr( 1 ); //substr()方法返回从参数值开始到结束的字符串；
+            var strs = str.split( "&" );
+            for ( var i = 0; i < strs.length; i++ ) {
+                theRequest[ strs[ i ].split( "=" )[ 0 ] ] = ( strs[ i ].split( "=" )[ 1 ] );
+            }
+            var urlUserID = this.props.location.search.substring(8);//8 == 'userID='.length+1 (url: ...?userID=xxx)
+            that.setState({
+                userID: urlUserID,
+            })
+            console.log('userID:', urlUserID);
+        }
+        /* get docs according to userID */
+        this.setState({
+            data: docs,
+        })
     }
     deleteDoc = (record, item) => {
         console.log('want to delete doc id(key):', item.key);
-        /* send to server, refresh this page in get/post request */
+        /* send key to server */
+        var that = this;
+        var tmpdata = that.state.data;
+        var dataLen = tmpdata.length;
+        for(let i=0; i<dataLen; i++){
+            if(tmpdata[i].key == item.key){
+                tmpdata.splice(i, 1);
+                break;
+            }
+        }
+        console.log('want to quit star paper: id(key): ', item.key-1);
+        that.setState({
+            data: tmpdata,
+        })
     }
     render(){
         return(
@@ -81,10 +133,11 @@ class UserDoc extends Component{
                 </Menu>
             </Anchor>
             <div style={{width:'60%',marginLeft:'200px'}}>
+            <p style={{marginLeft:'490px'}}>上次修改日期</p>
             <List
                 style={{textAlign:'left'}}
                 itemLayout="horizontal"
-                dataSource={data}
+                dataSource={this.state.data}
                 renderItem={item => (
                 <List.Item
                     actions={[<p>
@@ -95,11 +148,12 @@ class UserDoc extends Component{
                     </p>]}
                     >
                     <List.Item.Meta
-                    avatar={<Avatar src={book1} />}
+                    avatar={<Avatar src={item.cover} />}
                     /* 论文显示页 */
                     title={<a href="https://ant.design">{item.title}</a>}
                     description={item.description}
                     />
+                    <p>{item.date}</p>
                 </List.Item>
                 )}
             />
