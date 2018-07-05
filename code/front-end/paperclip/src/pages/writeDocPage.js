@@ -91,7 +91,9 @@ class Header extends React.Component {
                         </Tag>
                     )}
                 </div>
-                <a onClick={this.publish}>发布</a>
+                <div className="button" style={{marginTop:"15px"}}>
+                    <a onClick={this.publish}>发布</a>
+                </div>
             </div>
         );
     }
@@ -335,12 +337,14 @@ class WriteDoc extends Component{
         return(
             <div>
                 <Header />
-                <div className="textEditor" style={{width:"60%", marginLeft:"20%", marginTop:"50px"}}>
-                <input 
-                    style={{fontSize:"35px",fontWeight:"bolder",border:"none",outline:"none", textAlign:"center"}}
-                    placeholder="请输入标题"
-                />                
-                <Editor initText="<p>请输入内容</p>"/>
+                <div className="textEditor" style={{width:"60%", marginLeft:"20%", marginTop:"70px"}}>
+                    <input
+                        style={{fontSize:"35px",fontWeight:"bolder",border:"none",outline:"none", textAlign:"center"}}
+                        placeholder="请输入标题"
+                    />
+                    <div className="editor" style={{marginTop:"30px"}}>
+                        <Editor initText="<p>请输入内容</p>"/>
+                    </div>
                 </div>
             </div>
         )
