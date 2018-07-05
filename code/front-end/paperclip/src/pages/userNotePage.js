@@ -160,7 +160,7 @@ class UserNote extends Component{
                                         </p>]}>
                         <List.Item.Meta
                         avatar={<Avatar src={ book1 } />}
-                        title={<a href="/home">{item.title}</a>}
+                        title={<a href={"/viewnote?noteID="+item.key}>{item.title}</a>}
                         description={item.description}
                         />
                         <p>{item.date}</p>

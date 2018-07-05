@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Icon, Divider, Menu, List, Avatar, Modal, Input, Anchor } from 'antd';
+import { Layout, Icon, Divider, Menu, List, Avatar, Modal, Input, Anchor } from 'antd';
 import { Link } from 'react-router-dom';
 import '../css/style.css';
 import NavBar from '.././components/nav-bar';
@@ -11,78 +11,229 @@ const fensno   = 8;
 const userID = 1;
 const userName = '用户名';
 const userIntro = '用户描述';
-const data = [{
+const usersMoment = [{
     key: 1,
-    title: '动态 1',
-    discription: 'discription of 动态 1',
+    title: '用户动态 1',
+    discription: 'discription of 用户动态 1',
 },{
     key: 2,
-    title: '动态 2',
-    discription: 'discription of 动态 2',
+    title: '用户动态 2',
+    discription: 'discription of 用户动态 2',
 },{
     key: 3,
-    title: '动态 3',
-    discription: 'discription of 动态 3',
+    title: '用户动态 3',
+    discription: 'discription of 用户动态 3',
 },{
     key: 4,
-    title: '动态 4',
-    discription: 'discription of 动态 4',
+    title: '用户动态 4',
+    discription: 'discription of 用户动态 4',
 },{
     key: 5,
-    title: '动态 5',
-    discription: 'discription of 动态 5',
+    title: '用户动态 5',
+    discription: 'discription of 用户动态 5',
 },{
     key: 6,
-    title: '动态 6',
-    discription: 'discription of 动态 6',
+    title: '用户动态 6',
+    discription: 'discription of 用户动态 6',
 },{
     key: 7,
-    title: '动态 7',
-    discription: 'discription of 动态 7',
+    title: '用户动态 7',
+    discription: 'discription of 用户动态 7',
 },{
     key: 8,
-    title: '动态 8',
-    discription: 'discription of 动态 8',
+    title: '用户动态 8',
+    discription: 'discription of 用户动态 8',
 },{
     key: 9,
-    title: '动态 9',
-    discription: 'discription of 动态 9',
+    title: '用户动态 9',
+    discription: 'discription of 用户动态 9',
 },{
     key: 10,
-    title: '动态 10',
-    discription: 'discription of 动态 10',
+    title: '用户动态 10',
+    discription: 'discription of 用户动态 10',
 },{
     key: 11,
-    title: '动态 11',
-    discription: 'discription of 动态 11',
+    title: '用户动态 11',
+    discription: 'discription of 用户动态 11',
 },{
     key: 12,
-    title: '动态 12',
-    discription: 'discription of 动态 12',
+    title: '用户动态 12',
+    discription: 'discription of 用户动态 12',
 },{
     key: 13,
-    title: '动态 13',
-    discription: 'discription of 动态 13',
+    title: '用户动态 13',
+    discription: 'discription of 用户动态 13',
 },{
     key: 14,
-    title: '动态 14',
-    discription: 'discription of 动态 14',
+    title: '用户动态 14',
+    discription: 'discription of 用户动态 14',
 },{
     key: 15,
-    title: '动态 15',
-    discription: 'discription of 动态 15',
+    title: '用户动态 15',
+    discription: 'discription of 用户动态 15',
 },{
     key: 16,
-    title: '动态 16',
-    discription: 'discription of 动态 16',
+    title: '用户动态 16',
+    discription: 'discription of 用户动态 16',
 }]
 
+const papersMoment = [{
+    key: 1,
+    title: '论文动态 1',
+    discription: 'discription of 论文动态 1',
+},{
+    key: 2,
+    title: '论文动态 2',
+    discription: 'discription of 论文动态 2',
+},{
+    key: 3,
+    title: '论文动态 3',
+    discription: 'discription of 论文动态 3',
+},{
+    key: 4,
+    title: '论文动态 4',
+    discription: 'discription of 论文动态 4',
+},{
+    key: 5,
+    title: '论文动态 5',
+    discription: 'discription of 论文动态 5',
+},{
+    key: 6,
+    title: '论文动态 6',
+    discription: 'discription of 论文动态 6',
+},{
+    key: 7,
+    title: '论文动态 7',
+    discription: 'discription of 论文动态 7',
+},{
+    key: 8,
+    title: '论文动态 8',
+    discription: 'discription of 论文动态 8',
+},{
+    key: 9,
+    title: '论文动态 9',
+    discription: 'discription of 论文动态 9',
+},{
+    key: 10,
+    title: '论文动态 10',
+    discription: 'discription of 论文动态 10',
+},{
+    key: 11,
+    title: '论文动态 11',
+    discription: 'discription of 论文动态 11',
+},{
+    key: 12,
+    title: '论文动态 12',
+    discription: 'discription of 论文动态 12',
+},{
+    key: 13,
+    title: '论文动态 13',
+    discription: 'discription of 论文动态 13',
+},{
+    key: 14,
+    title: '论文动态 14',
+    discription: 'discription of 论文动态 14',
+},{
+    key: 15,
+    title: '论文动态 15',
+    discription: 'discription of 论文动态 15',
+},{
+    key: 16,
+    title: '论文动态 16',
+    discription: 'discription of 论文动态 16',
+}]
+
+const interactMoment = [{
+    key: 1,
+    title: '互动动态 1',
+    discription: 'discription of 互动动态 1',
+},{
+    key: 2,
+    title: '互动动态 2',
+    discription: 'discription of 互动动态 2',
+},{
+    key: 3,
+    title: '互动动态 3',
+    discription: 'discription of 互动动态 3',
+},{
+    key: 4,
+    title: '互动动态 4',
+    discription: 'discription of 互动动态 4',
+},{
+    key: 5,
+    title: '互动动态 5',
+    discription: 'discription of 互动动态 5',
+},{
+    key: 6,
+    title: '互动动态 6',
+    discription: 'discription of 互动动态 6',
+},{
+    key: 7,
+    title: '互动动态 7',
+    discription: 'discription of 互动动态 7',
+},{
+    key: 8,
+    title: '互动动态 8',
+    discription: 'discription of 互动动态 8',
+},{
+    key: 9,
+    title: '互动动态 9',
+    discription: 'discription of 互动动态 9',
+},{
+    key: 10,
+    title: '互动动态 10',
+    discription: 'discription of 互动动态 10',
+},{
+    key: 11,
+    title: '互动动态 11',
+    discription: 'discription of 互动动态 11',
+},{
+    key: 12,
+    title: '互动动态 12',
+    discription: 'discription of 互动动态 12',
+},{
+    key: 13,
+    title: '互动动态 13',
+    discription: 'discription of 互动动态 13',
+},{
+    key: 14,
+    title: '互动动态 14',
+    discription: 'discription of 互动动态 14',
+},{
+    key: 15,
+    title: '互动动态 15',
+    discription: 'discription of 互动动态 15',
+},{
+    key: 16,
+    title: '互动动态 16',
+    discription: 'discription of 互动动态 16',
+}]
 
 const { TextArea } = Input;
+const { Header, Content, Footer } = Layout;
 class User extends Component{
     state = {
         visible: false,
         mailContent: '',
+        data: papersMoment,
+    }
+    showStarUser = () => {
+        console.log('show user');
+        this.setState({
+            data: usersMoment,
+        })
+    }
+    showStarPaper = () => {
+        console.log('show paper');
+        this.setState({
+            data: papersMoment,
+        })
+    }
+    showInteract = () => {
+        console.log('show interact');
+        this.setState({
+            data: interactMoment,
+        })
     }
     showModal = () => {
         this.setState({
@@ -118,7 +269,6 @@ class User extends Component{
         this.setState({ mailContent: '' });
     }
     render() {
-        
         return(
             <div>
             <NavBar />
@@ -177,11 +327,12 @@ class User extends Component{
                     </div>
                 </div>
                 </div>
-                <Divider type="vertical" />
+                <Divider style={{width:'80%', display:'center'}}/>
                 <div>
                 <div id='u2'>
                     <div id='u2-1'>
-                        <List
+
+                        {/* <List
                             style={{textAlign:'left'}}
                             itemLayout="horizontal"
                             dataSource={data}
@@ -189,13 +340,45 @@ class User extends Component{
                             <List.Item>
                                 <List.Item.Meta
                                 avatar={<Avatar src={uh1} />}
-                                /* 论文显示页 */
+                                
+                                title={<a href="/home">{item.title}</a>}
+                                description={item.discription}
+                                />
+                            </List.Item>
+                            )}
+                        /> */}
+                        <Layout className="layout">
+                            {/* <Header> */}
+                            <Menu
+                                theme="light"
+                                mode="horizontal"
+                                defaultSelectedKeys={['2']}
+                                style={{ lineHeight: '50px', width:'100%' }}
+                            >
+                                <Menu.Item key="1"><a onClick={this.showStarUser}>关注的人的动态</a></Menu.Item>
+                                <Menu.Item key="2"><a onClick={this.showStarPaper}>收藏的论文的动态</a></Menu.Item>
+                                <Menu.Item key="3"><a onClick={this.showInteract}>最近互动动态</a></Menu.Item>
+                            </Menu>
+                            {/* </Header> */}
+                        
+                        <Content style={{backgroundColor:'#ffffff'}}>
+                        <List
+                            style={{textAlign:'left'}}
+                            itemLayout="horizontal"
+                            dataSource={this.state.data}
+                            renderItem={item => (
+                            <List.Item>
+                                <List.Item.Meta
+                                avatar={<Avatar src={uh1} />}
+                                
                                 title={<a href="/home">{item.title}</a>}
                                 description={item.discription}
                                 />
                             </List.Item>
                             )}
                         />
+                        </Content>
+                        </Layout>
                     </div>
                    
                     <Anchor style={{float:'right',marginRight:'10%',marginTop:'5%'}}>
