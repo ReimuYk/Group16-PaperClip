@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import AdminUser from '../components/adminUser'
 import AdminPaper from '../components/adminPaper'
-import adminPaper from '../components/adminPaper';
 
 class Admin extends React.Component {
     render(){
