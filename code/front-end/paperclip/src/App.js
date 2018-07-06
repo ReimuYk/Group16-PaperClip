@@ -29,8 +29,9 @@ import Register from './pages/RegisterPage';
 import Discover from './pages/discoverPage';
 import WriteDoc from './pages/writeDocPage';
 import PDFView from './pages/pdfview';
-import AdminUserList from './pages/adminUser'
-import AdminPaperList from './pages/adminPaper'
+import AdminUserList from './components/adminUser'
+import AdminPaperList from './components/adminPaper'
+import Admin from './pages/adminPage'
 
 class App extends Component {
   render() {
@@ -63,7 +64,7 @@ class App extends Component {
               <Route path='/discover' component={Discover} />
               <Route path='/writedoc' component={WriteDoc} />
               <Route path='/pdfview' component={PDFView} />
-              <Route path='/admin' component={AdminUserList} />
+              <Route path='/admin' component={Admin} />
             </Switch>
           </BrowserRouter>
 
