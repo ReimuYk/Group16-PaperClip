@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Collapse ,List,Input,Icon,Button,Avatar,Divider,Anchor} from 'antd';
+import Comment from "./comment";
 const Panel = Collapse.Panel;
 const Search = Input.Search;
 const ButtonGroup = Button.Group;
+
 
 class Postil extends Component{  
     constructor(props){
@@ -31,8 +33,6 @@ class Postil extends Component{
             agreeList:[],
             postilIdx:null,
             inputValue:"",
-            agreeOK:true,
-            disagreeOK:true
         }
     }
     componentWillMount(){
@@ -98,7 +98,6 @@ class Postil extends Component{
         this.setState({markList:markList});
     }
     getPostil = (item,idx)=>{
-        console.log(this.state.agreeList);
         return(
             <div style={{textAlign:"left"}}>
                 <p style={{marginLeft:"1%"}}>
@@ -173,14 +172,22 @@ class Postil extends Component{
             inputValue:""
         });
     }
+    
+    handleReply(name){
+        //console.log("father:"+name);
+        this.setState({
+            inputValue:"@"+name,
+        });
+    }
+    
     render() {
         const postils = this.state.postils;
         const comments = this.state.comments; 
         return(
-            <div id="postil" 
-            style={{width:"20%",height:"550px",float:"right",
-             marginRight:"2%",marginTop:"0",overflowY:"scroll",}}>
-                <Anchor style={{position:"fixed",zIndex:"1",backgroundColor:"#FFFFFF"}}>
+            <Anchor offsetTop={60} id="postil" 
+            style={{width:"20%",height:"530px",float:"right",
+             marginRight:"2%",marginTop:"0",overflowY:"scroll"}}>
+                <Anchor offsetTop={60} style={{position:"fixed",zIndex:"1",backgroundColor:"#FFFFFF"}}>
                     <Search
                     type="textarea"
                     placeholder="input text"
@@ -191,21 +198,22 @@ class Postil extends Component{
                     onSearch={this.handleInput}
                     />   
                 </Anchor>
+                <div style={{height:"14%"}}></div>
                 <Collapse accordion bordered={false} onChange={this.setPostilIdx}
                  style={{marginTop:"14%"}}>
                 {
                     postils.map((postil,idx)=>{
                         var postil = this.getPostil(postil,idx);
-                        var comment = this.getComment(comments[idx]);
+                        //var comment = this.getComment(comments[idx]);
                         return(
                             <Panel header={postil} key={idx}>
-                                    {comment}
+                                    <Comment data={comments[idx]} handleReply={this.handleReply.bind(this)}/>
                             </Panel>
                         );
                     },this)
                 }
                 </Collapse>                             
-          </div>          
+          </Anchor>          
         );
     }
 }
