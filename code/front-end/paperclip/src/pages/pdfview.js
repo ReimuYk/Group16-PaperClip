@@ -403,7 +403,7 @@ class PDFView extends Component{
     }
     render(){
         return(
-            <div style={{margin:'auto',backgroundColor:'gray'}}>
+            <div style={{float:"left",backgroundColor:'white',width:"50%",marginLeft:"3%"}}>
                     <Button onClick={this.handlePrevious}>prev page</Button>
                     <Button onClick={this.handleNext}>next page</Button>
                     <Button onClick={this.allocComm}>展示批注&笔记</Button>
@@ -412,7 +412,7 @@ class PDFView extends Component{
                     onMouseDown={this.mouseDown} 
                     onMouseUp={this.mouseUp} 
                     onMouseMove={this.mouseMove}
-                    style={{width:'600px',margin:'auto'}}
+                    style={{width:'700px',float:"left"}}
                     // style={{float:'left'}}
                     >
                         {/* <PDF page={this.state.page}
@@ -420,7 +420,7 @@ class PDFView extends Component{
                             onDocumentComplete={this.onDocumentComplete}
                             width={900}
                         /> */}
-                        <img src={require("./page.jpg")} width={600} style={{pointerEvents: 'none',userSelect:'none',mozUserSelect:'-moz-none'}}/>
+                        <img src={require("./page.jpg")} width={700} style={{pointerEvents: 'none',userSelect:'none',mozUserSelect:'-moz-none'}}/>
                     </div>
                     </div>
                     {this.state.selectRender}
