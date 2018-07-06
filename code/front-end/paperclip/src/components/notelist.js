@@ -34,9 +34,9 @@ class NoteList extends Component{
         return(
             <div style={{textAlign:"left",marginTop:"20%"}}>
                 key word:
-                {this.state.keyWords.map((key)=>{
+                {this.state.keyWords.map((key,idx)=>{
                     return(
-                        <Tag style={{marginLeft:10}}>{key}</Tag>
+                        <Tag key={idx} style={{marginLeft:10}}>{key}</Tag>
                     )
                 },this)}
             </div>
@@ -65,24 +65,25 @@ class NoteList extends Component{
         const notes = this.renderNotes();
         return(
             <div id="notelist" 
-            style={{width:"20%",height:"500px",float:"left", marginLeft:"2%",
+            style={{positon:"fixed",width:"20%",height:"500px",float:"left", marginLeft:"2%",
             marginTop:"0",overflowY:"hidden"}}>
-                <Anchor style={{position:"fixed",zIndex:"1",backgroundColor:"#FFFFFF"}}>
+                <div offsetTop={60} style={{zIndex:"1",backgroundColor:"#FFFFFF"}}>
                     <Search
                     type="textarea"
-                    placeholder="input text"
+                    placeholder="search"
                     enterButton={<Icon type="search" />}
                     size="default"
                     value={this.state.inputValue}
                     onChange={this.changeInputValue}
                     onSearch={this.handleSearch}
                     />   
-                </Anchor>
-                {keys}
-                <Divider />
-                {notes}
-                <Divider />
-                             
+                </div>
+                <div style={{positon:"absolute"}}>
+                    {keys}
+                    <Divider />
+                    {notes}
+                    <Divider />
+                </div>          
           </div>
         );
     }
