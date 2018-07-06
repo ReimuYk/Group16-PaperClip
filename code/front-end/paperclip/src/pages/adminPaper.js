@@ -6,16 +6,20 @@ const data = [
     {
         key :'1',
         ID:'1',
-        userid:'userid1',
-        username:'name1',
-        password:'pwd1',
+        paperid: '1',
+        title:'title1',
+        category:'cate1;cate2;',
+        tags:'tag1;tag2;',
+        auth:'Read/Download',
         valid:0
     },{
-        key:'2',
+        key :'2',
         ID:'2',
-        userid:'userid2',
-        username:'name2',
-        password:'pwd2',
+        paperid: '2',
+        title:'title2',
+        category:'cate1;cate3;',
+        tags:'tag1;tag3;',
+        auth:'Read',
         valid:1
     }
 
@@ -30,38 +34,50 @@ const EditableCell = ({ editable, value, onChange }) => (
     </div>
   );
 
-class AdminUserList extends Component {
+class AdminPaperList extends Component {
     constructor(props) {
         super(props);
         this.columns = [{
             title: 'ID',
             dataIndex: 'ID',
             key: 'id',
-            width: 200,
+            width: 50,
             render: (text, record) => <EditableCell editable={0} value={text} />
           }, {
-            title: 'userid',
-            dataIndex: 'userid',
-            key: 'userid',
-            width:150,
-            render: (text, record) => this.renderColumns(text, record, 'userid')
-          }, {
-            title: 'username',
-            dataIndex: 'username',
-            key: 'username',
+            title: 'paperid',
+            dataIndex: 'paperid',
+            key: 'paperid',
             width:100,
-            render: (text, record) => this.renderColumns(text, record, 'username')
+            render: (text, record) => this.renderColumns(text, record, 'paperid')
           }, {
-            title: 'password',
-            dataIndex: 'password',
-            key: 'password',
+            title: 'title',
+            dataIndex: 'title',
+            key: 'title',
+            width:100,
+            render: (text, record) => this.renderColumns(text, record, 'title')
+          }, {
+            title: 'category',
+            dataIndex: 'category',
+            key: 'category',
             width:200,
-            render: (text, record) => this.renderColumns(text, record, 'password')
+            render: (text, record) => this.renderColumns(text, record, 'category')
+          }, {
+            title: 'tags',
+            dataIndex: 'tags',
+            key: 'tags',
+            width:200,
+            render: (text, record) => this.renderColumns(text, record, 'tags')
+          }, {
+            title: 'authority',
+            dataIndex: 'auth',
+            key: 'auth',
+            width:150,
+            render: (text, record) => this.renderColumns(text, record, 'auth')
           }, {
             title: 'valid',
             dataIndex: 'valid',
             key: 'valid',
-            width:100,
+            width:75,
             render: (text, record) => this.renderColumns(text, record, 'valid')
           }, {
             title: '编辑',
@@ -221,8 +237,11 @@ class AdminUserList extends Component {
         return (
             <div style={{width:1200,margin:'auto'}}>
             <Row style={{textAlign:'left'}}>
-                <Col style={{display:'inline'}}><Input addonBefore="userid" style={{width:'200px'}}/></Col>
-                <Col style={{display:'inline',marginLeft:3}}><Input addonBefore="username" style={{width:'200px'}}/></Col>
+                <Col style={{display:'inline'}}><Input addonBefore="paperid" style={{width:'200px'}}/></Col>
+                <Col style={{display:'inline',marginLeft:3}}><Input addonBefore="title" style={{width:'200px'}}/></Col>
+                <Col style={{display:'inline',marginLeft:3}}><Input addonBefore="category" style={{width:'200px'}}/></Col>
+                <Col style={{display:'inline',marginLeft:3}}><Input addonBefore="tags" style={{width:'200px'}}/></Col>
+                <Col style={{display:'inline',marginLeft:3}}><Input addonBefore="authority" style={{width:'200px'}}/></Col>
                 <Col style={{display:'inline',marginLeft:3}}><Input addonBefore="valid" style={{width:'100px'}}/></Col>
                 <Col style={{display:'inline',marginLeft:3}}><Button type="primary" style={{width:'80px'}}>Search</Button></Col>
             </Row>
@@ -233,4 +252,4 @@ class AdminUserList extends Component {
       }
 }
 
-export default AdminUserList;
+export default AdminPaperList;

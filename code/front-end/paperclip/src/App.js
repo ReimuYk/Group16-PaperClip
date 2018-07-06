@@ -30,6 +30,7 @@ import Discover from './pages/discoverPage';
 import WriteDoc from './pages/writeDocPage';
 import PDFView from './pages/pdfview';
 import AdminUserList from './pages/adminUser'
+import AdminPaperList from './pages/adminPaper'
 
 class App extends Component {
   render() {
