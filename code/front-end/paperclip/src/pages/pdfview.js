@@ -7,10 +7,6 @@ import 'antd/dist/antd.css';
 let leftplace = []
 let rightplace = []
 class PDFView extends Component{
-    // constructor(props){
-    //     super(props)
-    //     this.allocComm()
-    // }
     state = {
         //page state
         pageloc: null,
@@ -100,8 +96,12 @@ class PDFView extends Component{
         console.log('clienty-objy',e.clientY-e.target.getBoundingClientRect().top)
     }
     mouseMove = (e) => {
+        var pgloc = [e.target.getBoundingClientRect().left,e.target.getBoundingClientRect().top]
+        if (pgloc!=this.state.pageloc && this.state.pageloc!=null){
+            this.allocComm()
+        }
         this.setState({
-            pageloc:[e.target.getBoundingClientRect().left,e.target.getBoundingClientRect().top]
+            pageloc:pgloc
         })
         let loc = [e.clientX-e.target.getBoundingClientRect().left,e.clientY-e.target.getBoundingClientRect().top]        
         let tid = this.findItemId(loc)
@@ -403,7 +403,7 @@ class PDFView extends Component{
     }
     render(){
         return(
-            <div style={{float:"left",backgroundColor:'gray',width:"50%",marginLeft:"3%"}}>
+            <div style={{float:"left",backgroundColor:'white',width:"50%",marginLeft:"3%"}}>
                     <Button onClick={this.handlePrevious}>prev page</Button>
                     <Button onClick={this.handleNext}>next page</Button>
                     <Button onClick={this.allocComm}>展示批注&笔记</Button>
