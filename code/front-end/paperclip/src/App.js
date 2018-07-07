@@ -55,11 +55,11 @@ class App extends Component {
               <Route path='/user/modifynote' component={ModifyNote} />
               <Route path='/user/modifydoc'  component={ModifyDoc} />
               <Route path='/user/setting' component={UserSetting} />
+                <Route path='/user/writedoc' component={WriteDoc} />
               <Route path='/viewdoc' component={ViewDoc} />
               <Route path='/viewnote' component={ViewNote} />
               <Route path='/user' component={User} /> 
               <Route path='/discover' component={Discover} />
-              <Route path='/writedoc' component={WriteDoc} />
               <Route path='/pdfview' component={PDFView} />
             </Switch>
           </BrowserRouter>

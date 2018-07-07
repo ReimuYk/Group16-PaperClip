@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, Avatar, Popconfirm, Menu, Anchor } from 'antd';
+import { List, Avatar, Popconfirm, Menu, Anchor, Button } from 'antd';
 import { Link } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 /* should get from server */
@@ -99,10 +99,24 @@ class UserDoc extends Component{
             data: tmpdata,
         })
     }
+    newDoc = () => {
+        var tmpdata = this.state.data;
+        var obj = {
+            key: 1,
+            title: '新建文档',
+            cover: book1,
+            date: '2018-07-01',
+            description: 'description of doc 1',
+        };
+        tmpdata.push(obj);
+        this.setState({
+            data: tmpdata
+        })
+    }
     render(){
         return(
             <div>
-            <NavBar />
+                <NavBar />
             <Anchor style={{float:'right',marginRight:'10%',marginTop:'5%'}}>
                 <Menu>
                     <Menu.Item>
@@ -133,30 +147,35 @@ class UserDoc extends Component{
                 </Menu>
             </Anchor>
             <div style={{width:'60%',marginLeft:'200px'}}>
-            <p style={{marginLeft:'490px'}}>上次修改日期</p>
-            <List
-                style={{textAlign:'left'}}
-                itemLayout="horizontal"
-                dataSource={this.state.data}
-                renderItem={item => (
-                <List.Item
-                    actions={[<p>
-                        <a style={{width:'75px'}} href={"/user/modifydoc?key="+item.key}>编辑文档</a> 
-                        <Popconfirm title="确定删除吗？" onConfirm={() => this.deleteDoc(this, item)}>
-                            <a style={{width:'75px',marginLeft:'20px'}}>删除文档</a>
-                        </Popconfirm>
-                    </p>]}
-                    >
-                    <List.Item.Meta
-                    avatar={<Avatar src={item.cover} />}
-                    /* 论文显示页 */
-                    title={<a href={"/viewdoc?docID="+item.key}>{item.title}</a>}
-                    description={item.description}
+                <div className="button" style={{width:"100%", height:"50px"}}>
+                    <Button style={{float:"right"}} type="primary" onClick={this.newDoc}>新建文档</Button>
+                </div>
+                <div className="content">
+                    <p style={{marginLeft:'490px'}}>上次修改日期</p>
+                    <List
+                        style={{textAlign:'left'}}
+                        itemLayout="horizontal"
+                        dataSource={this.state.data}
+                        renderItem={item => (
+                            <List.Item
+                                actions={[<p>
+                                    <a style={{width:'75px'}} href={"/user/writedoc?key="+item.key}>编辑文档</a>
+                                    <Popconfirm title="确定删除吗？" onConfirm={() => this.deleteDoc(this, item)}>
+                                        <a style={{width:'75px',marginLeft:'20px'}}>删除文档</a>
+                                    </Popconfirm>
+                                </p>]}
+                            >
+                                <List.Item.Meta
+                                    avatar={<Avatar src={item.cover} />}
+                                    /* 论文显示页 */
+                                    title={<a href={"/viewdoc?docID="+item.key}>{item.title}</a>}
+                                    description={item.description}
+                                />
+                                <p>{item.date}</p>
+                            </List.Item>
+                        )}
                     />
-                    <p>{item.date}</p>
-                </List.Item>
-                )}
-            />
+                </div>
             </div>
         </div>
         )

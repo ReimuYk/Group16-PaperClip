@@ -153,7 +153,7 @@ class UserNote extends Component{
                     dataSource={this.state.data}
                     renderItem={item => (
                     <List.Item actions={[<p>
-                                            <a style={{width:'75px'}} href={"modifyNote?key="+item.key}>编辑笔记</a> 
+                                            <a style={{width:'75px'}} href={"writedoc?key="+item.key}>编辑笔记</a>
                                             <Popconfirm title="确定删除吗？" onConfirm={() => this.deleteNote(this, item)}>
                                                 <a style={{width:'75px',marginLeft:'20px'}}>删除笔记</a>
                                             </Popconfirm>

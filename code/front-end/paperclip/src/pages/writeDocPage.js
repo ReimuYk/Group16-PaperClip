@@ -3,14 +3,21 @@ import Editor from '.././components/textEditor';
 import {Popconfirm, Popover,Icon,Button,Tag, Input, Tooltip,List,Avatar, Menu, Modal} from 'antd';
 
 const Search = Input.Search;
-const data = [
-    {
-        username:'大哥'
-    },
-    {
-        username:'大嫂'
-    }
-];
+
+const information = {
+    key: 0,
+    title:'',
+    tags:["key1"],
+    initContent:'',
+    invitor:[
+        {
+            username:'大哥'
+        },
+        {
+            username:'大嫂'
+        }
+    ]
+}
 
 class Header extends React.Component {
     state = {
@@ -21,6 +28,25 @@ class Header extends React.Component {
         inputValue:'',
         inputVisible: false,
         colors:["red","magenta","green","blue","geekblue"],
+        invitor:[]
+    }
+
+    componentWillMount = () => {
+        var url = window.location.href;
+        var theRequest = new Object();
+        if ( url.indexOf( "?" ) != -1 ) {
+            var str = url.substr( 1 ); //substr()方法返回从参数值开始到结束的字符串；
+            var strs = str.split( "&" );
+            for ( var i = 0; i < strs.length; i++ ) {
+                theRequest[ strs[ i ].split( "=" )[ 0 ] ] = ( strs[ i ].split( "=" )[ 1 ] );
+            }
+            /* get content of that note */
+            /* here we use fake data */
+            this.setState({
+                tags: information.tags,
+                invitor:information.invitor
+            })
+        }
     }
 
     handleClose = (removedTag) => {
@@ -148,7 +174,7 @@ class Header extends React.Component {
                         <p>目前的协作者有：</p>
                         <List
                             itemLayout="horizontal"
-                            dataSource={data}
+                            dataSource={this.state.invitor}
                             renderItem={item => (
                                 <List.Item actions={[<a>删除</a>]}>
                                     <List.Item.Meta
@@ -201,137 +227,28 @@ class Header extends React.Component {
     }
 }
 class WriteDoc extends Component{
-    /*constructor(props){
-        super(props);
-        this.state = {
-            tags:["key1"],
-            inputValue:'',
-            inputVisible: false,
-            colors:["red","magenta","green","blue","geekblue"],
-            invitor:["大哥"],
+    state = {
+        title:'',
+        initContent:''
+    }
+    componentWillMount = () => {
+        var url = window.location.href;
+        var theRequest = new Object();
+        if ( url.indexOf( "?" ) != -1 ) {
+            var str = url.substr( 1 ); //substr()方法返回从参数值开始到结束的字符串；
+            var strs = str.split( "&" );
+            for ( var i = 0; i < strs.length; i++ ) {
+                theRequest[ strs[ i ].split( "=" )[ 0 ] ] = ( strs[ i ].split( "=" )[ 1 ] );
+            }
+            var noteKey = this.props.location.search.substring(5);
+            /* get content of that note */
+            /* here we use fake data */
+            this.setState({
+                title: information.title,
+                initContent: information.initContent
+            })
         }
-        this.showInput = this.showInput.bind(this);
-        this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleInputConfirm = this.handleInputConfirm.bind(this);
-        this.handleClose = this.handleClose.bind(this);
-        //this.addInvitor = this.addInvitor.bind(this);
     }
-
-    handleClose(removedTag){
-        const tags = this.state.tags.filter(tag => tag !== removedTag);
-        console.log(tags);
-        this.setState({ tags:tags });
-    }
-    handleInputChange(e){
-        this.setState({ inputValue: e.target.value });
-    }
-    handleInputConfirm = () => {
-        var inputValue = this.state.inputValue;
-        var tags = this.state.tags;
-        if (inputValue && tags.indexOf(inputValue) === -1) {
-          tags = [...tags, inputValue];
-        }
-        console.log(tags);
-        this.setState({
-          tags:tags,
-          inputValue: '',
-          inputVisible: false
-        });
-    }
-    showInput(){
-        this.setState({ inputVisible: true });
-    }
-    /*addInvitor(name){
-        var invitor = this.state.invitor;
-        if (name && invitor.indexOf(name) === -1) {
-            invitor = [...invitor, name];
-        }
-        this.setState({invitor:invitor});
-    }
-
-    renderInvitor(){
-        var data = this.state.invitor;
-        return(
-            <div>
-                <p>邀请用户来阅读这篇文档，他们将可以为你提出意见。</p>
-                <List
-                    style = {{width:300}}
-                    itemLayout="horizontal"
-                    dataSource={data}
-                    renderItem={item => (
-                    <List.Item>
-                        <List.Item.Meta
-                        avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                        />
-                        {item}
-                    </List.Item>
-                    )}
-                />
-                <Search
-                    placeholder="请输入用户名"
-                    onSearch={this.addInvitor}
-                    style={{ width: 280 }}
-                    enterButton={<Icon type="plus-circle-o" />}
-                />
-            </div>
-        );
-    }
-    renderKeyTags(){
-        var tags = this.state.tags;
-        var inputVisible = this.state.inputVisible;
-        var inputValue = this.state.inputValue;
-        var color = this.state.colors;
-        return(
-            <div>
-                {tags.map((tag,idx) => {
-                    const isLongTag = tag.length > 20;
-                    const tagElem = (
-                    <Tag key={tag} color={color[idx%5]} closable={1} afterClose={() => this.handleClose(tag)}>
-                        {isLongTag ? `${tag.slice(0, 20)}...` : tag}
-                    </Tag>
-                    );
-                    return isLongTag ? <Tooltip title={tag} key={tag}>{tagElem}</Tooltip> : tagElem;
-                })}
-                {inputVisible && (
-                <Input
-                    ref={this.saveInputRef}
-                    type="text"
-                    size="small"
-                    style={{ width: 78 }}
-                    value={inputValue}
-                    onChange={this.handleInputChange}
-                    onBlur={this.handleInputConfirm}
-                    onPressEnter={this.handleInputConfirm}
-                />
-                )}
-                {!inputVisible && (
-                <Tag
-                    onClick={this.showInput}
-                    style={{ background: '#fff', borderStyle: 'dashed' }}
-                >
-                    <Icon type="plus" /> New Tag
-                </Tag>
-                )}
-      
-          </div>
-        );
-    }
-    renderSideCard(){
-        const keyTags = this.renderKeyTags();
-        const invitor = this.renderInvitor();
-        return(
-            <div style={{ width: 160 }}>
-                <Popover placement="right" title="邀请" content={invitor} trigger="click">
-                    <Button style={{width:150}}><Icon type="usergroup-add" />邀请协作者</Button>
-                </Popover><br/>
-                <Popover placement="right" title="关键词" content={keyTags} trigger="click">
-                    <Button style={{width:150}}><Icon type="plus" />添加关键词</Button>
-                </Popover>
-                <Button style={{width:150}}>{"保存为草稿"}<Icon type="edit" /></Button>
-                <Button style={{width:150}}>{"发布文档"}<Icon type="check" /></Button>
-            </div>
-        );
-    }*/
     render(){
         //const side = this.renderSideCard();
         return(
@@ -343,7 +260,7 @@ class WriteDoc extends Component{
                         placeholder="请输入标题"
                     />
                     <div className="editor" style={{marginTop:"30px"}}>
-                        <Editor initText="<p>请输入内容</p>"/>
+                        <Editor initText={<p>{this.state.initContent}</p>}/>
                     </div>
                 </div>
             </div>

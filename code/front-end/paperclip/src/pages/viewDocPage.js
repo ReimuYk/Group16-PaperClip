@@ -24,8 +24,10 @@ class ViewDoc extends Component{
         docID: 0,
         docTitle: '',
         docContent: '',
+        commentVisible: false,
         visible: false,
         mailContent: '',
+        commentContent:'',
         commentNo:0,
         likeNo:0,
         comment:[],
@@ -56,6 +58,11 @@ class ViewDoc extends Component{
             visible: true,
         });
     }
+    showComment = () => {
+        this.setState({
+            commentVisible: true,
+        });
+    }
     handleOk = (e) => {
         console.log('write mail');
         this.setState({
@@ -68,13 +75,30 @@ class ViewDoc extends Component{
             visible: false,
         });
     }
+    handleCommentOk = () => {
+        this.setState({
+            commentVisible: false,
+        });
+    }
+    handleCommentCancel = () => {
+        this.setState({
+            commentVisible: false,
+        });
+    }
     handleMailChange = (event) => {
         console.log('send mail', event.target.value);
         this.setState({ mailContent: event.target.value });
         /* send to server, server => that user */
     }
+    handleCommentChange = (event) => {
+        this.setState({ mailContent: event.target.value });
+        /* send to server, server => that user */
+    }
     clearInput = () => {
         this.setState({ mailContent: '' });
+    }
+    clearCommentInput = () => {
+        this.setState({ commentContent: '' });
     }
     like = () => {
         var like = this.state.likeNo;
@@ -137,7 +161,7 @@ class ViewDoc extends Component{
                         <div class="navbar-header" style={{width: "100%", paddingLeft:"25%", paddingRight:"25%", textAlign:"center"}}>
                             {likeButton}
                             {starButton}
-                            <a style={{width:"25%"}} class="navbar-brand" href="#"><Icon type="message" /> 评论 ( {this.state.commentNo} )</a>
+                            <a style={{width:"25%"}} class="navbar-brand" href="#" onClick={this.showComment}><Icon type="message" /> 评论 ( {this.state.commentNo} )</a>
                             <a style={{width:"25%"}} class="navbar-brand" href="#"><Icon type="fork" /> 分享</a>
                         </div>
                     </div>
@@ -162,6 +186,17 @@ class ViewDoc extends Component{
                         afterClose={this.clearInput}
                     >
                         <TextArea rows={5} value={this.state.mailContent} onChange={this.handleMailChange} placeholder='私信内容' />
+                    </Modal>
+                    <Modal
+                        width={700}
+                        title='评论'
+                        visible={this.state.commentVisible}
+                        onOk={this.handleCommentOk}
+                        onCancel={this.handleCommentCancel}
+                        afterClose={this.clearCommentInput}
+                    >
+
+                        <TextArea rows={5} value={this.state.commentContent} onChange={this.handleCommentChange} placeholder='添加评论' />
                     </Modal>
                     <div>
                         <h1 class="Post-Title" style={{ fontWeight: "600", fontSize: "36px", textAlign:"left"}}> {this.state.docTitle} </h1>
