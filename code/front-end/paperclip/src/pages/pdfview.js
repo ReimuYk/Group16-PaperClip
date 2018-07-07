@@ -7,22 +7,18 @@ import 'antd/dist/antd.css';
 let leftplace = []
 let rightplace = []
 class PDFView extends Component{
-    // constructor(props){
-    //     super(props)
-    //     this.allocComm()
-    // }
     state = {
         //page state
         pageloc: null,
-        pagesize:[600,900],
+        pagesize:[700,1000],
         blocklist:[
-            {id:1,start:[124,121],end:[278,136]},
-            {id:2,start:[126,152],end:[206,165]},
-            {id:3,start:[127,182],end:[239,196]},
-            {id:4,start:[127,215],end:[169,227]},
-            {id:5,start:[169,215],end:[190,227]},
-            {id:6,start:[190,215],end:[276,227]},
-            {id:7,start:[89,385],end:[509,582]}
+            {id:1,start:[144,141],end:[324,158]},
+            {id:2,start:[147,177],end:[240,193]},
+            {id:3,start:[148,212],end:[279,229]},
+            {id:4,start:[148,251],end:[197,265]},
+            {id:5,start:[197,251],end:[222,265]},
+            {id:6,start:[222,251],end:[322,265]},
+            {id:7,start:[104,449],end:[594,679]}
         ],
         selectid:[1],
         selectRender:null,
@@ -100,8 +96,12 @@ class PDFView extends Component{
         console.log('clienty-objy',e.clientY-e.target.getBoundingClientRect().top)
     }
     mouseMove = (e) => {
+        var pgloc = [e.target.getBoundingClientRect().left,e.target.getBoundingClientRect().top]
+        if (pgloc!=this.state.pageloc && this.state.pageloc!=null){
+            this.allocComm()
+        }
         this.setState({
-            pageloc:[e.target.getBoundingClientRect().left,e.target.getBoundingClientRect().top]
+            pageloc:pgloc
         })
         let loc = [e.clientX-e.target.getBoundingClientRect().left,e.clientY-e.target.getBoundingClientRect().top]        
         let tid = this.findItemId(loc)
@@ -287,7 +287,7 @@ class PDFView extends Component{
             var tt = this.getTop('r',bitem.end[1]+this.state.pageloc[1]+document.documentElement.scrollTop-3-73-15)
             var btn_stl = {
                 position: 'absolute',
-                left:this.state.pagesize[0]+this.state.pageloc[0]+document.documentElement.scrollLeft-73+73,
+                left:this.state.pagesize[0]+this.state.pageloc[0]+document.documentElement.scrollLeft-73+73-33,
                 top:tt,
             }
             rend.push(
@@ -298,9 +298,9 @@ class PDFView extends Component{
                 </div>
             )
             var lt = bitem.end[1]+this.state.pageloc[1]+document.documentElement.scrollTop-3
-            var deg = Math.atan((tt+15-lt)/73)*180/3.14
+            var deg = Math.atan((tt+15-lt)/40)*180/3.14
             deg = Math.round(deg)
-            var le = Math.sqrt(73*73+(lt-tt-15)*(lt-tt-15))
+            var le = Math.sqrt(40*40+(lt-tt-15)*(lt-tt-15))
             le = Math.round(le)
             var line_stl2 = {
                 transform:'rotate('+deg.toString()+'deg)',
@@ -369,7 +369,7 @@ class PDFView extends Component{
             var tt = this.getTop('l',bitem.end[1]+this.state.pageloc[1]+document.documentElement.scrollTop-3-73-15)
             var btn_stl = {
                 position: 'absolute',
-                left:this.state.pageloc[0]+document.documentElement.scrollLeft+73-73-30,
+                left:this.state.pageloc[0]+document.documentElement.scrollLeft+73-73,
                 top:tt
             }
             rend.push(
@@ -380,9 +380,9 @@ class PDFView extends Component{
                 </div>
             )
             var lt = bitem.end[1]+this.state.pageloc[1]+document.documentElement.scrollTop-3
-            var deg = Math.atan((tt+15-lt)/71)*180/3.14
+            var deg = Math.atan((tt+15-lt)/41)*180/3.14
             deg = -Math.round(deg)
-            var le = Math.sqrt(71*71+(lt-tt-15)*(lt-tt-15))
+            var le = Math.sqrt(41*41+(lt-tt-15)*(lt-tt-15))
             le = Math.round(le)
             var line_stl2 = {
                 transform:'rotate('+deg.toString()+'deg)',
@@ -403,7 +403,7 @@ class PDFView extends Component{
     }
     render(){
         return(
-            <div style={{margin:'auto',backgroundColor:'gray'}}>
+            <div style={{float:"left",backgroundColor:'white',width:"50%",marginLeft:"3%"}}>
                     <Button onClick={this.handlePrevious}>prev page</Button>
                     <Button onClick={this.handleNext}>next page</Button>
                     <Button onClick={this.allocComm}>展示批注&笔记</Button>
@@ -412,7 +412,7 @@ class PDFView extends Component{
                     onMouseDown={this.mouseDown} 
                     onMouseUp={this.mouseUp} 
                     onMouseMove={this.mouseMove}
-                    style={{width:'600px',margin:'auto'}}
+                    style={{width:'700px',float:"left"}}
                     // style={{float:'left'}}
                     >
                         {/* <PDF page={this.state.page}
@@ -420,7 +420,7 @@ class PDFView extends Component{
                             onDocumentComplete={this.onDocumentComplete}
                             width={900}
                         /> */}
-                        <img src={require("./page.jpg")} width={600} style={{pointerEvents: 'none',userSelect:'none',mozUserSelect:'-moz-none'}}/>
+                        <img src={require("./page.jpg")} width={700} style={{pointerEvents: 'none',userSelect:'none',mozUserSelect:'-moz-none'}}/>
                     </div>
                     </div>
                     {this.state.selectRender}
