@@ -6,6 +6,7 @@ import NavBar from '.././components/nav-bar';
 import PDFView from './pdfview';
 import NoteList from '.././components/notelist';
 import Tool from '.././components/tool';
+import emitter from '.././util/events';
 
 
 class Paper extends Component{
@@ -13,10 +14,17 @@ class Paper extends Component{
         super(props);
 
     }
-    
+    componentDidMount() {
+        this.starEvent = emitter.addListener('star', (message) => {
+            alert("star!");
+        });
+    }
+    componentWillUnmount() {
+        emitter.removeListener(this.starEvent);
+    }
     render() {
         return(
-            <div>
+            <div style={{position:"relative"}}>
                 <NavBar />
                 <NoteList />                
                 <PDFView />        

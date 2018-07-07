@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Collapse ,List,Input,Icon,Button,Avatar,Divider,Anchor,Tag} from 'antd';
+import emitter from '.././util/events';
 const Panel = Collapse.Panel;
 const Search = Input.Search;
 const ButtonGroup = Button.Group;
@@ -19,9 +20,19 @@ class NoteList extends Component{
                 {title:"大黄鸡",intro:"大黄鸡更黄"},
                 
             ],
-
         }
-
+    }
+    componentDidMount() {
+        this.noteEvent = emitter.addListener('changeNoteList', (keyWordData,noteData) => {
+            alert("notelist change!");
+            this.setState({
+                keyWords:keyWordData,
+                notes:noteData
+            })
+        });
+    }
+    componentWillUnmount() {
+        emitter.removeListener(this.noteEvent);
     }
     changeInputValue(e){
         this.setState({inputValue:e.target.value});
@@ -65,9 +76,9 @@ class NoteList extends Component{
         const notes = this.renderNotes();
         return(
             <div id="notelist" 
-            style={{positon:"fixed",width:"20%",height:"500px",float:"left", marginLeft:"2%",
-            marginTop:"0",overflowY:"hidden"}}>
-                <div offsetTop={60} style={{zIndex:"1",backgroundColor:"#FFFFFF"}}>
+            style={{position:"fixed",width:"18%",height:"500px",overflowY:"hidden",
+            left:"2%"}}>
+                <div style={{zIndex:"1",backgroundColor:"#FFFFFF"}}>
                     <Search
                     type="textarea"
                     placeholder="search"
@@ -78,7 +89,7 @@ class NoteList extends Component{
                     onSearch={this.handleSearch}
                     />   
                 </div>
-                <div style={{positon:"absolute"}}>
+                <div>
                     {keys}
                     <Divider />
                     {notes}
