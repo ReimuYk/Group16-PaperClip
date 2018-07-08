@@ -32,6 +32,7 @@ import PDFView from './pages/pdfview';
 import AdminUserList from './components/adminUser'
 import AdminPaperList from './components/adminPaper'
 import Admin from './pages/adminPage'
+import UserDocDetail from './pages/userDocDetailPage'
 
 class App extends Component {
   render() {
@@ -59,6 +60,7 @@ class App extends Component {
               <Route path='/user/modifydoc'  component={ModifyDoc} />
               <Route path='/user/setting' component={UserSetting} />
                 <Route path='/user/writedoc' component={WriteDoc} />
+              <Route path='/user/docdetail' component={UserDocDetail} />
               <Route path='/viewdoc' component={ViewDoc} />
               <Route path='/viewnote' component={ViewNote} />
               <Route path='/user' component={User} /> 
