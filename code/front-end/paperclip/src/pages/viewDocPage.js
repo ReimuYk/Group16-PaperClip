@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Divider, Input, Modal, Icon, Button } from 'antd';
+import { Divider, Input, Modal, Icon, Button, List } from 'antd';
 import '../css/style.css'
 import NavBar from '../components/nav-bar';
 import constuh from '../statics/uh.jpg'
@@ -14,7 +14,7 @@ const constComment = [{user:'大哥', comment:'....'},{user:'大嫂', comment:'.
 const { TextArea } = Input;
 const constIfLike = false;
 const constIfStar = false;
-
+const constUsername = '我自己';
 class ViewDoc extends Component{
     state = {
         uh: '',
@@ -32,7 +32,8 @@ class ViewDoc extends Component{
         likeNo:0,
         comment:[],
         ifLike: false,
-        ifStar: false
+        ifStar: false,
+        username:''
     }
     componentWillMount = () => {
         /* get docID from url */
@@ -50,7 +51,8 @@ class ViewDoc extends Component{
              commentNo:constCommentNo,
              likeNo:constLikeNo,
              ifLike: constIfLike,
-             ifStar: constIfStar
+             ifStar: constIfStar,
+             username: constUsername
         })
     }
     showModal = () => {
@@ -91,7 +93,7 @@ class ViewDoc extends Component{
         /* send to server, server => that user */
     }
     handleCommentChange = (event) => {
-        this.setState({ mailContent: event.target.value });
+        this.setState({ commentContent: event.target.value });
         /* send to server, server => that user */
     }
     clearInput = () => {
@@ -99,6 +101,21 @@ class ViewDoc extends Component{
     }
     clearCommentInput = () => {
         this.setState({ commentContent: '' });
+    }
+    commitComment = () => {
+        if(this.state.commentContent == '')
+        {
+            alert('内容不能为空！')
+            return;
+        }
+        var tmp = this.state.comment;
+        var number = this.state.commentNo;
+        tmp.push({user:this.state.username, comment: this.state.commentContent});
+        this.setState({
+            comment: tmp,
+            commentContent: '',
+            commentNo: number+1
+        });
     }
     like = () => {
         var like = this.state.likeNo;
@@ -169,9 +186,25 @@ class ViewDoc extends Component{
             </div>
         )
     }
-
+    renderComment = () =>{
+        return(
+            <List
+                itemLayout="horizontal"
+                dataSource={this.state.comment}
+                renderItem={item => (
+                    <List.Item>
+                        <List.Item.Meta
+                            title={<a>{item.user}</a>}
+                            description={item.comment}
+                        />
+                    </List.Item>
+                )}
+            />
+        )
+    }
     render(){
         const bottomNav = this.renderBottomNav();
+        const comment = this.renderComment();
         return(
             <div>
                 <NavBar/>
@@ -195,8 +228,9 @@ class ViewDoc extends Component{
                         onCancel={this.handleCommentCancel}
                         afterClose={this.clearCommentInput}
                     >
-
-                        <TextArea rows={5} value={this.state.commentContent} onChange={this.handleCommentChange} placeholder='添加评论' />
+                        {comment}
+                        <TextArea rows={2} value={this.state.commentContent} onChange={this.handleCommentChange} placeholder='添加评论' />
+                        <Button type="primary" onClick={this.commitComment}>添加评论</Button>
                     </Modal>
                     <div>
                         <h1 class="Post-Title" style={{ fontWeight: "600", fontSize: "36px", textAlign:"left"}}> {this.state.docTitle} </h1>
