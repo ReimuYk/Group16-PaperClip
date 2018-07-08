@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Collapse ,List,Input,Icon,Button,Avatar,Divider,Anchor} from 'antd';
 import Comment from "./comment";
+import emitter from '.././util/events';
 const Panel = Collapse.Panel;
 const Search = Input.Search;
 const ButtonGroup = Button.Group;
@@ -47,6 +48,18 @@ class Postil extends Component{
             markList:markList,
             agreeList:agreeList
         });
+    }
+    componentDidMount() {
+        this.postilEvent = emitter.addListener('changePostils', (postilData,commentData) => {
+            alert("postils change!");
+            this.setState({
+                postils:postilData,
+                comments:commentData
+            })
+        });
+    }
+    componentWillUnmount() {
+        emitter.removeListener(this.postilEvent);
     }
     agree(e){
         e.stopPropagation();
@@ -115,16 +128,6 @@ class Postil extends Component{
             </div>
         );
     }
-    getComment = (comment)=>{
-        if(!comment) return null;
-        return(
-            <List
-                bordered={false}
-                dataSource={comment}
-                renderItem={item => (<List.Item><Icon type="user" />{item.user}<br/>{item.content}</List.Item>)}
-            />
-        )
-    }
     setPostilIdx(key){
         if(!key){
             key = null;
@@ -184,9 +187,9 @@ class Postil extends Component{
         const postils = this.state.postils;
         const comments = this.state.comments; 
         return(
-            <Anchor offsetTop={60} id="postil" 
-            style={{width:"20%",height:"530px",float:"right",
-             marginRight:"2%",marginTop:"0",overflowY:"scroll"}}>
+            <div id="postil" 
+            style={{width:"20%",height:"530px",overflowY:"scroll",
+             position:"fixed",right:"0px",marginLeft:"5px"}}>
                 <Anchor offsetTop={60} style={{position:"fixed",zIndex:"1",backgroundColor:"#FFFFFF"}}>
                     <Search
                     type="textarea"
@@ -198,13 +201,11 @@ class Postil extends Component{
                     onSearch={this.handleInput}
                     />   
                 </Anchor>
-                <div style={{height:"14%"}}></div>
                 <Collapse accordion bordered={false} onChange={this.setPostilIdx}
                  style={{marginTop:"14%"}}>
                 {
                     postils.map((postil,idx)=>{
                         var postil = this.getPostil(postil,idx);
-                        //var comment = this.getComment(comments[idx]);
                         return(
                             <Panel header={postil} key={idx}>
                                     <Comment data={comments[idx]} handleReply={this.handleReply.bind(this)}/>
@@ -213,7 +214,7 @@ class Postil extends Component{
                     },this)
                 }
                 </Collapse>                             
-          </Anchor>          
+          </div>          
         );
     }
 }

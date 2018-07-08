@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PDF from 'react-pdf-js';
-import { Button, Popover, Affix, Row, Col, Card} from 'antd'
+import { Button, Popover, Affix, Row, Col, Card} from 'antd';
+import emitter from '.././util/events';
 import 'antd/dist/antd.css';
 
 
@@ -56,6 +57,26 @@ class PDFView extends Component{
     handlePrevious = () => {
         if (this.state.page==1) return
         this.setState({ page: this.state.page - 1 });
+
+        //test event
+        var postils=[
+            {user:"大哥大哥",content:"来测试一下",agree:10,disagree:2},
+            {user:"小弟",content:"我来划水",agree:2,disagree:1}
+        ];
+        var comments=[
+            [{user:"咸鱼",content:"nn"},
+            {user:"哇",content:"2"}],
+            [{user:"噢",content:"asdd"},
+            {user:"我的天哪",content:"倍v"}]
+        ];
+        var keyWords=["机智","好机智啊"];
+        var notes=[
+                {title:"你好",intro:"How are you"},
+                {title:"我很好",intro:"I`m fine, thank you, and you?"},        
+        ];
+        emitter.emit("changePostils",postils,comments);
+        emitter.emit("changeNoteList",keyWords,notes);
+        //以上部分是为了测试组件之间通信
     }
     handleNext = () => {
         if (this.state.page==this.state.pages) return
@@ -403,7 +424,8 @@ class PDFView extends Component{
     }
     render(){
         return(
-            <div style={{float:"left",backgroundColor:'white',width:"50%",marginLeft:"3%"}}>
+            <div style={{backgroundColor:'white',width:"60%",
+            position:"absolute",left:"22%"}}>
                     <Button onClick={this.handlePrevious}>prev page</Button>
                     <Button onClick={this.handleNext}>next page</Button>
                     <Button onClick={this.allocComm}>展示批注&笔记</Button>

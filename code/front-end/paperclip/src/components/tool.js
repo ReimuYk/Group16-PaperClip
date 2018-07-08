@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Divider ,Modal,Avatar,Checkbox,Icon,Button,Popover,Card} from 'antd';
 import {Link } from 'react-router-dom';
+import emitter from '.././util/events'
 const confirm = Modal.confirm;
 const CheckboxGroup = Checkbox.Group;
 
@@ -27,6 +28,7 @@ class Tool extends Component{
     star(){
         var star = this.state.isStar;
         this.setState({isStar:!star});
+        emitter.emit('star',"ok");
     }
     downloadCheck(checkvalue){
         console.log(checkvalue);
@@ -128,12 +130,13 @@ class Tool extends Component{
     render(){
         const content = this.rederToolContent();
         return(
+            <div id="tool" style={{zIndex:"100", position:"fixed",bottom:"5%",left:"2%"}}>
             <Popover 
             placement="topRight" content={content} trigger="click">
-                <Button type="primary"
-                 style={{zIndex:"100", position:"fixed",marginTop:"-20px"}}>
+                <Button type="primary">
                 <Icon type="tool" />Tool</Button>
             </Popover>
+            </div>
         );
     }
 }
