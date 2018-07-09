@@ -89,19 +89,22 @@ class NavBar extends Component{
           ];
           
         return(
+        <div className="message">
             <List
-              itemLayout="horizontal"
-              dataSource={data}
-              renderItem={item => (
-                <List.Item>
-                  <List.Item.Meta
-                    avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                    title={<a href="#">{item.title}</a>}
-                    description="Ant Design is refined by Ant UED Team"
-                  />
-                </List.Item>
-              )}
+                itemLayout="horizontal"
+                dataSource={data}
+                renderItem={item => (
+                    <List.Item>
+                        <List.Item.Meta
+                            avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                            title={<a href="#">{item.title}</a>}
+                            description="Ant Design is refined by Ant UED Team"
+                        />
+                    </List.Item>
+                )}
             />
+            <Button type="primary">查看全部私信</Button>
+        </div>
             );
     }
 

@@ -33,6 +33,7 @@ import AdminUserList from './components/adminUser'
 import AdminPaperList from './components/adminPaper'
 import Admin from './pages/adminPage'
 import UserDocDetail from './pages/userDocDetailPage'
+import Message from './pages/message'
 
 class App extends Component {
   render() {
@@ -61,6 +62,7 @@ class App extends Component {
               <Route path='/user/setting' component={UserSetting} />
                 <Route path='/user/writedoc' component={WriteDoc} />
               <Route path='/user/docdetail' component={UserDocDetail} />
+              <Route path='/user/message' component={Message} />
               <Route path='/viewdoc' component={ViewDoc} />
               <Route path='/viewnote' component={ViewNote} />
               <Route path='/user' component={User} /> 
