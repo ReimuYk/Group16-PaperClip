@@ -117,7 +117,7 @@ class PDFView extends Component{
         console.log('clienty-objy',e.clientY-e.target.getBoundingClientRect().top)
     }
     mouseMove = (e) => {
-        var pgloc = [e.target.getBoundingClientRect().left,e.target.getBoundingClientRect().top]
+        var pgloc = [e.target.offsetLeft-document.documentElement.scrollLeft,e.target.offsetTop-document.documentElement.scrollTop]
         if (pgloc!=this.state.pageloc && this.state.pageloc!=null){
             this.allocComm()
         }
@@ -147,7 +147,7 @@ class PDFView extends Component{
                 }
             }
         }
-        console.log(loc)
+        // console.log(loc)
     }
     findItemId = (loc) => {
         for (var i=0;i<this.state.blocklist.length;i++){
@@ -257,7 +257,7 @@ class PDFView extends Component{
                     rightplace.push(bh)
                     return bh
                 }
-                console.log(bh)
+                // console.log(bh)
             }
         }
     }
@@ -339,7 +339,7 @@ class PDFView extends Component{
             cr.push({cid:cr.length+1,tag:(cr.length+1).toString(),render:rend})
         }
         this.setState({commRender:cr})
-        console.log(rightplace)
+        // console.log(rightplace)
         this.allocNote()
     }
     allocNote = () => {
@@ -434,7 +434,7 @@ class PDFView extends Component{
                     onMouseDown={this.mouseDown} 
                     onMouseUp={this.mouseUp} 
                     onMouseMove={this.mouseMove}
-                    style={{width:'700px',float:"left"}}
+                    style={{width:'700px'}}
                     // style={{float:'left'}}
                     >
                         {/* <PDF page={this.state.page}
