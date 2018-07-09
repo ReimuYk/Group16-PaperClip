@@ -117,7 +117,7 @@ class PDFView extends Component{
         console.log('clienty-objy',e.clientY-e.target.getBoundingClientRect().top)
     }
     mouseMove = (e) => {
-        var pgloc = [e.target.offsetLeft,e.target.offsetTop]
+        var pgloc = [e.target.offsetLeft-document.documentElement.scrollLeft,e.target.offsetTop-document.documentElement.scrollTop]
         if (pgloc!=this.state.pageloc && this.state.pageloc!=null){
             this.allocComm()
         }
