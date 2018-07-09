@@ -20,7 +20,8 @@ class Paper extends Component{
         });
     }
     componentWillUnmount() {
-        emitter.removeListener(this.starEvent);
+        //console.log((this.starEvent));
+        //emitter.removeListener("star",this.starEvent);
     }
     render() {
         return(

@@ -12,7 +12,6 @@ class Comment extends Component{
     }
     getReplyName(e){
         var name = e.target.id;
-        //console.log("child:"+name);
         this.props.handleReply(name);
     }
     render(){
@@ -23,14 +22,16 @@ class Comment extends Component{
                 bordered={false}
                 dataSource={comment}
                 renderItem={item => (
-                        <List.Item >                        
-                            <Icon type="user" />
-                            <a href="#">{item.user}</a>
-                            <br/>
-                            {item.content}
-                            <Button id={item.user} onClick={this.getReplyName}
-                            shape="circle" icon="message"
-                            />                        
+                        <List.Item 
+                        style={{textAlign:"left"}}
+                        actions={[<Button id={item.user} onClick={this.getReplyName}
+                        shape="circle" icon="message"
+                        /> ]}> 
+                        <List.Item.Meta
+                        avatar={<Avatar shape="square" size="small" icon="user" />}
+                        title={<a href="#">{item.user}</a>}
+                        description={<p style={{width:"130%"}}>{item.content}</p>}
+                        /> 
                         </List.Item>
                     )}
             />

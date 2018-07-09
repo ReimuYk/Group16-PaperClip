@@ -59,7 +59,7 @@ class Postil extends Component{
         });
     }
     componentWillUnmount() {
-        emitter.removeListener(this.postilEvent);
+        //emitter.removeListener(this.postilEvent);
     }
     agree(e){
         e.stopPropagation();

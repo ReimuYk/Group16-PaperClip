@@ -32,7 +32,7 @@ class NoteList extends Component{
         });
     }
     componentWillUnmount() {
-        emitter.removeListener(this.noteEvent);
+        //emitter.removeListener(this.noteEvent);
     }
     changeInputValue(e){
         this.setState({inputValue:e.target.value});
