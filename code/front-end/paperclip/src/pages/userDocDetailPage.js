@@ -55,7 +55,7 @@ const docs = [{
     description: 'description of doc 8',
 }]
 
-class UserDoc extends Component{
+class UserDocDetail extends Component{
     state = {
         data: [],
         userID: 0,
@@ -63,7 +63,7 @@ class UserDoc extends Component{
     componentWillMount = () => {
         /* get userID */
         var that = this;
-        var url = window.location.href;
+        var url = window.location.href; 
         var theRequest = new Object();
         if ( url.indexOf( "?" ) != -1 ) {
             var str = url.substr( 1 ); //substr()方法返回从参数值开始到结束的字符串；
@@ -159,10 +159,9 @@ class UserDoc extends Component{
                         renderItem={item => (
                             <List.Item
                                 actions={[<p>
-                                    <a style={{width:'75px'}} href={"/user/writedoc?key="+item.key}>编辑文档</a>
-                                    <a style={{width:'75px', marginLeft:'20px'}} href={"/user/docdetail?key="+item.key}>查看文档版本</a>
+                                    <a style={{width:'75px'}} href={"/user/writedoc?key="+item.key}>查看内容</a>
                                     <Popconfirm title="确定删除吗？" onConfirm={() => this.deleteDoc(this, item)}>
-                                        <a style={{width:'75px',marginLeft:'20px'}}>删除文档</a>
+                                        <a style={{width:'75px',marginLeft:'20px'}}>删除该版本</a>
                                     </Popconfirm>
                                 </p>]}
                             >
@@ -183,4 +182,4 @@ class UserDoc extends Component{
     }
 }
 
-export default UserDoc;
+export default UserDocDetail;
