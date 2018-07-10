@@ -2,53 +2,55 @@ import React, { Component } from 'react';
 import { List, Avatar, Popconfirm, Menu, Anchor, Button } from 'antd';
 import { Link } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
+import UserFLoatMenu from '../components/userFloatMenu';
+import username from './loginpage';
 /* should get from server */
 import book1 from '../statics/book1.jpg';
-const userID = 1;
+
 const docs = [{
-    key: 1,
+    ID: 1,
     title: 'doc 1',
     cover: book1,
     date: '2018-07-01',
     description: 'description of doc 1',
 },{
-    key: 2,
+    ID: 2,
     title: 'doc 2',
     cover: book1,
     date: '2018-07-01',
     description: 'description of doc 2',
 },{
-    key: 3,
+    ID: 3,
     title: 'doc 3',
     cover: book1,
     date: '2018-07-01',
     description: 'description of doc 3',
 },{
-    key: 4,
+    ID: 4,
     title: 'doc 4',
     cover: book1,
     date: '2018-07-01',
     description: 'description of doc 4',
 },{
-    key: 5,
+    ID: 5,
     title: 'doc 5',
     cover: book1,
     date: '2018-07-01',
     description: 'description of doc 5',
 },{
-    key: 6,
+    ID: 6,
     title: 'doc 6',
     cover: book1,
     date: '2018-07-01',
     description: 'description of doc 6',
 },{
-    key: 7,
+    ID: 7,
     title: 'doc 7',
     cover: book1,
     date: '2018-07-01',
     description: 'description of doc 7',
 },{
-    key: 8,
+    ID: 8,
     title: 'doc 8',
     cover: book1,
     date: '2018-07-01',
@@ -83,18 +85,18 @@ class UserDoc extends Component{
         })
     }
     deleteDoc = (record, item) => {
-        console.log('want to delete doc id(key):', item.key);
-        /* send key to server */
+        console.log('want to delete doc id(ID):', item.ID);
+        /* send ID to server */
         var that = this;
         var tmpdata = that.state.data;
         var dataLen = tmpdata.length;
         for(let i=0; i<dataLen; i++){
-            if(tmpdata[i].key == item.key){
+            if(tmpdata[i].ID == item.ID){
                 tmpdata.splice(i, 1);
                 break;
             }
         }
-        console.log('want to quit star paper: id(key): ', item.key-1);
+        console.log('want to quit star paper: id(ID): ', item.ID-1);
         that.setState({
             data: tmpdata,
         })
@@ -102,7 +104,7 @@ class UserDoc extends Component{
     newDoc = () => {
         var tmpdata = this.state.data;
         var obj = {
-            key: 1,
+            ID: 1,
             title: '新建文档',
             cover: book1,
             date: '2018-07-01',
@@ -117,35 +119,8 @@ class UserDoc extends Component{
         return(
             <div>
                 <NavBar />
-            <Anchor style={{float:'right',marginRight:'10%',marginTop:'5%'}}>
-                <Menu>
-                    <Menu.Item>
-                        <Link to={'/user/starpaper?userID='+userID}>
-                        <span>收藏的论文</span>
-                        </Link>
-                    </Menu.Item>
-                    <Menu.Item>
-                        <Link to={'/user/starnote?userID='+userID}>
-                        <span>收藏的笔记</span>
-                        </Link>
-                    </Menu.Item>
-                    <Menu.Item>
-                        <Link to={'/user/stardoc?uesrID='+userID}>
-                        <span>收藏的文档</span>
-                        </Link>
-                    </Menu.Item>
-                    <Menu.Item>
-                        <Link to={'/user/usernote?userID='+userID}>
-                        <span>写过的笔记</span>
-                        </Link>
-                    </Menu.Item>
-                    <Menu.Item>
-                        <Link to={'/user/userdoc?userID='+userID}>
-                        <span>写过的文档</span>
-                        </Link>
-                    </Menu.Item>
-                </Menu>
-            </Anchor>
+            
+            <UserFLoatMenu />
             <div style={{width:'60%',marginLeft:'200px'}}>
                 <div className="button" style={{width:"100%", height:"50px"}}>
                     <Button style={{float:"right"}} type="primary" onClick={this.newDoc}>新建文档</Button>
@@ -159,8 +134,8 @@ class UserDoc extends Component{
                         renderItem={item => (
                             <List.Item
                                 actions={[<p>
-                                    <a style={{width:'75px'}} href={"/user/writedoc?key="+item.key}>编辑文档</a>
-                                    <a style={{width:'75px', marginLeft:'20px'}} href={"/user/docdetail?key="+item.key}>查看文档版本</a>
+                                    <a style={{width:'75px'}} href={"/user/writedoc?ID="+item.ID}>编辑文档</a>
+                                    <a style={{width:'75px', marginLeft:'20px'}} href={"/user/docdetail?ID="+item.ID}>查看文档版本</a>
                                     <Popconfirm title="确定删除吗？" onConfirm={() => this.deleteDoc(this, item)}>
                                         <a style={{width:'75px',marginLeft:'20px'}}>删除文档</a>
                                     </Popconfirm>
@@ -169,7 +144,7 @@ class UserDoc extends Component{
                                 <List.Item.Meta
                                     avatar={<Avatar src={item.cover} />}
                                     /* 论文显示页 */
-                                    title={<a href={"/viewdoc?docID="+item.key}>{item.title}</a>}
+                                    title={<a href={"/viewdoc?docID="+item.ID}>{item.title}</a>}
                                     description={item.description}
                                 />
                                 <p>{item.date}</p>

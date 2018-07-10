@@ -3,12 +3,14 @@ import React, { Component } from 'react';
 import { List, Avatar, Anchor, Menu, Popconfirm } from 'antd';
 import { Link } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
+import username from './loginpage';
+import UserFloatMenu from '../components/userFloatMenu';
 
 /* should get from server */
 import book1 from '../statics/book1.jpg';
 const userID=1;
 const papers = [{
-    key: 1,
+    ID: 1,
     cover: book1,
     title: 'paper 1',
     author: 'author 1',
@@ -18,7 +20,7 @@ const papers = [{
     date: '2018-06-01',
     discription: 'discription of paper 1',
 },{
-    key: 2,
+    ID: 2,
     cover: book1,
     title: 'paper 2',
     author: 'author 2',
@@ -28,7 +30,7 @@ const papers = [{
     date: '2018-06-01',
     discription: 'discription of paper 2',
 },{
-    key: 3,
+    ID: 3,
     cover: book1,
     title: 'paper 3',
     author: 'author 3',
@@ -38,7 +40,7 @@ const papers = [{
     date: '2018-06-01',
     discription: 'discription of paper 3',
 },{
-    key: 4,
+    ID: 4,
     cover: book1,
     title: 'paper 4',
     author: 'author 4',
@@ -48,7 +50,7 @@ const papers = [{
     date: '2018-06-01',
     discription: 'discription of paper 4',
 },{
-    key: 5,
+    ID: 5,
     cover: book1,
     title: 'paper 5',
     author: 'author 5',
@@ -58,7 +60,7 @@ const papers = [{
     date: '2018-06-01',
     discription: 'discription of paper 5',
 },{
-    key: 6,
+    ID: 6,
     cover: book1,
     title: 'paper 6',
     author: 'author 6',
@@ -68,7 +70,7 @@ const papers = [{
     date: '2018-06-01',
     discription: 'discription of paper 6',
 },{
-    key: 7,
+    ID: 7,
     cover: book1,
     title: 'paper 7',
     author: 'author 7',
@@ -78,7 +80,7 @@ const papers = [{
     date: '2018-06-01',
     discription: 'discription of paper 7',
 },{
-    key: 8,
+    ID: 8,
     cover: book1,
     title: 'paper 8',
     author: 'author 8',
@@ -104,12 +106,12 @@ class StarPaper extends Component{
         var tmpdata = that.state.data;
         var dataLen = tmpdata.length;
         for(let i=0; i<dataLen; i++){
-            if(tmpdata[i].key == item.key){
+            if(tmpdata[i].ID == item.ID){
                 tmpdata.splice(i, 1);
                 break;
             }
         }
-        console.log('want to quit star paper: id(key): ', item.key-1);
+        console.log('want to quit star paper: id(ID): ', item.ID-1);
         that.setState({
             data: tmpdata,
         })
@@ -119,35 +121,8 @@ class StarPaper extends Component{
         return(
             <div>
                 <NavBar />
-                <Anchor style={{float:'right',marginRight:'10%',marginTop:'5%'}}>
-                    <Menu>
-                        <Menu.Item>
-                            <Link to={'/user/starpaper?userID='+userID}>
-                            <span>收藏的论文</span>
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item>
-                            <Link to={'/user/starnote?userID='+userID}>
-                            <span>收藏的笔记</span>
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item>
-                            <Link to={'/user/stardoc?uesrID='+userID}>
-                            <span>收藏的文档</span>
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item>
-                            <Link to={'/user/usernote?userID='+userID}>
-                            <span>写过的笔记</span>
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item>
-                            <Link to={'/user/userdoc?userID='+userID}>
-                            <span>写过的文档</span>
-                            </Link>
-                        </Menu.Item>
-                    </Menu>
-                </Anchor>
+                
+                <UserFloatMenu />
                 <div style={{width:'60%',marginLeft:'200px'}}>
                 <div style={{width:'915px'}}>
                 <p style={{textAlign:'left'}}>
@@ -174,7 +149,7 @@ class StarPaper extends Component{
                         <List.Item.Meta
                         avatar={<Avatar src={item.cover} />}
                         /* 论文显示页 */
-                        title={<a href="https://ant.design">{item.title}</a>}
+                        title={<a href={"/paper?ID="+item.ID}>{item.title}</a>}
                         description={item.discription}
                         />
                         <a style={{width:'80px',marginLeft:'20px'}}>{item.author}</a>
