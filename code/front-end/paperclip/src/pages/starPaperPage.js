@@ -149,6 +149,7 @@ class StarPaper extends Component{
                     </Menu>
                 </Anchor>
                 <div style={{width:'60%',marginLeft:'200px'}}>
+                <div style={{width:'915px'}}>
                 <p style={{textAlign:'left'}}>
                     <a style={{width:'100px',marginLeft:'48px'}}>论文名称/描述</a>
                     <a style={{width:'40px',marginLeft:'200px'}}>作者</a>
@@ -158,6 +159,7 @@ class StarPaper extends Component{
                     <a style={{wdith:'50px',marginLeft:'70px'}}>发表日期</a>
                     <a style={{wdith:'50px',marginLeft:'90px'}}>操作</a>
                 </p>
+                </div>
                 <List
                     style={{textAlign:'left'}}
                     itemLayout="horizontal"
