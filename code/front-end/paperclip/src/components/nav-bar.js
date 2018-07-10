@@ -134,7 +134,7 @@ class NavBar extends Component{
                 <Link to="/user"><Icon type="home" />我的主页</Link>
               </Menu.Item>
               <Menu.Item key="1">
-                  <Link to ="/user/setting"><Icon type="setting" />设置</Link>
+                <Link to="/user/setting"><Icon type="setting" />设置</Link>
               </Menu.Item>
               <Menu.Item key="3"><Icon type="poweroff" />退出</Menu.Item>
             </Menu>

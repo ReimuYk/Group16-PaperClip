@@ -24,7 +24,7 @@ class NoteList extends Component{
     }
     componentDidMount() {
         this.noteEvent = emitter.addListener('changeNoteList', (keyWordData,noteData) => {
-            alert("notelist change!");
+            //alert("notelist change!");
             this.setState({
                 keyWords:keyWordData,
                 notes:noteData
