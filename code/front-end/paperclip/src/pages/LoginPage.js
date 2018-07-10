@@ -3,7 +3,8 @@ import '../css/LoginPage.css'
 import { Link, Redirect } from 'react-router-dom';
 
 export var log = false;
-
+export var username = 'username';
+export var password = '0';
 class Login extends Component {
     constructor(props){
         super(props);
@@ -13,8 +14,8 @@ class Login extends Component {
         }
     }
     login(){
-        var username = document.getElementById("username").value;
-        var password = document.getElementById("password").value;
+        username = document.getElementById("username").value;
+        password = document.getElementById("password").value;
         //alert(username);
         //alert(password);
         this.setState({isLog:true}); 

@@ -3,208 +3,209 @@ import { Layout, Icon, Divider, Menu, List, Avatar, Modal, Input, Anchor } from 
 import { Link } from 'react-router-dom';
 import '../css/style.css';
 import NavBar from '.././components/nav-bar';
+import UserFloatMenu from '../components/userFloatMenu';
 
 /* should get from server */
 import uh1 from '../statics/uh.jpg';
 const followno = 8;
 const fensno   = 8;
 const userID = 1;
-const userName = '用户名';
+const username = '用户名';
 const userIntro = '用户描述';
 const usersMoment = [{
-    key: 1,
+    ID: 1,
     title: '用户动态 1',
     discription: 'discription of 用户动态 1',
 },{
-    key: 2,
+    ID: 2,
     title: '用户动态 2',
     discription: 'discription of 用户动态 2',
 },{
-    key: 3,
+    ID: 3,
     title: '用户动态 3',
     discription: 'discription of 用户动态 3',
 },{
-    key: 4,
+    ID: 4,
     title: '用户动态 4',
     discription: 'discription of 用户动态 4',
 },{
-    key: 5,
+    ID: 5,
     title: '用户动态 5',
     discription: 'discription of 用户动态 5',
 },{
-    key: 6,
+    ID: 6,
     title: '用户动态 6',
     discription: 'discription of 用户动态 6',
 },{
-    key: 7,
+    ID: 7,
     title: '用户动态 7',
     discription: 'discription of 用户动态 7',
 },{
-    key: 8,
+    ID: 8,
     title: '用户动态 8',
     discription: 'discription of 用户动态 8',
 },{
-    key: 9,
+    ID: 9,
     title: '用户动态 9',
     discription: 'discription of 用户动态 9',
 },{
-    key: 10,
+    ID: 10,
     title: '用户动态 10',
     discription: 'discription of 用户动态 10',
 },{
-    key: 11,
+    ID: 11,
     title: '用户动态 11',
     discription: 'discription of 用户动态 11',
 },{
-    key: 12,
+    ID: 12,
     title: '用户动态 12',
     discription: 'discription of 用户动态 12',
 },{
-    key: 13,
+    ID: 13,
     title: '用户动态 13',
     discription: 'discription of 用户动态 13',
 },{
-    key: 14,
+    ID: 14,
     title: '用户动态 14',
     discription: 'discription of 用户动态 14',
 },{
-    key: 15,
+    ID: 15,
     title: '用户动态 15',
     discription: 'discription of 用户动态 15',
 },{
-    key: 16,
+    ID: 16,
     title: '用户动态 16',
     discription: 'discription of 用户动态 16',
 }]
 
 const papersMoment = [{
-    key: 1,
+    ID: 1,
     title: '论文动态 1',
     discription: 'discription of 论文动态 1',
 },{
-    key: 2,
+    ID: 2,
     title: '论文动态 2',
     discription: 'discription of 论文动态 2',
 },{
-    key: 3,
+    ID: 3,
     title: '论文动态 3',
     discription: 'discription of 论文动态 3',
 },{
-    key: 4,
+    ID: 4,
     title: '论文动态 4',
     discription: 'discription of 论文动态 4',
 },{
-    key: 5,
+    ID: 5,
     title: '论文动态 5',
     discription: 'discription of 论文动态 5',
 },{
-    key: 6,
+    ID: 6,
     title: '论文动态 6',
     discription: 'discription of 论文动态 6',
 },{
-    key: 7,
+    ID: 7,
     title: '论文动态 7',
     discription: 'discription of 论文动态 7',
 },{
-    key: 8,
+    ID: 8,
     title: '论文动态 8',
     discription: 'discription of 论文动态 8',
 },{
-    key: 9,
+    ID: 9,
     title: '论文动态 9',
     discription: 'discription of 论文动态 9',
 },{
-    key: 10,
+    ID: 10,
     title: '论文动态 10',
     discription: 'discription of 论文动态 10',
 },{
-    key: 11,
+    ID: 11,
     title: '论文动态 11',
     discription: 'discription of 论文动态 11',
 },{
-    key: 12,
+    ID: 12,
     title: '论文动态 12',
     discription: 'discription of 论文动态 12',
 },{
-    key: 13,
+    ID: 13,
     title: '论文动态 13',
     discription: 'discription of 论文动态 13',
 },{
-    key: 14,
+    ID: 14,
     title: '论文动态 14',
     discription: 'discription of 论文动态 14',
 },{
-    key: 15,
+    ID: 15,
     title: '论文动态 15',
     discription: 'discription of 论文动态 15',
 },{
-    key: 16,
+    ID: 16,
     title: '论文动态 16',
     discription: 'discription of 论文动态 16',
 }]
 
 const interactMoment = [{
-    key: 1,
+    ID: 1,
     title: '互动动态 1',
     discription: 'discription of 互动动态 1',
 },{
-    key: 2,
+    ID: 2,
     title: '互动动态 2',
     discription: 'discription of 互动动态 2',
 },{
-    key: 3,
+    ID: 3,
     title: '互动动态 3',
     discription: 'discription of 互动动态 3',
 },{
-    key: 4,
+    ID: 4,
     title: '互动动态 4',
     discription: 'discription of 互动动态 4',
 },{
-    key: 5,
+    ID: 5,
     title: '互动动态 5',
     discription: 'discription of 互动动态 5',
 },{
-    key: 6,
+    ID: 6,
     title: '互动动态 6',
     discription: 'discription of 互动动态 6',
 },{
-    key: 7,
+    ID: 7,
     title: '互动动态 7',
     discription: 'discription of 互动动态 7',
 },{
-    key: 8,
+    ID: 8,
     title: '互动动态 8',
     discription: 'discription of 互动动态 8',
 },{
-    key: 9,
+    ID: 9,
     title: '互动动态 9',
     discription: 'discription of 互动动态 9',
 },{
-    key: 10,
+    ID: 10,
     title: '互动动态 10',
     discription: 'discription of 互动动态 10',
 },{
-    key: 11,
+    ID: 11,
     title: '互动动态 11',
     discription: 'discription of 互动动态 11',
 },{
-    key: 12,
+    ID: 12,
     title: '互动动态 12',
     discription: 'discription of 互动动态 12',
 },{
-    key: 13,
+    ID: 13,
     title: '互动动态 13',
     discription: 'discription of 互动动态 13',
 },{
-    key: 14,
+    ID: 14,
     title: '互动动态 14',
     discription: 'discription of 互动动态 14',
 },{
-    key: 15,
+    ID: 15,
     title: '互动动态 15',
     discription: 'discription of 互动动态 15',
 },{
-    key: 16,
+    ID: 16,
     title: '互动动态 16',
     discription: 'discription of 互动动态 16',
 }]
@@ -258,7 +259,7 @@ class User extends Component{
         /* set data */
     }
     followUser = () => {
-        console.log('want to follow user id(key):', userID);
+        console.log('want to follow user username:', username);
     }
     handleMailChange = (event) => {
         console.log('send mail', event.target.value);
@@ -296,7 +297,7 @@ class User extends Component{
                         <br />
                         <br />
                         <br />
-                        <h6>{ userName }</h6> 
+                        <h6>{ username }</h6> 
                         <p>{ userIntro }</p>  
                     </div>
                     <div id='u1-3'>
@@ -352,12 +353,12 @@ class User extends Component{
                             <Menu
                                 theme="light"
                                 mode="horizontal"
-                                defaultSelectedKeys={['2']}
+                                defaultSelectedIDs={['2']}
                                 style={{ lineHeight: '50px', width:'100%' }}
                             >
-                                <Menu.Item key="1"><a onClick={this.showStarUser}>关注的人的动态</a></Menu.Item>
-                                <Menu.Item key="2"><a onClick={this.showStarPaper}>收藏的论文的动态</a></Menu.Item>
-                                <Menu.Item key="3"><a onClick={this.showInteract}>最近互动动态</a></Menu.Item>
+                                <Menu.Item ID="1"><a onClick={this.showStarUser}>关注的人的动态</a></Menu.Item>
+                                <Menu.Item ID="2"><a onClick={this.showStarPaper}>收藏的论文的动态</a></Menu.Item>
+                                <Menu.Item ID="3"><a onClick={this.showInteract}>最近互动动态</a></Menu.Item>
                             </Menu>
                             {/* </Header> */}
                         
@@ -381,35 +382,7 @@ class User extends Component{
                         </Layout>
                     </div>
                    
-                    <Anchor style={{float:'right',marginRight:'10%',marginTop:'5%'}}>
-                        <Menu>
-                            <Menu.Item>
-                                <Link to={'/user/starpaper?userID='+userID}>
-                                <span>收藏的论文</span>
-                                </Link>
-                            </Menu.Item>
-                            <Menu.Item>
-                                <Link to={'/user/starnote?userID='+userID}>
-                                <span>收藏的笔记</span>
-                                </Link>
-                            </Menu.Item>
-                            <Menu.Item>
-                                <Link to={'/user/stardoc?uesrID='+userID}>
-                                <span>收藏的文档</span>
-                                </Link>
-                            </Menu.Item>
-                            <Menu.Item>
-                                <Link to={'/user/usernote?userID='+userID}>
-                                <span>写过的笔记</span>
-                                </Link>
-                            </Menu.Item>
-                            <Menu.Item>
-                                <Link to={'/user/userdoc?userID='+userID}>
-                                <span>写过的文档</span>
-                                </Link>
-                            </Menu.Item>
-                        </Menu>
-                    </Anchor>
+                    <UserFloatMenu />
                     
                 </div>
                 </div>
