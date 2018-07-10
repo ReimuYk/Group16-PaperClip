@@ -29,11 +29,11 @@ import Register from './pages/RegisterPage';
 import Discover from './pages/discoverPage';
 import WriteDoc from './pages/writeDocPage';
 import PDFView from './pages/pdfview';
-import AdminUserList from './components/adminUser'
-import AdminPaperList from './components/adminPaper'
-import Admin from './pages/adminPage'
-import UserDocDetail from './pages/userDocDetailPage'
-import Message from './pages/message'
+import AdminUserList from './components/adminUser';
+import AdminPaperList from './components/adminPaper';
+import Admin from './pages/adminPage';
+import UserDocDetail from './pages/userDocDetailPage';
+import Message from './pages/message';
 
 class App extends Component {
   render() {
