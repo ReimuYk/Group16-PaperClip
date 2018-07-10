@@ -39,6 +39,7 @@ class Discover extends Component{
                 avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
                 description: 'Ant Design, a design language for background applications, is refined by Ant UED Team.',
                 content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
+                key: i
             });
         }
         const IconText = ({ type, text }) => (
@@ -66,19 +67,19 @@ class Discover extends Component{
                     dataSource={listData}
                     footer={<div><b>ant design</b> footer part</div>}
                     renderItem={item => (
-                        <List.Item
-                            span={16}
-                            key={item.title}
-                            actions={[<IconText type="star-o" text="156" />, <IconText type="like-o" text="156" />, <IconText type="message" text="2" />]}
-                            extra={<img width={272} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
-                        >
-                            <List.Item.Meta
-                                avatar={<Avatar src={item.avatar} />}
-                                title={<a href={item.href}>{item.title}</a>}
-                                description={item.description}
-                            />
-                            {item.content}
-                        </List.Item>
+                        <Link to={"/viewdoc/"+item.key}>
+                            <List.Item
+                                span={16}
+                                key={item.title}
+                                actions={[<IconText type="star-o" text="156" />, <IconText type="like-o" text="156" />, <IconText type="message" text="2" />]}
+                            >
+                                <List.Item.Meta
+                                    title={<a href={item.href}>{item.title}</a>}
+                                    description={item.description}
+                                />
+                                {item.content}
+                            </List.Item>
+                        </Link>
                     )}
                 />
             </div>
@@ -88,18 +89,22 @@ class Discover extends Component{
     renderRecommendPaper(){
         const data = [
             {
+                key: 1,
                 title: '论文1',
                 description:'empty'
             },
             {
+                key: 2,
                 title: '论文2',
                 description:'empty'
             },
             {
+                key: 3,
                 title: '论文3',
                 description:'empty'
             },
             {
+                key: 4,
                 title: '论文4',
                 description:'empty'
             },
@@ -118,12 +123,14 @@ class Discover extends Component{
                     renderItem={item => (
                         <List.Item>
                             <Card
-                                hoverable
-                                style={{ width: 240 }}
+                                style={{ width: 200 }}
                                 cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
                             >
                                 <Meta
-                                    title={item.title}
+                                    title={
+                                        <Link to={"/paper/"+item.key}>
+                                            {item.title}
+                                        </Link>}
                                     description={item.description}
                                 />
                             </Card>,
@@ -161,8 +168,7 @@ class Discover extends Component{
                     renderItem={item => (
                         <List.Item actions={[<a>删除</a>]}>
                             <List.Item.Meta
-                                avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                                title={<a href="https://ant.design">{item.title}</a>}
+                                title={<a>{item.title}</a>}
                                 description="Ant Design, a design language for background applications, is refined by Ant UED Team"
                             />
                         </List.Item>

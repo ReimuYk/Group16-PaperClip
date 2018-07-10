@@ -103,7 +103,7 @@ class NavBar extends Component{
                     </List.Item>
                 )}
             />
-            <Button type="primary">查看全部私信</Button>
+            <Link to="/user/message"><Button type="primary">查看全部私信</Button></Link>
         </div>
             );
     }

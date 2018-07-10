@@ -51,7 +51,7 @@ class Postil extends Component{
     }
     componentDidMount() {
         this.postilEvent = emitter.addListener('changePostils', (postilData,commentData) => {
-            alert("postils change!");
+            //alert("postils change!");
             this.setState({
                 postils:postilData,
                 comments:commentData

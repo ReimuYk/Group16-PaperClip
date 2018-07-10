@@ -16,7 +16,7 @@ class Paper extends Component{
     }
     componentDidMount() {
         this.starEvent = emitter.addListener('star', (message) => {
-            alert("star!");
+            //alert("star!");
         });
     }
     componentWillUnmount() {

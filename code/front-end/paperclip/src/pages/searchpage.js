@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Menu, Icon, Dropdown, Tag, Card, List, Avatar } from 'antd';
 import NavBar from '../components/nav-bar'
+import {Link} from 'react-router-dom';
 
 const { CheckableTag } = Tag;
 
@@ -177,15 +178,19 @@ class Search extends Component{
     renderSideBar(){
         const data = [
             {
+                key: 1,
                 title: 'Ant Design Title 1',
             },
             {
+                key: 2,
                 title: 'Ant Design Title 2',
             },
             {
+                key: 3,
                 title: 'Ant Design Title 3',
             },
             {
+                key: 4,
                 title: 'Ant Design Title 4',
             },
         ];
@@ -199,13 +204,14 @@ class Search extends Component{
                     itemLayout="horizontal"
                     dataSource={data}
                     renderItem={item => (
-                        <List.Item>
-                            <List.Item.Meta
-                                avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                                title={<a href="https://ant.design">{item.title}</a>}
-                                description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-                            />
-                        </List.Item>
+                        <Link to={"/paper/"+item.key}>
+                            <List.Item>
+                                <List.Item.Meta
+                                    title={<a>{item.title}</a>}
+                                    description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                                />
+                            </List.Item>
+                        </Link>
                     )}
                 />
             </div>
@@ -217,18 +223,20 @@ class Search extends Component{
                 grid={{ gutter: 16, column: 3 }}
                 dataSource={this.state.paperData}
                 renderItem={item => (
-                    <List.Item>
-                        <Card
-                            style={{ width: 200 }}
-                            cover={<img alt="example" src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" />}
-                            actions={[<span>阅读量：{item.readno}</span>, <span>笔记数：{item.noteno}</span>]}
-                        >
-                            <Meta
-                                title={item.title}
-                                description={item.keyWord}
-                            />
-                        </Card>
-                    </List.Item>
+                    <Link to={"/paper/"+item.key}>
+                        <List.Item>
+                            <Card
+                                style={{ width: 200 }}
+                                cover={<img alt="example" src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" />}
+                                actions={[<span>阅读量：{item.readno}</span>, <span>笔记数：{item.noteno}</span>]}
+                            >
+                                <Meta
+                                    title={item.title}
+                                    description={item.keyWord}
+                                />
+                            </Card>
+                        </List.Item>
+                    </Link>
                 )}
             />
         )
