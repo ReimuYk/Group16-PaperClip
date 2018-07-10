@@ -3,6 +3,8 @@ import {Link} from 'react-router-dom';
 import { Input, Select, List, Avatar, Button, Spin, Icon, Menu, Anchor } from 'antd';
 import NavBar from '../components/nav-bar';
 import reqwest from 'reqwest';
+import {log} from './loginpage';
+import {log1} from './RegisterPage';
 
 const fakeDataUrl = 'https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo';
 const MenuItemGroup = Menu.ItemGroup;
@@ -45,31 +47,43 @@ class Sider extends React.Component {
             </div>
         )
     }
-    render() {
-        const renderFooter = this.renderFooter();
-        return (
-            <div className="menu" style={{float: "right", marginRight: "10%", textAlign:"left"}}>
+    renderSider(){
+        if(log||log1){
+            return (
                 <Menu
                     onClick={this.handleClick}
                     style={{ width: 300 }}
                 >
                     <MenuItemGroup key="g1" title="消息提示">
-                       
+
                         <Menu.Item key="1">
-                        <Link to={'/user/starpaper?userID='+this.state.userID}>
-                            <Icon type="book" />我收藏的论文<span class="GlobalSideBar-navNumber">2,576</span>
-                        </Link>
+                            <Link to={'/user/starpaper?userID='+this.state.userID}>
+                                <Icon type="book" />我收藏的论文<span class="GlobalSideBar-navNumber">2,576</span>
+                            </Link>
                         </Menu.Item>
                         <Menu.Item key="2">
-                        <Link to={'/user?userID='+this.state.userID}>
-                            <Icon type="team" />我关注的用户<span class="GlobalSideBar-navNumber">2,576</span>
-                        </Link>
+                            <Link to={'/user?userID='+this.state.userID}>
+                                <Icon type="team" />我关注的用户<span class="GlobalSideBar-navNumber">2,576</span>
+                            </Link>
                         </Menu.Item>
                         <Menu.Item key="3"><Icon type="user-add" />我的邀请<span class="GlobalSideBar-navNumber">2,576</span></Menu.Item>
-                        <Menu.Item key="4"><Icon type="message" />我的私信<span class="GlobalSideBar-navNumber">2,576</span></Menu.Item>
+                        <Menu.Item key="4">
+                            <Link to={'/user/message?userID='+this.state.userID}>
+                                <Icon type="message" />我的私信<span class="GlobalSideBar-navNumber">2,576</span>
+                            </Link>
+                        </Menu.Item>
                         <Menu.Item key="5"><Icon type="customer-service" />社区服务中心</Menu.Item>
                     </MenuItemGroup>
                 </Menu>
+            )
+        }
+    }
+    render() {
+        const renderFooter = this.renderFooter();
+        const renderSider = this.renderSider();
+        return (
+            <div className="menu" style={{float: "right", marginRight: "10%", textAlign:"left"}}>
+                {renderSider}
                 {renderFooter}
             </div>
         );
