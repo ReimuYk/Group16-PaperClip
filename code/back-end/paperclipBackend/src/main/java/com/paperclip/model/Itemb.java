@@ -1,6 +1,4 @@
-package com.paperclip.modal;
-
-import com.sun.javafx.beans.IDProperty;
+package com.paperclip.model;
 
 import javax.persistence.*;
 

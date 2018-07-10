@@ -2,8 +2,8 @@ package com.paperclip.service.impl;
 
 import com.paperclip.dao.ItemaRepository;
 import com.paperclip.dao.ItembRepository;
-import com.paperclip.modal.Itema;
-import com.paperclip.modal.Itemb;
+import com.paperclip.model.Itema;
+import com.paperclip.model.Itemb;
 import com.paperclip.service.S1Service;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
