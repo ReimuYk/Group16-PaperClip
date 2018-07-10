@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import '../css/style.css';
 import NavBar from '.././components/nav-bar';
 import UserFloatMenu from '../components/userFloatMenu';
-
+import IPaddress from '../App'
 /* should get from server */
 import uh1 from '../statics/uh.jpg';
 const followno = 8;

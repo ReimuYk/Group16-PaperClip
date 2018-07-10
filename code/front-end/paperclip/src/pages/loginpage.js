@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import '../css/LoginPage.css'
 import { Link, Redirect } from 'react-router-dom';
-
+import IPaddress from '../App'
 export var log = false;
 export var username = 'username';
 export var password = '0';
+
 class Login extends Component {
     constructor(props){
         super(props);

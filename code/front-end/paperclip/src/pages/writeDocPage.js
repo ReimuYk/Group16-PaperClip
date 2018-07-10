@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Editor from '.././components/textEditor';
 import {Popconfirm, Popover,Icon,Button,Tag, Input, Tooltip,List,Avatar, Menu, Modal} from 'antd';
-
+import IPaddress from '../App'
 const Search = Input.Search;
 
 const information = {

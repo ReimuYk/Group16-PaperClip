@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Menu, Icon, Dropdown, Tag, Card, List, Avatar } from 'antd';
 import NavBar from '../components/nav-bar'
 import {Link} from 'react-router-dom';
-
+import IPaddress from '../App'
 const { CheckableTag } = Tag;
 
 /* fake data...

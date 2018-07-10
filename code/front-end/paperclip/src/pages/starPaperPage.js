@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import username from './loginpage';
 import UserFloatMenu from '../components/userFloatMenu';
-
+import IPaddress from '../App'
 /* should get from server */
 import book1 from '../statics/book1.jpg';
 const userID=1;
@@ -94,28 +94,65 @@ const papers = [{
 class StarPaper extends Component{
     state = {
         data: [],
+        username:''
     }
     componentWillMount = () => {
         this.setState({
-            data: papers,
+            username: username
         })
         /* get specific info of papers */
+        let jsonbody = {};
+        jsonbody.username = this.state.username;
+        let url = IPaddress + 'service/starPaper';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let data = eval(responseJson);
+                this.setState({
+                    data:data
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
     }
     quitStar = (record, item) => {
-        var that = this;
-        var tmpdata = that.state.data;
-        var dataLen = tmpdata.length;
-        for(let i=0; i<dataLen; i++){
-            if(tmpdata[i].ID == item.ID){
-                tmpdata.splice(i, 1);
-                break;
-            }
-        }
-        console.log('want to quit star paper: id(ID): ', item.ID-1);
-        that.setState({
-            data: tmpdata,
-        })
         /* send to server, refresh this page in get/post request */
+        let jsonbody = {};
+        jsonbody.username = this.state.username;
+        jsonbody.paperID = item.ID;
+        let url = IPaddress + 'service/quitStar/paper';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let result = eval(responseJson);
+                if(result == "success"){
+                    let that = this;
+                    let tmpdata = that.state.data;
+                    let dataLen = tmpdata.length;
+                    for(let i=0; i<dataLen; i++){
+                        if(tmpdata[i].ID == item.ID){
+                            tmpdata.splice(i, 1);
+                            break;
+                        }
+                    }
+                    that.setState({
+                        data: tmpdata,
+                    })
+                }
+                else{
+                    alert("删除错误，请重试");
+                }
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
     }
     render(){
         return(
@@ -147,10 +184,9 @@ class StarPaper extends Component{
                             </Popconfirm>
                         </p>]}>
                         <List.Item.Meta
-                        avatar={<Avatar src={item.cover} />}
                         /* 论文显示页 */
                         title={<a href={"/paper?ID="+item.ID}>{item.title}</a>}
-                        description={item.discription}
+                        description={item.keywords}
                         />
                         <a style={{width:'80px',marginLeft:'20px'}}>{item.author}</a>
                         <a style={{width:'80px',marginLeft:'20px'}}>{item.readno}</a>

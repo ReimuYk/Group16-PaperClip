@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 /* should get from server */
 import uh from '../statics/uh.jpg'
+import IPaddress from '../App'
 const { TextArea } = Input;
 const userID=1;
 const constUsername = 'user2'

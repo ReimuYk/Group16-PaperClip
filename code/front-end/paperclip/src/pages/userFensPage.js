@@ -5,6 +5,7 @@ import NavBar from '../components/nav-bar';
 /* should get from server */
 import uh from '../statics/uh.jpg'
 import UserFloatMenu from '../components/userFloatMenu';
+import IPaddress from '../App'
 import username from './loginpage';
 const userID=1;
 const data = [{
