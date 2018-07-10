@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Divider, Input, Modal, Icon, Button, List } from 'antd';
 import '../css/style.css'
 import NavBar from '../components/nav-bar';
+import UserFloatMenu from '../components/userFloatMenu';
+
 import constuh from '../statics/uh.jpg'
 const constUserID = 0;
 const constUserDescription = '用户描述';
