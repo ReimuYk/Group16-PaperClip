@@ -26,7 +26,7 @@ function beforeUpload(file) {
       message.error('Image must smaller than 2MB!');
     }
     return isJPG && isLt2M;
-  }
+}
 
 class UserSetting extends Component{
     constructor(props){
@@ -37,7 +37,7 @@ class UserSetting extends Component{
         this.state = {
             collapsed: false,
             content:'',
-            menuKey:null,
+            menuKey:1,
             openEdit:false,
             editIdx:null,
             loading: false,
@@ -65,7 +65,7 @@ class UserSetting extends Component{
     edit(e){
         var idx = e.target.id;
         this.setState({
-            openEdit:true,
+            openEdit:!this.state.openEdit,
             editIdx:idx
         })
     }
@@ -85,11 +85,11 @@ class UserSetting extends Component{
           return;
         }
         if (info.file.status === 'done') {
-        // Get this url from response in real world.
-        getBase64(info.file.originFileObj, imageUrl => this.setState({
-            imageUrl:imageUrl,
-            loading: false,
-        }));
+            // Get this url from response in real world.
+            getBase64(info.file.originFileObj, imageUrl => this.setState({
+                imageUrl:imageUrl,
+                loading: false,
+            }));
         }
       }
     renderAvatar(){
@@ -130,7 +130,10 @@ class UserSetting extends Component{
               itemLayout="horizontal"
               dataSource={this.state.data}
               renderItem={item => (
-                <List.Item actions={[<a id={item.idx} onClick={this.edit}>edit</a>]}>
+                <List.Item actions={
+                    [<a id={item.idx} onClick={this.edit}>
+                    {this.state.openEdit&&(this.state.editIdx==item.idx)?"确定":"修改"}
+                    </a>]}>
                   <List.Item.Meta
                     title={item.title}
                   />
@@ -143,7 +146,19 @@ class UserSetting extends Component{
 
     }
     changeMenuKey(e){
+        console.log(e.key);
         this.setState({menuKey:e.key});
+    }
+    renderContent(){
+        const UserSetting = this.renderUserSetting();
+        var key = this.state.menuKey;
+        console.log(key+"     "+(key==1))
+        if(key == 1){
+            return UserSetting;
+        }
+        else{
+            return <div>后续功能正在开发中QAQ</div>;
+        }
     }
     render() {
         const collapsedIcon = (
@@ -153,7 +168,7 @@ class UserSetting extends Component{
                 <Icon onClick={this.toggle} type='double-left' />
             )
         )
-        const UserSetting = this.renderUserSetting();
+        const getContent = this.renderContent();
         return(
             <div>
                 <NavBar />
@@ -170,13 +185,13 @@ class UserSetting extends Component{
                             <Icon type="user" />
                             <span>个人信息设置</span>
                             </Menu.Item>
-                            <Menu.Item key="2">
-                            <Icon type="video-camera" onClick={this.changeMenuKey} />
+                            <Menu.Item key="2" onClick={this.changeMenuKey}>
+                            <Icon type="frown-o"  />
                             <span>屏蔽设置</span>
                             </Menu.Item>
-                            <Menu.Item key="3">
-                            <Icon type="upload" onClick={this.changeMenuKey}/>
-                            <span>nav 3</span>
+                            <Menu.Item key="3" onClick={this.changeMenuKey}>
+                            <Icon type="filter"/>
+                            <span>其他设置</span>
                             </Menu.Item>
                             <Menu.Item>
                                 {collapsedIcon}
@@ -185,7 +200,7 @@ class UserSetting extends Component{
                         </Sider>
                         <Layout>
                         <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 560 }}>
-                            {UserSetting}
+                            {getContent}
                         </Content>
                         </Layout>
                     </Layout>
