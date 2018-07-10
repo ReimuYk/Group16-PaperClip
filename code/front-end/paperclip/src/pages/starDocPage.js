@@ -3,13 +3,12 @@ import React, { Component } from 'react';
 import { List, Avatar, Anchor, Menu, Popconfirm } from 'antd';
 import { Link } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
-import UserFloatMenu from '../components/userFloatMenu';
 
 /* should get from server */
 import book1 from '../statics/book1.jpg';
-import username from './loginpage';
+const userID=1;
 const docs = [{
-    ID: 1,
+    key: 1,
     cover: book1,
     title: 'doc 1',
     author: 'author 1',
@@ -18,7 +17,7 @@ const docs = [{
     date: '2018-05-01',
     description: 'description of doc 1',
 },{
-    ID: 2,
+    key: 2,
     cover: book1,
     title: 'doc 2',
     author: 'author 2',
@@ -27,7 +26,7 @@ const docs = [{
     date: '2018-05-02',
     description: 'description of doc 2',
 },{
-    ID: 3,
+    key: 3,
     cover: book1,
     title: 'doc 3',
     author: 'author 3',
@@ -36,7 +35,7 @@ const docs = [{
     date: '2018-05-03',
     description: 'description of doc 3',
 },{
-    ID: 4,
+    key: 4,
     cover: book1,
     title: 'doc 4',
     author: 'author 4',
@@ -45,7 +44,7 @@ const docs = [{
     date: '2018-05-04',
     description: 'description of doc 4',
 },{
-    ID: 5,
+    key: 5,
     cover: book1,
     title: 'note 5',
     author: 'author 5',
@@ -54,7 +53,7 @@ const docs = [{
     date: '2018-05-05',
     description: 'description of doc 5',
 },{
-    ID: 6,
+    key: 6,
     cover: book1,
     title: 'doc 6',
     author: 'author 6',
@@ -63,7 +62,7 @@ const docs = [{
     date: '2018-05-06',
     description: 'description of doc 6',
 },{
-    ID: 7,
+    key: 7,
     cover: book1,
     title: 'doc 7',
     author: 'author 7',
@@ -72,7 +71,7 @@ const docs = [{
     date: '2018-05-07',
     description: 'description of doc 7',
 },{
-    ID: 8,
+    key: 8,
     cover: book1,
     title: 'doc 8',
     author: 'author 8',
@@ -89,7 +88,7 @@ class StarDoc extends Component{
         this.setState({
             data: docs,
         })
-        /* get username */
+        /* get userID */
         var url = window.location.href; 
         var theRequest = new Object();
         if ( url.indexOf( "?" ) != -1 ) {
@@ -98,8 +97,8 @@ class StarDoc extends Component{
             for ( var i = 0; i < strs.length; i++ ) {
                 theRequest[ strs[ i ].split( "=" )[ 0 ] ] = ( strs[ i ].split( "=" )[ 1 ] );
             }
-            var urlUserName = this.props.location.search.substring(10);//10 == 'username='.length+1 (url: ...?username=xxx)
-            console.log('username:', urlUserName);
+            var urlUserID = this.props.location.search.substring(8);//8 == 'userID='.length+1 (url: ...?userID=xxx)
+            console.log('userID:', urlUserID);
         }
         /* get specific info of docs */
     }
@@ -108,12 +107,12 @@ class StarDoc extends Component{
         var tmpdata = that.state.data;
         var dataLen = tmpdata.length;
         for(let i=0; i<dataLen; i++){
-            if(tmpdata[i].ID == item.ID){
+            if(tmpdata[i].key == item.key){
                 tmpdata.splice(i, 1);
                 break;
             }
         }
-        console.log('want to quit star paper: id(ID): ', item.ID-1);
+        console.log('want to quit star paper: id(key): ', item.key-1);
         that.setState({
             data: tmpdata,
         })
@@ -123,8 +122,35 @@ class StarDoc extends Component{
         return(
             <div>
                 <NavBar />
-                
-                <UserFloatMenu />
+                <Anchor style={{float:'right',marginRight:'10%',marginTop:'5%'}}>
+                    <Menu>
+                        <Menu.Item>
+                            <Link to={'/user/starpaper?userID='+userID}>
+                            <span>收藏的论文</span>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item>
+                            <Link to={'/user/starnote?userID='+userID}>
+                            <span>收藏的笔记</span>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item>
+                            <Link to={'/user/stardoc?uesrID='+userID}>
+                            <span>收藏的文档</span>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item>
+                            <Link to={'/user/usernote?userID='+userID}>
+                            <span>写过的笔记</span>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item>
+                            <Link to={'/user/userdoc?userID='+userID}>
+                            <span>写过的文档</span>
+                            </Link>
+                        </Menu.Item>
+                    </Menu>
+                </Anchor>
                 <div style={{width:'60%',marginLeft:'200px'}}>
                 <div style={{width:'915px'}}>
                 <p style={{textAlign:'left'}}>
@@ -150,7 +176,7 @@ class StarDoc extends Component{
                         <List.Item.Meta
                         avatar={<Avatar src={item.cover} />}
                         /* 论文显示页 */
-                        title={<a href={"/viewdoc?docID="+item.ID}>{item.title}</a>}
+                        title={<a href={"/viewdoc?docID="+item.key}>{item.title}</a>}
                         description={item.description}
                         />
                         <a style={{width:'80px',marginLeft:'20px'}}>{item.author}</a>

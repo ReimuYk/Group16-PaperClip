@@ -2,39 +2,38 @@ import React, { Component } from 'react';
 import NavBar from '.././components/nav-bar';
 import Editor from '.././components/textEditor';
 import {Anchor, Popover,Icon,Button,Tag, Input, Tooltip,List,Avatar} from 'antd';
-
 const Search = Input.Search;
 /* fake data */
 const data = [{
-    ID: 1,
+    key: 1,
     title: 'doc 1',
     description: 'description of doc 1',
 },{
-    ID: 2,
+    key: 2,
     title: 'doc 2',
     description: 'description of doc 2',
 },{
-    ID: 3,
+    key: 3,
     title: 'doc 3',
     description: 'description of doc 3',
 },{
-    ID: 4,
+    key: 4,
     title: 'doc 4',
     description: 'description of doc 4',
 },{
-    ID: 5,
+    key: 5,
     title: 'doc 5',
     description: 'description of doc 5',
 },{
-    ID: 6,
+    key: 6,
     title: 'doc 6',
     description: 'description of doc 6',
 },{
-    ID: 7,
+    key: 7,
     title: 'doc 7',
     description: 'description of doc 7',
 },{
-    ID: 8,
+    key: 8,
     title: 'doc 8',
     description: 'description of doc 8',
 }]
@@ -66,14 +65,14 @@ class ModifyDoc extends Component{
             for ( var i = 0; i < strs.length; i++ ) {
                 theRequest[ strs[ i ].split( "=" )[ 0 ] ] = ( strs[ i ].split( "=" )[ 1 ] );
             }
-            var noteID = this.props.location.search.substring(4);
-            console.log('substring', noteID);//4 == 'ID='.length+1 (url: .../modifynote?ID=xxx)
-            console.log('data[noteID-1]',data[noteID-1]);
+            var noteKey = this.props.location.search.substring(5);
+            console.log('substring', noteKey);//5 == 'key='.length+1 (url: .../modifynote?key=xxx)
+            console.log('data[noteKey-1]',data[noteKey-1]);
             /* get content of that note */
             /* here we use fake data */
             this.setState({
-                title: data[noteID-1].title,
-                description: data[noteID-1].description,
+                title: data[noteKey-1].title,
+                description: data[noteKey-1].description,
             })
         }
     }
