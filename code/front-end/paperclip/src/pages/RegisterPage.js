@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../css/LoginPage.css'
 import { Link,Redirect } from 'react-router-dom';
+import IPaddress from '../App'
 export var log1 = false;
 class RegisterPage extends Component {
     constructor(props){

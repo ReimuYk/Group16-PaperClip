@@ -10,27 +10,27 @@ class UserFloatMenu extends Component{
                 <Anchor style={{float:'right',marginRight:'10%',marginTop:'5%'}}>
                     <Menu>
                         <Menu.Item>
-                            <Link to={'/user/starpaper?username='+username}>
+                            <Link to={'/user/starpaper'}>
                             <span>收藏的论文</span>
                             </Link>
                         </Menu.Item>
                         <Menu.Item>
-                            <Link to={'/user/starnote?username='+username}>
+                            <Link to={'/user/starnote'}>
                             <span>收藏的笔记</span>
                             </Link>
                         </Menu.Item>
                         <Menu.Item>
-                            <Link to={'/user/stardoc?username='+username}>
+                            <Link to={'/user/stardoc'}>
                             <span>收藏的文档</span>
                             </Link>
                         </Menu.Item>
                         <Menu.Item>
-                            <Link to={'/user/usernote?username='+username}>
+                            <Link to={'/user/usernote'}>
                             <span>写过的笔记</span>
                             </Link>
                         </Menu.Item>
                         <Menu.Item>
-                            <Link to={'/user/userdoc?username='+username}>
+                            <Link to={'/user/userdoc'}>
                             <span>写过的文档</span>
                             </Link>
                         </Menu.Item>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import IPaddress from '../App'
 import { List, Avatar, Anchor, Menu, Popconfirm } from 'antd';
 import { Link } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
@@ -83,40 +83,66 @@ const docs = [{
 }]
 class StarDoc extends Component{
     state = {
-        data: [],
+        username: ''
     }
     componentWillMount = () => {
         this.setState({
             data: docs,
+            username: username
         })
-        /* get username */
-        var url = window.location.href; 
-        var theRequest = new Object();
-        if ( url.indexOf( "?" ) != -1 ) {
-            var str = url.substr( 1 ); //substr()方法返回从参数值开始到结束的字符串；
-            var strs = str.split( "&" );
-            for ( var i = 0; i < strs.length; i++ ) {
-                theRequest[ strs[ i ].split( "=" )[ 0 ] ] = ( strs[ i ].split( "=" )[ 1 ] );
-            }
-            var urlUserName = this.props.location.search.substring(10);//10 == 'username='.length+1 (url: ...?username=xxx)
-            console.log('username:', urlUserName);
-        }
+        let jsonbody = {};
+        jsonbody.username = this.state.username;
+        let url = IPaddress + 'service/starDoc';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let data = eval(responseJson);
+                this.setState({
+                    data:data
+                })
+            }).catch(function(e){
+                console.log("Oops, error");
+            })
         /* get specific info of docs */
     }
     quitStar = (record, item) => {
-        var that = this;
-        var tmpdata = that.state.data;
-        var dataLen = tmpdata.length;
-        for(let i=0; i<dataLen; i++){
-            if(tmpdata[i].ID == item.ID){
-                tmpdata.splice(i, 1);
-                break;
-            }
-        }
-        console.log('want to quit star paper: id(ID): ', item.ID-1);
-        that.setState({
-            data: tmpdata,
+        let jsonbody = {};
+        jsonbody.username = this.state.username;
+        jsonbody.docID = item.ID;
+        let url = IPaddress + 'service/quitStar/doc';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let result = eval(responseJson);
+                if(result == "success"){
+                    let that = this;
+                    let tmpdata = that.state.data;
+                    let dataLen = tmpdata.length;
+                    for(let i=0; i<dataLen; i++){
+                        if(tmpdata[i].ID == item.ID){
+                            tmpdata.splice(i, 1);
+                            break;
+                        }
+                    }
+                    that.setState({
+                        data: tmpdata,
+                    })
+                }
+                else{
+                    alert("删除错误，请重试");
+                }
+            }).catch(function(e){
+            console.log("Oops, error");
         })
+
         /* send to server, refresh this page in get/post request */
     }
     render(){
@@ -148,10 +174,9 @@ class StarDoc extends Component{
                             </Popconfirm>
                         </p>]}>
                         <List.Item.Meta
-                        avatar={<Avatar src={item.cover} />}
                         /* 论文显示页 */
                         title={<a href={"/viewdoc?docID="+item.ID}>{item.title}</a>}
-                        description={item.description}
+                        description={item.keywords}
                         />
                         <a style={{width:'80px',marginLeft:'20px'}}>{item.author}</a>
                         <a style={{width:'80px',marginLeft:'20px'}}>{item.readno}</a>

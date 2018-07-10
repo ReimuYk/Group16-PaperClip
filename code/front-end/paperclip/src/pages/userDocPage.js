@@ -6,17 +6,15 @@ import UserFLoatMenu from '../components/userFloatMenu';
 import username from './loginpage';
 /* should get from server */
 import book1 from '../statics/book1.jpg';
-
+import IPaddress from '../App'
 const docs = [{
     ID: 1,
     title: 'doc 1',
-    cover: book1,
     date: '2018-07-01',
     description: 'description of doc 1',
 },{
     ID: 2,
     title: 'doc 2',
-    cover: book1,
     date: '2018-07-01',
     description: 'description of doc 2',
 },{
@@ -28,25 +26,21 @@ const docs = [{
 },{
     ID: 4,
     title: 'doc 4',
-    cover: book1,
     date: '2018-07-01',
     description: 'description of doc 4',
 },{
     ID: 5,
     title: 'doc 5',
-    cover: book1,
     date: '2018-07-01',
     description: 'description of doc 5',
 },{
     ID: 6,
     title: 'doc 6',
-    cover: book1,
     date: '2018-07-01',
     description: 'description of doc 6',
 },{
     ID: 7,
     title: 'doc 7',
-    cover: book1,
     date: '2018-07-01',
     description: 'description of doc 7',
 },{
@@ -60,7 +54,7 @@ const docs = [{
 class UserDoc extends Component{
     state = {
         data: [],
-        userID: 0,
+        username: 0,
     }
     componentWillMount = () => {
         /* get userID */

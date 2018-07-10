@@ -3,7 +3,7 @@ import PDF from 'react-pdf-js';
 import { Button, Popover, Affix, Row, Col, Card} from 'antd';
 import emitter from '.././util/events';
 import 'antd/dist/antd.css';
-
+import IPaddress from '../App'
 
 let leftplace = []
 let rightplace = []

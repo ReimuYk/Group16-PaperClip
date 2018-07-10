@@ -6,7 +6,7 @@ import username from './loginpage';
 import UserFloatMenu from '../components/userFloatMenu';
 /* should get from server */
 import book1 from '../statics/book1.jpg';
-
+import IPaddress from '../App'
 const docs = [{
     ID: 1,
     title: 'doc 1',

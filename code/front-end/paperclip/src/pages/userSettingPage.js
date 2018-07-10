@@ -3,7 +3,7 @@ import {  Layout, Icon, Divider, Menu, List, Avatar, Modal, Input, Anchor } from
 import { Link } from 'react-router-dom';
 import NavBar from '../components/nav-bar.js';
 import '../css/style.css';
-
+import IPaddress from '../App'
 /* fake data */
 
 const { Header, Content, Sider } = Layout;

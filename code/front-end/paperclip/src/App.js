@@ -8,7 +8,6 @@ import 'antd/dist/antd.css';
 
 import Home from './pages/homepage';
 import Login from './pages/loginpage';
-import Note from './pages/notepage';
 import Paper from './pages/paperpage';
 import Search from './pages/searchpage';
 import User from './pages/userpage';
@@ -21,10 +20,7 @@ import UserDoc from './pages/userDocPage';
 import UserNote from './pages/userNotePage';
 import UserFens from './pages/userFensPage';
 import UserSetting from './pages/userSettingPage';
-import ModifyNote from './pages/userModifyNotePage';
-import ModifyDoc  from './pages/userModifyDocPage';
 import ViewDoc from './pages/viewDocPage';
-import ViewNote from './pages/viewNotePage';
 import Register from './pages/RegisterPage';
 import Discover from './pages/discoverPage';
 import WriteDoc from './pages/writeDocPage';
@@ -34,6 +30,8 @@ import AdminPaperList from './components/adminPaper'
 import Admin from './pages/adminPage'
 import UserDocDetail from './pages/userDocDetailPage'
 import Message from './pages/message'
+
+export var IPaddress = '...'
 
 class App extends Component {
   render() {
@@ -46,7 +44,6 @@ class App extends Component {
               <Route path='/login' component={Login} />
               <Route path='/findback' component={FindBack} />
               <Route path='/register' component={Register} />
-              <Route path='/note' component={Note} />
               <Route path='/paper' component={Paper} />
               <Route path='/search/:data' component={Search} />
               <Route exact path='/user' component={User} />
@@ -57,14 +54,11 @@ class App extends Component {
               <Route path='/user/userdoc' component={UserDoc} />
               <Route path='/user/usernote' component={UserNote} />
               <Route path='/user/userfens' component={UserFens} />
-              <Route path='/user/modifynote' component={ModifyNote} />
-              <Route path='/user/modifydoc'  component={ModifyDoc} />
               <Route path='/user/setting' component={UserSetting} />
                 <Route path='/user/writedoc' component={WriteDoc} />
               <Route path='/user/docdetail' component={UserDocDetail} />
               <Route path='/user/message' component={Message} />
               <Route path='/viewdoc' component={ViewDoc} />
-              <Route path='/viewnote' component={ViewNote} />
               <Route path='/user' component={User} /> 
               <Route path='/discover' component={Discover} />
               <Route path='/pdfview' component={PDFView} />

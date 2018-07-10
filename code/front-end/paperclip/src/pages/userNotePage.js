@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import UserFloatMenu from '../components/userFloatMenu';
 import username from './loginpage';
-
+import IPaddress from '../App'
 /* should get from server */
 import book1 from '../statics/book1.jpg';
 const userID=1;
