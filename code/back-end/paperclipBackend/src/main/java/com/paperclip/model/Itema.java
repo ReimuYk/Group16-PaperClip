@@ -1,6 +1,4 @@
-package com.paperclip.modal;
-
-import org.springframework.web.bind.annotation.CrossOrigin;
+package com.paperclip.model;
 
 import javax.persistence.*;
 
