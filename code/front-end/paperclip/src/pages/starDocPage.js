@@ -152,6 +152,7 @@ class StarDoc extends Component{
                     </Menu>
                 </Anchor>
                 <div style={{width:'60%',marginLeft:'200px'}}>
+                <div style={{width:'915px'}}>
                 <p style={{textAlign:'left'}}>
                     <a style={{width:'100px',marginLeft:'48px'}}>文档名称/描述</a>
                     <a style={{width:'40px',marginLeft:'300px'}}>作者</a>
@@ -160,6 +161,7 @@ class StarDoc extends Component{
                     <a style={{width:'70px',marginLeft:'60px'}}>创作日期</a>
                     <a style={{wdith:'50px',marginLeft:'90px'}}>操作</a>
                 </p>
+                </div>
                 <List
                     style={{textAlign:'left'}}
                     itemLayout="horizontal"
