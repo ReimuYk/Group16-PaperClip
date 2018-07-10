@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import username from './loginpage';
 import UserFloatMenu from '../components/userFloatMenu';
-import IPaddress from '../App'
+import { IPaddress } from '../App'
 /* should get from server */
 import uh from '../statics/uh.jpg';
 
@@ -43,6 +43,7 @@ class StarUser extends Component{
         this.setState({
             username: username
         })
+        let that = this;
         /* get specific info of users */
         let jsonbody = {};
         jsonbody.username = this.state.username;
@@ -55,7 +56,7 @@ class StarUser extends Component{
             .then(response=>response.text())
             .then(responseJson=>{
                 let data = eval(responseJson);
-                this.setState({
+                that.setState({
                     data:data
                 })
             }).catch(function(e){
@@ -63,6 +64,7 @@ class StarUser extends Component{
         })
     }
     quitFollow = (item, record) => {
+        let that = this;
         /* tell the server to do something */
         let jsonbody = {};
         jsonbody.hostname = this.state.username;
@@ -77,7 +79,6 @@ class StarUser extends Component{
             .then(responseJson=>{
                 let result = eval(responseJson);
                 if(result == "success"){
-                    let that = this;
                     let tmpdata = that.state.data;
                     let dataLen = tmpdata.length;
                     for(let i=0; i<dataLen; i++){

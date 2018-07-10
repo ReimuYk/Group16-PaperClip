@@ -7,7 +7,7 @@ import PDFView from './pdfview';
 import NoteList from '.././components/notelist';
 import Tool from '.././components/tool';
 import emitter from '.././util/events';
-import IPaddress from '../App'
+import { IPaddress } from '../App'
 
 class Paper extends Component{
     constructor(props){

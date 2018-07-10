@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import UserFloatMenu from '../components/userFloatMenu';
 import username from './loginpage';
-import IPaddress from '../App'
+import { IPaddress } from '../App'
 /* should get from server */
 import book1 from '../statics/book1.jpg';
 const userID=1;
@@ -78,40 +78,63 @@ const notes = [{
 class UserNote extends Component{
     state = {
         data: [],
+        username:''
     }
     componentWillMount = () => {
+        let that = this;
+        /* get username */
         this.setState({
-            data: notes,
+            username: username
         })
-        /* get userID */
-        var url = window.location.href; 
-        var theRequest = new Object();
-        if ( url.indexOf( "?" ) != -1 ) {
-            var str = url.substr( 1 ); //substr()方法返回从参数值开始到结束的字符串；
-            var strs = str.split( "&" );
-            for ( var i = 0; i < strs.length; i++ ) {
-                theRequest[ strs[ i ].split( "=" )[ 0 ] ] = ( strs[ i ].split( "=" )[ 1 ] );
-            }
-            var urlUserID = this.props.location.search.substring(8);//8 == 'userID='.length+1 (url: ...?userID=xxx)
-            console.log('userID:', urlUserID);
-        }
-        /* get specific info of papers */
+        /* get data according to username */
+        let jsonbody = {};
+        jsonbody.username = this.state.username;
+        let url = IPaddress + 'service/userNote';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                that.setState({
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
     }
     deleteNote = (record, item) => {
-        console.log('want to delete note id(ID):', item.ID);
         /* send to server, refresh this page in get/post request */
-        var that = this;
-        var tmpdata = that.state.data;
-        var dataLen = tmpdata.length;
-        for(let i=0; i<dataLen; i++){
-            if(tmpdata[i].ID == item.ID){
-                tmpdata.splice(i, 1);
-                break;
-            }
-        }
-        console.log('want to quit star paper: id(ID): ', item.ID-1);
-        that.setState({
-            data: tmpdata,
+        let that = this;
+        let jsonbody = {};
+        jsonbody.noteID = item.ID;
+        let url = IPaddress + 'service/delete/note';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let result = eval(responseJson);
+                if(result == "success"){
+                    let tmpdata = that.state.data;
+                    let dataLen = tmpdata.length;
+                    for(let i=0; i<dataLen; i++){
+                        if(tmpdata[i].ID == item.ID){
+                            tmpdata.splice(i, 1);
+                            break;
+                        }
+                    }
+                    that.setState({
+                        data: tmpdata,
+                    })
+                }
+                else{
+                    alert("删除错误，请重试");
+                }
+            }).catch(function(e){
+            console.log("Oops, error");
         })
     }
     render(){
@@ -128,7 +151,7 @@ class UserNote extends Component{
                     dataSource={this.state.data}
                     renderItem={item => (
                     <List.Item actions={[<p>
-                                            <a style={{width:'75px'}} href={"writedoc?ID="+item.ID}>编辑笔记</a>
+                                            <a style={{width:'75px'}} href={"modifyNote?ID="+item.ID}>编辑笔记</a>
                                             <Popconfirm title="确定删除吗？" onConfirm={() => this.deleteNote(this, item)}>
                                                 <a style={{width:'75px',marginLeft:'20px'}}>删除笔记</a>
                                             </Popconfirm>

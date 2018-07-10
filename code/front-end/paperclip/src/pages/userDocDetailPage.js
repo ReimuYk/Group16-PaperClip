@@ -6,7 +6,7 @@ import username from './loginpage';
 import UserFloatMenu from '../components/userFloatMenu';
 /* should get from server */
 import book1 from '../statics/book1.jpg';
-import IPaddress from '../App'
+import { IPaddress } from '../App'
 const docs = [{
     ID: 1,
     title: 'doc 1',
@@ -60,24 +60,31 @@ const docs = [{
 class UserDocDetail extends Component{
     state = {
         data: [],
+        username:''
     }
     componentWillMount = () => {
+        let that = this;
         /* get username */
-        var that = this;
-        var url = window.location.href; 
-        var theRequest = new Object();
-        if ( url.indexOf( "?" ) != -1 ) {
-            var str = url.substr( 1 ); //substr()方法返回从参数值开始到结束的字符串；
-            var strs = str.split( "&" );
-            for ( var i = 0; i < strs.length; i++ ) {
-                theRequest[ strs[ i ].split( "=" )[ 0 ] ] = ( strs[ i ].split( "=" )[ 1 ] );
-            }
-            var urlusername = this.props.location.search.substring(10);//10 == 'username='.length+1 (url: ...?username=xxx)
-            console.log('username:', urlusername);
-        }
-        /* get docs according to username */
         this.setState({
-            data: docs,
+            username: username
+        })
+        /* get docs according to username */
+        let jsonbody = {};
+        jsonbody.username = this.state.username;
+        let url = IPaddress + 'service/starDoc';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let data = eval(responseJson);
+                that.setState({
+                    data:data
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
         })
     }
     deleteDoc = (record, item) => {

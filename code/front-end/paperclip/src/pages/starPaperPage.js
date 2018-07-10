@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import username from './loginpage';
 import UserFloatMenu from '../components/userFloatMenu';
-import IPaddress from '../App'
+import { IPaddress } from '../App'
 /* should get from server */
 import book1 from '../statics/book1.jpg';
 const userID=1;
@@ -100,10 +100,12 @@ class StarPaper extends Component{
         this.setState({
             username: username
         })
+        let that = this;
         /* get specific info of papers */
         let jsonbody = {};
         jsonbody.username = this.state.username;
         let url = IPaddress + 'service/starPaper';
+        console.log(url);
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -111,8 +113,10 @@ class StarPaper extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
+                console.log(1);
                 let data = eval(responseJson);
-                this.setState({
+                console.log(data)
+                that.setState({
                     data:data
                 })
             }).catch(function(e){
@@ -120,6 +124,7 @@ class StarPaper extends Component{
         })
     }
     quitStar = (record, item) => {
+        let that =this;
         /* send to server, refresh this page in get/post request */
         let jsonbody = {};
         jsonbody.username = this.state.username;
@@ -134,7 +139,6 @@ class StarPaper extends Component{
             .then(responseJson=>{
                 let result = eval(responseJson);
                 if(result == "success"){
-                    let that = this;
                     let tmpdata = that.state.data;
                     let dataLen = tmpdata.length;
                     for(let i=0; i<dataLen; i++){

@@ -5,7 +5,7 @@ import NavBar from '../components/nav-bar';
 import reqwest from 'reqwest';
 import {log} from './loginpage';
 import {log1} from './RegisterPage';
-import IPaddress from '../App'
+import { IPaddress } from '../App'
 const fakeDataUrl = 'https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo';
 const MenuItemGroup = Menu.ItemGroup;
 

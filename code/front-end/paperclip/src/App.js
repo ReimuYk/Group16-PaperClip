@@ -23,7 +23,8 @@ import UserSetting from './pages/userSettingPage';
 import ViewDoc from './pages/viewDocPage';
 import Register from './pages/RegisterPage';
 import Discover from './pages/discoverPage';
-import WriteDoc from './pages/writeDocPage';
+import ModifyDoc from './pages/modifyDoc';
+import ModifyNote from './pages/modifyNote'
 import PDFView from './pages/pdfview';
 import AdminUserList from './components/adminUser';
 import AdminPaperList from './components/adminPaper';
@@ -31,7 +32,7 @@ import Admin from './pages/adminPage';
 import UserDocDetail from './pages/userDocDetailPage';
 import Message from './pages/message';
 
-export var IPaddress = '...'
+export var IPaddress = '192.168.1.128:8080/'
 
 class App extends Component {
   render() {
@@ -55,7 +56,8 @@ class App extends Component {
               <Route path='/user/usernote' component={UserNote} />
               <Route path='/user/userfens' component={UserFens} />
               <Route path='/user/setting' component={UserSetting} />
-                <Route path='/user/writedoc' component={WriteDoc} />
+                <Route path='/user/modifyDoc' component={ModifyDoc} />
+              <Route path='/user/modifyNote' component={ModifyNote} />
               <Route path='/user/docdetail' component={UserDocDetail} />
               <Route path='/user/message' component={Message} />
               <Route path='/viewdoc' component={ViewDoc} />

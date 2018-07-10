@@ -5,7 +5,7 @@ import NavBar from '../components/nav-bar';
 import UserFloatMenu from '../components/userFloatMenu';
 /* should get from server */
 import book1 from '../statics/book1.jpg';
-import IPaddress from '../App'
+import { IPaddress } from '../App'
 // const userID=1;
 import username from './loginpage';
 const notes = [{
@@ -92,6 +92,7 @@ class StarNote extends Component{
         this.setState({
             username: username
         })
+        let that = this;
         /* get specific info of notes */
         let jsonbody = {};
         jsonbody.username = this.state.username;
@@ -104,7 +105,7 @@ class StarNote extends Component{
             .then(response=>response.text())
             .then(responseJson=>{
                 let data = eval(responseJson);
-                this.setState({
+                that.setState({
                     data:data
                 })
             }).catch(function(e){
@@ -112,6 +113,7 @@ class StarNote extends Component{
         })
     }
     quitStar = (record, item) => {
+        let that = this;
         let jsonbody = {};
         jsonbody.username = this.state.username;
         jsonbody.noteID = item.ID;
@@ -125,7 +127,6 @@ class StarNote extends Component{
             .then(responseJson=>{
                 let result = eval(responseJson);
                 if(result == "success"){
-                    let that = this;
                     let tmpdata = that.state.data;
                     let dataLen = tmpdata.length;
                     for(let i=0; i<dataLen; i++){

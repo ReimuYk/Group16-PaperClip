@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../css/findbackpage.css'
-import IPaddress from '../App'
+import { IPaddress } from '../App'
 
 class Findback extends Component {
     constructor(props){

@@ -3,13 +3,9 @@ import {  Layout, Icon,Upload, message,Button, Divider, Menu, List, Avatar, Moda
 import { Link } from 'react-router-dom';
 import NavBar from '../components/nav-bar.js';
 import '../css/style.css';
-<<<<<<< HEAD
-import IPaddress from '../App'
-=======
+import { IPaddress } from '../App'
 import User from './userpage.js';
 import url from '../statics/uh.jpg'
-
->>>>>>> b9d289374d5c889e7ca9af33a3125e21159d2b89
 /* fake data */
 
 const { Header, Content, Sider } = Layout;

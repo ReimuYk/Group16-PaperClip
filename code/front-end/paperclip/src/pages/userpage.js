@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import '../css/style.css';
 import NavBar from '.././components/nav-bar';
 import UserFloatMenu from '../components/userFloatMenu';
-import IPaddress from '../App'
+import { IPaddress } from '../App'
 /* should get from server */
 import uh1 from '../statics/uh.jpg';
 const followno = 8;
@@ -214,6 +214,11 @@ const { TextArea } = Input;
 const { Header, Content, Footer } = Layout;
 class User extends Component{
     state = {
+        userheader:'',
+        username:'',
+        fansno:0,
+        followno:0,
+        userDescription:'',
         visible: false,
         mailContent: '',
         data: papersMoment,
@@ -254,9 +259,27 @@ class User extends Component{
         });
     }
     componentWillMount = () => {
-        /* get user info ?? */
-        /* like star papers, notes... */
-        /* set data */
+        let that = this;
+        /* get username */
+        this.setState({
+            username: username
+        })
+        /* get data according to username */
+        let jsonbody = {};
+        jsonbody.username = this.state.username;
+        let url = IPaddress + 'service/userinfo';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                that.setState({
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
     }
     followUser = () => {
         console.log('want to follow user username:', username);

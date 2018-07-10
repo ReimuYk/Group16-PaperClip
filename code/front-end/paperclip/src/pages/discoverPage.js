@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom';
 import { Input, Select, Carousel, List, Avatar, Card, Icon } from 'antd';
 import { Row, Col } from 'antd';
 import NavBar from '.././components/nav-bar';
-import IPaddress from '../App'
+import { IPaddress } from '../App'
 
 const Search = Input.Search;
 const Option = Select.Option;

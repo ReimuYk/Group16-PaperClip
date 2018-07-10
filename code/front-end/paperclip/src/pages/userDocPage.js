@@ -6,7 +6,7 @@ import UserFLoatMenu from '../components/userFloatMenu';
 import username from './loginpage';
 /* should get from server */
 import book1 from '../statics/book1.jpg';
-import IPaddress from '../App'
+import { IPaddress } from '../App'
 const docs = [{
     ID: 1,
     title: 'doc 1',
@@ -54,45 +54,65 @@ const docs = [{
 class UserDoc extends Component{
     state = {
         data: [],
-        username: 0,
+        username: ''
     }
     componentWillMount = () => {
-        /* get userID */
-        var that = this;
-        var url = window.location.href;
-        var theRequest = new Object();
-        if ( url.indexOf( "?" ) != -1 ) {
-            var str = url.substr( 1 ); //substr()方法返回从参数值开始到结束的字符串；
-            var strs = str.split( "&" );
-            for ( var i = 0; i < strs.length; i++ ) {
-                theRequest[ strs[ i ].split( "=" )[ 0 ] ] = ( strs[ i ].split( "=" )[ 1 ] );
-            }
-            var urlUserID = this.props.location.search.substring(8);//8 == 'userID='.length+1 (url: ...?userID=xxx)
-            that.setState({
-                userID: urlUserID,
-            })
-            console.log('userID:', urlUserID);
-        }
-        /* get docs according to userID */
+        let that = this;
+        /* get username */
         this.setState({
-            data: docs,
+            username: username
+        })
+        /* get docs according to username */
+        let jsonbody = {};
+        jsonbody.username = this.state.username;
+        let url = IPaddress + 'service/userDoc';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let docs = eval(responseJson);
+                that.setState({
+                    data:docs
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
         })
     }
     deleteDoc = (record, item) => {
-        console.log('want to delete doc id(ID):', item.ID);
-        /* send ID to server */
-        var that = this;
-        var tmpdata = that.state.data;
-        var dataLen = tmpdata.length;
-        for(let i=0; i<dataLen; i++){
-            if(tmpdata[i].ID == item.ID){
-                tmpdata.splice(i, 1);
-                break;
-            }
-        }
-        console.log('want to quit star paper: id(ID): ', item.ID-1);
-        that.setState({
-            data: tmpdata,
+        let that = this;
+        let jsonbody = {};
+        jsonbody.username = this.state.username;
+        jsonbody.paperID = item.ID;
+        let url = IPaddress + 'service/quitStar/paper';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let result = eval(responseJson);
+                if(result == "success"){
+                    let tmpdata = that.state.data;
+                    let dataLen = tmpdata.length;
+                    for(let i=0; i<dataLen; i++){
+                        if(tmpdata[i].ID == item.ID){
+                            tmpdata.splice(i, 1);
+                            break;
+                        }
+                    }
+                    that.setState({
+                        data: tmpdata,
+                    })
+                }
+                else{
+                    alert("删除错误，请重试");
+                }
+            }).catch(function(e){
+            console.log("Oops, error");
         })
     }
     newDoc = () => {
@@ -128,7 +148,7 @@ class UserDoc extends Component{
                         renderItem={item => (
                             <List.Item
                                 actions={[<p>
-                                    <a style={{width:'75px'}} href={"/user/writedoc?ID="+item.ID}>编辑文档</a>
+                                    <a style={{width:'75px'}} href={"/user/modifyDoc?ID="+item.ID}>编辑文档</a>
                                     <a style={{width:'75px', marginLeft:'20px'}} href={"/user/docdetail?ID="+item.ID}>查看文档版本</a>
                                     <Popconfirm title="确定删除吗？" onConfirm={() => this.deleteDoc(this, item)}>
                                         <a style={{width:'75px',marginLeft:'20px'}}>删除文档</a>
@@ -136,7 +156,6 @@ class UserDoc extends Component{
                                 </p>]}
                             >
                                 <List.Item.Meta
-                                    avatar={<Avatar src={item.cover} />}
                                     /* 论文显示页 */
                                     title={<a href={"/viewdoc?docID="+item.ID}>{item.title}</a>}
                                     description={item.description}

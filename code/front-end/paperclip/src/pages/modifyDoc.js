@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Editor from '.././components/textEditor';
 import {Popconfirm, Popover,Icon,Button,Tag, Input, Tooltip,List,Avatar, Menu, Modal} from 'antd';
-import IPaddress from '../App'
+import { IPaddress } from '../App'
 const Search = Input.Search;
 
 const information = {
@@ -226,7 +226,7 @@ class Header extends React.Component {
         );
     }
 }
-class WriteDoc extends Component{
+class ModifyDoc extends Component{
     state = {
         title:'',
         initContent:''
@@ -268,4 +268,4 @@ class WriteDoc extends Component{
     }
 }
 
-export default WriteDoc;
+export default ModifyDoc;
