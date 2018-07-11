@@ -41,7 +41,7 @@ class Header extends React.Component {
                 theRequest[ strs[ i ].split( "=" )[ 0 ] ] = ( strs[ i ].split( "=" )[ 1 ] );
             }
             /* get content of that note */
-            /* here we use fake data */
+            /* here we use fake bdata */
             this.setState({
                 tags: information.tags,
                 invitor:information.invitor
@@ -148,9 +148,13 @@ class Header extends React.Component {
     }
 
     addInvitor(){
+        console.log()
         alert("邀请成功！");
     }
 
+    saveDoc = () => {
+        alert("保存成功！");
+    }
     renderModal() {
         const visible = this.state.visible;
         return (
@@ -211,6 +215,7 @@ class Header extends React.Component {
                     <Menu.Item key="invite" onClick={this.showModal}>
                         <Icon type="user-add" />协作者
                     </Menu.Item>
+                    <Button type="primary" style={{float:"right", right:"80px", top:"8px"}} onClick={this.saveDoc}>保存</Button>
                     <Popover
                         content={tags}
                         title="给你的文章添加关键词"
@@ -218,7 +223,7 @@ class Header extends React.Component {
                         visible={this.state.popoverVisible}
                         onVisibleChange={this.handleVisibleChange}
                     >
-                        <Button type="primary" style={{float:"right", right:"100px", top:"8px"}}>发布</Button>
+                        <Button type="primary" style={{ float:"right", right:"100px", top:"8px"}}>发布</Button>
                     </Popover>
                 </Menu>
                 {renderModal}

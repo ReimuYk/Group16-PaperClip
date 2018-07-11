@@ -64,7 +64,7 @@ class UserFens extends Component{
             console.log("Oops, error");
         })
     }
-    follow = (item, record) => {
+    follow = (record, item) => {
         let that = this;
         /* get data according to username */
         let jsonbody = {};
