@@ -12,11 +12,11 @@ public class Assist {
     @Column(name = "id",nullable = false)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="username",referencedColumnName = "username")
     private User user;//foreign key
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="docId",referencedColumnName = "id")
     private DocumentPdf documentPdf;//foreign key
 

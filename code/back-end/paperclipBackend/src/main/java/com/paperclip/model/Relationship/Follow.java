@@ -11,11 +11,11 @@ public class Follow {
     @Column(name = "id",nullable = false)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="followee",referencedColumnName = "username")
     private User followee;//foreign key
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="follower",referencedColumnName = "username")
     private User follower;//foreign key
 
