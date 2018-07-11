@@ -179,6 +179,11 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
+    @Override
+    public JSONArray getUserDocDetail(JSONObject data) {
+        return null;
+    }
+
     // delete all version of this doc( whose ID is docID)
     public JSONObject deleteUserDocVersion(JSONObject data) {
         return null;
