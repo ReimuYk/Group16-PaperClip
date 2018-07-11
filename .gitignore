@@ -1,3 +1,7 @@
 code/front-end/paperclip/command.bat
 .idea/
+<<<<<<< HEAD
 code/back-end/paperclipBackend/paperclip.iml
+=======
+__pycache__/
+>>>>>>> a0de8024788712eb747d3cc208e75a100372b71c
