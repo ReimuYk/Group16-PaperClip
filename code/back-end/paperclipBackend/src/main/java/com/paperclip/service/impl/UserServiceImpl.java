@@ -7,22 +7,27 @@ import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 
-;
-
 @Service
 public class UserServiceImpl implements UserService {
 
     // get all the docs that this user has stared
-    public JSONArray getStarDoc(String username){
+    public JSONArray getStarDoc(JSONObject username){
         JSONArray docs = new JSONArray();
         JSONObject doc = new JSONObject();
         doc.accumulate("get star doc","ok");
+        doc.accumulate("ID", 1);
+        doc.accumulate("title", "实验室安全管理制度");
+        doc.accumulate("author", "佚名");
+        doc.accumulate("readno", 91);
+        doc.accumulate("starno", 45);
+        doc.accumulate("date","8012-07-09");
+        doc.accumulate("keywords", "git commit, git push");
         docs.add(doc);
         return docs;
     }
 
     // user choose to stop star ths doc(whose ID is docID)
-    public JSONObject quitStarDoc(String username, int docID){
+    public JSONObject quitStarDoc(JSONObject data){
         JSONObject result = new JSONObject();
         if(true) {
             result.accumulate("result", "success");
@@ -34,13 +39,24 @@ public class UserServiceImpl implements UserService {
     }
 
     // get all the notes that the user has stared
-    public JSONArray getStarNote(String username) {
+    public JSONArray getStarNote(JSONObject data) {
         JSONArray notes = new JSONArray();
+        JSONObject note = new JSONObject();
+        note.accumulate("ID", 1);
+        note.accumulate("title", "火咖");
+        note.accumulate("author", "KIRIN");
+        note.accumulate("readno", 440);
+        note.accumulate("starno", 55);
+        note.accumulate("date", "2018-03-30");
+        note.accumulate("keywords","Italian Cafe Latte");
+        note.accumulate("paperID", 5);
+        note.accumulate("paperTitle", "Coffe Beverage");
+        notes.add(note);
         return notes;
     }
 
     // user want to stop star this note(whose ID is noteID)
-    public JSONObject quitStarNote(String username, int noteID){
+    public JSONObject quitStarNote(JSONObject data){
         JSONObject result = new JSONObject();
         if(true) {
             result.accumulate("result", "success");
@@ -52,7 +68,7 @@ public class UserServiceImpl implements UserService {
     }
 
     // get all papers that this user has stared
-    public JSONArray getStarPaper(String username) {
+    public JSONArray getStarPaper(JSONObject data) {
         JSONArray papers = new JSONArray();
         JSONObject paper = new JSONObject();
         paper.accumulate("get star paper:","ok");
@@ -61,7 +77,7 @@ public class UserServiceImpl implements UserService {
     }
 
     // user want to stop star this paper
-    public JSONObject quitStarPaper(String username, int paperID){
+    public JSONObject quitStarPaper(JSONObject data){
         JSONObject result = new JSONObject();
         if(true) {
             result.accumulate("result", "success");
@@ -73,7 +89,7 @@ public class UserServiceImpl implements UserService {
     }
 
     //
-    public JSONArray getStarUser(String username) {
+    public JSONArray getStarUser(JSONObject data) {
         JSONArray users = new JSONArray();
         JSONObject user = new JSONObject();
         user.accumulate("get star user", "ok");
@@ -83,7 +99,7 @@ public class UserServiceImpl implements UserService {
 
     // hostname want to stop star clientname
     //(hostname used to star clientname
-    public JSONObject quitStarUser(String hostname, String clientname){
+    public JSONObject quitStarUser(JSONObject data){
         JSONObject result = new JSONObject();
         if(true) {
             result.accumulate("result", "success");
@@ -95,12 +111,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public JSONObject starUser(String hostname, String clientname) {
-        return null;
+    public JSONObject starUser(JSONObject data) {
+        JSONObject result = new JSONObject();
+        if(true){
+            result.accumulate("result", "success");
+        }else{
+            result.accumulate("result", "fail");
+        }
+        return result;
     }
 
     // get all the doc that this user has written
-    public JSONArray getUserDoc(String username) {
+    public JSONArray getUserDoc(JSONObject data) {
         JSONArray docs = new JSONArray();
         JSONObject doc = new JSONObject();
         doc.accumulate("get user doc", "ok");
@@ -109,7 +131,7 @@ public class UserServiceImpl implements UserService {
     }
 
     // delete this user's doc( which matches this docID and docVersion)
-    public JSONObject deleteUserDoc(int docID) {
+    public JSONObject deleteUserDoc(JSONObject data) {
         JSONObject result = new JSONObject();
         if(true) {
             result.accumulate("result", "success");
@@ -121,24 +143,24 @@ public class UserServiceImpl implements UserService {
     }
 
     // delete all version of this doc( whose ID is docID)
-    public JSONObject deleteUserDocVersion(int docID, int docVersion) {
+    public JSONObject deleteUserDocVersion(JSONObject data) {
         return null;
     }
 
     // get this user's fans
-    public JSONArray getUserFans(String username) {
+    public JSONArray getUserFans(JSONObject data) {
         JSONArray fans = new JSONArray();
         return fans;
     }
 
     // get all the notes that this user has written
-    public JSONArray getUserNote(String username){
+    public JSONArray getUserNote(JSONObject data){
         JSONArray notes = new JSONArray();
         return notes;
     }
 
     // delete this note with ID(noteID)
-    public JSONObject deleteUserNote(int noteID){
+    public JSONObject deleteUserNote(JSONObject data){
         JSONObject result = new JSONObject();
         if(true) {
             result.accumulate("result", "success");
@@ -150,13 +172,13 @@ public class UserServiceImpl implements UserService {
     }
 
     // get doc details
-    public JSONObject getDocDetail(int docID){
+    public JSONObject getDocDetail(JSONObject data){
         JSONObject doc = new JSONObject();
         return doc;
     }
 
     // save doc details (after user has modified it)
-    public JSONObject saveDoc(int docID, String docTitle, String docContent){
+    public JSONObject saveDoc(JSONObject data){
         JSONObject result = new JSONObject();
         if(true) {
             result.accumulate("result", "success");
@@ -168,7 +190,7 @@ public class UserServiceImpl implements UserService {
     }
 
     // add a contributer to this doc
-    public JSONObject addDocContributer(int docID, String contributerName){
+    public JSONObject addDocContributer(JSONObject data){
         JSONObject result = new JSONObject();
         if(true) {
             result.accumulate("result", "success");
@@ -179,7 +201,20 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
-    public JSONObject getNoteDetail(int noteID) {
+    public JSONArray getContributeDoc(JSONObject data) {
+        JSONArray docs = new JSONArray();
+
+        JSONObject doc = new JSONObject();
+        doc.accumulate("docID", 7);
+        doc.accumulate("title", "doc title");
+        doc.accumulate("author", "MKK NB");
+        doc.accumulate("date", "2017-06-08");
+
+        docs.add(doc);
+        return docs;
+    }
+
+    public JSONObject getNoteDetail(JSONObject data) {
         JSONObject note = new JSONObject();
         note.accumulate("ID", 1);
         note.accumulate("title", "this is a note title");
@@ -188,7 +223,7 @@ public class UserServiceImpl implements UserService {
         return note;
     }
 
-    public JSONObject saveNote(int noteID, String noteTitle, String noteContent) {
+    public JSONObject saveNote(JSONObject data) {
         JSONObject result = new JSONObject();
         if(true){
             result.accumulate("result", "success");
@@ -198,7 +233,7 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
-    public JSONObject getHostInfo(String username) {
+    public JSONObject getHostInfo(JSONObject data) {
         JSONObject user = new JSONObject();
         user.accumulate("userheader", "data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEBAAEAAAD//gAmUGFpbnQgVG9vbCAtU0FJLSBKUEVHIEVuY29kZXIgdjEuMDAA/9sAhAAjGhoaGholJSUlMzMzMzNERERERERVVVVVVVVVampqampqamqCgoKCgoKCmpqampqatra2trbV1dXV9PT0////ATwsLCwsLD8/Pz9WVlZWVnFxcXFxcY+Pj4+Pj4+ysrKysrKystjY2NjY2Nj/////////////////////////////wAARCADYANgDAREAAhEBAxEB/8QBogAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoLEAACAQMDAgQDBQUEBAAAAX0BAgMABBEFEiExQQYTUW" +
                 "EHInEUMoGRoQgjQrHBFVLR8CQzYnKCCQoWFxgZGiUmJygpKjQ1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4eLj5OXm5+jp6vHy8/T19vf4+foBAAMBAQEBAQEBAQEAAAAAAAABAgMEBQYHCAkKCxEAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmq" +
@@ -219,14 +254,14 @@ public class UserServiceImpl implements UserService {
                 "AjJvNNPmGSHAz94UXsJxUiKG9a3YRTg4HAPcU0yWmi9kIN6cqfSmSVbu0Eg8yL/9dAbhYEgx57PQOG5Ow8m5kI/hYP8AgetBS0Zp0DCgAoAKACgAoAKAIZYt/Q4NANXM6aPOeMEdaDNkULmNvY0CLjfMh+lAzIsj+7dffNA5EjGgQ2gAoAcBQBLaw/arnafuJy3uewpMqCNnGKDQXpQIUUgFoAawzQCKtxbQ3C7ZFzS2HZMoxrNZTGMfOnWqTM5RsWY3VHAByj9PY0ydgWIRTfVgf1oGtyW5KreR8f6xGH5UFMvUDCgAoAKACgAoAKACgCrdxceYB06/SgTVzPlTByOhoIJ4G3R89qAMqEeXcMv+0RQMlcYNAhtABmgB60AaOlR7bXf3kYtSZoti7QMKAHCkAUANoA" +
                 "awoBFO6jPEo/h6/ShBJXRHJHnK9CefrVGb0JA7SW+T95f6UDQzUJVFzZODwWP60DZq0DCgAoAKACgAoAKACgBDQBmsm1pIv7p4+hoIkiKI7JMetBJTvIyly2P4sEUDJWAkQOO4oAhIIoAAKAEkbYh55waBpXZvWqbLaJfRBSNCXFIAoAWgAoAQ0ANNAEZAJwe9IZXEashhJ+ZPumqWqM3o2hLVsgqwww4P1FMWzM/U2K+VH3Qtj6cYpFPY6KmMKACgAoAKACgAoAKACgCF7ZHkLknJAFAmrkZsYic7m/SgXIgm0+CYoWLZX0xQPlQ1NNgRdoZ8Zz2/woDlQh0y3P8AE/6f4UC5UH9mQD+J/wBP8KB8qHNptqY3QAru6kdf1oGtCyqBVAHalYBdoosFwwKLAGKLAGBR" +
                 "YA2iiwCbBRYBPKX3o5UO5E1nG0ok3MCPTFNKxLV3cU2kZm8zJBxg+9ANJkVxptvclSxbIBHGO/4UBbQ//9k=");
-        user.accumulate("username",username);
+        user.accumulate("username","username");
         user.accumulate("fensno", 50);
         user.accumulate("followno", 60);
         user.accumulate("userDescription", "this is the description of host user");
         return user;
     }
 
-    public JSONObject getClientInfo(String username) {
+    public JSONObject getClientInfo(JSONObject data) {
         JSONObject user = new JSONObject();
         user.accumulate("userheader", "data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEBAAEAAAD//gAmUGFpbnQgVG9vbCAtU0FJLSBKUEVHIEVuY29kZXIgdjEuMDAA/9sAhAAjGhoaGholJSUlMzMzMzNERERERERVVVVVVVVVampqampqamqCgoKCgoKCmpqampqatra2trbV1dXV9PT0////ATwsLCwsLD8/Pz9WVlZWVnFxcXFxcY+Pj4+Pj4+ysrKysrKystjY2NjY2Nj/////////////////////////////wAARCADYANgDAREAAhEBAxEB/8QBogAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoLEAACAQMDAgQDBQUEBAAAAX0BAgMABBEFEiExQQYTUW" +
                 "EHInEUMoGRoQgjQrHBFVLR8CQzYnKCCQoWFxgZGiUmJygpKjQ1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4eLj5OXm5+jp6vHy8/T19vf4+foBAAMBAQEBAQEBAQEAAAAAAAABAgMEBQYHCAkKCxEAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmq" +
@@ -247,7 +282,7 @@ public class UserServiceImpl implements UserService {
                 "AjJvNNPmGSHAz94UXsJxUiKG9a3YRTg4HAPcU0yWmi9kIN6cqfSmSVbu0Eg8yL/9dAbhYEgx57PQOG5Ow8m5kI/hYP8AgetBS0Zp0DCgAoAKACgAoAKAIZYt/Q4NANXM6aPOeMEdaDNkULmNvY0CLjfMh+lAzIsj+7dffNA5EjGgQ2gAoAcBQBLaw/arnafuJy3uewpMqCNnGKDQXpQIUUgFoAawzQCKtxbQ3C7ZFzS2HZMoxrNZTGMfOnWqTM5RsWY3VHAByj9PY0ydgWIRTfVgf1oGtyW5KreR8f6xGH5UFMvUDCgAoAKACgAoAKACgCrdxceYB06/SgTVzPlTByOhoIJ4G3R89qAMqEeXcMv+0RQMlcYNAhtABmgB60AaOlR7bXf3kYtSZoti7QMKAHCkAUANoA" +
                 "awoBFO6jPEo/h6/ShBJXRHJHnK9CefrVGb0JA7SW+T95f6UDQzUJVFzZODwWP60DZq0DCgAoAKACgAoAKACgBDQBmsm1pIv7p4+hoIkiKI7JMetBJTvIyly2P4sEUDJWAkQOO4oAhIIoAAKAEkbYh55waBpXZvWqbLaJfRBSNCXFIAoAWgAoAQ0ANNAEZAJwe9IZXEashhJ+ZPumqWqM3o2hLVsgqwww4P1FMWzM/U2K+VH3Qtj6cYpFPY6KmMKACgAoAKACgAoAKACgCF7ZHkLknJAFAmrkZsYic7m/SgXIgm0+CYoWLZX0xQPlQ1NNgRdoZ8Zz2/woDlQh0y3P8AE/6f4UC5UH9mQD+J/wBP8KB8qHNptqY3QAru6kdf1oGtCyqBVAHalYBdoosFwwKLAGKLAGBR" +
                 "YA2iiwCbBRYBPKX3o5UO5E1nG0ok3MCPTFNKxLV3cU2kZm8zJBxg+9ANJkVxptvclSxbIBHGO/4UBbQ//9k=");
-        user.accumulate("username",username);
+        user.accumulate("username","username");
         user.accumulate("fensno", 50);
         user.accumulate("followno", 60);
         user.accumulate("userDescription", "this is the description of client user");
@@ -255,7 +290,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    public JSONObject modifyUserInfo(String username, String password, String userHeader, String userDescription) {
+    public JSONObject modifyUserInfo(JSONObject data) {
         JSONObject result = new JSONObject();
         if(true){
             result.accumulate("result", "success");
@@ -265,7 +300,7 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
-    public JSONObject getViewDocDetail(int docID, int version) {
+    public JSONObject getViewDocDetail(JSONObject data) {
         JSONObject doc = new JSONObject();
         doc.accumulate("docID", 2);
         doc.accumulate("author", "doc's author");
@@ -279,7 +314,7 @@ public class UserServiceImpl implements UserService {
         return doc;
     }
 
-    public JSONObject getViewNoteDetail(int noteID) {
+    public JSONObject getViewNoteDetail(JSONObject data) {
         JSONObject note = new JSONObject();
         note.accumulate("noteID", 3);
         note.accumulate("author", "note's author");
@@ -292,7 +327,7 @@ public class UserServiceImpl implements UserService {
         return note;
     }
 
-    public JSONObject addDoc(String username, String title, String content) {
+    public JSONObject addDoc(JSONObject data) {
         JSONObject result = new JSONObject();
         if(true){
             result.accumulate("result", "success");
@@ -302,7 +337,7 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
-    public JSONObject findPassword(String userEmail) {
+    public JSONObject findPassword(JSONObject data) {
         JSONObject result = new JSONObject();
         if(true){
             result.accumulate("result", "success");
@@ -312,11 +347,11 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
-    public JSONObject addUser(String username, String password, String email) {
+    public JSONObject addUser(JSONObject data) {
         JSONObject result = new JSONObject();
         if(true){
             result.accumulate("result", "success");
-        }else if(username.equals("")){
+        }else if("username".equals("")){
             result.accumulate("result", "duplicate username");
         }else{
             result.accumulate("result", "duplicate email");
@@ -324,10 +359,10 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
-    public JSONObject userLogin(String username, String password) {
+    public JSONObject userLogin(JSONObject data) {
         JSONObject userinfo = new JSONObject();
-        userinfo.accumulate("username", username);
-        userinfo.accumulate("password", password);
+        userinfo.accumulate("username", "username");
+        userinfo.accumulate("password", "password");
         userinfo.accumulate("userhader", "data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEBAAEAAAD//gAmUGFpbnQgVG9vbCAtU0FJLSBKUEVHIEVuY29kZXIgdjEuMDAA/9sAhAAjGhoaGholJSUlMzMzMzNERERERERVVVVVVVVVampqampqamqCgoKCgoKCmpqampqatra2trbV1dXV9PT0////ATwsLCwsLD8/Pz9WVlZWVnFxcXFxcY+Pj4+Pj4+ysrKysrKystjY2NjY2Nj/////////////////////////////wAARCADYANgDAREAAhEBAxEB/8QBogAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoLEAACAQMDAgQDBQUEBAAAAX0BAgMABBEFEiExQQYTUW" +
                 "EHInEUMoGRoQgjQrHBFVLR8CQzYnKCCQoWFxgZGiUmJygpKjQ1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4eLj5OXm5+jp6vHy8/T19vf4+foBAAMBAQEBAQEBAQEAAAAAAAABAgMEBQYHCAkKCxEAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmq" +
                 "srO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDdoAjM8QlEZPzYz+FADXuoEAJb+LHQ9c4oCxNQAUAFABQAUAFABQAUAFABQAUAFABQAUAFAEaTxyAlT0JH5UBYDNGFyTxQFgWaNpCgPzAZoAkoAKACgAoAKACgAoAz8Z1OVvSJR+ZNCGhrL5lxbL/tu35UAzSoEFABQAUAFABQAUAFABQAUAJQAZHrQBDc3H2dFO0tlgo/GgCOVr2OXeDH5Q6jnOPWgCWeXZHlercCgERqFijA9BQMhYjGWOFX5m+gpAS2MbCNpXGGkO4+w7CmIt0AFABQAUAFABQAUAUwB9rnP+zH/WgaEjx9pi/3H/mKAZJPfQW77WJzjJ" +
@@ -351,7 +386,7 @@ public class UserServiceImpl implements UserService {
         return userinfo;
     }
 
-    public JSONArray getHomeInfo(String username) {
+    public JSONArray getHomeInfo(JSONObject data) {
         JSONArray homeinfo = new JSONArray();
         JSONObject followMement = new JSONObject();
         followMement.accumulate("title", "我关注的人的动态");
@@ -366,24 +401,106 @@ public class UserServiceImpl implements UserService {
         return homeinfo;
     }
 
-    public JSONArray searchPaper(String searchText) {
+    public JSONArray searchPaper(JSONObject data1) {
         JSONArray data = new JSONArray();
+        JSONArray papers = new JSONArray();
+        JSONArray recommands = new JSONArray();
 
-        return null;
+        JSONObject paper = new JSONObject();
+        paper.accumulate("paperID", 4);
+        paper.accumulate("title", "paper title 1");
+        paper.accumulate("author", "paper author 1");
+        paper.accumulate("keyword", "keyword2, keyword2, keyword3");
+        Calendar calendar = Calendar.getInstance();
+        paper.accumulate("date", calendar.get(Calendar.YEAR)+"-"+
+                calendar.get(Calendar.MONDAY)+"-"+
+                calendar.get(Calendar.DATE));
+        paper.accumulate("readno", 55);
+        paper.accumulate("noteno", 66);
+        papers.add(paper);
+
+        JSONObject recommand = new JSONObject();
+        recommand.accumulate("paperID", 5);
+        recommand.accumulate("title", "recommand paper title 1");
+        recommand.accumulate("author", "recommand author 1");
+        recommand.accumulate("keyword", "keyword1, keyword2, keyword3");
+        recommand.accumulate("date", "2018-06-04");
+        recommand.accumulate("readno", 77);
+        recommand.accumulate("noteno", 88);
+        recommands.add(recommand);
+
+        JSONObject paperObject = new JSONObject();
+        paperObject.accumulate("papers", papers);
+
+        JSONObject recommandObject = new JSONObject();
+        recommandObject.accumulate("recommand", recommands);
+
+        data.add(paperObject);
+        data.add(recommandObject);
+        return data;
     }
 
-    @Override
-    public JSONArray getMessageInfo(String username) {
-        return null;
+    /*
+    e.g.
+    *  messages = [{
+    *       clientname: mary，
+    *       content: [{
+    *           hostname: "mary",
+    *           time: "2017-07-08:11:31",
+    *           content: "okk",
+    *           },{
+    *           hostname: "David",
+    *           time: "2017-07-08:11:30",
+    *           content: "lunch?",
+    *           }]
+    *       },{
+    *       clientname: "Kally"
+    *       content: [{
+    *           hostname: "David"
+    *           time: "2017-07-05:18:21"
+    *           content: "No problem"
+    *           },{
+    *           hostname: "Kally"
+    *           time: "2017-07-05:17:54"
+    *           content: "Can you walk the dog before I'm home?"
+    *           }
+    *       }]
+    * */
+    public JSONArray getMessageInfo(JSONObject data) {
+        JSONObject content1 = new JSONObject();
+        content1.accumulate("hostname", "我");
+        content1.accumulate("time", "2018-07-06:11:30");
+        content1.accumulate("content", "吃饭去吧！");
+
+        JSONArray messageContent = new JSONArray();
+        messageContent.add(content1);
+
+        JSONObject message = new JSONObject();
+        message.accumulate("clientname", "小妹妹");
+        message.accumulate("content", messageContent);
+
+        JSONArray messages = new JSONArray();
+        messages.add(message);
+        return messages;
     }
 
-    @Override
-    public JSONObject sendMessage(String hostname, String clientname, String content) {
-        return null;
+    public JSONObject sendMessage(JSONObject data) {
+        JSONObject result = new JSONObject();
+        if(true){
+            result.accumulate("result", "success");
+        }else{
+            result.accumulate("result", "fail");
+        }
+        return result;
     }
 
-    @Override
-    public JSONObject getPaperDetail(String username, int paperID, int pagination) {
-        return null;
+    public JSONObject getPaperDetail(JSONObject data) {
+        JSONObject paper = new JSONObject();
+        JSONArray blocklist = new JSONArray();
+        JSONArray marked = new JSONArray();
+
+        paper.accumulate("blocklist", blocklist);
+        paper.accumulate("marked", marked);
+        return paper;
     }
 }

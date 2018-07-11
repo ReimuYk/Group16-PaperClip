@@ -17,7 +17,7 @@ public class UserController {
     @RequestMapping(value = "/service/starDoc",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONArray getStarDoc(@RequestParam String username){
+    JSONArray getStarDoc(@RequestBody JSONObject username){
         return uService.getStarDoc(username);
     }
 
@@ -25,31 +25,31 @@ public class UserController {
     @RequestMapping(value = "/service/quitStar/doc",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject quitStarDoc(@RequestParam String username, @RequestParam int docID){
-        return uService.quitStarDoc(username, docID);
+    JSONObject quitStarDoc(@RequestBody JSONObject data){
+        return uService.quitStarDoc(data);
     }
 
     // get user's stared note according to username
     @RequestMapping(value = "/service/starNote",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONArray getStarNote(@RequestParam String username){
-        return uService.getStarNote(username);
+    JSONArray getStarNote(@RequestBody JSONObject data){
+        return uService.getStarNote(data);
     }
 
     // user choose to stop star a note
     @RequestMapping(value = "/service/quitStar/note",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject quitStarNote(@RequestParam String username, @RequestParam int noteID){
-        return uService.quitStarNote(username, noteID);
+    JSONObject quitStarNote(@RequestBody JSONObject data){
+        return uService.quitStarNote(data);
     }
 
     // get user's stared paper according to username
     @RequestMapping(value = "/service/starPaper",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONArray getStarPaper(@RequestParam String username){
+    JSONArray getStarPaper(@RequestBody JSONObject username){
         return uService.getStarPaper(username);
     }
 
@@ -57,22 +57,22 @@ public class UserController {
     @RequestMapping(value = "/service/quitStar/paper",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject quitStarPaper(@RequestParam String username, @RequestParam int noteID){
-        return uService.quitStarPaper(username, noteID);
+    JSONObject quitStarPaper(@RequestBody JSONObject username){
+        return uService.quitStarPaper(username);
     }
 
     @RequestMapping(value="/service/follow", method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject starUser(@RequestParam String hostname, @RequestParam String clientname){
-        return uService.starUser(hostname, clientname);
+    JSONObject starUser(@RequestBody JSONObject hostname){
+        return uService.starUser(hostname);
     }
 
     // get user's stared user according to username
     @RequestMapping(value = "/service/starUser",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONArray getStarUser(@RequestParam String username){
+    JSONArray getStarUser(@RequestBody JSONObject username){
         return uService.getStarUser(username);
     }
 
@@ -80,15 +80,15 @@ public class UserController {
     @RequestMapping(value = "/service/quitStar/user",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject quitStarUser(@RequestParam String hostname, @RequestParam String clientname){
-        return uService.quitStarUser(hostname, clientname);
+    JSONObject quitStarUser(@RequestBody JSONObject hostname){
+        return uService.quitStarUser(hostname);
     }
 
     // get user's own doc according to username
     @RequestMapping(value = "/service/userDoc",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONArray getUserDoc(@RequestParam String username){
+    JSONArray getUserDoc(@RequestBody JSONObject username){
         return uService.getUserDoc(username);
     }
 
@@ -96,7 +96,7 @@ public class UserController {
     @RequestMapping(value = "/service/delete/doc",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject deleteDoc( @RequestParam int docID){
+    JSONObject deleteDoc( @RequestBody JSONObject docID){
         return uService.deleteUserDoc(docID);
     }
 
@@ -104,21 +104,21 @@ public class UserController {
     @RequestMapping(value = "/service/delete/docVersion",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject deleteDocVersion( @RequestParam int docID, @RequestParam int docVersion){
-        return uService.deleteUserDocVersion(docID, docVersion);
+    JSONObject deleteDocVersion( @RequestBody JSONObject docID){
+        return uService.deleteUserDocVersion(docID);
     }
 
     @RequestMapping(value = "/service/userFans",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONArray getUserFans(@RequestParam String username){
+    JSONArray getUserFans(@RequestBody JSONObject username){
         return uService.getUserFans(username);
     }
     // get user's own note according to username
     @RequestMapping(value = "/service/userNote",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONArray getUserNote(@RequestParam String username){
+    JSONArray getUserNote(@RequestBody JSONObject username){
         return uService.getUserNote(username);
     }
 
@@ -126,141 +126,147 @@ public class UserController {
     @RequestMapping(value = "/service/delete/note",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject deleteNote(@RequestParam int noteID){
+    JSONObject deleteNote(@RequestBody JSONObject noteID){
         return uService.deleteUserNote(noteID);
     }
 
     @RequestMapping(value = "/service/modify/docDetail",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject getDocDetail(@RequestParam int docID){
+    JSONObject getDocDetail(@RequestBody JSONObject docID){
         return uService.getDocDetail(docID);
     }
 
     @RequestMapping(value = "/service/save/doc",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject saveDoc(@RequestParam int docID, @RequestParam String docTitle, @RequestParam String docContent){
-        return uService.saveDoc(docID, docTitle, docContent);
+    JSONObject saveDoc(@RequestBody JSONObject docID){
+        return uService.saveDoc(docID);
     }
 
     @RequestMapping(value = "/service/addDocContributer",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject addDocContributer(@RequestParam int noteID, @RequestParam String contributerName){
-        return uService.addDocContributer(noteID, contributerName);
+    JSONObject addDocContributer(@RequestBody JSONObject noteID){
+        return uService.addDocContributer(noteID);
+    }
+
+    @RequestMapping(value = "/service/contributeDoc",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONArray getContributeDoc( @RequestBody JSONObject username){
+        return uService.getContributeDoc(username);
     }
 
     @RequestMapping(value = "/service/modify/noteDetail",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject getNoteDetail(@RequestParam int noteID){
+    JSONObject getNoteDetail(@RequestBody JSONObject noteID){
         return uService.getNoteDetail(noteID);
     }
 
     @RequestMapping(value = "/service/save/note",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject saveNote(@RequestParam int noteID, @RequestParam String noteTitle, @RequestParam String noteContent){
-        return uService.saveNote(noteID, noteTitle, noteContent);
+    JSONObject saveNote(@RequestBody JSONObject noteID){
+        return uService.saveNote(noteID);
     }
 
     @RequestMapping(value = "/service/hostInfo",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject getHostInfo(@RequestParam String username){
+    JSONObject getHostInfo(@RequestBody JSONObject username){
         return uService.getHostInfo(username);
     }
 
     @RequestMapping(value = "/service/clientInfo",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject getClientInfo(@RequestParam String username){
+    JSONObject getClientInfo(@RequestBody JSONObject username){
         return uService.getClientInfo(username);
     }
 
     @RequestMapping(value = "/service/modify/userinfo",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject modifyUserInfo(@RequestParam String username, @RequestParam String password,
-                              @RequestParam String userheader, @RequestParam String userDescription){
-        return uService.modifyUserInfo(username, password, userheader, userDescription);
+    JSONObject modifyUserInfo(@RequestBody JSONObject username){
+        return uService.modifyUserInfo(username);
     }
 
     @RequestMapping(value = "/service/docDetail",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject viewDocDetail(@RequestParam int docID, @RequestParam int version){
-        return uService.getViewDocDetail(docID, version);
+    JSONObject viewDocDetail(@RequestBody JSONObject docID){
+        return uService.getViewDocDetail(docID);
     }
 
     @RequestMapping(value = "/service/noteDetail",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject viewNoteDetail(@RequestParam int noteID){
+    JSONObject viewNoteDetail(@RequestBody JSONObject noteID){
         return uService.getViewNoteDetail(noteID);
     }
 
     @RequestMapping(value = "/service/addDoc",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject addDoc(@RequestParam String username, @RequestParam String title, @RequestParam String content){
-        return uService.addDoc(username, title, content);
+    JSONObject addDoc(@RequestBody JSONObject username){
+        return uService.addDoc(username);
     }
 
     @RequestMapping(value = "/service/findPassword",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject findPassword(@RequestParam String userEmail){
+    JSONObject findPassword(@RequestBody JSONObject userEmail){
         return uService.findPassword(userEmail);
     }
 
     @RequestMapping(value = "/service/register",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject addUser(@RequestParam String username, @RequestParam String password, @RequestParam String email){
-        return uService.addUser(username, password, email);
+    JSONObject addUser(@RequestBody JSONObject username){
+        return uService.addUser(username);
     }
 
     @RequestMapping(value = "/service/login",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject userLogin(@RequestParam String username, @RequestParam String password){
-        return uService.userLogin(username, password);
+    JSONObject userLogin(@RequestBody JSONObject username){
+        return uService.userLogin(username);
     }
 
     @RequestMapping(value = "/service/homeinfo",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONArray getHomeInfo(@RequestParam String username){
+    JSONArray getHomeInfo(@RequestBody JSONObject username){
         return uService.getHomeInfo(username);
     }
 
     @RequestMapping(value = "/service/search",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONArray search(@RequestParam String searchText){
+    JSONArray search(@RequestBody JSONObject searchText){
         return uService.searchPaper(searchText);
     }
 
     @RequestMapping(value = "/service/messageInfo",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONArray getMessageInfo(@RequestParam String username){
+    JSONArray getMessageInfo(@RequestBody JSONObject username){
         return uService.getMessageInfo(username);
     }
 
     @RequestMapping(value = "/service/sendMessage",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject sendMessage(@RequestParam String hostname, @RequestParam String clientname, @RequestParam String content){
-        return uService.sendMessage(hostname, clientname, content);
+    JSONObject sendMessage(@RequestBody JSONObject hostname){
+        return uService.sendMessage(hostname);
     }
 
     @RequestMapping(value = "/service/paperDetail",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject getPaperDetail(@RequestParam int paperID, @RequestParam String username, @RequestParam int pagination){
-        return uService.getPaperDetail(username, paperID, pagination);
+    JSONObject getPaperDetail(@RequestBody JSONObject paperID){
+        return uService.getPaperDetail(paperID);
     }
 }

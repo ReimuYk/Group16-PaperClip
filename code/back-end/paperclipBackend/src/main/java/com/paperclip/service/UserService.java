@@ -5,78 +5,79 @@ import net.sf.json.JSONObject;
 
 public interface UserService {
     // StarDocPage.js
-    public JSONArray getStarDoc(String username);
-    public JSONObject quitStarDoc(String username, int docID);
+    public JSONArray getStarDoc(JSONObject username);
+    public JSONObject quitStarDoc(JSONObject data);
 
     // StarNotePage.js
-    public JSONArray getStarNote(String username);
-    public JSONObject quitStarNote(String username, int noteID);
+    public JSONArray getStarNote(JSONObject data);
+    public JSONObject quitStarNote(JSONObject data);
 
     // StarPaperPage.js
-    public JSONArray getStarPaper(String username);
-    public JSONObject quitStarPaper(String username, int paperID);
+    public JSONArray getStarPaper(JSONObject data);
+    public JSONObject quitStarPaper(JSONObject data);
 
     // StarUserPage.js
-    public JSONArray getStarUser(String username);
-    public JSONObject quitStarUser(String hostname, String clientname);
-    public JSONObject starUser(String hostname, String clientname);
+    public JSONArray getStarUser(JSONObject data);
+    public JSONObject quitStarUser(JSONObject data);
+    public JSONObject starUser(JSONObject data);
 
     // UserDocPage.js
-    public JSONArray getUserDoc(String username);
-    public JSONObject deleteUserDoc(int docID);
-    public JSONObject deleteUserDocVersion(int docID, int docVersion);
+    public JSONArray getUserDoc(JSONObject data);
+    public JSONObject deleteUserDoc(JSONObject data);
+    public JSONObject deleteUserDocVersion(JSONObject data);
 
     // UserFansPage.js
-    public JSONArray getUserFans(String username);
+    public JSONArray getUserFans(JSONObject data);
 
     // UserNotePage.js
-    public JSONArray getUserNote(String username);
-    public JSONObject deleteUserNote(int noteID);
+    public JSONArray getUserNote(JSONObject data);
+    public JSONObject deleteUserNote(JSONObject data);
 
     // UserModifyDocPage.js
-    public JSONObject getDocDetail(int docID);
-    public JSONObject saveDoc(int docID, String docTitle, String docContent);
-    public JSONObject addDocContributer(int docID, String contributerName);
+    public JSONObject getDocDetail(JSONObject data);
+    public JSONObject saveDoc(JSONObject data);
+    public JSONObject addDocContributer(JSONObject data);
+    public JSONArray getContributeDoc(JSONObject data);
 
     // UserModifyNotePage.js
-    public JSONObject getNoteDetail(int noteID);
-    public JSONObject saveNote(int noteID, String noteTitle, String noteContent);
+    public JSONObject getNoteDetail(JSONObject data);
+    public JSONObject saveNote(JSONObject data);
 
     // UserPage.js
-    public JSONObject getHostInfo(String username);
-    public JSONObject getClientInfo(String username);
+    public JSONObject getHostInfo(JSONObject data);
+    public JSONObject getClientInfo(JSONObject data);
 
     // UserSettingPage.js
-    public JSONObject modifyUserInfo(String username, String password, String userHeader, String userDescription);
+    public JSONObject modifyUserInfo(JSONObject data);
 
     // viewDocPage.js
-    public JSONObject getViewDocDetail(int docID, int version);
+    public JSONObject getViewDocDetail(JSONObject data);
 
     // viewNotePage.js
-    public JSONObject getViewNoteDetail(int noteID);
+    public JSONObject getViewNoteDetail(JSONObject data);
 
     // writeDocPage.js
-    public JSONObject addDoc(String username, String title, String content);
+    public JSONObject addDoc(JSONObject data);
 
     // findback
-    public JSONObject findPassword(String userEmail);
+    public JSONObject findPassword(JSONObject data);
 
     // registerPage
-    public JSONObject addUser(String username, String password, String email);
+    public JSONObject addUser(JSONObject data);
 
     // loginpage
-    public JSONObject userLogin(String username, String password);
+    public JSONObject userLogin(JSONObject data);
 
     // home
-    public JSONArray getHomeInfo(String username);
+    public JSONArray getHomeInfo(JSONObject data);
 
     // searchpage
-    public JSONArray searchPaper(String searchText);
+    public JSONArray searchPaper(JSONObject data);
 
     // message.js
-    public JSONArray getMessageInfo(String username);
-    public JSONObject sendMessage(String hostname, String clientname, String content);
+    public JSONArray getMessageInfo(JSONObject data);
+    public JSONObject sendMessage(JSONObject data);
 
     // paperpage.js
-    public JSONObject getPaperDetail(String username, int paperID, int pagination);
+    public JSONObject getPaperDetail(JSONObject data);
 }
