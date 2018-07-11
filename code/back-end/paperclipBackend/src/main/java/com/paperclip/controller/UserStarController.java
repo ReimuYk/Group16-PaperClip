@@ -1,6 +1,6 @@
 package com.paperclip.controller;
 
-import com.paperclip.service.UserService;
+import com.paperclip.service.UserStarService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserStarController {
 
     @Autowired
-    UserService userService;
+    UserStarService userStarService;
 
     /*****************
      * starDocPage
@@ -34,7 +34,7 @@ public class UserStarController {
     public
     @ResponseBody
     JSONArray getStarDoc(@RequestBody JSONObject data){
-        return userService.getStarDoc(data);
+        return userStarService.getStarDoc(data);
     }
 
     // user choose to stop star a doc
@@ -42,7 +42,7 @@ public class UserStarController {
     public
     @ResponseBody
     JSONObject quitStarDoc(@RequestBody JSONObject data){
-        return userService.quitStarDoc(data);
+        return userStarService.quitStarDoc(data);
     }
 
     /*****************
@@ -53,7 +53,7 @@ public class UserStarController {
     public
     @ResponseBody
     JSONArray getStarNote(@RequestBody JSONObject data){
-        return userService.getStarNote(data);
+        return userStarService.getStarNote(data);
     }
 
     // user choose to stop star a note
@@ -61,7 +61,7 @@ public class UserStarController {
     public
     @ResponseBody
     JSONObject quitStarNote(@RequestBody JSONObject data){
-        return userService.quitStarNote(data);
+        return userStarService.quitStarNote(data);
     }
 
     /******************
@@ -72,7 +72,7 @@ public class UserStarController {
     public
     @ResponseBody
     JSONArray getStarPaper(@RequestBody JSONObject data){
-        return userService.getStarPaper(data);
+        return userStarService.getStarPaper(data);
     }
 
     // user want to quit star this paper
@@ -80,7 +80,7 @@ public class UserStarController {
     public
     @ResponseBody
     JSONObject quitStarPaper(@RequestBody JSONObject data){
-        return userService.quitStarPaper(data);
+        return userStarService.quitStarPaper(data);
     }
 
     /****************
@@ -92,7 +92,7 @@ public class UserStarController {
     public
     @ResponseBody
     JSONArray getStarUser(@RequestBody JSONObject data){
-        return userService.getStarUser(data);
+        return userStarService.getStarUser(data);
     }
 
 
@@ -101,13 +101,13 @@ public class UserStarController {
     public
     @ResponseBody
     JSONObject quitStarUser(@RequestBody JSONObject data){
-        return userService.quitStarUser(data);
+        return userStarService.quitStarUser(data);
     }
 
     @RequestMapping(value="/service/follow", method = RequestMethod.POST)
     public
     @ResponseBody
     JSONObject addStarUser(@RequestBody JSONObject data){
-        return userService.starUser(data);
+        return userStarService.starUser(data);
     }
 }

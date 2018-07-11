@@ -9,7 +9,7 @@ public class PaperPage {
     @Column(name = "id",nullable = false)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="paperId",referencedColumnName = "id")
     private Paper paper;//foreign key
 

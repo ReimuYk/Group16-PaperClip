@@ -12,11 +12,11 @@ public class StarDoc {
     @Column(name = "id",nullable = false)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="username",referencedColumnName = "username")
     private User user;//foreign key
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="documentId",referencedColumnName = "id")
     private Document document;//foreign key
 

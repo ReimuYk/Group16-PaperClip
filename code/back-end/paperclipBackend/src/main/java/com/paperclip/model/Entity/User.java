@@ -11,6 +11,7 @@ public class User {
     @GenericGenerator(name = "usernameStrategy", strategy = "assigned")
     @Column(name = "username",nullable = false)
     private String username;
+
     @Column(name = "password",nullable = false)
     private String password;
     @Column(name = "email",nullable = false)
