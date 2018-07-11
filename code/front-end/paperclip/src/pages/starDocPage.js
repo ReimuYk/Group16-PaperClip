@@ -83,17 +83,17 @@ const docs = [{
 }]
 class StarDoc extends Component{
     state = {
-        username: ''
+        username: '',
+        data: []
     }
     componentWillMount = () => {
         this.setState({
-            data: docs,
             username: username
         })
         let that  = this;
         let jsonbody = {};
-        jsonbody.username = this.state.username;
-        let url = IPaddress + 'service/starDoc';
+        jsonbody.username = username;
+        var url = IPaddress + 'service/starDoc';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -101,8 +101,8 @@ class StarDoc extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
+                console.log(responseJson);
                 let data = eval(responseJson);
-                console.log(data);
                 that.setState({
                     data:data
                 })
