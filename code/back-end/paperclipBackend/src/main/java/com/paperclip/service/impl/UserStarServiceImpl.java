@@ -1,11 +1,13 @@
 package com.paperclip.service.impl;
 
-import com.paperclip.dao.entityDao.DocumentRepository;
-import com.paperclip.dao.entityDao.UserRepository;
-import com.paperclip.dao.relationshipDao.StarDocRepository;
-import com.paperclip.model.Entity.Document;
-import com.paperclip.model.Entity.User;
-import com.paperclip.model.Relationship.StarDoc;
+import com.paperclip.dao.entityDao.*;
+import com.paperclip.dao.relationshipDao.BlockPostilRepository;
+import com.paperclip.dao.relationshipDao.StarNoteRepository;
+import com.paperclip.dao.relationshipDao.StarPaperRepository;
+import com.paperclip.model.Entity.*;
+import com.paperclip.model.Relationship.BlockPostil;
+import com.paperclip.model.Relationship.StarNote;
+import com.paperclip.model.Relationship.StarPaper;
 import com.paperclip.service.UserStarService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
@@ -13,6 +15,7 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -23,49 +26,68 @@ public class UserStarServiceImpl implements UserStarService {
     private UserRepository userRepo;
 
     @Autowired
-    private DocumentRepository docRepo;
+    private PaperRepository paperRepo;
 
     @Autowired
-    private StarDocRepository starDocRepo;
+    private StarPaperRepository starPaperRepo;
 
-    // get all the docs that this user has stared
-    public JSONArray getStarDoc(JSONObject data){
+    @Autowired
+    private NoteRepository noteRepo;
+
+    @Autowired
+    private StarNoteRepository starNoteRepo;
+    
+    @Autowired
+    private PaperPageRepository paperPageRepo;
+
+    @Autowired
+    private BlockRepository blockRepo;
+
+    @Autowired
+    private BlockPostilRepository blockPRepo;
+
+
+
+    // get all the notes that the user has stared
+    public JSONArray getStarNote(JSONObject data) {
         String username = data.getString("username");
 
         User user = userRepo.findOne(username);
-        List<StarDoc> l1 = starDocRepo.findByUser(user);
-        Iterator<StarDoc> it1 = l1.iterator();
-        List<Document> l2 = new ArrayList<>();
+        List<StarNote> l1 = starNoteRepo.findByUser(user);
+        Iterator<StarNote> it1 = l1.iterator();
+        List<Note> l2 = new ArrayList<>();
         while(it1.hasNext()){
-            l2.add(it1.next().getDocument());
+            l2.add(it1.next().getNote());
         }
-        Iterator<Document> it2 = l2.iterator();
-        JSONArray docs = new JSONArray();
-        while(it2.hasNext()) {
-            Document dd = it2.next();
-            JSONObject doc = new JSONObject();
+        Iterator<Note> it2 = l2.iterator();
 
-            doc.accumulate("ID", dd.getId());
-            doc.accumulate("title", dd.getTitle());
-            doc.accumulate("author", dd.getUser().getUsername());
-            doc.accumulate("starno", starDocRepo.findByDocument(dd).size());
-            //doc.accumulate("date","aaa");
-            //doc.accumulate("keywords", "git commit, git push");
-            docs.add(doc);
+        JSONArray notes = new JSONArray();
+        while(it2.hasNext()) {
+            JSONObject note = new JSONObject();
+            Note n = it2.next();
+            note.accumulate("ID", n.getId());
+            note.accumulate("title", n.getTitle());
+            note.accumulate("author", n.getUser().getUsername());
+            note.accumulate("starno", starNoteRepo.findByNote(n).size());
+            note.accumulate("date", n.getDate());
+            note.accumulate("keywords", n.getKeyWords());
+            note.accumulate("paperID", n.getPaper().getId());
+            note.accumulate("paperTitle", n.getPaper().getTitle());
+            notes.add(note);
         }
-        return docs;
+        return notes;
     }
 
-    // user choose to stop star ths doc(whose ID is docID)
-    public JSONObject quitStarDoc(JSONObject data) throws JSONException {
+    // user want to stop star this note(whose ID is noteID)
+    public JSONObject quitStarNote(JSONObject data){
         JSONObject result = new JSONObject();
         try {
             String username = data.getString("username");
-            Long docID = data.getLong("docID");
+            Long noteID = data.getLong("noteID");
 
             User user = userRepo.findOne(username);
-            Document doc = docRepo.findOne(docID);
-            starDocRepo.deleteDistinctByDocumentAndUser(doc, user);
+            Note note = noteRepo.findOne(noteID);
+            starNoteRepo.deleteDistinctByNoteAndUser(note,user);
             result.accumulate("result", "success");
         }catch (JSONException e){
             result.accumulate("result", "fail");
@@ -74,53 +96,60 @@ public class UserStarServiceImpl implements UserStarService {
         return result;
     }
 
-    // get all the notes that the user has stared
-    public JSONArray getStarNote(JSONObject data) {
-        JSONArray notes = new JSONArray();
-        JSONObject note = new JSONObject();
-        note.accumulate("ID", 1);
-        note.accumulate("title", "火咖");
-        note.accumulate("author", "KIRIN");
-        note.accumulate("readno", 440);
-        note.accumulate("starno", 55);
-        note.accumulate("date", "2018-03-30");
-        note.accumulate("keywords","Italian Cafe Latte");
-        note.accumulate("paperID", 5);
-        note.accumulate("paperTitle", "Coffe Beverage");
-        notes.add(note);
-        return notes;
-    }
-
-    // user want to stop star this note(whose ID is noteID)
-    public JSONObject quitStarNote(JSONObject data){
-        JSONObject result = new JSONObject();
-        if(true) {
-            result.accumulate("result", "success");
-        }
-        else{
-            result.accumulate("result", "fail");
-        }
-        return result;
-    }
-
     // get all papers that this user has stared
     public JSONArray getStarPaper(JSONObject data) {
+        String username = data.getString("username");
+
+        User user = userRepo.findOne(username);
+        List<StarPaper> l1 = starPaperRepo.findByUser(user);
+        Iterator<StarPaper> it1 = l1.iterator();
+        List<Paper> l2 = new ArrayList<>();
+        while(it1.hasNext()){
+            l2.add(it1.next().getPaper());
+        }
+        Iterator<Paper> it2 = l2.iterator();
         JSONArray papers = new JSONArray();
-        JSONObject paper = new JSONObject();
-        paper.accumulate("get star paper:","ok");
-        papers.add(paper);
+
+        while(it2.hasNext()) {
+            JSONObject paper = new JSONObject();
+            Paper p = it2.next();
+            paper.accumulate("ID",p.getId());
+            paper.accumulate("noteno",noteRepo.findByPaper(p).size());
+            paper.accumulate("postilno",getPostilNo(p));
+            paper.accumulate("keywords",p.getKeyWords());
+            papers.add(paper);
+        }
         return papers;
+    }
+
+    private Integer getPostilNo(Paper paper){
+        Integer num = 0;
+        List<PaperPage> l1 = paperPageRepo.findByPaper(paper);
+        Iterator<PaperPage> it1 = l1.iterator();
+        while(it1.hasNext()){
+            PaperPage pp = it1.next();
+            List<Block> l2 = blockRepo.findByPaperPage(pp);
+            num = num + blockPRepo.findDistinctPostilByBlock(l2).size();
+        }
+        return num;
+
     }
 
     // user want to stop star this paper
     public JSONObject quitStarPaper(JSONObject data){
         JSONObject result = new JSONObject();
-        if(true) {
+        try {
+            String username = data.getString("username");
+            Long paperID = data.getLong("paperID");
+
+            User user = userRepo.findOne(username);
+            Paper paper = paperRepo.findOne(paperID);
+            starPaperRepo.deleteDistinctByPaperAndUser(paper,user);
             result.accumulate("result", "success");
-        }
-        else{
+        }catch (JSONException e){
             result.accumulate("result", "fail");
         }
+
         return result;
     }
 

@@ -24,50 +24,50 @@ import java.util.List;
 @Transactional
 @SpringBootTest
 @Rollback(false)
-public class UserServiceTest {
+public class UserStarServiceTest {
     @Autowired
-    private UserStarService us;
+    private UserStarService service;
 
     @Before
-    public void before(){
+    public void before() {
         System.out.println("test begin!");
     }
 
     @After
-    public void after(){
+    public void after() {
         System.out.println("test finished!");
     }
 
     @Test
-    public void testGetStarDoc(){
+    public void testGetStarNote() {
         JSONObject data = new JSONObject();
-        data.accumulate("username","xiaobai");
-        JSONArray aa = us.getStarDoc(data);
-        System.out.println("xiaobai:\n"+aa);
+        data.accumulate("username", "xiaobai");
+        JSONArray aa = service.getStarNote(data);
+        System.out.println("xiaobai:\n" + aa);
 
         JSONObject data1 = new JSONObject();
-        data1.accumulate("username","apple");
-        JSONArray bb = us.getStarDoc(data1);
-        System.out.println("apple:\n"+bb);
+        data1.accumulate("username", "apple");
+        JSONArray bb = service.getStarNote(data1);
+        System.out.println("apple:\n" + bb);
 
         JSONObject data2 = new JSONObject();
-        data2.accumulate("username","null");
-        JSONArray cc = us.getStarDoc(data2);
-        System.out.println("null:\n"+cc);
+        data2.accumulate("username", "null");
+        JSONArray cc = service.getStarNote(data2);
+        System.out.println("null:\n" + cc);
 
     }
 
     @Test
-    public void testQuitStarDoc(){
+    public void testQuitStarNote() {
         JSONObject data = new JSONObject();
-        data.accumulate("username","xiaobai");
-        data.accumulate("docID",3);
-        JSONObject aa = us.quitStarDoc(data);
-        System.out.println("result1:\n"+aa.getString("result"));
+        data.accumulate("username", "xiaobai");
+        data.accumulate("noteID", 4);
+        JSONObject aa = service.quitStarNote(data);
+        System.out.println("result1:\n" + aa.getString("result"));
 
         JSONObject data1 = new JSONObject();
-        data1.accumulate("username","apple");
-        JSONObject bb = us.quitStarDoc(data1);
-        System.out.println("result2:\n"+bb.getString("result"));
+        data1.accumulate("username", "apple");
+        JSONObject bb = service.quitStarNote(data1);
+        System.out.println("result2:\n" + bb.getString("result"));
     }
 }

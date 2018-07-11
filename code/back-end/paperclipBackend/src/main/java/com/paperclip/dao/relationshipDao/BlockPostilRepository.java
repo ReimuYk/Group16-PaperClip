@@ -15,4 +15,7 @@ import java.util.List;
 public interface BlockPostilRepository extends CrudRepository<BlockPostil,Long>{
     List<BlockPostil> findByBlock(Block block);
     List<BlockPostil> findByPostil(Postil postil);
+
+    @Query("select distinct o.postil from BlockPostil o where o.block in (:blocks)")
+    List<Postil> findDistinctPostilByBlock(@Param("blocks") List<Block>blocks);
 }

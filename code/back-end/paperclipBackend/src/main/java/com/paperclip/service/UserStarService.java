@@ -4,9 +4,6 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 public interface UserStarService {
-    // StarDocPage.js
-    public JSONArray getStarDoc(JSONObject data);
-    public JSONObject quitStarDoc(JSONObject data);
 
     // StarNotePage.js
     public JSONArray getStarNote(JSONObject data);
