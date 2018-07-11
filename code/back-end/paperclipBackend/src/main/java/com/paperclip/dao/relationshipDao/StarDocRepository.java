@@ -15,4 +15,5 @@ import java.util.List;
 public interface StarDocRepository extends CrudRepository<StarDoc,Long>{
     List<StarDoc> findByDocument(Document doc);
     List<StarDoc> findByUser(User user);
+    void deleteDistinctByDocumentAndUser(Document doc, User user);
 }

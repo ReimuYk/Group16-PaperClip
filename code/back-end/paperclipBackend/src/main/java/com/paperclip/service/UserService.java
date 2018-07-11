@@ -5,7 +5,7 @@ import net.sf.json.JSONObject;
 
 public interface UserService {
     // StarDocPage.js
-    public JSONArray getStarDoc(JSONObject username);
+    public JSONArray getStarDoc(JSONObject data);
     public JSONObject quitStarDoc(JSONObject data);
 
     // StarNotePage.js

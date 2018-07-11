@@ -1,40 +1,77 @@
 package com.paperclip.service.impl;
 
+import com.paperclip.dao.entityDao.DocumentRepository;
+import com.paperclip.dao.entityDao.UserRepository;
+import com.paperclip.dao.relationshipDao.StarDocRepository;
+import com.paperclip.model.Entity.Document;
+import com.paperclip.model.Entity.User;
+import com.paperclip.model.Relationship.StarDoc;
 import com.paperclip.service.UserService;
 import net.sf.json.JSONArray;
+import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
+    @Autowired
+    private UserRepository userRepo;
+
+    @Autowired
+    private DocumentRepository docRepo;
+
+    @Autowired
+    private StarDocRepository starDocRepo;
 
     // get all the docs that this user has stared
-    public JSONArray getStarDoc(JSONObject username){
+    public JSONArray getStarDoc(JSONObject data){
+        String username = data.getString("username");
+
+        User user = userRepo.findOne(username);
+        List<StarDoc> l1 = starDocRepo.findByUser(user);
+        Iterator<StarDoc> it1 = l1.iterator();
+        List<Document> l2 = new ArrayList<>();
+        while(it1.hasNext()){
+            l2.add(it1.next().getDocument());
+        }
+        Iterator<Document> it2 = l2.iterator();
         JSONArray docs = new JSONArray();
-        JSONObject doc = new JSONObject();
-        doc.accumulate("get star doc","ok");
-        doc.accumulate("ID", 1);
-        doc.accumulate("title", "实验室安全管理制度");
-        doc.accumulate("author", "佚名");
-        doc.accumulate("readno", 91);
-        doc.accumulate("starno", 45);
-        doc.accumulate("date","8012-07-09");
-        doc.accumulate("keywords", "git commit, git push");
-        docs.add(doc);
+        while(it2.hasNext()) {
+            Document dd = it2.next();
+            JSONObject doc = new JSONObject();
+
+            doc.accumulate("ID", dd.getId());
+            doc.accumulate("title", dd.getTitle());
+            doc.accumulate("author", dd.getUser().getUsername());
+            doc.accumulate("starno", starDocRepo.findByDocument(dd).size());
+            //doc.accumulate("date","aaa");
+            //doc.accumulate("keywords", "git commit, git push");
+            docs.add(doc);
+        }
         return docs;
     }
 
     // user choose to stop star ths doc(whose ID is docID)
-    public JSONObject quitStarDoc(JSONObject data){
+    public JSONObject quitStarDoc(JSONObject data) throws JSONException {
         JSONObject result = new JSONObject();
-        if(true) {
+        try {
+            String username = data.getString("username");
+            Long docID = data.getLong("docID");
+
+            User user = userRepo.findOne(username);
+            Document doc = docRepo.findOne(docID);
+            starDocRepo.deleteDistinctByDocumentAndUser(doc, user);
             result.accumulate("result", "success");
-        }
-        else{
+        }catch (JSONException e){
             result.accumulate("result", "fail");
         }
+
         return result;
     }
 
