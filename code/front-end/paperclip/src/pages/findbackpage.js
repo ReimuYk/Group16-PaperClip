@@ -23,7 +23,22 @@ class Findback extends Component {
             alert("邮箱错误！");
             return false;
         }
-        alert(email);
+        let that  = this;
+        let jsonbody = {};
+        jsonbody.userEmail = email;
+        let url = IPaddress + 'service/findPassword';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                that.setState({
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
+        });
         return true;
     }
     render() {

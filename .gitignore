@@ -2,6 +2,10 @@ code/front-end/paperclip/command.bat
 .idea/
 <<<<<<< HEAD
 code/back-end/paperclipBackend/paperclip.iml
+<<<<<<< HEAD
 =======
 __pycache__/
 >>>>>>> a0de8024788712eb747d3cc208e75a100372b71c
+=======
+code/back-end/paperclipBackend/src/main/resources/application.properties
+>>>>>>> 47f7f64ce9896423c6376d361623c6e52b4eb723
