@@ -366,8 +366,9 @@ public class UserServiceImpl implements UserService {
         return homeinfo;
     }
 
-    @Override
     public JSONArray searchPaper(String searchText) {
+        JSONArray data = new JSONArray();
+
         return null;
     }
 
