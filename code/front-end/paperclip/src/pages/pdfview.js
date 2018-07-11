@@ -8,47 +8,70 @@ import { IPaddress } from '../App'
 let leftplace = []
 let rightplace = []
 class PDFView extends Component{
-    state = {
-        //page state
-        pageloc: null,
-        pagesize:[700,1000],
-        blocklist:[
-            {id:1,start:[144,141],end:[324,158]},
-            {id:2,start:[147,177],end:[240,193]},
-            {id:3,start:[148,212],end:[279,229]},
-            {id:4,start:[148,251],end:[197,265]},
-            {id:5,start:[197,251],end:[222,265]},
-            {id:6,start:[222,251],end:[322,265]},
-            {id:7,start:[104,449],end:[594,679]}
-        ],
-        selectid:[1],
-        selectRender:null,
-        marked:[
-            {id:[2],content:'this is id 2 block',visible:false},
-            {id:[3],content:'this is id 3 block',visible:false},
-            {id:[5],content:'拥挤的两个批注',visible:false},
-            {id:[6],content:'拥挤的第二个批注',visible:false}
-        ],
-        marked_note:[
-            {id:[4],title:'note4',content:'this is id 4 note addr',visible:false},
-            {id:[5],title:'note5',content:'int stands integer',visible:false}
-        ],
-        sel_content:[
-            {ids:[2],like:11,dislike:22,marked:false,content:'this is an unmarked',user:'user1',time:'2019.01.01'}
-        ],
-        //mouse state
-        mousePressing: false,
-        mouseStart: null,
-        //comment state
-        commRender:[
-            {cid:1,tag:'1',render:[]}
-        ],
-        noteRender:[
-            {nid:1,tag:'1',render:[]}
-        ],
-        leftplace:[],
-        rightplace:[]
-    };
+    constructor(props){
+        super(props);
+        this.state = {
+            isLoading:true,
+        }
+        let url = 'http://localhost:8000/page';
+        let options={};
+        options.method='GET';
+        options.mode='no-cors'
+        fetch(url, options)
+        .then(function(response){return response.text()})
+        .then(function(response){
+            console.log('res',response)
+            let page = eval('('+response+')');
+            console.log('page',page)
+            // that.setState({
+            //     data:docs
+            // })
+        }).catch(function(e){
+            console.log("Oops, error");
+        })
+
+    }
+    // state = {
+    //     //page state
+    //     pageloc: null,
+    //     pagesize:[700,1000],
+    //     blocklist:[
+    //         {id:1,start:[144,141],end:[324,158]},
+    //         {id:2,start:[147,177],end:[240,193]},
+    //         {id:3,start:[148,212],end:[279,229]},
+    //         {id:4,start:[148,251],end:[197,265]},
+    //         {id:5,start:[197,251],end:[222,265]},
+    //         {id:6,start:[222,251],end:[322,265]},
+    //         {id:7,start:[104,449],end:[594,679]}
+    //     ],
+    //     selectid:[1],
+    //     selectRender:null,
+    //     marked:[
+    //         {id:[2],content:'this is id 2 block',visible:false},
+    //         {id:[3],content:'this is id 3 block',visible:false},
+    //         {id:[5],content:'拥挤的两个批注',visible:false},
+    //         {id:[6],content:'拥挤的第二个批注',visible:false}
+    //     ],
+    //     marked_note:[
+    //         {id:[4],title:'note4',content:'this is id 4 note addr',visible:false},
+    //         {id:[5],title:'note5',content:'int stands integer',visible:false}
+    //     ],
+    //     sel_content:[
+    //         {ids:[2],like:11,dislike:22,marked:false,content:'this is an unmarked',user:'user1',time:'2019.01.01'}
+    //     ],
+    //     //mouse state
+    //     mousePressing: false,
+    //     mouseStart: null,
+    //     //comment state
+    //     commRender:[
+    //         {cid:1,tag:'1',render:[]}
+    //     ],
+    //     noteRender:[
+    //         {nid:1,tag:'1',render:[]}
+    //     ],
+    //     leftplace:[],
+    //     rightplace:[]
+    // };
     onDocumentComplete = (pages) => {
         this.setState({ page: 1, pages });
         // while (this.state.pageloc==null){}
@@ -424,7 +447,9 @@ class PDFView extends Component{
     }
     render(){
         return(
-            <div style={{backgroundColor:'white',width:"60%",
+            this.state.isLoading
+            ? <div>is loading</div>
+            : <div style={{backgroundColor:'white',width:"60%",
             position:"absolute",left:"22%"}}>
                     <Button onClick={this.handlePrevious}>prev page</Button>
                     <Button onClick={this.handleNext}>next page</Button>
