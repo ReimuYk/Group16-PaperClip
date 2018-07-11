@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Service;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,7 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 @SpringBootTest
+@Rollback(false)
 public class FollowDaoTest {
     @Autowired
     private FollowRepository followRepo;
@@ -58,14 +60,14 @@ public class FollowDaoTest {
         followRepo.save(f2);
         followRepo.save(f3);
 
-        List<Follow> l1 = followRepo.findAllFollowers(user1);
+        List<Follow> l1 = followRepo.findByFollowee(user1);
         System.out.println("Followers of "+user1.getUsername());
         Iterator<Follow> iter = l1.iterator();
         while(iter.hasNext()){  //执行过程中会执行数据锁定，性能稍差，若在循环过程中要去掉某个元素只能调用iter.remove()方法。
             System.out.println(iter.next().getFollower().getUsername());
         }
 
-        List<Follow> l2 = followRepo.findAllFollowings(user3);
+        List<Follow> l2 = followRepo.findByFollower(user3);
         System.out.println("Followings of "+user3.getUsername());
         Iterator<Follow> iter2 = l2.iterator();
         while(iter2.hasNext()){  //执行过程中会执行数据锁定，性能稍差，若在循环过程中要去掉某个元素只能调用iter.remove()方法。

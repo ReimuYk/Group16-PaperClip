@@ -19,6 +19,8 @@ public class DocumentPdf extends Paper{
         this.document = document;
         this.version = version;
         this.date = new Date();
+        this.setTitle(document.getTitle());
+        this.setAuthor(document.getUser().getUsername());
     }
 
     public void setDate(Date date) {

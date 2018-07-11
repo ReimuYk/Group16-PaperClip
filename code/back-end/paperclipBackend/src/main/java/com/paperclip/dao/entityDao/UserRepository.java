@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository("userRepo")
 public interface UserRepository extends CrudRepository<User,String>{
-
+    
 }

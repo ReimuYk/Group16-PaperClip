@@ -1,9 +1,6 @@
 package com.paperclip.service.impl;
 
-import com.paperclip.dao.ItemaRepository;
-import com.paperclip.dao.ItembRepository;
-import com.paperclip.model.Itema;
-import com.paperclip.model.Itemb;
+
 import com.paperclip.service.S1Service;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -11,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+/*
 @Service
 public class S1ServiceImpl implements S1Service {
     @Autowired
@@ -73,3 +70,4 @@ public class S1ServiceImpl implements S1Service {
         return res;
     }
 }
+*/

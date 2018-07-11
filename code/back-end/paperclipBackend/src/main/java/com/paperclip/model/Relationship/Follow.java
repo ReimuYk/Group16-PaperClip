@@ -23,6 +23,7 @@ public class Follow {
     public Follow(User followee,User follower){
         this.followee = followee;
         this.follower = follower;
+
     }
 
     public void setFollower(User follower) {
