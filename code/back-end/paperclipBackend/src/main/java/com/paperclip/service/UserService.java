@@ -43,7 +43,8 @@ public interface UserService {
     public JSONObject saveNote(int noteID, String noteTitle, String noteContent);
 
     // UserPage.js
-    public JSONObject getUserInfo(String username);
+    public JSONObject getHostInfo(String username);
+    public JSONObject getClientInfo(String username);
 
     // UserSettingPage.js
     public JSONObject modifyUserInfo(String username, String password, String userHeader, String userDescription);

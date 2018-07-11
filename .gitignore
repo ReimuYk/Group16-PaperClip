@@ -1,3 +1,4 @@
 code/front-end/paperclip/command.bat
 .idea/
 code/back-end/paperclipBackend/paperclip.iml
+code/back-end/paperclipBackend/src/main/resources/application.properties

@@ -165,11 +165,18 @@ public class UserController {
         return uService.saveNote(noteID, noteTitle, noteContent);
     }
 
-    @RequestMapping(value = "/service/userinfo",method = RequestMethod.POST)
+    @RequestMapping(value = "/service/hostInfo",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject getUserInfo(@RequestParam String username){
-        return uService.getUserInfo(username);
+    JSONObject getHostInfo(@RequestParam String username){
+        return uService.getHostInfo(username);
+    }
+
+    @RequestMapping(value = "/service/clientInfo",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONObject getClientInfo(@RequestParam String username){
+        return uService.getClientInfo(username);
     }
 
     @RequestMapping(value = "/service/modify/userinfo",method = RequestMethod.POST)
@@ -208,5 +215,52 @@ public class UserController {
         return uService.findPassword(userEmail);
     }
 
+    @RequestMapping(value = "/service/register",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONObject addUser(@RequestParam String username, @RequestParam String password, @RequestParam String email){
+        return uService.addUser(username, password, email);
+    }
 
+    @RequestMapping(value = "/service/login",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONObject userLogin(@RequestParam String username, @RequestParam String password){
+        return uService.userLogin(username, password);
+    }
+
+    @RequestMapping(value = "/service/homeinfo",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONArray getHomeInfo(@RequestParam String username){
+        return uService.getHomeInfo(username);
+    }
+
+    @RequestMapping(value = "/service/search",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONArray search(@RequestParam String searchText){
+        return uService.searchPaper(searchText);
+    }
+
+    @RequestMapping(value = "/service/messageInfo",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONArray getMessageInfo(@RequestParam String username){
+        return uService.getMessageInfo(username);
+    }
+
+    @RequestMapping(value = "/service/sendMessage",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONObject sendMessage(@RequestParam String hostname, @RequestParam String clientname, @RequestParam String content){
+        return uService.sendMessage(hostname, clientname, content);
+    }
+
+    @RequestMapping(value = "/service/paperDetail",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONObject getPaperDetail(@RequestParam int paperID, @RequestParam String username, @RequestParam int pagination){
+        return uService.getPaperDetail(username, paperID, pagination);
+    }
 }
