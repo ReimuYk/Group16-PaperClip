@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout, Icon, Divider, Menu, List, Avatar, Modal, Input, Anchor } from 'antd';
+import { Layout, Icon, Divider, Menu, List, Avatar, Modal, Input, Anchor, Button } from 'antd';
 import { Link } from 'react-router-dom';
 import '../css/style.css';
 import NavBar from '.././components/nav-bar';
@@ -216,11 +216,10 @@ class User extends Component{
     state = {
         userheader:'',
         username:'',
-        fansno:0,
+        fensno:0,
         followno:0,
         userDescription:'',
         visible: false,
-        mailContent: '',
         data: papersMoment,
     }
     showStarUser = () => {
@@ -241,23 +240,6 @@ class User extends Component{
             data: interactMoment,
         })
     }
-    showModal = () => {
-        this.setState({
-            visible: true,
-        });
-    }
-    handleOk = (e) => {
-        console.log('write mail');
-        this.setState({
-            visible: false,
-        });
-    }
-    handleCancel = (e) => {
-        console.log(e);
-        this.setState({
-            visible: false,
-        });
-    }
     componentWillMount = () => {
         let that = this;
         /* get username */
@@ -267,7 +249,7 @@ class User extends Component{
         /* get data according to username */
         let jsonbody = {};
         jsonbody.username = this.state.username;
-        let url = IPaddress + 'service/userinfo';
+        let url = IPaddress + 'service/hostInfo';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -284,34 +266,15 @@ class User extends Component{
     followUser = () => {
         console.log('want to follow user username:', username);
     }
-    handleMailChange = (event) => {
-        console.log('send mail', event.target.value);
-        this.setState({ mailContent: event.target.value });
-        /* send to server, server => that user */
-    }
-    clearInput = () => {
-        this.setState({ mailContent: '' });
-    }
     render() {
         return(
             <div>
             <NavBar />
-            <Modal
-                style={{height:'500px'}}
-                width={500}
-                title='私信'
-                visible={this.state.visible}
-                onOk={this.handleOk}
-                onCancel={this.handleCancel}
-                afterClose={this.clearInput}
-                >
-                <TextArea rows={5} value={this.state.mailContent} onChange={this.handleMailChange} placeholder='私信内容' />
-            </Modal>
             <div id='u'>
                 <div>
                 <div id='u1'>
                     <div id='u1-1'>
-                        <img alt='' src={uh1}
+                        <img alt='' src={ this.state.userheader }
                         style={{width:130,height:'130px',borderRadius:'50%',margin:'0 auto',display:'block'}}
                         />
                     </div>
@@ -320,34 +283,16 @@ class User extends Component{
                         <br />
                         <br />
                         <br />
-                        <h6>{ username }</h6> 
-                        <p>{ userIntro }</p>  
+                        <h6>{ this.state.username }</h6>
+                        <p>{ this.state.userDescription }</p>
                     </div>
-                    <div id='u1-3'>
-                        <br />
-                        <br />
-                        <p>
+                    <div id='u1-3' style={{marginTop:"40px"}}>
                         <Link to='/user/staruser'>
-                        <span>关注:</span>
-                        <span>{ followno }</span>
+                            <Button style={{width:"100px"}} size="large" type="primary">关注（ { this.state.followno } )</Button>
                         </Link>
                         <Link to='/user/userfens'>
-                        <span style={{width:'80px',marginLeft:'20px'}}>粉丝:</span>
-                        <span>{ fensno }</span>
+                            <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary">粉丝 （ { this.state.fensno} )</Button>
                         </Link>
-                        <br />
-                        </p>
-                        <p>
-                        <span>
-                        <Icon  onClick={this.sendMail} type='mail' style={{ fontSize: 30, color: '#08c' }} />
-                        </span>
-                        <span style={{width:'80px',marginLeft:'20px'}}>
-                        <Icon  onClick={this.showModal} type="plus-square-o" style={{ fontSize: 30, color: '#08c' }} />
-                        </span>
-                        <br />
-                        <a onClick={this.showModal}>发私信</a>
-                        <a style={{width:'80px',marginLeft:'20px'}} onClick={this.followUser}>关注</a>
-                        </p>
                     </div>
                 </div>
                 </div>
@@ -355,22 +300,6 @@ class User extends Component{
                 <div>
                 <div id='u2'>
                     <div id='u2-1'>
-
-                        {/* <List
-                            style={{textAlign:'left'}}
-                            itemLayout="horizontal"
-                            dataSource={data}
-                            renderItem={item => (
-                            <List.Item>
-                                <List.Item.Meta
-                                avatar={<Avatar src={uh1} />}
-                                
-                                title={<a href="/home">{item.title}</a>}
-                                description={item.discription}
-                                />
-                            </List.Item>
-                            )}
-                        /> */}
                         <Layout className="layout">
                             {/* <Header> */}
                             <Menu
@@ -396,7 +325,7 @@ class User extends Component{
                                 avatar={<Avatar src={uh1} />}
                                 
                                 title={<a href="/home">{item.title}</a>}
-                                description={item.discription}
+                                description={item.description}
                                 />
                             </List.Item>
                             )}

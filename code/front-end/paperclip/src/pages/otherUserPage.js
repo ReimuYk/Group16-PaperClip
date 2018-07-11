@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout, Icon, Divider, Menu, List, Avatar, Modal, Input, Anchor } from 'antd';
+import { Layout, Icon, Divider, Menu, List, Avatar, Modal, Input, Anchor, Button } from 'antd';
 import { Link } from 'react-router-dom';
 import '../css/style.css';
 import NavBar from '.././components/nav-bar';
@@ -78,168 +78,19 @@ const usersMoment = [{
     discription: 'discription of 用户动态 16',
 }]
 
-const papersMoment = [{
-    ID: 1,
-    title: '论文动态 1',
-    discription: 'discription of 论文动态 1',
-},{
-    ID: 2,
-    title: '论文动态 2',
-    discription: 'discription of 论文动态 2',
-},{
-    ID: 3,
-    title: '论文动态 3',
-    discription: 'discription of 论文动态 3',
-},{
-    ID: 4,
-    title: '论文动态 4',
-    discription: 'discription of 论文动态 4',
-},{
-    ID: 5,
-    title: '论文动态 5',
-    discription: 'discription of 论文动态 5',
-},{
-    ID: 6,
-    title: '论文动态 6',
-    discription: 'discription of 论文动态 6',
-},{
-    ID: 7,
-    title: '论文动态 7',
-    discription: 'discription of 论文动态 7',
-},{
-    ID: 8,
-    title: '论文动态 8',
-    discription: 'discription of 论文动态 8',
-},{
-    ID: 9,
-    title: '论文动态 9',
-    discription: 'discription of 论文动态 9',
-},{
-    ID: 10,
-    title: '论文动态 10',
-    discription: 'discription of 论文动态 10',
-},{
-    ID: 11,
-    title: '论文动态 11',
-    discription: 'discription of 论文动态 11',
-},{
-    ID: 12,
-    title: '论文动态 12',
-    discription: 'discription of 论文动态 12',
-},{
-    ID: 13,
-    title: '论文动态 13',
-    discription: 'discription of 论文动态 13',
-},{
-    ID: 14,
-    title: '论文动态 14',
-    discription: 'discription of 论文动态 14',
-},{
-    ID: 15,
-    title: '论文动态 15',
-    discription: 'discription of 论文动态 15',
-},{
-    ID: 16,
-    title: '论文动态 16',
-    discription: 'discription of 论文动态 16',
-}]
-
-const interactMoment = [{
-    ID: 1,
-    title: '互动动态 1',
-    discription: 'discription of 互动动态 1',
-},{
-    ID: 2,
-    title: '互动动态 2',
-    discription: 'discription of 互动动态 2',
-},{
-    ID: 3,
-    title: '互动动态 3',
-    discription: 'discription of 互动动态 3',
-},{
-    ID: 4,
-    title: '互动动态 4',
-    discription: 'discription of 互动动态 4',
-},{
-    ID: 5,
-    title: '互动动态 5',
-    discription: 'discription of 互动动态 5',
-},{
-    ID: 6,
-    title: '互动动态 6',
-    discription: 'discription of 互动动态 6',
-},{
-    ID: 7,
-    title: '互动动态 7',
-    discription: 'discription of 互动动态 7',
-},{
-    ID: 8,
-    title: '互动动态 8',
-    discription: 'discription of 互动动态 8',
-},{
-    ID: 9,
-    title: '互动动态 9',
-    discription: 'discription of 互动动态 9',
-},{
-    ID: 10,
-    title: '互动动态 10',
-    discription: 'discription of 互动动态 10',
-},{
-    ID: 11,
-    title: '互动动态 11',
-    discription: 'discription of 互动动态 11',
-},{
-    ID: 12,
-    title: '互动动态 12',
-    discription: 'discription of 互动动态 12',
-},{
-    ID: 13,
-    title: '互动动态 13',
-    discription: 'discription of 互动动态 13',
-},{
-    ID: 14,
-    title: '互动动态 14',
-    discription: 'discription of 互动动态 14',
-},{
-    ID: 15,
-    title: '互动动态 15',
-    discription: 'discription of 互动动态 15',
-},{
-    ID: 16,
-    title: '互动动态 16',
-    discription: 'discription of 互动动态 16',
-}]
 
 const { TextArea } = Input;
 const { Header, Content, Footer } = Layout;
-class User extends Component{
+class OtherUserPage extends Component{
     state = {
         userheader:'',
+        selfUsername:'',
         username:'',
-        fansno:0,
-        followno:0,
+        fensno:0,
         userDescription:'',
         visible: false,
         mailContent: '',
-        data: papersMoment,
-    }
-    showStarUser = () => {
-        console.log('show user');
-        this.setState({
-            data: usersMoment,
-        })
-    }
-    showStarPaper = () => {
-        console.log('show paper');
-        this.setState({
-            data: papersMoment,
-        })
-    }
-    showInteract = () => {
-        console.log('show interact');
-        this.setState({
-            data: interactMoment,
-        })
+        data: usersMoment,
     }
     showModal = () => {
         this.setState({
@@ -247,27 +98,51 @@ class User extends Component{
         });
     }
     handleOk = (e) => {
-        console.log('write mail');
+        if(this.state.mailContent == ''){
+            alert("内容不能为空！");
+            return;
+        }
+        let that  = this;
+        let jsonbody = {};
+        jsonbody.hostname = this.state.selfUsername;
+        jsonbody.clientname = this.state.username;
+        jsonbody.content = this.state.mailContent;
+        let url = IPaddress + 'service/sendMessage';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                that.setState({
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
+        });
         this.setState({
             visible: false,
         });
+        this.clearInput();
     }
     handleCancel = (e) => {
-        console.log(e);
         this.setState({
             visible: false,
         });
+        this.clearInput();
     }
     componentWillMount = () => {
+        var urlUserID = this.props.location.search.substring(10);//username=
         let that = this;
         /* get username */
         this.setState({
-            username: username
+            selfUsername: username,
+            username: urlUserID
         })
         /* get data according to username */
         let jsonbody = {};
         jsonbody.username = this.state.username;
-        let url = IPaddress + 'service/userinfo';
+        let url = IPaddress + 'service/clientInfo';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -282,7 +157,26 @@ class User extends Component{
         })
     }
     followUser = () => {
-        console.log('want to follow user username:', username);
+        let that = this;
+        /* get data according to username */
+        let jsonbody = {};
+        jsonbody.hostname = this.state.selfUsername;
+        jsonbody.clientname = this.state.username;
+        let url = IPaddress + 'service/follow';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let result = eval(responseJson);
+                if(result == "fail"){
+                    alert("关注失败，请重试");
+                }
+            }).catch(function(e) {
+            console.log("Oops, error");
+        })
     }
     handleMailChange = (event) => {
         console.log('send mail', event.target.value);
@@ -311,7 +205,7 @@ class User extends Component{
                 <div>
                 <div id='u1'>
                     <div id='u1-1'>
-                        <img alt='' src={uh1}
+                        <img alt='' src={ this.state.userheader }
                         style={{width:130,height:'130px',borderRadius:'50%',margin:'0 auto',display:'block'}}
                         />
                     </div>
@@ -320,34 +214,12 @@ class User extends Component{
                         <br />
                         <br />
                         <br />
-                        <h6>{ username }</h6> 
-                        <p>{ userIntro }</p>  
+                        <h6>{ this.state.username }</h6>
+                        <p>{ this.state.userDescription }</p>
                     </div>
                     <div id='u1-3'>
-                        <br />
-                        <br />
-                        <p>
-                        <Link to='/user/staruser'>
-                        <span>关注:</span>
-                        <span>{ followno }</span>
-                        </Link>
-                        <Link to='/user/userfens'>
-                        <span style={{width:'80px',marginLeft:'20px'}}>粉丝:</span>
-                        <span>{ fensno }</span>
-                        </Link>
-                        <br />
-                        </p>
-                        <p>
-                        <span>
-                        <Icon  onClick={this.sendMail} type='mail' style={{ fontSize: 30, color: '#08c' }} />
-                        </span>
-                        <span style={{width:'80px',marginLeft:'20px'}}>
-                        <Icon  onClick={this.showModal} type="plus-square-o" style={{ fontSize: 30, color: '#08c' }} />
-                        </span>
-                        <br />
-                        <a onClick={this.showModal}>发私信</a>
-                        <a style={{width:'80px',marginLeft:'20px'}} onClick={this.followUser}>关注</a>
-                        </p>
+                        <Button style={{width:"100px"}} size="large" type="primary" onClick={this.showModal}><Icon type='mail' />发私信</Button>
+                        <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary" onClick={this.followUser}><Icon type='plus-square-o' />关注</Button>
                     </div>
                 </div>
                 </div>
@@ -355,22 +227,6 @@ class User extends Component{
                 <div>
                 <div id='u2'>
                     <div id='u2-1'>
-
-                        {/* <List
-                            style={{textAlign:'left'}}
-                            itemLayout="horizontal"
-                            dataSource={data}
-                            renderItem={item => (
-                            <List.Item>
-                                <List.Item.Meta
-                                avatar={<Avatar src={uh1} />}
-                                
-                                title={<a href="/home">{item.title}</a>}
-                                description={item.discription}
-                                />
-                            </List.Item>
-                            )}
-                        /> */}
                         <Layout className="layout">
                             {/* <Header> */}
                             <Menu
@@ -379,11 +235,8 @@ class User extends Component{
                                 defaultSelectedIDs={['2']}
                                 style={{ lineHeight: '50px', width:'100%' }}
                             >
-                                <Menu.Item ID="1"><a onClick={this.showStarUser}>关注的人的动态</a></Menu.Item>
-                                <Menu.Item ID="2"><a onClick={this.showStarPaper}>收藏的论文的动态</a></Menu.Item>
-                                <Menu.Item ID="3"><a onClick={this.showInteract}>最近互动动态</a></Menu.Item>
+                                <Menu.Item ID="1"><a>他的动态</a></Menu.Item>
                             </Menu>
-                            {/* </Header> */}
                         
                         <Content style={{backgroundColor:'#ffffff'}}>
                         <List
@@ -404,9 +257,6 @@ class User extends Component{
                         </Content>
                         </Layout>
                     </div>
-                   
-                    <UserFloatMenu />
-                    
                 </div>
                 </div>
             </div>
@@ -415,4 +265,4 @@ class User extends Component{
     }
 }
 
-export default User;
+export default OtherUserPage;

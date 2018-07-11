@@ -31,6 +31,7 @@ import AdminPaperList from './components/adminPaper';
 import Admin from './pages/adminPage';
 import UserDocDetail from './pages/userDocDetailPage';
 import Message from './pages/message';
+import OtherUserPage from './pages/otherUserPage'
 
 export var IPaddress = '192.168.1.128:8080/'
 
@@ -65,6 +66,7 @@ class App extends Component {
               <Route path='/discover' component={Discover} />
               <Route path='/pdfview' component={PDFView} />
               <Route path='/admin' component={Admin} />
+              <Route path='/viewpage' component={OtherUserPage} />
             </Switch>
           </BrowserRouter>
 
