@@ -1,6 +1,6 @@
 package com.paperclip.controller;
 
-import com.paperclip.service.UserService;
+import com.paperclip.service.PaperService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.*;
 public class PaperController {
 
     @Autowired
-    UserService userService;
+    PaperService paperService;
 
     @RequestMapping(value = "/service/paperDetail",method = RequestMethod.POST)
     public
     @ResponseBody
     JSONObject getPaperDetail(@RequestBody JSONObject paperID){
-        return userService.getPaperDetail(paperID);
+        return paperService.getPaperDetail(paperID);
     }
 }

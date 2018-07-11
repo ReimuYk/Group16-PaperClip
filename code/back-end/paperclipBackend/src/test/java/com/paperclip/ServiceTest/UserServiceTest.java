@@ -1,7 +1,9 @@
 package com.paperclip.ServiceTest;
 
 
+import com.paperclip.service.UserInfoService;
 import com.paperclip.service.UserService;
+import com.paperclip.service.UserStarService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -24,7 +26,7 @@ import java.util.List;
 @Rollback(false)
 public class UserServiceTest {
     @Autowired
-    private UserService us;
+    private UserStarService us;
 
     @Before
     public void before(){

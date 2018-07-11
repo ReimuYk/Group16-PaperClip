@@ -1,6 +1,6 @@
 package com.paperclip.controller;
 
-import com.paperclip.service.UserService;
+import com.paperclip.service.SearchService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +21,12 @@ import org.springframework.web.bind.annotation.*;
 public class SearchController {
 
     @Autowired
-    UserService userService;
+    SearchService searchService;
 
     @RequestMapping(value = "/service/search",method = RequestMethod.POST)
     public
     @ResponseBody
     JSONArray search(@RequestBody JSONObject data){
-        return userService.searchPaper(data);
+        return searchService.searchPaper(data);
     }
 }
