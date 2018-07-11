@@ -24,6 +24,9 @@ public interface UserService {
     // UserDocPage.js
     public JSONArray getUserDoc(JSONObject data);
     public JSONObject deleteUserDoc(JSONObject data);
+
+    // UserDocDetailPage
+    public JSONArray getUserDocDetail(JSONObject data);
     public JSONObject deleteUserDocVersion(JSONObject data);
 
     // UserFansPage.js
