@@ -81,12 +81,4 @@ public class UserServiceTest {
         JSONObject rr2 = service.userLogin(data2);
         System.out.println("result:\n" + rr2.toString());
     }
-
-    @Test
-    public void testGetViewDocDetail(){
-        JSONObject data = new JSONObject();
-        data.accumulate("versionID",new Long(1));
-        JSONObject rr = service.getViewDocDetail(data);
-        System.out.println("result:\n" + rr.toString());
-    }
 }

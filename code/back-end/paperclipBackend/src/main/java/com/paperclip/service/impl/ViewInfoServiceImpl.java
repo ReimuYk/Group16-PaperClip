@@ -1,22 +1,22 @@
 package com.paperclip.service.impl;
 
+import com.paperclip.dao.entityDao.DocumentPdfRepository;
+import com.paperclip.model.Entity.DocumentPdf;
 import com.paperclip.service.ViewInfoService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ViewInfoServiceImpl implements ViewInfoService {
+    @Autowired
+    private DocumentPdfRepository docPdfRepo;
 
     // get this user's fans
     public JSONArray getUserFans(JSONObject data) {
         JSONArray fans = new JSONArray();
         return fans;
-    }
-
-    @Override
-    public JSONObject getViewDocDetail(JSONObject data) {
-        return null;
     }
 
     public JSONArray getHomeInfo(JSONObject data) {
@@ -100,5 +100,20 @@ public class ViewInfoServiceImpl implements ViewInfoService {
             result.accumulate("result", "fail");
         }
         return result;
+    }
+
+    public JSONObject getViewDocDetail(JSONObject data) {
+        Long id = data.getLong("versionID");
+
+        DocumentPdf docp = docPdfRepo.findOne(id);
+
+        JSONObject doc = new JSONObject();
+        if(docp != null) {
+            doc.accumulate("author", docp.getAuthor());
+            doc.accumulate("version", docp.getVersion());
+            doc.accumulate("date", docp.getDate());
+            doc.accumulate("title", docp.getTitle());
+        }
+        return doc;
     }
 }

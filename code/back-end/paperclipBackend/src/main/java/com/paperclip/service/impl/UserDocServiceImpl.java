@@ -8,7 +8,6 @@ import com.paperclip.model.Entity.Document;
 import com.paperclip.model.Entity.DocumentPdf;
 import com.paperclip.model.Entity.User;
 import com.paperclip.model.Relationship.Assist;
-import com.paperclip.model.Relationship.StarDoc;
 import com.paperclip.service.UserDocService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
