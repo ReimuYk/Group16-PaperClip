@@ -84,6 +84,18 @@
             <version>4.3.3.RELEASE</version>
         </dependency>
 
+        <!--mail-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>4.3.8.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.7</version>
+        </dependency>
         <!--&lt;!&ndash; https://mvnrepository.com/artifact/org.springframework/spring-core &ndash;&gt;-->
         <!--<dependency>-->
         <!--<groupId>org.springframework</groupId>-->
