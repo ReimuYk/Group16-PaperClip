@@ -1,6 +1,6 @@
 package com.paperclip.controller;
 
-import com.paperclip.service.S1Service;
+//import com.paperclip.service.S1Service;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 public class helloController {
     protected static Logger logger=LoggerFactory.getLogger(helloController.class);
 
-    @Autowired
-    private S1Service s1Service;
+    //@Autowired
+    //private S1Service s1Service;
 
     @RequestMapping(value = "/hello",method = RequestMethod.GET)
     public
@@ -28,10 +28,10 @@ public class helloController {
         return "this is a hello world page";
     }
 
-    @RequestMapping(value = "/findtest",method = RequestMethod.GET)
+    /*@RequestMapping(value = "/findtest",method = RequestMethod.GET)
     public
     @ResponseBody
     JSONArray findtest(){
         return s1Service.findtest();
-    }
+    }*/
 }
