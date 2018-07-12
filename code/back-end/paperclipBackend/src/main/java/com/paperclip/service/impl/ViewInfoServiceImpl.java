@@ -13,6 +13,12 @@ public class ViewInfoServiceImpl implements ViewInfoService {
         JSONArray fans = new JSONArray();
         return fans;
     }
+
+    @Override
+    public JSONObject getViewDocDetail(JSONObject data) {
+        return null;
+    }
+
     public JSONArray getHomeInfo(JSONObject data) {
         JSONArray homeinfo = new JSONArray();
         JSONObject followMement = new JSONObject();
