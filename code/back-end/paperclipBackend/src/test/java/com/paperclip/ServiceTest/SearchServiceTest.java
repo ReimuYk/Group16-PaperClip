@@ -1,5 +1,8 @@
 package com.paperclip.ServiceTest;
 
+import com.paperclip.dao.entityDao.PaperRepository;
+import com.paperclip.model.Entity.Paper;
+import com.paperclip.service.SearchService;
 import com.paperclip.service.UserService;
 import com.paperclip.service.UserStarService;
 import net.sf.json.JSONArray;
@@ -24,7 +27,10 @@ import java.util.List;
 @Rollback(false)
 public class SearchServiceTest {
     @Autowired
-    private UserService service;
+    private SearchService service;
+
+    @Autowired
+    private PaperRepository paperRepo;
 
     @Before
     public void before() {
@@ -37,5 +43,9 @@ public class SearchServiceTest {
     }
 
     @Test
-    p
+    public void testMatch(){
+        String search = "no way";
+        Paper paper = paperRepo.findOne(new Long(2));
+        service.match(search,paper);
+    }
 }

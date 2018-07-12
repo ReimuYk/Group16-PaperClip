@@ -1,6 +1,6 @@
 package com.paperclip.model.Relationship;
 
-import com.paperclip.model.Entity.DocumentPdf;
+import com.paperclip.model.Entity.Document;
 import com.paperclip.model.Entity.User;
 
 import javax.persistence.*;
@@ -18,12 +18,12 @@ public class Assist {
 
     @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="docId",referencedColumnName = "id")
-    private DocumentPdf documentPdf;//foreign key
+    private Document document;//foreign key
 
     public Assist(){}
-    public Assist(User user, DocumentPdf documentPdf){
+    public Assist(User user, Document document){
         this.user = user;
-        this.documentPdf = documentPdf;
+        this.document = document;
     }
 
     public User getUser() {
@@ -34,11 +34,11 @@ public class Assist {
         this.user = user;
     }
 
-    public DocumentPdf getDocumentPdf() {
-        return documentPdf;
+    public Document getDocument() {
+        return document;
     }
 
-    public void setDocumentPdf(DocumentPdf documentPdf) {
-        this.documentPdf = documentPdf;
+    public void setDocument(Document document) {
+        this.document = document;
     }
 }

@@ -65,20 +65,29 @@ public class SearchServiceImpl implements SearchService {
         return data;
     }
 
-    private boolean match(String searchText, Paper paper){
+    public boolean match(String searchText, Paper paper){
         String title = paper.getTitle();
         String keyword = paper.getKeyWords();
 
-        //检测要匹配的单词，单词的前面必须是空格或者标点符号
-        Pattern pattern = Pattern.compile("[^\\w]"+searchText+"[^\\w]");
+        String[] list = searchText.split("\\s+");
+        for(String s:list){
+            System.out.println("word: "+s);
 
-        Matcher matcher = pattern.matcher("yesterday, I entered  a shop and bought a pencil.");
+            Pattern pattern = Pattern.compile("[^\\w]"+s+"[^\\w]");
+            Matcher matcher = pattern.matcher(title);
+            boolean result1 = matcher.find();
+            System.out.println("title: "+title);
+            System.out.println("in title?"+result1);
 
-        boolean result= matcher.find();
-
-        System.out.println(result)
-
-
-        return title.contains(searchText) || keyword.contains(searchText);
+            pattern = Pattern.compile("[^\\w]"+s+"[^\\w]");
+            matcher = pattern.matcher(keyword);
+            boolean result2 = matcher.find();
+            System.out.println("keyword: "+keyword);
+            System.out.println("in keyWords?"+result2);
+            if(result1 || result2){
+                return true;
+            }
+        }
+        return false;
     }
 }
