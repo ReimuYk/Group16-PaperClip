@@ -76,22 +76,20 @@ class PDFView extends Component{
         this.setState({ page: this.state.page - 1 });
 
         //test event
-        var postils=[
-            {user:"大哥大哥",content:"来测试一下",agree:10,disagree:2},
-            {user:"小弟",content:"我来划水",agree:2,disagree:1}
-        ];
-        var comments=[
-            [{user:"咸鱼",content:"nn"},
-            {user:"哇",content:"2"}],
-            [{user:"噢",content:"asdd"},
-            {user:"我的天哪",content:"倍v"}]
-        ];
+        var postilsData = [
+            {
+                postils:{user:"大哥大哥",content:"来测试一下",agree:10,disagree:2},
+                comments:[{user:"咸鱼",content:"nn"},{user:"哇",content:"2"}],
+                marked:0,
+                agreement:{agreed:false,disagreed:false}
+            }
+        ]
         var keyWords=["机智","好机智啊"];
         var notes=[
                 {title:"你好",intro:"How are you"},
                 {title:"我很好",intro:"I`m fine, thank you, and you?"},        
         ];
-        emitter.emit("changePostils",postils,comments);
+        emitter.emit("changePostils",postilsData);
         emitter.emit("changeNoteList",keyWords,notes);
         //以上部分是为了测试组件之间通信
     }
@@ -112,14 +110,6 @@ class PDFView extends Component{
         }else{
             this.putSelect([])
         }
-        console.log(e.target)
-        console.log(e.target.height)
-        console.log('screenX',e.screenX)
-        console.log('clienty',e.clientY)
-        console.log('objy',e.target.getBoundingClientRect().top)
-        console.log('scroll top',document.documentElement.scrollTop)
-        console.log('clienty-objx',e.clientX-e.target.getBoundingClientRect().left)
-        console.log('clienty-objy',e.clientY-e.target.getBoundingClientRect().top)
     }
     mouseUp = (e) => {
         console.log('mouse up')

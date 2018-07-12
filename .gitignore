@@ -3,3 +3,4 @@ code/front-end/paperclip/command.bat
 code/back-end/paperclipBackend/paperclip.iml
 __pycache__/
 *.properties
+target/
