@@ -5,7 +5,7 @@ import java.util.Date;
 
 @Entity
 public class DocumentPdf extends Paper{
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="documentId",referencedColumnName = "id")
     private Document document;//foreign key
 
@@ -19,6 +19,8 @@ public class DocumentPdf extends Paper{
         this.document = document;
         this.version = version;
         this.date = new Date();
+        this.setTitle(document.getTitle());
+        this.setAuthor(document.getUser().getUsername());
     }
 
     public void setDate(Date date) {

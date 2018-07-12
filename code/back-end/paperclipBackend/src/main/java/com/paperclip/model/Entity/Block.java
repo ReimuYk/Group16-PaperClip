@@ -9,7 +9,7 @@ public class Block {
     @Column(name = "id",nullable = false)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="paperPageId",referencedColumnName = "id")
     private PaperPage paperPage;//foreign key
 
