@@ -13,65 +13,59 @@ class PDFView extends Component{
         this.state = {
             isLoading:true,
         }
-        let url = 'http://localhost:8000/page';
+        let that  = this;
+        let jsonbody = {};
+        jsonbody.username = '';
+        jsonbody.paperID = 1;
+        jsonbody.pagination = 1;
+        var url = 'http://localhost:8080/service/paperDetail';
         let options={};
-        options.method='GET';
-        options.mode='no-cors'
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
         fetch(url, options)
-        .then(function(response){return response.text()})
-        .then(function(response){
-            console.log('res',response)
-            let page = eval('('+response+')');
-            console.log('page',page)
-            // that.setState({
-            //     data:docs
-            // })
+        .then(response=>response.text())
+        .then(responseJson=>{
+            // console.log(responseJson);
+            let data = eval('('+responseJson+')');
+            console.log(data)
+            that.setState({
+                isLoading: false,
+                //page state
+                b64str:data.b64str,
+                pageloc: null,
+                pagesize:[700,1000],
+                blocklist:data.blocklist,
+                selectid:[1],
+                selectRender:null,
+                marked:[
+                    {id:[2],content:'this is id 2 block',visible:false},
+                    {id:[3],content:'this is id 3 block',visible:false},
+                    {id:[5],content:'拥挤的两个批注',visible:false},
+                    {id:[6],content:'拥挤的第二个批注',visible:false}
+                ],
+                marked_note:[
+                    {id:[4],title:'note4',content:'this is id 4 note addr',visible:false},
+                    {id:[5],title:'note5',content:'int stands integer',visible:false}
+                ],
+                sel_content:[
+                    {ids:[2],like:11,dislike:22,marked:false,content:'this is an unmarked',user:'user1',time:'2019.01.01'}
+                ],
+                //mouse state
+                mousePressing: false,
+                mouseStart: null,
+                //comment state
+                commRender:[
+                    {cid:1,tag:'1',render:[]}
+                ],
+                noteRender:[
+                    {nid:1,tag:'1',render:[]}
+                ]
+            })
         }).catch(function(e){
             console.log("Oops, error");
         })
-
     }
-    // state = {
-    //     //page state
-    //     pageloc: null,
-    //     pagesize:[700,1000],
-    //     blocklist:[
-    //         {id:1,start:[144,141],end:[324,158]},
-    //         {id:2,start:[147,177],end:[240,193]},
-    //         {id:3,start:[148,212],end:[279,229]},
-    //         {id:4,start:[148,251],end:[197,265]},
-    //         {id:5,start:[197,251],end:[222,265]},
-    //         {id:6,start:[222,251],end:[322,265]},
-    //         {id:7,start:[104,449],end:[594,679]}
-    //     ],
-    //     selectid:[1],
-    //     selectRender:null,
-    //     marked:[
-    //         {id:[2],content:'this is id 2 block',visible:false},
-    //         {id:[3],content:'this is id 3 block',visible:false},
-    //         {id:[5],content:'拥挤的两个批注',visible:false},
-    //         {id:[6],content:'拥挤的第二个批注',visible:false}
-    //     ],
-    //     marked_note:[
-    //         {id:[4],title:'note4',content:'this is id 4 note addr',visible:false},
-    //         {id:[5],title:'note5',content:'int stands integer',visible:false}
-    //     ],
-    //     sel_content:[
-    //         {ids:[2],like:11,dislike:22,marked:false,content:'this is an unmarked',user:'user1',time:'2019.01.01'}
-    //     ],
-    //     //mouse state
-    //     mousePressing: false,
-    //     mouseStart: null,
-    //     //comment state
-    //     commRender:[
-    //         {cid:1,tag:'1',render:[]}
-    //     ],
-    //     noteRender:[
-    //         {nid:1,tag:'1',render:[]}
-    //     ],
-    //     leftplace:[],
-    //     rightplace:[]
-    // };
     onDocumentComplete = (pages) => {
         this.setState({ page: 1, pages });
         // while (this.state.pageloc==null){}
@@ -455,19 +449,13 @@ class PDFView extends Component{
                     <Button onClick={this.handleNext}>next page</Button>
                     <Button onClick={this.allocComm}>展示批注&笔记</Button>
                     <div>
-                    <div id="pdf-canvas" 
+                    <div
                     onMouseDown={this.mouseDown} 
                     onMouseUp={this.mouseUp} 
                     onMouseMove={this.mouseMove}
                     style={{width:'700px'}}
-                    // style={{float:'left'}}
                     >
-                        {/* <PDF page={this.state.page}
-                            file={require("./hw-2-4.pdf")}
-                            onDocumentComplete={this.onDocumentComplete}
-                            width={900}
-                        /> */}
-                        <img src={require("./page.jpg")} width={700} style={{pointerEvents: 'none',userSelect:'none',mozUserSelect:'-moz-none'}}/>
+                        <img id="pdf-canvas" src={this.state.b64str} width={700} style={{pointerEvents: 'none',userSelect:'none',mozUserSelect:'-moz-none'}}/>
                     </div>
                     </div>
                     {this.state.selectRender}

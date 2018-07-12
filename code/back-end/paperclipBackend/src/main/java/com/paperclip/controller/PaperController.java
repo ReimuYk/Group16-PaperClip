@@ -15,7 +15,7 @@ public class PaperController {
     @RequestMapping(value = "/service/paperDetail",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject getPaperDetail(@RequestBody JSONObject paperID){
-        return paperService.getPaperDetail(paperID);
+    JSONObject getPaperDetail(@RequestBody JSONObject data){
+        return paperService.getPaperDetail(data);
     }
 }

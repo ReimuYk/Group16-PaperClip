@@ -30,7 +30,7 @@ public class UserStarController {
      * starDocPage
      *****************/
     // get user's stared doc according to username
-    @RequestMapping(value = "/service/starDoc",method = RequestMethod.POST)
+    /*@RequestMapping(value = "/service/starDoc",method = RequestMethod.POST)
     public
     @ResponseBody
     JSONArray getStarDoc(@RequestBody JSONObject data){
@@ -43,7 +43,7 @@ public class UserStarController {
     @ResponseBody
     JSONObject quitStarDoc(@RequestBody JSONObject data){
         return userStarService.quitStarDoc(data);
-    }
+    }*/
 
     /*****************
      * StarNotePage

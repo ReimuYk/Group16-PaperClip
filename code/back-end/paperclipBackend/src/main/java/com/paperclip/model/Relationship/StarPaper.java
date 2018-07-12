@@ -1,12 +1,13 @@
 package com.paperclip.model.Relationship;
 
-import com.paperclip.model.Entity.Document;
+import com.paperclip.model.Entity.Note;
+import com.paperclip.model.Entity.Paper;
 import com.paperclip.model.Entity.User;
 
 import javax.persistence.*;
 
 @Entity
-public class StarDoc {
+public class StarPaper {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "id",nullable = false)
@@ -17,21 +18,21 @@ public class StarDoc {
     private User user;//foreign key
 
     @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name="documentId",referencedColumnName = "id")
-    private Document document;//foreign key
+    @JoinColumn(name="paperId",referencedColumnName = "id")
+    private Paper paper;//foreign key
 
-    public StarDoc(){}
-    public StarDoc(User user,Document document){
+    public StarPaper(){}
+    public StarPaper(User user,Paper paper){
         this.user = user;
-        this.document = document;
+        this.paper = paper;
     }
 
-    public void setDocument(Document document) {
-        this.document = document;
+    public void setPaper(Paper paper) {
+        this.paper = paper;
     }
 
-    public Document getDocument() {
-        return document;
+    public Paper getPaper() {
+        return paper;
     }
 
     public void setUser(User user) {
