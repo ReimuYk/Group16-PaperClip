@@ -15,8 +15,7 @@ public interface UserService {
     // loginpage
     public JSONObject userLogin(JSONObject data);
 
-    // viewDocPage.js
-    public JSONObject getViewDocDetail(JSONObject data);
+
 
 
 
