@@ -8,7 +8,6 @@ import com.paperclip.model.Entity.Document;
 import com.paperclip.model.Entity.DocumentPdf;
 import com.paperclip.model.Entity.User;
 import com.paperclip.model.Relationship.Assist;
-import com.paperclip.model.Relationship.StarDoc;
 import com.paperclip.service.UserDocService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -40,21 +39,12 @@ public class UserDocServiceImpl implements UserDocService {
         Document doc = docRepo.findOne(docID);
         if (doc.getUser().getUsername().equals(user.getUsername()))
             return true;
-        List<DocumentPdf> docPdfList = docPdfRepo.findByDocument(doc);
-        Iterator<DocumentPdf> docPdfIt = docPdfList.iterator();
-        while (docPdfIt.hasNext()) {
-            DocumentPdf docPdf = docPdfIt.next();
-            // if the user is a contributor to this doc, he will also has access to this doc
-            List<Assist> assistList = assistRepo.findByDocumentPdf(docPdf);
-            Iterator<Assist> assistIterator = assistList.iterator();
-            while (assistIterator.hasNext()) {
-                Assist assist = assistIterator.next();
-                User assistUser = assist.getUser();
-                if (assistUser.getUsername().equals(user.getUsername())) {
-                    return true;
-                }
-            }
-            // this user doesn't has access to this doc
+        List<Assist> assistIist = assistRepo.findByDocument(doc);
+        Iterator<Assist> assistIterator = assistIist.iterator();
+        while(assistIterator.hasNext()){
+            Assist assist = assistIterator.next();
+            if(assist.getUser().getUsername().equals(user.getUsername()))
+                return true;
         }
         return false;
     }
