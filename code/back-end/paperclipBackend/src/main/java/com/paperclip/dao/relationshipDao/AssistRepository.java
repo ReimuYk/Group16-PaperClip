@@ -14,6 +14,5 @@ import java.util.List;
 @Repository("assistRepo")
 public interface AssistRepository extends CrudRepository<Assist,Long>{
     List<Assist> findByDocument(Document document);
-
     List<Assist> findByUser(User user);
 }
