@@ -1,7 +1,5 @@
 package com.paperclip.ServiceTest;
 
-
-import com.paperclip.service.UserInfoService;
 import com.paperclip.service.UserService;
 import com.paperclip.service.UserStarService;
 import net.sf.json.JSONArray;
