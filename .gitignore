@@ -2,4 +2,4 @@ code/front-end/paperclip/command.bat
 .idea/
 code/back-end/paperclipBackend/paperclip.iml
 __pycache__/
-application.properties
+*.properties
