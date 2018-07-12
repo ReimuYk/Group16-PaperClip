@@ -16,6 +16,8 @@ public class User {
     private String password;
     @Column(name = "email",nullable = false)
     private String email;
+    @Column(name = "avatar")
+    private String avatar;
     @Column(name = "following",nullable = false)
     private Integer following;
     @Column(name = "follower",nullable = false)
@@ -29,6 +31,7 @@ public class User {
         this.email = email;
         this.follower = 0;
         this.following = 0;
+        this.avatar = "";
     }
 
     public void setUsername(String username) {
@@ -69,5 +72,13 @@ public class User {
 
     public Integer getFollowing() {
         return following;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

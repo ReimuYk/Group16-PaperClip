@@ -60,16 +60,16 @@ public class BlockPostilDaoTest {
     @Test
     public void testSave(){
         Paper p = paperRepo.findOne(new Long(3));
-        PaperPage pp = new PaperPage(p,3,"1.img");
+        PaperPage pp = new PaperPage(p,2,"1.img");
         paperPageRepo.save(pp);
-        Block b1 = new Block(pp,1,"(1,1)","(3,3)","Eat");
-        Block b2 = new Block(pp,2,"(1,2)","(3,3)","big");
-        Block b3 = new Block(pp,3,"(1,3)","(3,3)","apple");
+        Block b1 = new Block(pp,1,"(11,1)","(32,3)","Eat");
+        Block b2 = new Block(pp,2,"(11,2)","(32,3)","big");
+        Block b3 = new Block(pp,3,"(11,3)","(32,3)","apple");
         blockRepo.save(b1);
         blockRepo.save(b2);
         blockRepo.save(b3);
         User user = userRepo.findOne("apple");
-        Postil pos = new Postil(user,"很不错呀");
+        Postil pos = new Postil(user,"在写一点");
         postilRepo.save(pos);
         BlockPostil bp1 = new BlockPostil(b1,pos);
         BlockPostil bp2 = new BlockPostil(b2,pos);

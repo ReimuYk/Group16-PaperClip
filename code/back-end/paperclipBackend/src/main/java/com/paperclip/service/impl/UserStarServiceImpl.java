@@ -2,10 +2,12 @@ package com.paperclip.service.impl;
 
 import com.paperclip.dao.entityDao.*;
 import com.paperclip.dao.relationshipDao.BlockPostilRepository;
+import com.paperclip.dao.relationshipDao.FollowRepository;
 import com.paperclip.dao.relationshipDao.StarNoteRepository;
 import com.paperclip.dao.relationshipDao.StarPaperRepository;
 import com.paperclip.model.Entity.*;
 import com.paperclip.model.Relationship.BlockPostil;
+import com.paperclip.model.Relationship.Follow;
 import com.paperclip.model.Relationship.StarNote;
 import com.paperclip.model.Relationship.StarPaper;
 import com.paperclip.service.UserStarService;
@@ -19,6 +21,11 @@ import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+/*
+* 罗宇辰
+* 2018/7/11 第一次编辑 getStarNote quitStarNote getStarPaper quitStarPaper getPostilNo
+* 2018/7/12 第二次编辑 getStarPaper*/
 
 @Service
 public class UserStarServiceImpl implements UserStarService {
@@ -46,6 +53,8 @@ public class UserStarServiceImpl implements UserStarService {
     @Autowired
     private BlockPostilRepository blockPRepo;
 
+    @Autowired
+    private FollowRepository followRepo;
 
 
     // get all the notes that the user has stared
@@ -117,11 +126,13 @@ public class UserStarServiceImpl implements UserStarService {
             paper.accumulate("noteno",noteRepo.findByPaper(p).size());
             paper.accumulate("postilno",getPostilNo(p));
             paper.accumulate("keywords",p.getKeyWords());
+            paper.accumulate("tag",p.getTag());
             papers.add(paper);
         }
         return papers;
     }
 
+    /* 计算与一篇论文有关的批注数量 */
     private Integer getPostilNo(Paper paper){
         Integer num = 0;
         List<PaperPage> l1 = paperPageRepo.findByPaper(paper);
@@ -155,10 +166,25 @@ public class UserStarServiceImpl implements UserStarService {
 
     //
     public JSONArray getStarUser(JSONObject data) {
+        String username = data.getString("username");
+
+        User u = userRepo.findOne(username);
+        List<Follow> l1 = followRepo.findByFollower(u);
+        Iterator<Follow> it1 = l1.iterator();
+        List<User> l2 = new ArrayList<>();
+        while(it1.hasNext()){
+            l2.add(it1.next().getFollowee());
+        }
+        Iterator<User> it2 = l2.iterator();
+
         JSONArray users = new JSONArray();
-        JSONObject user = new JSONObject();
-        user.accumulate("get star user", "ok");
-        users.add(user);
+        while(it2.hasNext()) {
+            User uu = it2.next();
+            JSONObject user = new JSONObject();
+            user.accumulate("username",uu.getUsername());
+            user.accumulate("avatar",uu.getAvatar());
+            users.add(user);
+        }
         return users;
     }
 
@@ -166,7 +192,17 @@ public class UserStarServiceImpl implements UserStarService {
     //(hostname used to star clientname
     public JSONObject quitStarUser(JSONObject data){
         JSONObject result = new JSONObject();
-        if(true) {
+        String hostname = data.getString("hostname");
+        String clientname = data.getString("clientname");
+
+        User followee = userRepo.findOne(clientname);
+        User follower = userRepo.findOne(hostname);
+        Follow ff = followRepo.findDistinctByFolloweeAndAndFollower(followee,follower);
+
+        if(ff != null) {
+            followRepo.delete(ff);
+            userRepo.updateFollowings(follower.getFollowing()-1,hostname);
+            userRepo.updateFollowers(followee.getFollower()-1,clientname);
             result.accumulate("result", "success");
         }
         else{
@@ -175,8 +211,19 @@ public class UserStarServiceImpl implements UserStarService {
         return result;
     }
 
-    @Override
+    // hostname want to star clientname
     public JSONObject starUser(JSONObject data) {
+        String hostname = data.getString("hostname");
+        String clientname = data.getString("clientname");
+
+        User followee = userRepo.findOne(clientname);
+        User follower = userRepo.findOne(hostname);
+        userRepo.updateFollowers(followee.getFollower()+1,clientname);
+        userRepo.updateFollowings(follower.getFollowing()+1,hostname);
+
+        Follow f = new Follow(followee,follower);
+        followRepo.save(f);
+
         JSONObject result = new JSONObject();
         if(true){
             result.accumulate("result", "success");

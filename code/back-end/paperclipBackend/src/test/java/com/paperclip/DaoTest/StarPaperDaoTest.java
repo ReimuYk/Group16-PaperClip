@@ -53,7 +53,7 @@ public class StarPaperDaoTest {
         User user1 = userRepo.findOne("apple");
         User user2 = userRepo.findOne("pear");
         User user3 = userRepo.findOne("xiaobai");
-        Paper p1 = new Paper("ics","zangby",3,"cpu");
+        /*Paper p1 = new Paper("ics","zangby",3,"cpu");
         Paper p2 = new Paper("web","chenhp",5,"SSH");
         Paper p3 = new Paper("database","jboss",2,"index");
         paperRepo.save(p1);
@@ -66,9 +66,7 @@ public class StarPaperDaoTest {
         starPaperRepo.save(sp1);
         starPaperRepo.save(sp2);
         starPaperRepo.save(sp3);
-        starPaperRepo.save(sp4);
-
-
+        starPaperRepo.save(sp4);*/
     }
 
     @Test

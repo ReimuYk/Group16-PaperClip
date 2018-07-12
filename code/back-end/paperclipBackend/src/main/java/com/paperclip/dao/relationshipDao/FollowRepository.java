@@ -11,5 +11,6 @@ import java.util.List;
 public interface FollowRepository extends CrudRepository<Follow,Long>{
     List<Follow> findByFollowee(User followee);
     List<Follow> findByFollower(User follower);
+    Follow findDistinctByFolloweeAndAndFollower(User followee,User follower);
 }
 
