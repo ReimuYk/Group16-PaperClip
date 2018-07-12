@@ -132,6 +132,7 @@ class PDFView extends Component{
         console.log('scroll top',document.documentElement.scrollTop)
         console.log('clienty-objx',e.clientX-e.target.getBoundingClientRect().left)
         console.log('clienty-objy',e.clientY-e.target.getBoundingClientRect().top)
+        alert(this.state.selectid)
     }
     mouseMove = (e) => {
         var pgloc = [e.target.offsetLeft-document.documentElement.scrollLeft,e.target.offsetTop-document.documentElement.scrollTop]
@@ -364,7 +365,7 @@ class PDFView extends Component{
         for (var i=0;i<this.state.marked_note.length;i++){
             let mitem = this.state.marked_note[i]
             let rend = []
-            //add block div(Red)
+            //add block div(Blue)
             let bitem = null
             for (var j=0;j<mitem.id.length;j++){
                 for (var k=0;k<this.state.blocklist.length;k++){
