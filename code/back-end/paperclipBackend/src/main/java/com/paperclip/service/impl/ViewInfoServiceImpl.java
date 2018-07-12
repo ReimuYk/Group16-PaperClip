@@ -1,59 +1,18 @@
 package com.paperclip.service.impl;
 
-import com.paperclip.service.UserInfoService;
+import com.paperclip.service.ViewInfoService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
-
 @Service
-public class UserInfoServiceImpl implements UserInfoService {
-
-
-    // get all the doc that this user has written
-    public JSONArray getUserDoc(JSONObject data) {
-        JSONArray docs = new JSONArray();
-        JSONObject doc = new JSONObject();
-        doc.accumulate("get user doc", "ok");
-        docs.add(doc);
-        return docs;
-    }
-
-    // delete this user's doc( which matches this docID and docVersion)
-    public JSONObject deleteUserDoc(JSONObject data) {
-        JSONObject result = new JSONObject();
-        if(true) {
-            result.accumulate("result", "success");
-        }
-        else{
-            result.accumulate("result", "fail");
-        }
-        return result;
-    }
-
-    @Override
-    public JSONArray getUserDocDetail(JSONObject data) {
-        return null;
-    }
-
-    // delete all version of this doc( whose ID is docID)
-    public JSONObject deleteUserDocVersion(JSONObject data) {
-        return null;
-    }
+public class ViewInfoServiceImpl implements ViewInfoService {
 
     // get this user's fans
     public JSONArray getUserFans(JSONObject data) {
         JSONArray fans = new JSONArray();
         return fans;
     }
-
-    // get all the notes that this user has written
-    public JSONArray getUserNote(JSONObject data){
-        JSONArray notes = new JSONArray();
-        return notes;
-    }
-
     public JSONArray getHomeInfo(JSONObject data) {
         JSONArray homeinfo = new JSONArray();
         JSONObject followMement = new JSONObject();
@@ -69,79 +28,6 @@ public class UserInfoServiceImpl implements UserInfoService {
         return homeinfo;
     }
 
-    // delete this note with ID(noteID)
-    public JSONObject deleteUserNote(JSONObject data){
-        JSONObject result = new JSONObject();
-        if(true) {
-            result.accumulate("result", "success");
-        }
-        else{
-            result.accumulate("result", "fail");
-        }
-        return result;
-    }
-
-    // get doc details
-    public JSONObject getDocDetail(JSONObject data){
-        JSONObject doc = new JSONObject();
-        return doc;
-    }
-
-    // save doc details (after user has modified it)
-    public JSONObject saveDoc(JSONObject data){
-        JSONObject result = new JSONObject();
-        if(true) {
-            result.accumulate("result", "success");
-        }
-        else{
-            result.accumulate("result", "fail");
-        }
-        return result;
-    }
-
-    // add a contributer to this doc
-    public JSONObject addDocContributer(JSONObject data){
-        JSONObject result = new JSONObject();
-        if(true) {
-            result.accumulate("result", "success");
-        }
-        else{
-            result.accumulate("result", "fail");
-        }
-        return result;
-    }
-
-    public JSONArray getContributeDoc(JSONObject data) {
-        JSONArray docs = new JSONArray();
-
-        JSONObject doc = new JSONObject();
-        doc.accumulate("docID", 7);
-        doc.accumulate("title", "doc title");
-        doc.accumulate("author", "MKK NB");
-        doc.accumulate("date", "2017-06-08");
-
-        docs.add(doc);
-        return docs;
-    }
-
-    public JSONObject getNoteDetail(JSONObject data) {
-        JSONObject note = new JSONObject();
-        note.accumulate("ID", 1);
-        note.accumulate("title", "this is a note title");
-        note.accumulate("content", "this is the content of this note");
-        note.accumulate("keywords", "keyword1, keyword2, keyword3");
-        return note;
-    }
-
-    public JSONObject saveNote(JSONObject data) {
-        JSONObject result = new JSONObject();
-        if(true){
-            result.accumulate("result", "success");
-        }else{
-            result.accumulate("result", "fail");
-        }
-        return result;
-    }
 
     public JSONObject getHostInfo(JSONObject data) {
         JSONObject user = new JSONObject();
@@ -209,29 +95,4 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
         return result;
     }
-
-
-    public JSONObject getViewNoteDetail(JSONObject data) {
-        JSONObject note = new JSONObject();
-        note.accumulate("noteID", 3);
-        note.accumulate("author", "note's author");
-        note.accumulate("title", "note title");
-        note.accumulate("content", "this is the content of the note");
-        Calendar calendar = Calendar.getInstance();
-        note.accumulate("date", calendar.get(Calendar.YEAR)+"-"+
-                calendar.get(Calendar.MONDAY)+"-"+
-                calendar.get(Calendar.DATE));
-        return note;
-    }
-
-    public JSONObject addDoc(JSONObject data) {
-        JSONObject result = new JSONObject();
-        if(true){
-            result.accumulate("result", "success");
-        }else{
-            result.accumulate("result", "fail");
-        }
-        return result;
-    }
-
 }
