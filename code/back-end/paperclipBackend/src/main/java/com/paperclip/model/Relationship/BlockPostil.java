@@ -13,11 +13,11 @@ public class BlockPostil {
     @Column(name = "id",nullable = false)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="blockId",referencedColumnName = "id")
     private Block block;//foreign key
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="postilId",referencedColumnName = "id")
     private Postil postil;//foreign key
 

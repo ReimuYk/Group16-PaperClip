@@ -9,7 +9,7 @@ public class Document {
     @Column(name = "id",nullable = false)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="username",referencedColumnName = "username")
     private User user;//foreign key
 

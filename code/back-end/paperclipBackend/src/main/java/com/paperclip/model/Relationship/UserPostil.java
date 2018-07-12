@@ -12,11 +12,11 @@ public class UserPostil {
     @Column(name = "id",nullable = false)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="username",referencedColumnName = "username")
     private User user;//foreign key
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="postilId",referencedColumnName = "id")
     private Postil postil;//foreign key
 
