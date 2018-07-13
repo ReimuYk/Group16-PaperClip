@@ -60,7 +60,11 @@ public class DocumentPdfDaoTest {
         userRepo.save(user);
         docRepo.save(doc);
         docPdfRepo.save(dp);
+    }
 
+    @Test
+    public void testDelete(){
+        docPdfRepo.delete(new Long(1));
     }
 
 }

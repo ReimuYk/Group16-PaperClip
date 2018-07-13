@@ -87,5 +87,19 @@ public class UserNoteController {
         return userNoteService.getViewNoteDetail(data);
     }
 
+    @RequestMapping(value = "/service/getNoteComment",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONArray getNoteComment(@RequestBody JSONObject data){
+        return userNoteService.getNoteComment(data);
+    }
+
+    @RequestMapping(value = "/service/addNoteComment",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONObject addNoteComment(@RequestBody JSONObject data){
+        return userNoteService.addNoteComment(data);
+    }
+
 
 }
