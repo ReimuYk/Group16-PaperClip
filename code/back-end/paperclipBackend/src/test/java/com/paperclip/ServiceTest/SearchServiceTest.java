@@ -43,9 +43,10 @@ public class SearchServiceTest {
     }
 
     @Test
-    public void testMatch(){
-        String search = "no way";
-        Paper paper = paperRepo.findOne(new Long(2));
-        service.match(search,paper);
+    public void testSearchPaper(){
+        JSONObject data = new JSONObject();
+        data.accumulate("searchText","u");
+        JSONArray a = service.searchPaper(data);
+        System.out.println(a.toString());
     }
 }

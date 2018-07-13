@@ -4,8 +4,8 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 public interface UserNoteService {
-
-
+    // paperpage.js
+    JSONObject addNote(JSONObject data);
 
     // UserNotePage.js
     public JSONArray getUserNote(JSONObject data);

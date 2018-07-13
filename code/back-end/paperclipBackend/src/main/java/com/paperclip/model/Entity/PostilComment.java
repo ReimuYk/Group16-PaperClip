@@ -14,7 +14,7 @@ public class PostilComment {
     @JoinColumn(name="postilId",referencedColumnName = "id")
     private Postil postil;//foreign key
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name="username",referencedColumnName = "username")
     private User user;//foreign key
 
