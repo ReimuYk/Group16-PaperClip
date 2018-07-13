@@ -1,6 +1,7 @@
 package com.paperclip.controller;
 
 import com.paperclip.service.PaperService;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,5 +18,12 @@ public class PaperController {
     @ResponseBody
     JSONObject getPaperDetail(@RequestBody JSONObject data){
         return paperService.getPaperDetail(data);
+    }
+
+    @RequestMapping(value = "/service/blockPostils",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONArray getBlockPostils(@RequestBody JSONObject data){
+        return paperService.getBlockPostils(data);
     }
 }

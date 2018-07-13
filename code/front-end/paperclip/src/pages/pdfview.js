@@ -18,7 +18,7 @@ class PDFView extends Component{
         jsonbody.username = '';
         jsonbody.paperID = 1;
         jsonbody.pagination = 1;
-        var url = 'http://localhost:8080/service/paperDetail';
+        var url = 'http://192.168.1.159:8080/service/paperDetail';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -76,28 +76,49 @@ class PDFView extends Component{
         this.setState({ page: this.state.page - 1 });
 
         //test event
-        var postils=[
-            {user:"大哥大哥",content:"来测试一下",agree:10,disagree:2},
-            {user:"小弟",content:"我来划水",agree:2,disagree:1}
-        ];
-        var comments=[
-            [{user:"咸鱼",content:"nn"},
-            {user:"哇",content:"2"}],
-            [{user:"噢",content:"asdd"},
-            {user:"我的天哪",content:"倍v"}]
-        ];
+        var postilsData = [
+            {
+                postils:{user:"大哥大哥",content:"来测试一下",agree:10,disagree:2},
+                comments:[{user:"咸鱼",content:"nn"},{user:"哇",content:"2"}],
+                marked:0,
+                agreement:{agreed:false,disagreed:false}
+            }
+        ]
         var keyWords=["机智","好机智啊"];
         var notes=[
                 {title:"你好",intro:"How are you"},
                 {title:"我很好",intro:"I`m fine, thank you, and you?"},        
         ];
-        emitter.emit("changePostils",postils,comments);
+        emitter.emit("changePostils",postilsData);
         emitter.emit("changeNoteList",keyWords,notes);
         //以上部分是为了测试组件之间通信
     }
     handleNext = () => {
         if (this.state.page==this.state.pages) return
         this.setState({ page: this.state.page + 1 });
+    }
+    refreshPostil = (selectid) => {
+        let that  = this;
+        let jsonbody = {};
+        jsonbody.username = 'testuser1';
+        jsonbody.paperID = 1;
+        jsonbody.pagination = 1;
+        jsonbody.selectid = selectid;
+        var url = 'http://192.168.1.159:8080/service/blockPostils';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+        .then(response=>response.text())
+        .then(responseJson=>{
+            console.log(responseJson);
+            let data = eval('('+responseJson+')');
+            console.log(data)
+            emitter.emit("changePostils",data);
+        }).catch(function(e){
+            console.log("Oops, error");
+        })
     }
     mouseDown = (e) => {
         console.log('mouse down')
@@ -112,14 +133,6 @@ class PDFView extends Component{
         }else{
             this.putSelect([])
         }
-        console.log(e.target)
-        console.log(e.target.height)
-        console.log('screenX',e.screenX)
-        console.log('clienty',e.clientY)
-        console.log('objy',e.target.getBoundingClientRect().top)
-        console.log('scroll top',document.documentElement.scrollTop)
-        console.log('clienty-objx',e.clientX-e.target.getBoundingClientRect().left)
-        console.log('clienty-objy',e.clientY-e.target.getBoundingClientRect().top)
     }
     mouseUp = (e) => {
         console.log('mouse up')
@@ -132,6 +145,10 @@ class PDFView extends Component{
         console.log('scroll top',document.documentElement.scrollTop)
         console.log('clienty-objx',e.clientX-e.target.getBoundingClientRect().left)
         console.log('clienty-objy',e.clientY-e.target.getBoundingClientRect().top)
+        // alert(this.state.selectid)
+        if (this.state.selectid.length!=0){
+            this.refreshPostil(this.state.selectid)
+        }
     }
     mouseMove = (e) => {
         var pgloc = [e.target.offsetLeft-document.documentElement.scrollLeft,e.target.offsetTop-document.documentElement.scrollTop]
@@ -364,7 +381,7 @@ class PDFView extends Component{
         for (var i=0;i<this.state.marked_note.length;i++){
             let mitem = this.state.marked_note[i]
             let rend = []
-            //add block div(Red)
+            //add block div(Blue)
             let bitem = null
             for (var j=0;j<mitem.id.length;j++){
                 for (var k=0;k<this.state.blocklist.length;k++){

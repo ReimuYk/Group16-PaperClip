@@ -151,4 +151,41 @@ public class UserNoteServiceImpl implements UserNoteService {
         return note;
     }
 
+    public JSONArray getNoteComment(JSONObject data){
+        Long noteID = data.getLong("noteID");
+
+        Note n = noteRepo.findOne(noteID);
+        List<NoteComment> li = noteCommRepo.findByNote(n);
+        Iterator<NoteComment> it = li.iterator();
+
+        JSONArray noteComment = new JSONArray();
+        while (it.hasNext()){
+            NoteComment c = it.next();
+            JSONObject com = new JSONObject();
+            com.accumulate("username",c.getUser().getUsername());
+            com.accumulate("content",c.getContent());
+            com.accumulate("date",c.getDate());
+            noteComment.add(com);
+        }
+        return noteComment;
+    }
+
+    public JSONObject addNoteComment(JSONObject data){
+        Long noteID = data.getLong("noteID");
+        String username = data.getString("username");
+        String content = data.getString("content");
+
+        Note note = noteRepo.findOne(noteID);
+        User user = userRepo.findOne(username);
+        JSONObject result = new JSONObject();
+        if(note == null || user == null){
+            result.accumulate("result","fail");
+        }
+        else{
+            NoteComment nc = new NoteComment(note,user,content);
+            noteCommRepo.save(nc);
+            result.accumulate("result","success");
+        }
+        return result;
+    }
 }

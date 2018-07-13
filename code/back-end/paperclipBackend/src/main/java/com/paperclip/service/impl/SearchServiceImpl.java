@@ -1,7 +1,7 @@
 package com.paperclip.service.impl;
 
-import com.paperclip.dao.entityDao.NoteRepository;
 import com.paperclip.dao.entityDao.PaperRepository;
+import com.paperclip.dao.entityDao.NoteRepository;
 import com.paperclip.model.Entity.Paper;
 import com.paperclip.service.SearchService;
 import net.sf.json.JSONArray;
@@ -9,9 +9,6 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
-import java.util.Iterator;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -67,6 +64,7 @@ public class SearchServiceImpl implements SearchService {
     private boolean match(String searchText, Paper paper){
         String title = paper.getTitle();
         String keyword = paper.getKeyWords();
+
 
         String[] list = searchText.split("\\s+");
         for(String s:list){

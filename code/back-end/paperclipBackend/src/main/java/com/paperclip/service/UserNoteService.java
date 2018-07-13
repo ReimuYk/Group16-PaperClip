@@ -21,6 +21,8 @@ public interface UserNoteService {
 
     // viewNotePage.js
     public JSONObject getViewNoteDetail(JSONObject data);
+    JSONArray getNoteComment(JSONObject data);
+    JSONObject addNoteComment(JSONObject data);
 
 
 }
