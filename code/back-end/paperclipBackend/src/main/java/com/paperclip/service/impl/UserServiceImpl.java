@@ -115,20 +115,6 @@ public class UserServiceImpl implements UserService {
         return userinfo;
     }
 
-    public JSONObject getViewDocDetail(JSONObject data) {
-        Long id = data.getLong("versionID");
-
-        DocumentPdf docp = docPdfRepo.findOne(id);
-
-        JSONObject doc = new JSONObject();
-        if(docp != null) {
-            doc.accumulate("author", docp.getAuthor());
-            doc.accumulate("version", docp.getVersion());
-            doc.accumulate("date", docp.getDate());
-            doc.accumulate("title", docp.getTitle());
-        }
-        return doc;
-    }
 
     /* 以下内容与私信有关，有待后期拓展 */
     public JSONArray getMessageInfo(JSONObject data) {

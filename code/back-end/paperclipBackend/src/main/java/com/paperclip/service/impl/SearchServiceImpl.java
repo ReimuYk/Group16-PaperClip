@@ -73,13 +73,14 @@ public class SearchServiceImpl implements SearchService {
         for(String s:list){
             System.out.println("word: "+s);
 
-            Pattern pattern = Pattern.compile("[^\\w]"+s+"[^\\w]");
+            //Pattern pattern = Pattern.compile("[^\\w]*"+s+"[^\\w]*");
+            Pattern pattern = Pattern.compile(".*"+s+".*");
             Matcher matcher = pattern.matcher(title);
             boolean result1 = matcher.find();
             System.out.println("title: "+title);
             System.out.println("in title?"+result1);
 
-            pattern = Pattern.compile("[^\\w]"+s+"[^\\w]");
+            //pattern = Pattern.compile("[^\\w]"+s+"[^\\w]");
             matcher = pattern.matcher(keyword);
             boolean result2 = matcher.find();
             System.out.println("keyword: "+keyword);
