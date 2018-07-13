@@ -18,7 +18,7 @@ class PDFView extends Component{
         jsonbody.username = '';
         jsonbody.paperID = 1;
         jsonbody.pagination = 1;
-        var url = 'http://localhost:8080/service/paperDetail';
+        var url = 'http://192.168.1.159:8080/service/paperDetail';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -97,6 +97,29 @@ class PDFView extends Component{
         if (this.state.page==this.state.pages) return
         this.setState({ page: this.state.page + 1 });
     }
+    refreshPostil = (selectid) => {
+        let that  = this;
+        let jsonbody = {};
+        jsonbody.username = 'testuser1';
+        jsonbody.paperID = 1;
+        jsonbody.pagination = 1;
+        jsonbody.selectid = selectid;
+        var url = 'http://192.168.1.159:8080/service/blockPostils';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+        .then(response=>response.text())
+        .then(responseJson=>{
+            console.log(responseJson);
+            let data = eval('('+responseJson+')');
+            console.log(data)
+            emitter.emit("changePostils",data);
+        }).catch(function(e){
+            console.log("Oops, error");
+        })
+    }
     mouseDown = (e) => {
         console.log('mouse down')
         let loc = [e.clientX-e.target.getBoundingClientRect().left,e.clientY-e.target.getBoundingClientRect().top]
@@ -122,7 +145,10 @@ class PDFView extends Component{
         console.log('scroll top',document.documentElement.scrollTop)
         console.log('clienty-objx',e.clientX-e.target.getBoundingClientRect().left)
         console.log('clienty-objy',e.clientY-e.target.getBoundingClientRect().top)
-        alert(this.state.selectid)
+        // alert(this.state.selectid)
+        if (this.state.selectid.length!=0){
+            this.refreshPostil(this.state.selectid)
+        }
     }
     mouseMove = (e) => {
         var pgloc = [e.target.offsetLeft-document.documentElement.scrollLeft,e.target.offsetTop-document.documentElement.scrollTop]

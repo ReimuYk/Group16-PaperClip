@@ -105,8 +105,8 @@ class Postil extends Component{
                 <p style={{marginTop:"7%"}}>{item.postils.content}</p>  
                 <Divider />  
                 <ButtonGroup>
-                    <Button type={this.state.data[idx].agreement.agreed?"primary":"default"} icon="like" value={idx} onClick={this.agree}>{item.agree}</Button>
-                    <Button type={this.state.data[idx].agreement.disagreed?"primary":"default"} icon="dislike-o" value={idx} onClick={this.disagree}>{item.disagree}</Button>
+                    <Button type={this.state.data[idx].agreement.agreed?"primary":"default"} icon="like" value={idx} onClick={this.agree}>{this.state.data[idx].postils.agree}</Button>
+                    <Button type={this.state.data[idx].agreement.disagreed?"primary":"default"} icon="dislike-o" value={idx} onClick={this.disagree}>{this.state.data[idx].postils.disagree}</Button>
                 </ButtonGroup>
                 <Divider type="vertical"/>
                 <Button type={this.state.data[idx].marked?"primary":"default"} shape="circle" icon="flag" value={idx} onClick={this.mark}/>
