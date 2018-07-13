@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { List, Avatar, Menu, Anchor } from 'antd';
-import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import username from './loginpage';
 import UserFloatMenu from '../components/userFloatMenu';
@@ -99,6 +99,9 @@ class StarUser extends Component{
         })
     }
     render(){
+        if(sessionStorage.getItem('username') == ''){
+            return <Redirect to="/login"/>;
+        }
         return(
             <div>
             <NavBar />
@@ -114,7 +117,7 @@ class StarUser extends Component{
                     <List.Item actions={[<a onClick={this.quitFollow.bind(this, item)}>取消关注</a>]}>
                         <List.Item.Meta
                         avatar={<Avatar src={ item.avatar } />}
-                        title={<a href={"/user?username="+item.username}>{item.username}</a>}
+                        title={<a href={"/viewpage?username="+item.username}>{item.username}</a>}
                         />
                     </List.Item>
                     )}

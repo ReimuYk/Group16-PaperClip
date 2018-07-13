@@ -2,27 +2,13 @@ import React, { Component } from 'react';
 import { Divider, Input, Modal, Icon, Button, List } from 'antd';
 import '../css/style.css'
 import NavBar from '../components/nav-bar';
-import UserFloatMenu from '../components/userFloatMenu';
 import { IPaddress } from '../App'
-import constuh from '../statics/uh.jpg'
-const constUserID = 0;
-const constUserDescription = '用户描述';
-const constUserName = '用户名';
-const constDocTitle = '文档标题';
-const constDocContent = '一次坐葡萄牙TAP航空从里斯本飞卡萨布兰卡，是那种螺旋桨小飞机，我选到了第一排紧急出口旁边的座位，登机之后正对面就坐着一个空少小哥。在候机厅的时候口渴在自动售货机里吗买了一小听类似芬达的碳酸饮料，后来广播登机了没来得及打开就放到了冲锋衣的兜里登机了。后来飞机升空平稳解开安全带之后我想起来了还有一听饮料准备喝，正好这时候空少小哥在后面，我当时脑子不知道怎么想的鬼使神差的把那听饮料藏在了我那件比较宽大的冲锋衣的袖子里面。小哥回来坐下了之后，我慢慢把袖子竖起来，另一只手伸进去扣住拉环，“呲”的一声拉开了拉环，同时还冒出来一股白烟，之后举起来喝了一口。短短的五秒之内，我观察空少小哥的面部表情至少经历了“疑惑—诧异/恐惧/绝望—劫后余生的喜悦与放松”三种状态。后来一想，要是对面坐的不是空少是空警，我应该已经被当场击毙了吧……';
-const constLikeNo = 10;
-const constCommentNo = 2;
-const constComment = [{user:'大哥', comment:'....'},{user:'大嫂', comment:'.....'}];
 const { TextArea } = Input;
-const constIfLike = false;
-const constIfStar = false;
-const constUsername = '我自己';
-class ViewDoc extends Component{
+class ViewNote extends Component{
     state = {
         uh: '',
-        userID: 0,
-        userDescription: '',
-        userName: '',
+        authorDescription: '',
+        author: '',
         docID: 0,
         docTitle: '',
         docContent: '',
@@ -39,23 +25,32 @@ class ViewDoc extends Component{
     }
     componentWillMount = () => {
         /* get docID from url */
-        var urlDocID = this.props.location.search.substring(7);//7 == 'docID='.length+1
+        var urlNoteID = this.props.location.search.substring(8);//7 == 'noteID='.length+1
          /* get info from server */
-         this.setState({
-            uh: constuh,
-            userID: constUserID,
-            userDescription: constUserDescription,
-            userName: constUserName,
-            docID: urlDocID,
-            docTitle: constDocTitle,
-            docContent: constDocContent,
-             comment:constComment,
-             commentNo:constCommentNo,
-             likeNo:constLikeNo,
-             ifLike: constIfLike,
-             ifStar: constIfStar,
-             username: constUsername
+        let that = this;
+        /* get username */
+        let username = sessionStorage.getItem('username');
+        this.setState({
+            noteID : urlNoteID,
+            username: username
         })
+        /* get data according to username */
+        let jsonbody = {};
+        jsonbody.noteID = urlNoteID;
+        let url = IPaddress + 'service/viewNote';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                that.setState({
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
+
     }
     showModal = () => {
         this.setState({
@@ -141,6 +136,28 @@ class ViewDoc extends Component{
     cancelStar = () => {
         this.setState({
             ifStar: false
+        })
+    }
+
+    followUser = () => {
+        /* get data according to username */
+        let jsonbody = {};
+        jsonbody.hostname = this.state.username;
+        jsonbody.clientname = this.state.author;
+        let url = IPaddress + 'service/follow';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let result = eval(responseJson);
+                if(result == "fail"){
+                    alert("关注失败，请重试");
+                }
+            }).catch(function(e) {
+            console.log("Oops, error");
         })
     }
     renderLikeButton(){
@@ -246,8 +263,8 @@ class ViewDoc extends Component{
 
                             <div id='u1-2'>
                                 <br />
-                                <h3>{ this.state.userName }</h3>
-                                <p>{ this.state.userDescription }</p>
+                                <h3>{ this.state.author }</h3>
+                                <p>{ this.state.authorDescription }</p>
                                 <br />
                                 <br />
                             </div>
@@ -274,4 +291,4 @@ class ViewDoc extends Component{
 }
 
 
-export default ViewDoc;
+export default ViewNote;

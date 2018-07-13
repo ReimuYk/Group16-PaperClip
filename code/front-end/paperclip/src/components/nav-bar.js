@@ -6,32 +6,23 @@ import { Anchor } from 'antd';
 import { Tabs } from 'antd';
 
 import {Link} from 'react-router-dom';
-import {log} from '../pages/loginpage';
-import {log1} from '../pages/RegisterPage';
+
 
 const Search = Input.Search;
-const Option = Select.Option;
 const TabPane = Tabs.TabPane
 
 class NavBar extends Component{
     constructor(props){
         super(props);
-        this.changeSearchIdx = this.changeSearchIdx.bind(this);
         this.state = {
             isLog:false,
             searchIdx:"empty"
         }
     }
 
-    changeSearchIdx(e){
-        var idx = e.target.value;
-        if(idx == ""){
-            idx = "empty";
-        }
-        this.setState({searchIdx:idx});
-    }
-    selectChange(value){
-        console.log("select idx: " + value);
+    logout = () =>{
+        sessionStorage.setItem('username', '');
+        window.location.reload();
     }
 
     renderInfo(){
@@ -109,22 +100,9 @@ class NavBar extends Component{
     }
 
     render() {
-        const selectBefore = (
-            <Select defaultValue="title" style={{ width: 90 }} onChange={this.selectChange}>
-                <Option value="title">标题</Option>
-                <Option value="author">作者</Option>
-            </Select>
-        );
-        const buttonAfter = (
-            <Link to={"/search/"+this.state.searchIdx}>
-                <Icon type="search" />
-            </Link>
-        )        
         const search = (
                 <Search
-                addonBefore={selectBefore}
                 placeholder="input search text"
-                enterButton={buttonAfter}
                 onChange={this.changeSearchIdx}
                 />
         )
@@ -136,12 +114,12 @@ class NavBar extends Component{
               <Menu.Item key="1">
                 <Link to="/user/setting"><Icon type="setting" />设置</Link>
               </Menu.Item>
-              <Menu.Item key="3"><Icon type="poweroff" />退出</Menu.Item>
+              <Menu.Item key="3" onClick={this.logout}><Icon type="poweroff" />退出</Menu.Item>
             </Menu>
           );
         const message = this.renderMessage();
         const info = this.renderInfo();
-        if(log||log1){
+        if(sessionStorage.getItem('username') != ''){
             return(
                 <Anchor>
                     <Row type="flex" align="middle" justify="center">

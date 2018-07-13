@@ -19,39 +19,38 @@ class Login extends Component {
         password = document.getElementById("password").value;
         //alert(username);
         //alert(password);
-        this.setState({isLog:true}); 
-
-        log = true;
+        this.setState({isLog:true});
+        sessionStorage.setItem('username', username);
     }
     render() {
-        if(this.state.isLog){
-            return <Redirect to="/"/>;
+        if(sessionStorage.getItem('username') != ''){
+            return <Redirect to="/user"/>;
         }
         return (
             <section id='login-page'>
-                <div class="SignFlowHomepage">
-                    <div class="Card SignContainer-content">
-                        <div class="SignContainer-inner">
-                            <div class="Login-content">
-                                <form novalidate class="SignFlow">
-                                    <div class="SignFlow-account">
-                                        <div class="SignFlowInput SignFlow-accountInputContainer">
-                                            <div class="SignFlow-accountInput Input-wrapper">
-                                                <input type="text" id="username" name="username" class="Input" placeholder="用户名或邮箱"></input>
+                <div className="SignFlowHomepage">
+                    <div className="Card SignContainer-content">
+                        <div className="SignContainer-inner">
+                            <div className="Login-content">
+                                <form novalidate className="SignFlow">
+                                    <div className="SignFlow-account">
+                                        <div className="SignFlowInput SignFlow-accountInputContainer">
+                                            <div className="SignFlow-accountInput Input-wrapper">
+                                                <input type="text" id="username" name="username" className="Input" placeholder="用户名或邮箱"></input>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="SignFlow-password">
-                                        <div class="SignFlowInput">
-                                            <div class="Input-wrapper">
-                                                <input type="password" id="password" name="password" class="Input" placeholder="密码"></input>
+                                    <div className="SignFlow-password">
+                                        <div className="SignFlowInput">
+                                            <div className="Input-wrapper">
+                                                <input type="password" id="password" name="password" className="Input" placeholder="密码"></input>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="Login-options">
-                                        <button type="button" class="Button Login-cannotLogin Button--plain"><Link to="/findback">忘记密码？</Link></button>
+                                    <div className="Login-options">
+                                        <button type="button" className="Button Login-cannotLogin Button--plain"><Link to="/findback">忘记密码？</Link></button>
                                     </div>
-                                    <button type="submit" onClick={this.login} class="Button SignFlow-submitButton Button--primary Button--blue">登录</button>
+                                    <button type="submit" onClick={this.login} className="Button SignFlow-submitButton Button--primary Button--blue">登录</button>
                                 </form>
                             </div>
                             <div class="SignContainer-switch">没有帐号？

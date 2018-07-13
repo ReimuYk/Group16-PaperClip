@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { List, Avatar, Menu, Anchor } from 'antd';
-import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 /* should get from server */
 import uh from '../statics/uh.jpg'
 import UserFloatMenu from '../components/userFloatMenu';
 import { IPaddress } from '../App'
-import username from './loginpage';
 const userID=1;
 const data = [{
     fensName: 'fens 1',
@@ -42,12 +41,13 @@ class UserFens extends Component{
     componentWillMount = () => {
         let that = this;
         /* get username */
+        let username = sessionStorage.getItem('username');
         this.setState({
             username: username
         })
         /* get data according to username */
         let jsonbody = {};
-        jsonbody.username = this.state.username;
+        jsonbody.username = username;
         let url = IPaddress + 'service/userFans';
         let options={};
         options.method='POST';
@@ -88,6 +88,9 @@ class UserFens extends Component{
     }
 
     render(){
+        if(sessionStorage.getItem('username') == ''){
+            return <Redirect to="/login"/>;
+        }
         return(
             <div>
             <NavBar />
@@ -103,7 +106,7 @@ class UserFens extends Component{
                     <List.Item actions={[<a onClick={this.follow.bind(this, item)}>关注</a>]}>
                         <List.Item.Meta
                         avatar={<Avatar src={ item.avatar } />}
-                        title={<a href={"/user?username="+item.username}>{item.username}</a>}
+                        title={<a href={"/viewpage?username="+item.username}>{item.username}</a>}
                         />
                     </List.Item>
                     )}

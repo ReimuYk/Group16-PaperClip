@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { List, Avatar, Anchor, Menu, Popconfirm } from 'antd';
-import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import UserFloatMenu from '../components/userFloatMenu';
 /* should get from server */
 import book1 from '../statics/book1.jpg';
 import { IPaddress } from '../App'
 // const userID=1;
-import username from './loginpage';
 const notes = [{
     ID: 1,
     cover: book1,
@@ -89,13 +88,14 @@ class StarNote extends Component{
     }
     componentWillMount = () => {
         /* notes should get from server */
+        let username = sessionStorage.getItem('username');
         this.setState({
             username: username
         })
         let that = this;
         /* get specific info of notes */
         let jsonbody = {};
-        jsonbody.username = this.state.username;
+        jsonbody.username = username;
         let url = IPaddress + 'service/starNote';
         let options={};
         options.method='POST';
@@ -148,6 +148,9 @@ class StarNote extends Component{
         /* send to server, refresh this page in get/post request */
     }
     render(){
+        if(sessionStorage.getItem('username') == ''){
+            return <Redirect to="/login"/>;
+        }
         return(
             <div>
             <NavBar />

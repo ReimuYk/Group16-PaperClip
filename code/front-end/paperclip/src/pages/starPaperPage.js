@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { List, Avatar, Anchor, Menu, Popconfirm } from 'antd';
-import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import username from './loginpage';
 import UserFloatMenu from '../components/userFloatMenu';
@@ -159,6 +159,9 @@ class StarPaper extends Component{
         })
     }
     render(){
+        if(sessionStorage.getItem('username') == ''){
+            return <Redirect to="/login"/>;
+        }
         return(
             <div>
                 <NavBar />

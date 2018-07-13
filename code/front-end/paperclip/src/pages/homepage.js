@@ -3,8 +3,6 @@ import {Link} from 'react-router-dom';
 import { Input, Select, List, Avatar, Button, Spin, Icon, Menu, Anchor } from 'antd';
 import NavBar from '../components/nav-bar';
 import reqwest from 'reqwest';
-import {log} from './loginpage';
-import {log1} from './RegisterPage';
 import { IPaddress } from '../App'
 const fakeDataUrl = 'https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo';
 const MenuItemGroup = Menu.ItemGroup;
@@ -48,7 +46,7 @@ class Sider extends React.Component {
         )
     }
     renderSider(){
-        if(log||log1){
+        if(sessionStorage.getItem('username') != ''){
             return (
                 <Menu
                     onClick={this.handleClick}

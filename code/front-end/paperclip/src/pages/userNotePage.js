@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { List, Avatar, Popconfirm, Menu, Anchor } from 'antd';
-import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import UserFloatMenu from '../components/userFloatMenu';
-import username from './loginpage';
 import { IPaddress } from '../App'
 /* should get from server */
 import book1 from '../statics/book1.jpg';
-const userID=1;
 const notes = [{
     ID: 1,
     title: 'note 1',
@@ -83,12 +81,13 @@ class UserNote extends Component{
     componentWillMount = () => {
         let that = this;
         /* get username */
+        let username = sessionStorage.getItem('username');
         this.setState({
             username: username
         })
         /* get data according to username */
         let jsonbody = {};
-        jsonbody.username = this.state.username;
+        jsonbody.username = username;
         let url = IPaddress + 'service/userNote';
         let options={};
         options.method='POST';
@@ -138,6 +137,9 @@ class UserNote extends Component{
         })
     }
     render(){
+        if(sessionStorage.getItem('username') == ''){
+            return <Redirect to="/login"/>;
+        }
         return(
             <div>
             <NavBar />
@@ -158,7 +160,7 @@ class UserNote extends Component{
                                         </p>]}>
                         <List.Item.Meta
                         avatar={<Avatar src={ book1 } />}
-                        title={<a href={"/viewnote?noteID="+item.ID}>{item.title}</a>}
+                        title={<a href={"/viewNote?noteID="+item.ID}>{item.title}</a>}
                         description={item.description}
                         />
                         <p>{item.date}</p>

@@ -20,7 +20,7 @@ import UserDoc from './pages/userDocPage';
 import UserNote from './pages/userNotePage';
 import UserFens from './pages/userFensPage';
 import UserSetting from './pages/userSettingPage';
-import ViewDoc from './pages/viewDocPage';
+import ViewNote from './pages/viewNotePage';
 import Register from './pages/RegisterPage';
 import Discover from './pages/discoverPage';
 import ModifyDoc from './pages/modifyDoc';
@@ -61,7 +61,7 @@ class App extends Component {
               <Route path='/user/modifyNote' component={ModifyNote} />
               <Route path='/user/docdetail' component={UserDocDetail} />
               <Route path='/user/message' component={Message} />
-              <Route path='/viewdoc' component={ViewDoc} />
+              <Route path='/viewNote' component={ViewNote} />
               <Route path='/user' component={User} /> 
               <Route path='/discover' component={Discover} />
               <Route path='/pdfview' component={PDFView} />

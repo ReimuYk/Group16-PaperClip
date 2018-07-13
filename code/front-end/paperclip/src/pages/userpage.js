@@ -1,17 +1,12 @@
 import React, { Component } from 'react';
 import { Layout, Icon, Divider, Menu, List, Avatar, Modal, Input, Anchor, Button } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import '../css/style.css';
 import NavBar from '.././components/nav-bar';
 import UserFloatMenu from '../components/userFloatMenu';
 import { IPaddress } from '../App'
 /* should get from server */
 import uh1 from '../statics/uh.jpg';
-const followno = 8;
-const fensno   = 8;
-const userID = 1;
-const username = '用户名';
-const userIntro = '用户描述';
 const usersMoment = [{
     ID: 1,
     title: '用户动态 1',
@@ -210,8 +205,7 @@ const interactMoment = [{
     discription: 'discription of 互动动态 16',
 }]
 
-const { TextArea } = Input;
-const { Header, Content, Footer } = Layout;
+const { Content } = Layout;
 class User extends Component{
     state = {
         userheader:'',
@@ -243,12 +237,13 @@ class User extends Component{
     componentWillMount = () => {
         let that = this;
         /* get username */
+        let username = sessionStorage.getItem('username');
         this.setState({
             username: username
         })
         /* get data according to username */
         let jsonbody = {};
-        jsonbody.username = this.state.username;
+        jsonbody.username = username;
         let url = IPaddress + 'service/hostInfo';
         let options={};
         options.method='POST';
@@ -263,10 +258,10 @@ class User extends Component{
             console.log("Oops, error");
         })
     }
-    followUser = () => {
-        console.log('want to follow user username:', username);
-    }
     render() {
+        if(sessionStorage.getItem('username') == ''){
+            return <Redirect to="/login"/>;
+        }
         return(
             <div>
             <NavBar />
