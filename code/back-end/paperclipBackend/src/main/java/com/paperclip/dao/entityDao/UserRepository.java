@@ -18,5 +18,6 @@ public interface UserRepository extends CrudRepository<User,String>{
     @Modifying
     @Query("update User o set o.following = :num where username = :username")
     void updateFollowings(@Param("num")Integer num, @Param("username")String username);
-    
+
+    User findDistinctByEmail(String email);
 }

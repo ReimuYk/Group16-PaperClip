@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 @Entity
 public class User {
+    private static final String defaultAvatar = "";
     @Id
     @GeneratedValue(generator  = "usernameStrategy")
     @GenericGenerator(name = "usernameStrategy", strategy = "assigned")
@@ -18,6 +19,8 @@ public class User {
     private String email;
     @Column(name = "avatar")
     private String avatar;
+    @Column(name = "description")
+    private String description;
     @Column(name = "following",nullable = false)
     private Integer following;
     @Column(name = "follower",nullable = false)
@@ -31,7 +34,8 @@ public class User {
         this.email = email;
         this.follower = 0;
         this.following = 0;
-        this.avatar = "";
+        this.avatar = defaultAvatar;
+        this.description = "welcome to Paperclip";
     }
 
     public void setUsername(String username) {
@@ -80,5 +84,13 @@ public class User {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

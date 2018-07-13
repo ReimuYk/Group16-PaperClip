@@ -51,7 +51,7 @@ public class DocumentPdfDaoTest {
 
     @Test
     public void testSave(){
-        User user = userRepo.findOne("xiaobai");
+        User user = userRepo.findOne("7");
         Document doc = new Document(user,"web","online bookshop");
         DocumentPdf dp = new DocumentPdf(doc,1);
         dp.setKeyWords("oh no");

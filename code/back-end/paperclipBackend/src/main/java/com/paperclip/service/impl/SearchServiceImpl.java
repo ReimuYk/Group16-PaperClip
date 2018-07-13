@@ -1,31 +1,48 @@
 package com.paperclip.service.impl;
 
+import com.paperclip.dao.entityDao.NoteRepository;
+import com.paperclip.dao.entityDao.PaperRepository;
+import com.paperclip.model.Entity.Paper;
 import com.paperclip.service.SearchService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
+import java.util.Iterator;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class SearchServiceImpl implements SearchService {
+    @Autowired
+    private PaperRepository paperRepo;
+
+    @Autowired
+    private NoteRepository noteRepo;
+
     public JSONArray searchPaper(JSONObject data1) {
+        String searchText = data1.getString("searchText");
+
         JSONArray data = new JSONArray();
         JSONArray papers = new JSONArray();
-        JSONArray recommands = new JSONArray();
+        Iterable<Paper> allPaper = paperRepo.findAll();
+        for(Paper p: allPaper){
+            if (match(searchText,p)) {
+                JSONObject paper = new JSONObject();
+                paper.accumulate("paperID", p.getId());
+                paper.accumulate("title", p.getTitle());
+                paper.accumulate("author", p.getAuthor());
+                paper.accumulate("keyword", p.getKeyWords());
+                paper.accumulate("noteno", noteRepo.findByPaper(p).size());
+                papers.add(paper);
+            }
+        }
 
-        JSONObject paper = new JSONObject();
-        paper.accumulate("paperID", 4);
-        paper.accumulate("title", "paper title 1");
-        paper.accumulate("author", "paper author 1");
-        paper.accumulate("keyword", "keyword2, keyword2, keyword3");
-        Calendar calendar = Calendar.getInstance();
-        paper.accumulate("date", calendar.get(Calendar.YEAR)+"-"+
-                calendar.get(Calendar.MONDAY)+"-"+
-                calendar.get(Calendar.DATE));
-        paper.accumulate("readno", 55);
-        paper.accumulate("noteno", 66);
-        papers.add(paper);
+
+        JSONArray recommands = new JSONArray();
 
         JSONObject recommand = new JSONObject();
         recommand.accumulate("paperID", 5);
@@ -46,5 +63,46 @@ public class SearchServiceImpl implements SearchService {
         data.add(paperObject);
         data.add(recommandObject);
         return data;
+    }
+
+    public boolean match(String searchText, Paper paper){
+        String title = paper.getTitle();
+        String keyword = paper.getKeyWords();
+
+<<<<<<< HEAD
+        //检测要匹配的单词，单词的前面必须是空格或者标点符号
+        Pattern pattern = Pattern.compile("[^\\w]"+searchText+"[^\\w]");
+
+        Matcher matcher = pattern.matcher("yesterday, I entered  a shop and bought a pencil.");
+
+        boolean result= matcher.find();
+
+        System.out.println(result);
+
+
+        return title.contains(searchText) || keyword.contains(searchText);
+=======
+        String[] list = searchText.split("\\s+");
+        for(String s:list){
+            System.out.println("word: "+s);
+
+            //Pattern pattern = Pattern.compile("[^\\w]*"+s+"[^\\w]*");
+            Pattern pattern = Pattern.compile(".*"+s+".*");
+            Matcher matcher = pattern.matcher(title);
+            boolean result1 = matcher.find();
+            System.out.println("title: "+title);
+            System.out.println("in title?"+result1);
+
+            //pattern = Pattern.compile("[^\\w]"+s+"[^\\w]");
+            matcher = pattern.matcher(keyword);
+            boolean result2 = matcher.find();
+            System.out.println("keyword: "+keyword);
+            System.out.println("in keyWords?"+result2);
+            if(result1 || result2){
+                return true;
+            }
+        }
+        return false;
+>>>>>>> 185af86dfdf6005f416886334dc8430ea9f142cf
     }
 }

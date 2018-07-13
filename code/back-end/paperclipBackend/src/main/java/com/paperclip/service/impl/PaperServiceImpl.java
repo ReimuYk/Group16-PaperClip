@@ -1,11 +1,10 @@
 package com.paperclip.service.impl;
 
-import com.paperclip.dao.entityDao.BlockRepository;
-import com.paperclip.dao.entityDao.PaperPageRepository;
-import com.paperclip.dao.entityDao.PaperRepository;
-import com.paperclip.model.Entity.Block;
-import com.paperclip.model.Entity.Paper;
-import com.paperclip.model.Entity.PaperPage;
+import com.paperclip.dao.entityDao.*;
+import com.paperclip.dao.relationshipDao.BlockPostilRepository;
+import com.paperclip.dao.relationshipDao.UserPostilRepository;
+import com.paperclip.model.Entity.*;
+import com.paperclip.model.Relationship.UserPostil;
 import com.paperclip.service.PaperService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -16,6 +15,7 @@ import sun.misc.BASE64Encoder;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -30,6 +30,18 @@ public class PaperServiceImpl implements PaperService {
 
     @Autowired
     BlockRepository blockRepo;
+
+    @Autowired
+    BlockPostilRepository blockPRepo;
+
+    @Autowired
+    PostilRepository postilRepo;
+
+    @Autowired
+    PostilCommentRepository postilCommRepo;
+
+    @Autowired
+    UserPostilRepository userPRepo;
 
 
     public String GetImageStrFromPath(String imgPath) {
@@ -100,5 +112,69 @@ public class PaperServiceImpl implements PaperService {
         paper.accumulate("marked", marked);
         paper.accumulate("pagenum",pagenum);
         return paper;
+    }
+
+    public JSONArray getBlockPostils(JSONObject data){
+        Long paperID = data.getLong("paperID");
+        String username = data.getString("username");
+        int pagination = data.getInt("pagination");
+        JSONArray blist = data.getJSONArray("selectid");
+        List<Block> blocklist = new ArrayList<Block>();
+        for (int i=0;i<blist.size();i++){
+            Long bid = blist.getLong(i);
+            Block b = blockRepo.findOne(bid);
+            blocklist.add(b);
+        }
+        List<Postil> poslist = blockPRepo.findDistinctPostilByBlock(blocklist);
+        JSONArray res = new JSONArray();
+        for (Postil p:poslist){
+            JSONObject obj = new JSONObject();
+            //postils:{user:xxx,content:xxx,agree:xxx,disagree:xxx}
+            JSONObject postils = new JSONObject();
+            User user = p.getUser();
+            postils.accumulate("user",user.getUsername());
+            postils.accumulate("content",p.getContent());
+            postils.accumulate("agree",p.getAgreement());
+            postils.accumulate("disagree",p.getDisagreement());
+            obj.accumulate("postils",postils);
+            //comments:[{user:xxx,content:xx},{...}]
+            List<PostilComment> pclist = postilCommRepo.findByPostil(p);
+            JSONArray comments = new JSONArray();
+            for (PostilComment pc:pclist){
+                JSONObject commitem = new JSONObject();
+                User u = pc.getUser();
+                commitem.accumulate("user",u.getUsername());
+                commitem.accumulate("content",pc.getContent());
+                comments.add(commitem);
+            }
+            obj.accumulate("comments",comments);
+            //marked: 0/1
+            //agreement:{agreed:T/F,disagreed:T/F}
+            List<UserPostil> uplist = userPRepo.findByUserAndPostil(user,p);
+            JSONObject agreement = new JSONObject();
+            if (uplist.isEmpty()){
+                obj.accumulate("marked",0);
+                agreement.accumulate("agreed",false);
+                agreement.accumulate("disagreed",false);
+            }else{
+                UserPostil up = uplist.get(0);
+                int marked = up.getMark();
+                obj.accumulate("marked",marked);
+                int agr = up.getAgreement();
+                if (agr==-1){
+                    agreement.accumulate("agreed",false);
+                    agreement.accumulate("disagreed",true);
+                }else if (agr==0){
+                    agreement.accumulate("agreed",false);
+                    agreement.accumulate("disagreed",false);
+                }else if (agr==1){
+                    agreement.accumulate("agreed",true);
+                    agreement.accumulate("disagreed",false);
+                }
+            }
+            obj.accumulate("agreement",agreement);
+            res.add(obj);
+        }
+        return res;
     }
 }
