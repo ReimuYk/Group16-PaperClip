@@ -2,51 +2,22 @@ import React, { Component } from 'react';
 import { List, Avatar, Menu, Anchor } from 'antd';
 import { Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
-import username from './loginpage';
 import UserFloatMenu from '../components/userFloatMenu';
 import { IPaddress } from '../App'
 /* should get from server */
-import uh from '../statics/uh.jpg';
 
-const data = [{
-    userName: 'user 1',
-    description: 'description of user 1',
-},{
-    userName: 'user 2',
-    description: 'description of user 2',
-},{
-    userName: 'user 3',
-    description: 'description of user 3',
-},{
-    userName: 'user 4',
-    description: 'description of user 4',
-},{
-    userName: 'user 5',
-    description: 'description of user 5',
-},{
-    userName: 'user 6',
-    description: 'description of user 6',
-},{
-    userName: 'user 7',
-    description: 'description of user 7',
-},{
-    userName: 'user 8',
-    description: 'description of user 8',
-}]
+var username ='';
 
 class StarUser extends Component{
     state = {
         data: [],
-        username:''
     }
     componentWillMount = () => {
-        this.setState({
-            username: username
-        })
+        username = sessionStorage.getItem('username');
         let that = this;
         /* get specific info of users */
         let jsonbody = {};
-        jsonbody.username = this.state.username;
+        jsonbody.username = username;
         let url = IPaddress + 'service/starUser';
         let options={};
         options.method='POST';
@@ -63,13 +34,13 @@ class StarUser extends Component{
             console.log("Oops, error");
         })
     }
-    quitFollow = (item, record) => {
+    quitFollow = (record, item) => {
         let that = this;
         /* tell the server to do something */
         let jsonbody = {};
-        jsonbody.hostname = this.state.username;
+        jsonbody.hostname = username;
         jsonbody.clientname = item.username;
-        let url = IPaddress + 'service/quitStar/doc';
+        let url = IPaddress + 'service/quitStar/user';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -77,8 +48,8 @@ class StarUser extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                let result = eval(responseJson);
-                if(result == "success"){
+                let result = eval('(' + responseJson + ')');
+                if(result.result == "success"){
                     let tmpdata = that.state.data;
                     let dataLen = tmpdata.length;
                     for(let i=0; i<dataLen; i++){
@@ -92,7 +63,7 @@ class StarUser extends Component{
                     })
                 }
                 else{
-                    alert("删除错误，请重试");
+                    alert("取消错误，请重试");
                 }
             }).catch(function(e){
             console.log("Oops, error");
@@ -112,7 +83,7 @@ class StarUser extends Component{
                     style={{textAlign:'left'}}
                     className="demo-loadmore-list"
                     itemLayout="horizontal"
-                    dataSource={data}
+                    dataSource={this.state.data}
                     renderItem={item => (
                     <List.Item actions={[<a onClick={this.quitFollow.bind(this, item)}>取消关注</a>]}>
                         <List.Item.Meta

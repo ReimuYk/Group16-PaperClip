@@ -3,93 +3,10 @@ import React, { Component } from 'react';
 import { List, Avatar, Anchor, Menu, Popconfirm } from 'antd';
 import { Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
-import username from './loginpage';
 import UserFloatMenu from '../components/userFloatMenu';
 import { IPaddress } from '../App'
-/* should get from server */
-import book1 from '../statics/book1.jpg';
-const userID=1;
-const papers = [{
-    ID: 1,
-    cover: book1,
-    title: 'paper 1',
-    author: 'author 1',
-    readno: 111,
-    commentno: 11,
-    noteno: 1,
-    date: '2018-06-01',
-    discription: 'discription of paper 1',
-},{
-    ID: 2,
-    cover: book1,
-    title: 'paper 2',
-    author: 'author 2',
-    readno: 222,
-    commentno: 22,
-    noteno: 2,
-    date: '2018-06-01',
-    discription: 'discription of paper 2',
-},{
-    ID: 3,
-    cover: book1,
-    title: 'paper 3',
-    author: 'author 3',
-    readno: 333,
-    commentno: 33,
-    noteno: 3,
-    date: '2018-06-01',
-    discription: 'discription of paper 3',
-},{
-    ID: 4,
-    cover: book1,
-    title: 'paper 4',
-    author: 'author 4',
-    readno: 444,
-    commentno: 44,
-    noteno: 4,
-    date: '2018-06-01',
-    discription: 'discription of paper 4',
-},{
-    ID: 5,
-    cover: book1,
-    title: 'paper 5',
-    author: 'author 5',
-    readno: 555,
-    commentno: 55,
-    noteno: 5,
-    date: '2018-06-01',
-    discription: 'discription of paper 5',
-},{
-    ID: 6,
-    cover: book1,
-    title: 'paper 6',
-    author: 'author 6',
-    readno: 666,
-    commentno: 66,
-    noteno: 6,
-    date: '2018-06-01',
-    discription: 'discription of paper 6',
-},{
-    ID: 7,
-    cover: book1,
-    title: 'paper 7',
-    author: 'author 7',
-    readno: 777,
-    commentno: 77,
-    noteno: 7,
-    date: '2018-06-01',
-    discription: 'discription of paper 7',
-},{
-    ID: 8,
-    cover: book1,
-    title: 'paper 8',
-    author: 'author 8',
-    readno: 888,
-    commentno: 88,
-    noteno: 8,
-    date: '2018-06-01',
-    discription: 'discription of paper 8',
-}]
+
+var username ='';
 
 class StarPaper extends Component{
     state = {
@@ -97,15 +14,12 @@ class StarPaper extends Component{
         username:''
     }
     componentWillMount = () => {
-        this.setState({
-            username: username
-        })
+        username = sessionStorage.getItem('username');
         let that = this;
         /* get specific info of papers */
         let jsonbody = {};
-        jsonbody.username = this.state.username;
+        jsonbody.username = username;
         let url = IPaddress + 'service/starPaper';
-        console.log(url);
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -113,9 +27,7 @@ class StarPaper extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                console.log(1);
                 let data = eval(responseJson);
-                console.log(data)
                 that.setState({
                     data:data
                 })
@@ -127,7 +39,7 @@ class StarPaper extends Component{
         let that =this;
         /* send to server, refresh this page in get/post request */
         let jsonbody = {};
-        jsonbody.username = this.state.username;
+        jsonbody.username = username;
         jsonbody.paperID = item.ID;
         let url = IPaddress + 'service/quitStar/paper';
         let options={};
@@ -137,7 +49,7 @@ class StarPaper extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                let result = eval(responseJson);
+                let result = eval('(' + responseJson + ')');
                 if(result == "success"){
                     let tmpdata = that.state.data;
                     let dataLen = tmpdata.length;

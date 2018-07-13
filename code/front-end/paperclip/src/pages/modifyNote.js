@@ -1,52 +1,90 @@
 import React, { Component } from 'react';
-import Editor from '.././components/textEditor';
 import {Popconfirm, Popover,Icon,Button,Tag, Input, Tooltip,List,Avatar, Menu, Modal} from 'antd';
 import { IPaddress } from '../App'
+import  { Redirect, Link } from 'react-router-dom'
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 const Search = Input.Search;
 
-const information = {
-    key: 0,
+var information = {
+    noteID: 0,
     title:'',
-    tags:["key1"],
-    initContent:'',
-    invitor:[
-        {
-            username:'大哥'
-        },
-        {
-            username:'大嫂'
-        }
-    ]
+    tags:[],
+    contentHTML:'',
+    contentText:'',
 }
+
+class Editor extends React.Component {
+    constructor (props) {
+        super(props)
+        this.state = {
+            theme: 'snow'
+        }
+        this.handleChange = this.handleChange.bind(this)
+    }
+
+    componentDidMount(){
+        information.content = this.props.initText;
+    }
+
+    handleChange(content, delta, source, editor) {
+        information.contentText = editor.getText();
+        information.contentHTML = content;
+    }
+
+    render () {
+        return (
+            <ReactQuill
+                theme={this.state.theme}
+                onChange={this.handleChange}
+                modules={Editor.modules}
+                formats={Editor.formats}
+                value={information.content}
+                bounds={'.app'}
+                placeholder="请输入内容"
+            />
+        )
+    }
+}
+
+/*
+ * Quill modules to attach to editor
+ * See https://quilljs.com/docs/modules/ for complete options
+ */
+Editor.modules = {
+    toolbar: [
+        [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
+        [{size: []}],
+        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+        [{'list': 'ordered'}, {'list': 'bullet'},
+            {'indent': '-1'}, {'indent': '+1'}],
+        ['link', 'image', 'video'],
+        ['clean']
+    ],
+    clipboard: {
+        // toggle to add extra line breaks when pasting HTML:
+        matchVisual: false,
+    }
+}
+/*
+ * Quill editor formats
+ * See https://quilljs.com/docs/formats/
+ */
+Editor.formats = [
+    'header', 'font', 'size',
+    'bold', 'italic', 'underline', 'strike', 'blockquote',
+    'list', 'bullet', 'indent',
+    'link', 'image', 'video'
+]
 
 class Header extends React.Component {
     state = {
         loading: false,
         visible: false,
         popoverVisible: false,
-        tags:["key1"],
         inputValue:'',
         inputVisible: false,
         colors:["red","magenta","green","blue","geekblue"],
-        invitor:[]
-    }
-
-    componentWillMount = () => {
-        var url = window.location.href;
-        var theRequest = new Object();
-        if ( url.indexOf( "?" ) != -1 ) {
-            var str = url.substr( 1 ); //substr()方法返回从参数值开始到结束的字符串；
-            var strs = str.split( "&" );
-            for ( var i = 0; i < strs.length; i++ ) {
-                theRequest[ strs[ i ].split( "=" )[ 0 ] ] = ( strs[ i ].split( "=" )[ 1 ] );
-            }
-            /* get content of that note */
-            /* here we use fake data */
-            this.setState({
-                tags: information.tags,
-                invitor:information.invitor
-            })
-        }
     }
 
     handleClose = (removedTag) => {
@@ -61,16 +99,15 @@ class Header extends React.Component {
 
     handleInputConfirm = () => {
         var inputValue = this.state.inputValue;
-        var tags = this.state.tags;
+        var tags = information.tags;
         if (inputValue && tags.indexOf(inputValue) === -1) {
             tags = [...tags, inputValue];
         }
-        console.log(tags);
         this.setState({
-            tags:tags,
             inputValue: '',
             inputVisible: false,
         });
+        information.tags = tags;
     }
 
     showInput = () =>{
@@ -80,7 +117,7 @@ class Header extends React.Component {
     }
 
     renderKeyTags(){
-        var tags = this.state.tags;
+        var tags = information.tags;
         var inputVisible = this.state.inputVisible;
         var inputValue = this.state.inputValue;
         var color = this.state.colors;
@@ -132,16 +169,45 @@ class Header extends React.Component {
         this.setState({
             popoverVisible: false,
         });
-        alert("发布成功！");
+        var length = information.tags.length;
+        var keywords ='';
+        for(var i=0;i<length;++i){
+            keywords += information.tags[i] + ';';
+        }
+        let jsonbody = {};
+        jsonbody.noteID = information.docID;
+        jsonbody.noteTitle = information.title;
+        jsonbody.noteContent = information.contentHTML;
+        jsonbody.keywords = keywords;
+
+        var url = IPaddress + 'service/publish/doc';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let data = eval('('+responseJson+')');
+                if(data.result = "fail"){
+                    alert("保存失败，请重试")
+                    return;
+                }
+                window.location.href="/viewnote?noteID="+information.noteID;
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
     }
 
-
-    confirmLeave(){
-        alert('跳转到首页');
+    confirmLeave = () =>{
+        window.location.href="/home";
     }
     cancelLeave(){
     }
     render(){
+        if(sessionStorage.getItem('username') == ''){
+            return <Redirect to="/login"/>;
+        }
         const tags = this.renderKeyTags();
         return (
             <div className="menuHeader">
@@ -155,12 +221,12 @@ class Header extends React.Component {
                     </Menu.Item>
                     <Popover
                         content={tags}
-                        title="给你的笔记添加关键词"
+                        title="给你的文章添加关键词"
                         trigger="click"
                         visible={this.state.popoverVisible}
                         onVisibleChange={this.handleVisibleChange}
                     >
-                        <Button type="primary" style={{float:"right", right:"100px", top:"8px"}}>发布</Button>
+                        <Button type="primary" style={{ float:"right", right:"100px", top:"8px"}}>发布</Button>
                     </Popover>
                 </Menu>
             </div>
@@ -173,25 +239,36 @@ class ModifyNote extends Component{
         initContent:''
     }
     componentWillMount = () => {
-        var url = window.location.href;
-        var theRequest = new Object();
-        if ( url.indexOf( "?" ) != -1 ) {
-            var str = url.substr( 1 ); //substr()方法返回从参数值开始到结束的字符串；
-            var strs = str.split( "&" );
-            for ( var i = 0; i < strs.length; i++ ) {
-                theRequest[ strs[ i ].split( "=" )[ 0 ] ] = ( strs[ i ].split( "=" )[ 1 ] );
-            }
-            var noteKey = this.props.location.search.substring(5);
-            /* get content of that note */
-            /* here we use fake data */
-            this.setState({
-                title: information.title,
-                initContent: information.initContent
-            })
-        }
+        information.noteID = window.location.search.substring(8);//noteID=
+        let username = sessionStorage.getItem('username');
+        let that  = this;
+        let jsonbody = {};
+        jsonbody.username = username;
+        jsonbody.noteID = information.noteID;
+        var url = IPaddress + 'service/modify/noteDetail';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                console.log(responseJson);
+                let data = eval('('+responseJson+')');
+                information.title = data.title;
+                information.contentHTML = data.content;
+                that.setState({
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
+    }
+
+    handleInputChange = (e) => {
+        information.title = e.target.value;
     }
     render(){
-
+        //const side = this.renderSideCard();
         return(
             <div>
                 <Header />
@@ -199,6 +276,8 @@ class ModifyNote extends Component{
                     <input
                         style={{fontSize:"35px",fontWeight:"bolder",border:"none",outline:"none", textAlign:"center"}}
                         placeholder="请输入标题"
+                        value={information.title}
+                        onChange={this.handleInputChange}
                     />
                     <div className="editor" style={{marginTop:"30px"}}>
                         <Editor initText={<p>{this.state.initContent}</p>}/>

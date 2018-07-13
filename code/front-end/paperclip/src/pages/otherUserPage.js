@@ -6,91 +6,21 @@ import NavBar from '.././components/nav-bar';
 import UserFloatMenu from '../components/userFloatMenu';
 import { IPaddress } from '../App'
 /* should get from server */
-import uh1 from '../statics/uh.jpg';
-const followno = 8;
-const fensno   = 8;
-const userID = 1;
-const username = '用户名';
-const userIntro = '用户描述';
-const usersMoment = [{
-    ID: 1,
-    title: '用户动态 1',
-    discription: 'discription of 用户动态 1',
-},{
-    ID: 2,
-    title: '用户动态 2',
-    discription: 'discription of 用户动态 2',
-},{
-    ID: 3,
-    title: '用户动态 3',
-    discription: 'discription of 用户动态 3',
-},{
-    ID: 4,
-    title: '用户动态 4',
-    discription: 'discription of 用户动态 4',
-},{
-    ID: 5,
-    title: '用户动态 5',
-    discription: 'discription of 用户动态 5',
-},{
-    ID: 6,
-    title: '用户动态 6',
-    discription: 'discription of 用户动态 6',
-},{
-    ID: 7,
-    title: '用户动态 7',
-    discription: 'discription of 用户动态 7',
-},{
-    ID: 8,
-    title: '用户动态 8',
-    discription: 'discription of 用户动态 8',
-},{
-    ID: 9,
-    title: '用户动态 9',
-    discription: 'discription of 用户动态 9',
-},{
-    ID: 10,
-    title: '用户动态 10',
-    discription: 'discription of 用户动态 10',
-},{
-    ID: 11,
-    title: '用户动态 11',
-    discription: 'discription of 用户动态 11',
-},{
-    ID: 12,
-    title: '用户动态 12',
-    discription: 'discription of 用户动态 12',
-},{
-    ID: 13,
-    title: '用户动态 13',
-    discription: 'discription of 用户动态 13',
-},{
-    ID: 14,
-    title: '用户动态 14',
-    discription: 'discription of 用户动态 14',
-},{
-    ID: 15,
-    title: '用户动态 15',
-    discription: 'discription of 用户动态 15',
-},{
-    ID: 16,
-    title: '用户动态 16',
-    discription: 'discription of 用户动态 16',
-}]
 
-
+var username='';
+var information = {
+    avatar:'',
+    username:'',
+    fansno:0,
+    userDescription:'',
+}
 const { TextArea } = Input;
 const { Header, Content, Footer } = Layout;
 class OtherUserPage extends Component{
     state = {
-        userheader:'',
-        selfUsername:'',
-        username:'',
-        fensno:0,
-        userDescription:'',
         visible: false,
         mailContent: '',
-        data: usersMoment,
+        moment: [],
     }
     showModal = () => {
         this.setState({
@@ -104,8 +34,8 @@ class OtherUserPage extends Component{
         }
         let that  = this;
         let jsonbody = {};
-        jsonbody.hostname = this.state.selfUsername;
-        jsonbody.clientname = this.state.username;
+        jsonbody.hostname = username;
+        jsonbody.clientname = information.username;
         jsonbody.content = this.state.mailContent;
         let url = IPaddress + 'service/sendMessage';
         let options={};
@@ -115,8 +45,10 @@ class OtherUserPage extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                that.setState({
-                })
+                let result = eval('('+responseJson+')');
+                if(result.result == "fail"){
+                    alert("关注失败，请重试");
+                }
             }).catch(function(e){
             console.log("Oops, error");
         });
@@ -132,16 +64,14 @@ class OtherUserPage extends Component{
         this.clearInput();
     }
     componentWillMount = () => {
-        var urlUserID = this.props.location.search.substring(10);//username=
-        let that = this;
-        /* get username */
-        this.setState({
-            selfUsername: username,
-            username: urlUserID
-        })
-        /* get data according to username */
+        information.username = this.props.location.search.substring(10);//username=
+        username = sessionStorage.getItem('username');
+        if(username == information.username){
+            window.location.href = "/user";
+        }
+
         let jsonbody = {};
-        jsonbody.username = this.state.username;
+        jsonbody.username = information.username;
         let url = IPaddress + 'service/clientInfo';
         let options={};
         options.method='POST';
@@ -150,8 +80,11 @@ class OtherUserPage extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                that.setState({
-                })
+                let data = eval('('+responseJson+')');
+                information.avatar = data.userheader;
+                information.fansno = data.fensno;
+                information.userDescription = data.userDescription;
+
             }).catch(function(e){
             console.log("Oops, error");
         })
@@ -160,8 +93,8 @@ class OtherUserPage extends Component{
         let that = this;
         /* get data according to username */
         let jsonbody = {};
-        jsonbody.hostname = this.state.selfUsername;
-        jsonbody.clientname = this.state.username;
+        jsonbody.hostname = username;
+        jsonbody.clientname = information.username;
         let url = IPaddress + 'service/follow';
         let options={};
         options.method='POST';
@@ -170,8 +103,8 @@ class OtherUserPage extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                let result = eval(responseJson);
-                if(result == "fail"){
+                let result = eval('('+responseJson+')');
+                if(result.result == "fail"){
                     alert("关注失败，请重试");
                 }
             }).catch(function(e) {
@@ -205,7 +138,7 @@ class OtherUserPage extends Component{
                 <div>
                 <div id='u1'>
                     <div id='u1-1'>
-                        <img alt='' src={ this.state.userheader }
+                        <img alt='' src={ information.avatar }
                         style={{width:130,height:'130px',borderRadius:'50%',margin:'0 auto',display:'block'}}
                         />
                     </div>
@@ -214,12 +147,12 @@ class OtherUserPage extends Component{
                         <br />
                         <br />
                         <br />
-                        <h6>{ this.state.username }</h6>
-                        <p>{ this.state.userDescription }</p>
+                        <h6>{ information.username }</h6>
+                        <p>{ information.userDescription }</p>
                     </div>
                     <div id='u1-3'>
                         <Button style={{width:"100px"}} size="large" type="primary" onClick={this.showModal}><Icon type='mail' />发私信</Button>
-                        <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary" onClick={this.followUser}><Icon type='plus-square-o' />关注</Button>
+                        <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary" onClick={this.followUser}><Icon type='plus-square-o' />关注 { information.fansno }</Button>
                     </div>
                 </div>
                 </div>
@@ -246,10 +179,9 @@ class OtherUserPage extends Component{
                             renderItem={item => (
                             <List.Item>
                                 <List.Item.Meta
-                                avatar={<Avatar src={uh1} />}
-                                
+                                avatar={<Avatar src={item.avatar} />}
                                 title={<a href="/home">{item.title}</a>}
-                                description={item.discription}
+                                description={item.description}
                                 />
                             </List.Item>
                             )}

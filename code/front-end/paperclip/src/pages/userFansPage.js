@@ -33,7 +33,7 @@ const data = [{
     description: 'description of fens 8',
 }]
 
-class UserFens extends Component{
+class UserFans extends Component{
     state = {
         data: [],
         username:''
@@ -117,4 +117,4 @@ class UserFens extends Component{
     }
 }
 
-export default UserFens;
+export default UserFans;

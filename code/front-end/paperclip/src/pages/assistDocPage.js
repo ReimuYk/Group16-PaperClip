@@ -81,7 +81,7 @@ const docs = [{
     date: '2018-05-08',
     description: 'description of doc 8',
 }]
-class StarDoc extends Component{
+class AssistDoc extends Component{
     state = {
         username: '',
         data: []
@@ -197,4 +197,4 @@ class StarDoc extends Component{
     }
 }
 
-export default StarDoc;
+export default AssistDoc;

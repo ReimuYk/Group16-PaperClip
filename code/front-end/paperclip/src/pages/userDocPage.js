@@ -6,62 +6,16 @@ import UserFLoatMenu from '../components/userFloatMenu';
 /* should get from server */
 import book1 from '../statics/book1.jpg';
 import { IPaddress } from '../App'
-const docs = [{
-    ID: 1,
-    title: 'doc 1',
-    date: '2018-07-01',
-    description: 'description of doc 1',
-},{
-    ID: 2,
-    title: 'doc 2',
-    date: '2018-07-01',
-    description: 'description of doc 2',
-},{
-    ID: 3,
-    title: 'doc 3',
-    cover: book1,
-    date: '2018-07-01',
-    description: 'description of doc 3',
-},{
-    ID: 4,
-    title: 'doc 4',
-    date: '2018-07-01',
-    description: 'description of doc 4',
-},{
-    ID: 5,
-    title: 'doc 5',
-    date: '2018-07-01',
-    description: 'description of doc 5',
-},{
-    ID: 6,
-    title: 'doc 6',
-    date: '2018-07-01',
-    description: 'description of doc 6',
-},{
-    ID: 7,
-    title: 'doc 7',
-    date: '2018-07-01',
-    description: 'description of doc 7',
-},{
-    ID: 8,
-    title: 'doc 8',
-    cover: book1,
-    date: '2018-07-01',
-    description: 'description of doc 8',
-}]
 
+var username = '';
 class UserDoc extends Component{
     state = {
         data: [],
-        username: ''
     }
     componentWillMount = () => {
         let that = this;
         /* get username */
-        let username = sessionStorage.getItem('username');
-        this.setState({
-            username: username
-        })
+        username = sessionStorage.getItem('username');
         /* get docs according to username */
         let jsonbody = {};
         jsonbody.username = username;
@@ -74,7 +28,6 @@ class UserDoc extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                console.log(responseJson);
                 let data = eval(responseJson);
                 that.setState({
                     data: data
@@ -96,8 +49,8 @@ class UserDoc extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                let result = eval(responseJson);
-                if(result == "success"){
+                let result = eval('('+responseJson+')');
+                if(result.result == "success"){
                     let tmpdata = that.state.data;
                     let dataLen = tmpdata.length;
                     for(let i=0; i<dataLen; i++){
@@ -127,8 +80,30 @@ class UserDoc extends Component{
             description: 'description of doc 1',
         };
         tmpdata.push(obj);
-        this.setState({
-            data: tmpdata
+
+        let jsonbody = {};
+        jsonbody.username = username;
+        jsonbody.title = '新建文档';
+        jsonbody.content='';
+        let url = IPaddress + 'service/addDoc';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let result = eval('(' + responseJson + ')');
+                if(result.result == "fail"){
+                    alert("新建失败，请重试");
+                }
+                else{
+                    this.setState({
+                        data: tmpdata
+                    })
+                }
+            }).catch(function(e){
+            console.log("Oops, error");
         })
     }
     render(){

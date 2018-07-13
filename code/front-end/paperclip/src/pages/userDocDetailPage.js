@@ -2,80 +2,25 @@ import React, { Component } from 'react';
 import { List, Avatar, Popconfirm, Menu, Anchor, Button } from 'antd';
 import { Link, Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
-import {username} from './loginpage';
 import UserFloatMenu from '../components/userFloatMenu';
 /* should get from server */
-import book1 from '../statics/book1.jpg';
 import { IPaddress } from '../App'
-const docs = [{
-    ID: 1,
-    title: 'doc 1',
-    cover: book1,
-    date: '2018-07-01',
-    description: 'description of doc 1',
-},{
-    ID: 2,
-    title: 'doc 2',
-    cover: book1,
-    date: '2018-07-01',
-    description: 'description of doc 2',
-},{
-    ID: 3,
-    title: 'doc 3',
-    cover: book1,
-    date: '2018-07-01',
-    description: 'description of doc 3',
-},{
-    ID: 4,
-    title: 'doc 4',
-    cover: book1,
-    date: '2018-07-01',
-    description: 'description of doc 4',
-},{
-    ID: 5,
-    title: 'doc 5',
-    cover: book1,
-    date: '2018-07-01',
-    description: 'description of doc 5',
-},{
-    ID: 6,
-    title: 'doc 6',
-    cover: book1,
-    date: '2018-07-01',
-    description: 'description of doc 6',
-},{
-    ID: 7,
-    title: 'doc 7',
-    cover: book1,
-    date: '2018-07-01',
-    description: 'description of doc 7',
-},{
-    ID: 8,
-    title: 'doc 8',
-    cover: book1,
-    date: '2018-07-01',
-    description: 'description of doc 8',
-}]
+
+var username ='';
+var docID = 0;
 
 class UserDocDetail extends Component{
     state = {
         data: [],
-        username:'',
-        docID:0
     }
     componentWillMount = () => {
-        var urlDocID = this.props.location.search.substring(7);//7 == 'docID='.length+1
+        docID = this.props.location.search.substring(7);//7 == 'docID='.length+1
+        username = sessionStorage.getItem('username');
+
         let that = this;
-        /* get username */
-        this.setState({
-            username: username,
-            docID: urlDocID
-        })
-        /* get docs according to username */
         let jsonbody = {};
         jsonbody.username = username;
-        console.log(username);
-        jsonbody.docID = urlDocID;
+        jsonbody.docID = docID;
         let url = IPaddress + 'service/userDocDetail';
         let options={};
         options.method='POST';
@@ -85,8 +30,9 @@ class UserDocDetail extends Component{
             .then(response=>response.text())
             .then(responseJson=>{
                 let data = eval(responseJson);
+
                 that.setState({
-                    data: data
+                    data: data.docs
                 })
             }).catch(function(e){
             console.log("Oops, error");

@@ -3,95 +3,17 @@ import { List, Avatar, Anchor, Menu, Popconfirm } from 'antd';
 import { Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import UserFloatMenu from '../components/userFloatMenu';
-/* should get from server */
-import book1 from '../statics/book1.jpg';
 import { IPaddress } from '../App'
-// const userID=1;
-const notes = [{
-    ID: 1,
-    cover: book1,
-    title: 'note 1',
-    author: 'author 1',
-    readno: 111,
-    starno: 1,
-    date: '2018-05-01',
-    discription: 'discription of note 1',
-},{
-    ID: 2,
-    cover: book1,
-    title: 'note 2',
-    author: 'author 2',
-    readno: 222,
-    starno: 2,
-    date: '2018-05-02',
-    discription: 'discription of note 2',
-},{
-    ID: 3,
-    cover: book1,
-    title: 'note 3',
-    author: 'author 3',
-    readno: 333,
-    starno: 3,
-    date: '2018-05-03',
-    discription: 'discription of note 3',
-},{
-    ID: 4,
-    cover: book1,
-    title: 'note 4',
-    author: 'author 4',
-    readno: 444,
-    starno: 4,
-    date: '2018-05-04',
-    discription: 'discription of note 4',
-},{
-    ID: 5,
-    cover: book1,
-    title: 'note 5',
-    author: 'author 5',
-    readno: 555,
-    starno: 5,
-    date: '2018-05-05',
-    discription: 'discription of note 5',
-},{
-    ID: 6,
-    cover: book1,
-    title: 'note 6',
-    author: 'author 6',
-    readno: 666,
-    starno: 6,
-    date: '2018-05-06',
-    discription: 'discription of note 6',
-},{
-    ID: 7,
-    cover: book1,
-    title: 'note 7',
-    author: 'author 7',
-    readno: 777,
-    starno: 7,
-    date: '2018-05-07',
-    discription: 'discription of note 7',
-},{
-    ID: 8,
-    cover: book1,
-    title: 'note 8',
-    author: 'author 8',
-    readno: 888,
-    starno: 8,
-    date: '2018-05-08',
-    discription: 'discription of note 8',
-}]
 
+var username ='';
 class StarNote extends Component{
     state = {
         data: [],
-        username: ''
     }
     componentWillMount = () => {
         /* notes should get from server */
-        let username = sessionStorage.getItem('username');
-        this.setState({
-            username: username
-        })
+        username = sessionStorage.getItem('username');
+
         let that = this;
         /* get specific info of notes */
         let jsonbody = {};
@@ -115,7 +37,7 @@ class StarNote extends Component{
     quitStar = (record, item) => {
         let that = this;
         let jsonbody = {};
-        jsonbody.username = this.state.username;
+        jsonbody.username = username;
         jsonbody.noteID = item.ID;
         let url = IPaddress + 'service/quitStar/note';
         let options={};
@@ -125,7 +47,7 @@ class StarNote extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                let result = eval(responseJson);
+                let result = eval('(' + responseJson + ')');
                 if(result == "success"){
                     let tmpdata = that.state.data;
                     let dataLen = tmpdata.length;
@@ -140,7 +62,7 @@ class StarNote extends Component{
                     })
                 }
                 else{
-                    alert("删除错误，请重试");
+                    alert("取消错误，请重试");
                 }
             }).catch(function(e){
             console.log("Oops, error");
