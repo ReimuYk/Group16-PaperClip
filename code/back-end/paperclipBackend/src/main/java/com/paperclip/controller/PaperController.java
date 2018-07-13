@@ -26,4 +26,11 @@ public class PaperController {
     JSONArray getBlockPostils(@RequestBody JSONObject data){
         return paperService.getBlockPostils(data);
     }
+
+    @RequestMapping(value = "/service/statPostil",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONObject markPostil(@RequestBody JSONObject data){
+        return paperService.statPostil(data);
+    }
 }

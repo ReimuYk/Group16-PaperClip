@@ -43,6 +43,9 @@ public class PaperServiceImpl implements PaperService {
     @Autowired
     UserPostilRepository userPRepo;
 
+    @Autowired
+    UserRepository userRepo;
+
 
     public String GetImageStrFromPath(String imgPath) {
         InputStream in = null;
@@ -132,6 +135,7 @@ public class PaperServiceImpl implements PaperService {
             //postils:{user:xxx,content:xxx,agree:xxx,disagree:xxx}
             JSONObject postils = new JSONObject();
             User user = p.getUser();
+            postils.accumulate("posID",p.getId());
             postils.accumulate("user",user.getUsername());
             postils.accumulate("content",p.getContent());
             postils.accumulate("agree",p.getAgreement());
@@ -175,6 +179,39 @@ public class PaperServiceImpl implements PaperService {
             obj.accumulate("agreement",agreement);
             res.add(obj);
         }
+        return res;
+    }
+
+    public JSONObject statPostil(JSONObject data){
+        Long posID = data.getLong("posID");
+        String username = data.getString("username");
+        int marked = data.getInt("marked");
+        JSONObject agreement = data.getJSONObject("agreement");
+
+        Postil pos = postilRepo.findOne(posID);
+        User user = userRepo.findOne(username);
+        List<UserPostil> uplist = userPRepo.findByUserAndPostil(user,pos);
+        if (uplist.isEmpty()){
+            UserPostil up = new UserPostil(user,pos);
+            up.setMark(marked);
+            if (agreement.getBoolean("agreed")){
+                up.setAgreement(1);
+            }else if (agreement.getBoolean("disagreement")){
+                up.setAgreement(-1);
+            }
+            userPRepo.save(up);
+        }else{
+            UserPostil up = uplist.get(0);
+            up.setMark(marked);
+            if (agreement.getBoolean("agreed")){
+                up.setAgreement(1);
+            }else if (agreement.getBoolean("disagreement")){
+                up.setAgreement(-1);
+            }
+            userPRepo.save(up);
+        }
+        JSONObject res = new JSONObject();
+        res.accumulate("stat","success");
         return res;
     }
 }
