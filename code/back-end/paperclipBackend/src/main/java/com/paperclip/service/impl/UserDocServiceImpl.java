@@ -133,18 +133,18 @@ public class UserDocServiceImpl implements UserDocService {
         // check if this user has access
         if(!hasAccess(user, docID)){
             result.accumulate("result", "fail");
-            return result;
-        }
+        }else {
 
-        List<DocumentPdf> docPdfList = docPdfRepo.findByDocument(doc);
-        Iterator<DocumentPdf> documentPdfIterator = docPdfList.iterator();
+            List<DocumentPdf> docPdfList = docPdfRepo.findByDocument(doc);
+            Iterator<DocumentPdf> documentPdfIterator = docPdfList.iterator();
 
-        while (documentPdfIterator.hasNext()){
-            DocumentPdf docPdf = documentPdfIterator.next();
-            docPdfRepo.delete(docPdf.getId());
+            while (documentPdfIterator.hasNext()) {
+                DocumentPdf docPdf = documentPdfIterator.next();
+                docPdfRepo.delete(docPdf.getId());
+            }
+            docRepo.delete(doc.getId());
+            result.accumulate("result", "success");
         }
-        docRepo.delete(doc.getId());
-        result.accumulate("result", "success");
         return result;
     }
 
@@ -172,8 +172,7 @@ public class UserDocServiceImpl implements UserDocService {
         JSONObject result = new JSONObject();
         if(!hasAccess(user, docID)) {
             result.accumulate("result", "fail");
-        }
-        else{
+        }else{
             Document doc = docRepo.findOne(docID);
             String content = data.getString("content");
             String title = data.getString("title");
@@ -190,9 +189,9 @@ public class UserDocServiceImpl implements UserDocService {
         JSONObject result = new JSONObject();
         String hostname = data.getString("hostname");
         String clientname = data.getString("clientname");
+        Long docID = data.getLong("docID");
         User host = userRepo.findOne(hostname);
         User client = userRepo.findOne(clientname);
-        Long docID = data.getLong("docID");
         Document doc = docRepo.findOne(docID);
         if(!doc.getUser().getUsername().equals(hostname)){
             result.accumulate("result", "fail");
@@ -207,23 +206,31 @@ public class UserDocServiceImpl implements UserDocService {
     public JSONArray getContributeDoc(JSONObject data) {
         JSONArray docs = new JSONArray();
 
-        JSONObject doc = new JSONObject();
-        doc.accumulate("docID", 7);
-        doc.accumulate("title", "doc title");
-        doc.accumulate("author", "MKK NB");
-        doc.accumulate("date", "2017-06-08");
-
-        docs.add(doc);
+        String username = data.getString("username");
+        User user = userRepo.findOne(username);
+        List<Assist> assistList = assistRepo.findByUser(user);
+        Iterator<Assist> assistIterator = assistList.iterator();
+        while(assistIterator.hasNext()){
+            Assist assist = assistIterator.next();
+            Document doc = assist.getDocument();
+            JSONObject docJson = new JSONObject();
+            docJson.accumulate("docID", doc.getId());
+            docJson.accumulate("title", doc.getTitle());
+            docJson.accumulate("author", doc.getUser().getUsername());
+            docs.add(doc);
+        }
         return docs;
     }
 
     public JSONObject addDoc(JSONObject data) {
         JSONObject result = new JSONObject();
-        if(true){
-            result.accumulate("result", "success");
-        }else{
-            result.accumulate("result", "fail");
-        }
+        String username = data.getString("username");
+        String title = data.getString("title");
+        String content = data.getString("content");
+        User user = userRepo.findOne(username);
+        Document doc = new Document(user, title, content);
+        docRepo.save(doc);
+        result.accumulate("result", "success");
         return result;
     }
 
