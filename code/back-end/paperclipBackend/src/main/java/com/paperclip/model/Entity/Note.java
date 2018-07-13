@@ -14,7 +14,7 @@ public class Note {
     @JoinColumn(name="paperId",referencedColumnName = "id")
     private Paper paper;//foreign key
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name="username",referencedColumnName = "username")
     private User user;//foreign key
 
@@ -26,8 +26,22 @@ public class Note {
     private String keyWords;
     @Column(name = "date",nullable = false)
     private Date date;
+    @Column(name = "agreement",nullable = false)
+    private Integer agreement;
+    @Column(name = "disagreement",nullable = false)
+    private Integer disagreement;
 
     public Note(){};
+    public Note(Paper paper,User user){
+        this.paper = paper;
+        this.user = user;
+        this.title = "";
+        this.content = "";
+        this.keyWords = "";
+        this.date = new Date();
+        this.agreement = 0;
+        this.disagreement = 0;
+    }
     public Note(Paper paper,User user,String title,String content,String keyWords){
         this.paper = paper;
         this.user = user;
@@ -35,6 +49,8 @@ public class Note {
         this.content = content;
         this.keyWords = keyWords;
         this.date = new Date();
+        this.agreement = 0;
+        this.disagreement = 0;
     }
 
     public Long getId() {
@@ -87,5 +103,13 @@ public class Note {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void setAgreement(Integer agreement) {
+        this.agreement = agreement;
+    }
+
+    public Integer getAgreement() {
+        return agreement;
     }
 }
