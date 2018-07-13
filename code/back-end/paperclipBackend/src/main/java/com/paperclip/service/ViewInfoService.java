@@ -17,4 +17,7 @@ public interface ViewInfoService {
 
     // UserFansPage.js
     public JSONArray getUserFans(JSONObject data);
+
+    // viewDocPage.js
+    public JSONObject getViewDocDetail(JSONObject data);
 }

@@ -63,4 +63,15 @@ public class ViewInfoController {
     JSONArray getUserFans(@RequestBody JSONObject data) {
         return viewInfoService.getUserFans(data);
     }
+
+    /*********************************************** doc *************************************************/
+    /******************
+     * viewDocPage
+     ******************/
+    @RequestMapping(value = "/service/docDetail",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONObject getViewDocDetail(@RequestBody JSONObject data) {
+        return viewInfoService.getViewDocDetail(data);
+    }
 }
