@@ -1,22 +1,64 @@
 package com.paperclip.service.impl;
 
-import com.paperclip.dao.entityDao.DocumentPdfRepository;
-import com.paperclip.model.Entity.DocumentPdf;
+import com.paperclip.dao.entityDao.DocumentRepository;
+import com.paperclip.dao.entityDao.UserRepository;
+import com.paperclip.dao.relationshipDao.FollowRepository;
+import com.paperclip.model.Entity.Document;
+import com.paperclip.model.Entity.User;
+import com.paperclip.model.Relationship.Follow;
 import com.paperclip.service.ViewInfoService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Iterator;
+import java.util.List;
+
 @Service
 public class ViewInfoServiceImpl implements ViewInfoService {
+
     @Autowired
-    private DocumentPdfRepository docPdfRepo;
+    FollowRepository followRepo;
+
+    @Autowired
+    UserRepository userRepo;
+
+    @Autowired
+    DocumentRepository docRepo;
 
     // get this user's fans
     public JSONArray getUserFans(JSONObject data) {
         JSONArray fans = new JSONArray();
+
+        String username = data.getString("username");
+        User user = userRepo.findOne(username);
+        List<Follow> followList = followRepo.findByFollowee(user);
+        Iterator<Follow> followIterable = followList.iterator();
+        while(followIterable.hasNext()){
+            Follow follow = followIterable.next();
+            User follower = follow.getFollower();
+            JSONObject fan = new JSONObject();
+            fan.accumulate("username", follower.getUsername());
+            fan.accumulate("description", follower.getDescription());
+            fan.accumulate("userheader", follower.getAvatar());
+            fans.add(fan);
+        }
         return fans;
+    }
+
+    public JSONObject getViewDocDetail(JSONObject data) {
+        JSONObject docJson = new JSONObject();
+        Long docID = data.getLong("docID");
+        Document doc = docRepo.findOne(docID);
+        // the doc dose not exist
+        if(doc==null)
+            return docJson;
+        docJson.accumulate("docID", doc.getId());
+        docJson.accumulate("title", doc.getTitle());
+        docJson.accumulate("content", doc.getContent());
+        docJson.accumulate("author", doc.getUser().getUsername());
+        return docJson;
     }
 
     public JSONArray getHomeInfo(JSONObject data) {
@@ -94,26 +136,20 @@ public class ViewInfoServiceImpl implements ViewInfoService {
 
     public JSONObject modifyUserInfo(JSONObject data) {
         JSONObject result = new JSONObject();
-        if(true){
-            result.accumulate("result", "success");
-        }else{
+        String username = data.getString("username");
+        String password = data.getString("password");
+        String userHeader = data.getString("userheader");
+        String description = data.getString("description");
+        User user = userRepo.findOne(username);
+        if(user == null){
             result.accumulate("result", "fail");
+        }else{
+            user.setAvatar(userHeader);
+            user.setPassword(password);
+            user.setDescription(description);
+            userRepo.save(user);
+            result.accumulate("result", "success");
         }
         return result;
-    }
-
-    public JSONObject getViewDocDetail(JSONObject data) {
-        Long id = data.getLong("versionID");
-
-        DocumentPdf docp = docPdfRepo.findOne(id);
-
-        JSONObject doc = new JSONObject();
-        if(docp != null) {
-            doc.accumulate("author", docp.getAuthor());
-            doc.accumulate("version", docp.getVersion());
-            doc.accumulate("date", docp.getDate());
-            doc.accumulate("title", docp.getTitle());
-        }
-        return doc;
     }
 }
