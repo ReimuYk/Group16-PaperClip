@@ -187,29 +187,29 @@ public class PaperServiceImpl implements PaperService {
         String username = data.getString("username");
         int marked = data.getInt("marked");
         JSONObject agreement = data.getJSONObject("agreement");
+        JSONArray flag = data.getJSONArray("flag");
 
         Postil pos = postilRepo.findOne(posID);
+        pos.setAgreement(pos.getAgreement()+flag.getInt(0));
+        pos.setDisagreement(pos.getDisagreement()+flag.getInt(1));
+        postilRepo.save(pos);
         User user = userRepo.findOne(username);
         List<UserPostil> uplist = userPRepo.findByUserAndPostil(user,pos);
+        UserPostil up;
         if (uplist.isEmpty()){
-            UserPostil up = new UserPostil(user,pos);
-            up.setMark(marked);
-            if (agreement.getBoolean("agreed")){
-                up.setAgreement(1);
-            }else if (agreement.getBoolean("disagreement")){
-                up.setAgreement(-1);
-            }
-            userPRepo.save(up);
+            up = new UserPostil(user,pos);
         }else{
-            UserPostil up = uplist.get(0);
-            up.setMark(marked);
-            if (agreement.getBoolean("agreed")){
-                up.setAgreement(1);
-            }else if (agreement.getBoolean("disagreement")){
-                up.setAgreement(-1);
-            }
-            userPRepo.save(up);
+            up = uplist.get(0);
         }
+        up.setMark(marked);
+        if (agreement.getBoolean("agreed")){
+            up.setAgreement(1);
+        }else if (agreement.getBoolean("disagreed")){
+            up.setAgreement(-1);
+        }else{
+            up.setAgreement(0);
+        }
+        userPRepo.save(up);
         JSONObject res = new JSONObject();
         res.accumulate("stat","success");
         return res;

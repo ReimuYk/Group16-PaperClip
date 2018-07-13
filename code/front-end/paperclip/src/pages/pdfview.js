@@ -78,7 +78,7 @@ class PDFView extends Component{
         //test event
         var postilsData = [
             {
-                postils:{user:"大哥大哥",content:"来测试一下",agree:10,disagree:2},
+                postils:{posID:1,user:"大哥大哥",content:"来测试一下",agree:10,disagree:2},
                 comments:[{user:"咸鱼",content:"nn"},{user:"哇",content:"2"}],
                 marked:0,
                 agreement:{agreed:false,disagreed:false}
