@@ -2,15 +2,11 @@ import React, { Component } from 'react';
 import '../css/LoginPage.css'
 import { Link,Redirect } from 'react-router-dom';
 import { IPaddress } from '../App'
-export var log1 = false;
 class RegisterPage extends Component {
     constructor(props){
         super(props);
         this.isEmailAvailable = this.isEmailAvailable.bind(this);
         this.checkRegister = this.checkRegister.bind(this);
-        this.state = {
-            isLog:false
-        }
     }
     isEmailAvailable(str){
         var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
@@ -29,15 +25,29 @@ class RegisterPage extends Component {
             alert("邮箱错误！");
             return false;
         }
-        alert(username);
-        alert(password);
-        this.setState({isLog:true});
-        log1 = true;
+        let that  = this;
+        let jsonbody = {};
+        jsonbody.email = email;
+        jsonbody.password = password;
+        jsonbody.username = username;
+        let url = IPaddress + 'service/register';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                that.setState({
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
+        });
         return true;
     }
     render() {
-        if(this.state.isLog){
-            return <Redirect to="/"/>;
+        if(sessionStorage.getItem('username') != ''){
+            return <Redirect to="/user"/>;
         }
         return (
             <section id='register-page'>

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { List, Avatar, Popconfirm, Menu, Anchor, Button } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
-import username from './loginpage';
+import {username} from './loginpage';
 import UserFloatMenu from '../components/userFloatMenu';
 /* should get from server */
 import book1 from '../statics/book1.jpg';
@@ -60,18 +60,23 @@ const docs = [{
 class UserDocDetail extends Component{
     state = {
         data: [],
-        username:''
+        username:'',
+        docID:0
     }
     componentWillMount = () => {
+        var urlDocID = this.props.location.search.substring(7);//7 == 'docID='.length+1
         let that = this;
         /* get username */
         this.setState({
-            username: username
+            username: username,
+            docID: urlDocID
         })
         /* get docs according to username */
         let jsonbody = {};
-        jsonbody.username = this.state.username;
-        let url = IPaddress + 'service/starDoc';
+        jsonbody.username = username;
+        console.log(username);
+        jsonbody.docID = urlDocID;
+        let url = IPaddress + 'service/userDocDetail';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -81,55 +86,53 @@ class UserDocDetail extends Component{
             .then(responseJson=>{
                 let data = eval(responseJson);
                 that.setState({
-                    data:data
+                    data: data
                 })
             }).catch(function(e){
             console.log("Oops, error");
         })
     }
     deleteDoc = (record, item) => {
-        console.log('want to delete doc id(ID):', item.ID);
-        /* send ID to server */
-        var that = this;
-        var tmpdata = that.state.data;
-        var dataLen = tmpdata.length;
-        for(let i=0; i<dataLen; i++){
-            if(tmpdata[i].ID == item.ID){
-                tmpdata.splice(i, 1);
-                break;
-            }
-        }
-        console.log('want to quit star paper: id(ID): ', item.ID-1);
-        that.setState({
-            data: tmpdata,
-        })
-    }
-    newDoc = () => {
-        var tmpdata = this.state.data;
-        var obj = {
-            ID: 1,
-            title: '新建文档',
-            cover: book1,
-            date: '2018-07-01',
-            description: 'description of doc 1',
-        };
-        tmpdata.push(obj);
-        this.setState({
-            data: tmpdata
+        let that = this;
+        /* get username */
+        /* get docs according to username */
+        let jsonbody = {};
+        jsonbody.versionID = item.versionID;
+        jsonbody.username = username;
+        let url = IPaddress + 'service/delete/docVersion';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                var tmpdata = that.state.data;
+                var dataLen = tmpdata.length;
+                for(let i=0; i<dataLen; i++){
+                    if(tmpdata[i].ID == item.ID){
+                        tmpdata.splice(i, 1);
+                        break;
+                    }
+                }
+                that.setState({
+                    data: tmpdata,
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
         })
     }
     render(){
+        if(sessionStorage.getItem('username') == ''){
+            return <Redirect to="/login"/>;
+        }
         return(
             <div>
                 <NavBar />
             
             <UserFloatMenu />
             <div style={{width:'60%',marginLeft:'200px'}}>
-                <div className="button" style={{width:"100%", height:"50px"}}>
-                    <Button style={{float:"right"}} type="primary" onClick={this.newDoc}>新建文档</Button>
-                </div>
                 <div className="content">
-                    <p style={{marginLeft:'490px'}}>上次修改日期</p>
                     <List
                         style={{textAlign:'left'}}
                         itemLayout="horizontal"
@@ -137,17 +140,14 @@ class UserDocDetail extends Component{
                         renderItem={item => (
                             <List.Item
                                 actions={[<p>
-                                    <a style={{width:'75px'}} href={"/user/writedoc?ID="+item.ID}>查看内容</a>
+                                    <a style={{width:'75px'}} href={"/user/paperpage?ID="+item.ID}>查看内容</a>
                                     <Popconfirm title="确定删除吗？" onConfirm={() => this.deleteDoc(this, item)}>
                                         <a style={{width:'75px',marginLeft:'20px'}}>删除该版本</a>
                                     </Popconfirm>
                                 </p>]}
                             >
                                 <List.Item.Meta
-                                    avatar={<Avatar src={item.cover} />}
-                                    /* 论文显示页 */
-                                    title={<a href={"/viewdoc?docID="+item.ID}>{item.title}</a>}
-                                    description={item.description}
+                                    title={<a href={"/viewdoc?versionID="+item.versionID}>{item.title}</a>}
                                 />
                                 <p>{item.date}</p>
                             </List.Item>

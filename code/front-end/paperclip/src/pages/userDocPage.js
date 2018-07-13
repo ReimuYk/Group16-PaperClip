@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { List, Avatar, Popconfirm, Menu, Anchor, Button } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import UserFLoatMenu from '../components/userFloatMenu';
-import username from './loginpage';
 /* should get from server */
 import book1 from '../statics/book1.jpg';
 import { IPaddress } from '../App'
@@ -59,12 +58,14 @@ class UserDoc extends Component{
     componentWillMount = () => {
         let that = this;
         /* get username */
+        let username = sessionStorage.getItem('username');
         this.setState({
             username: username
         })
         /* get docs according to username */
         let jsonbody = {};
-        jsonbody.username = this.state.username;
+        jsonbody.username = username;
+        console.log(jsonbody);
         let url = IPaddress + 'service/userDoc';
         let options={};
         options.method='POST';
@@ -73,9 +74,10 @@ class UserDoc extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                let docs = eval(responseJson);
+                console.log(responseJson);
+                let data = eval(responseJson);
                 that.setState({
-                    data:docs
+                    data: data
                 })
             }).catch(function(e){
             console.log("Oops, error");
@@ -130,6 +132,9 @@ class UserDoc extends Component{
         })
     }
     render(){
+        if(sessionStorage.getItem('username') == ''){
+            return <Redirect to="/login"/>;
+        }
         return(
             <div>
                 <NavBar />
@@ -148,18 +153,13 @@ class UserDoc extends Component{
                         renderItem={item => (
                             <List.Item
                                 actions={[<p>
-                                    <a style={{width:'75px'}} href={"/user/modifyDoc?ID="+item.ID}>编辑文档</a>
-                                    <a style={{width:'75px', marginLeft:'20px'}} href={"/user/docdetail?ID="+item.ID}>查看文档版本</a>
+                                    <Link style={{width:'75px'}} to={"/user/modifyDoc?docID="+item.ID}>编辑文档</Link>
+                                    <Link style={{width:'75px', marginLeft:'20px'}} to={"/user/docdetail?docID="+item.ID}>查看文档版本</Link>
                                     <Popconfirm title="确定删除吗？" onConfirm={() => this.deleteDoc(this, item)}>
                                         <a style={{width:'75px',marginLeft:'20px'}}>删除文档</a>
                                     </Popconfirm>
                                 </p>]}
                             >
-                                <List.Item.Meta
-                                    /* 论文显示页 */
-                                    title={<a href={"/viewdoc?docID="+item.ID}>{item.title}</a>}
-                                    description={item.description}
-                                />
                                 <p>{item.date}</p>
                             </List.Item>
                         )}

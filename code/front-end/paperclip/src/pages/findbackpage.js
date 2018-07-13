@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../css/findbackpage.css'
 import { IPaddress } from '../App'
+import  { Redirect } from 'react-router-dom'
 
 class Findback extends Component {
     constructor(props){
@@ -42,6 +43,9 @@ class Findback extends Component {
         return true;
     }
     render() {
+        if(sessionStorage.getItem('username') != ''){
+            return <Redirect to="/user"/>;
+        }
         return (
             <section id='login-page'>
                 <div class="Step-inner PasswordReset">

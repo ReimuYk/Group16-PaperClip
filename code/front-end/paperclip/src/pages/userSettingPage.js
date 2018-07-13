@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {  Layout, Icon,Upload, message,Button, Divider, Menu, List, Avatar, Modal, Input, Anchor } from 'antd';
-import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar.js';
 import '../css/style.css';
 import { IPaddress } from '../App'
@@ -161,6 +161,10 @@ class UserSetting extends Component{
         }
     }
     render() {
+        if(sessionStorage.getItem('username') == ''){
+            return <Redirect to="/login"/>;
+        }
+
         const collapsedIcon = (
             this.state.collapsed ? (
                 <Icon onClick={this.toggle} type='double-right' />

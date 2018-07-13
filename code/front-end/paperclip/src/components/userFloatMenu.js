@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Anchor, Menu } from 'antd';
 import { Link } from 'react-router-dom';
-import { username } from '../pages/loginpage';
 
 class UserFloatMenu extends Component{
     render() {

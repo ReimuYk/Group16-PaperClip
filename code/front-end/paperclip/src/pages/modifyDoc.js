@@ -2,14 +2,15 @@ import React, { Component } from 'react';
 import Editor from '.././components/textEditor';
 import {Popconfirm, Popover,Icon,Button,Tag, Input, Tooltip,List,Avatar, Menu, Modal} from 'antd';
 import { IPaddress } from '../App'
+import  { Redirect } from 'react-router-dom'
 const Search = Input.Search;
 
-const information = {
-    key: 0,
+var information = {
+    docID:0,
     title:'',
-    tags:["key1"],
+    tags:[],
     initContent:'',
-    invitor:[
+    contributors:[
         {
             username:'大哥'
         },
@@ -28,10 +29,11 @@ class Header extends React.Component {
         inputValue:'',
         inputVisible: false,
         colors:["red","magenta","green","blue","geekblue"],
-        invitor:[]
+        contributors:[]
     }
 
     componentWillMount = () => {
+        var urlDocID = window.location.search.substring(7);//docID=?
         var url = window.location.href;
         var theRequest = new Object();
         if ( url.indexOf( "?" ) != -1 ) {
@@ -44,7 +46,7 @@ class Header extends React.Component {
             /* here we use fake bdata */
             this.setState({
                 tags: information.tags,
-                invitor:information.invitor
+                contributors:information.contributors
             })
         }
     }
@@ -147,7 +149,13 @@ class Header extends React.Component {
         });
     }
 
-    addInvitor(){
+    handleCancel = () =>{
+        this.setState({
+            visible: false
+        });
+    }
+
+    addContributor(){
         console.log()
         alert("邀请成功！");
     }
@@ -170,15 +178,15 @@ class Header extends React.Component {
                 >
                     <Search
                         placeholder="请输入用户名"
-                        onSearch={this.addInvitor}
+                        onSearch={this.addContributor}
                         style={{ width: "100%" }}
                         enterButton={<Icon type="plus-circle-o" />}
                     />
-                    <div className="invitorList" style={{marginTop: "15px"}}>
+                    <div className="ContributorList" style={{marginTop: "15px"}}>
                         <p>目前的协作者有：</p>
                         <List
                             itemLayout="horizontal"
-                            dataSource={this.state.invitor}
+                            dataSource={this.state.contributors}
                             renderItem={item => (
                                 <List.Item actions={[<a>删除</a>]}>
                                     <List.Item.Meta
@@ -200,6 +208,9 @@ class Header extends React.Component {
     cancelLeave(){
     }
     render(){
+        if(sessionStorage.getItem('username') == ''){
+            return <Redirect to="/login"/>;
+        }
         const renderModal = this.renderModal();
         const tags = this.renderKeyTags();
         return (
@@ -237,22 +248,26 @@ class ModifyDoc extends Component{
         initContent:''
     }
     componentWillMount = () => {
-        var url = window.location.href;
-        var theRequest = new Object();
-        if ( url.indexOf( "?" ) != -1 ) {
-            var str = url.substr( 1 ); //substr()方法返回从参数值开始到结束的字符串；
-            var strs = str.split( "&" );
-            for ( var i = 0; i < strs.length; i++ ) {
-                theRequest[ strs[ i ].split( "=" )[ 0 ] ] = ( strs[ i ].split( "=" )[ 1 ] );
-            }
-            var noteKey = this.props.location.search.substring(5);
-            /* get content of that note */
-            /* here we use fake data */
-            this.setState({
-                title: information.title,
-                initContent: information.initContent
-            })
-        }
+        var urlDocID = window.location.search.substring(7);
+        let username = sessionStorage.getItem('username');
+        let that  = this;
+        let jsonbody = {};
+        jsonbody.username = username;
+        jsonbody.docID = urlDocID;
+        var url = IPaddress + 'service/modify/docDetail';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                console.log(responseJson);
+                that.setState({
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
     }
     render(){
         //const side = this.renderSideCard();

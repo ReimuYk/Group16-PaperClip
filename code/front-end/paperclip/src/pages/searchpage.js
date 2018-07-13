@@ -119,13 +119,42 @@ const paper = [{
     noteno: 2,
 }]
 class Search extends Component{
+    state = {
+        paperData: [],
+        searchContent:''
+    }
     constructor(props) {
         super(props);
         this.readnoDESC = this.readnoDESC.bind(this);
         this.readnoASC = this.readnoASC.bind(this);
         this.notenoDESC = this.notenoDESC.bind(this);
         this.notenoASC = this.notenoASC.bind(this);
-        this.state = {paperData: paper};
+    }
+    componentWillMount = () => {
+        /* get searchContent from url */
+        var searchContent = this.props.location.search.substring(8);//8 == 'search='.length+1
+        /* get info from server */
+        this.setState({
+            searchContent:searchContent
+        });
+        let that = this;
+        /* get search content according to username */
+        let jsonbody = {};
+        jsonbody.searchText = this.state.searchContent;
+        let url = IPaddress + 'service/search';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                that.setState({
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
+
     }
     readnoDESC(){
         var compare = function(obj1, obj2) {
@@ -267,6 +296,7 @@ class Search extends Component{
         )
     }
     render() {
+
         const renderList = this.renderList();
         const renderMenu = this.renderMenu();
         const renderSideBar = this.renderSideBar();

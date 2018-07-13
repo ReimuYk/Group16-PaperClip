@@ -191,7 +191,7 @@ class ModifyNote extends Component{
         }
     }
     render(){
-        //const side = this.renderSideCard();
+
         return(
             <div>
                 <Header />
