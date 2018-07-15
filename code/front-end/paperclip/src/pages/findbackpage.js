@@ -35,15 +35,21 @@ class Findback extends Component {
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                that.setState({
-                })
-            }).catch(function(e){
+                let data = eval('('+responseJson+')');
+                if(data.result=="fail"){
+                    alert("请求失败，请重试或检查您的注册邮箱是否正确");
+                }
+                else{
+                    alert("请检查您的注册邮箱");
+                }
+            }
+            ).catch(function(e){
             console.log("Oops, error");
         });
         return true;
     }
     render() {
-        if(sessionStorage.getItem('username') != ''){
+        if(sessionStorage.getItem('username') != null){
             return <Redirect to="/user"/>;
         }
         return (

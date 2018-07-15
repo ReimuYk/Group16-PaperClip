@@ -5,7 +5,7 @@ import  { Redirect, Link } from 'react-router-dom'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 const Search = Input.Search;
-
+var username ='';
 var information = {
     docID: 0,
     title:'',
@@ -13,7 +13,7 @@ var information = {
     contentHTML:'',
     contentText:'',
     contributors:[]
-}
+};
 
 class Editor extends React.Component {
     constructor (props) {
@@ -82,95 +82,30 @@ class Header extends React.Component {
     state = {
         loading: false,
         visible: false,
-        popoverVisible: false,
-        inputValue:'',
-        inputVisible: false,
-        colors:["red","magenta","green","blue","geekblue"],
-    }
-
-    handleClose = (removedTag) => {
-        const tags = this.state.tags.filter(tag => tag !== removedTag);
-        console.log(tags);
-        this.setState({ tags:tags });
-    }
-
-    handleInputChange = (e) => {
-        this.setState({ inputValue: e.target.value });
-    }
-
-    handleInputConfirm = () => {
-        var inputValue = this.state.inputValue;
-        var tags = information.tags;
-        if (inputValue && tags.indexOf(inputValue) === -1) {
-            tags = [...tags, inputValue];
-        }
-        this.setState({
-            inputValue: '',
-            inputVisible: false,
-        });
-        information.tags = tags;
-    }
-
-    showInput = () =>{
-        this.setState({
-            inputVisible: true
-        });
-    }
-
-    renderKeyTags(){
-        var tags = information.tags;
-        var inputVisible = this.state.inputVisible;
-        var inputValue = this.state.inputValue;
-        var color = this.state.colors;
-        return(
-            <div>
-                <div className="content">
-                    {tags.map((tag,idx) => {
-                        const isLongTag = tag.length > 20;
-                        const tagElem = (
-                            <Tag key={tag} color={color[idx%5]} closable={1} afterClose={() => this.handleClose(tag)}>
-                                {isLongTag ? `${tag.slice(0, 20)}...` : tag}
-                            </Tag>
-                        );
-                        return isLongTag ? <Tooltip title={tag} key={tag}>{tagElem}</Tooltip> : tagElem;
-                    })}
-                    {inputVisible && (
-                        <Input
-                            ref={this.saveInputRef}
-                            type="text"
-                            size="small"
-                            style={{ width: 78 }}
-                            value={inputValue}
-                            onChange={this.handleInputChange}
-                            onBlur={this.handleInputConfirm}
-                            onPressEnter={this.handleInputConfirm}
-                        />
-                    )}
-                    {!inputVisible && (
-                        <Tag
-                            onClick={this.showInput}
-                            style={{ background: '#fff', borderStyle: 'dashed' }}
-                        >
-                            <Icon type="plus" /> New Tag
-                        </Tag>
-                    )}
-                </div>
-                <div className="button" style={{marginTop:"15px"}}>
-                    <a onClick={this.publish}>发布</a>
-                </div>
-            </div>
-        );
-    }
-
-    handleVisibleChange = (popoverVisible) => {
-        this.setState({ popoverVisible });
     }
 
     publish = () => {
-        this.setState({
-            popoverVisible: false,
-        });
-        alert(information.contentHTML);
+        let jsonbody = {};
+        jsonbody.docID = information.docID;
+        jsonbody.docTitle = information.title;
+        jsonbody.docContent = information.contentHTML;
+
+        var url = IPaddress + 'service/publish/doc';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let data = eval('('+responseJson+')');
+                if(data.result = "fail"){
+                    alert("保存失败，请重试")
+                    return;
+                }
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
     }
 
     showModal = () => {
@@ -197,7 +132,28 @@ class Header extends React.Component {
     }
 
     saveDoc = () => {
-        alert("保存成功！");
+        let jsonbody = {};
+        jsonbody.docID = information.docID;
+        jsonbody.title = information.title;
+        jsonbody.content = information.contentHTML;
+        jsonbody.username = username;
+
+        var url = IPaddress + 'service/save/doc';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let data = eval('('+responseJson+')');
+                if(data.result = "fail"){
+                    alert("保存失败，请重试")
+                    return;
+                }
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
     }
     renderModal() {
         const visible = this.state.visible;
@@ -218,7 +174,7 @@ class Header extends React.Component {
                         style={{ width: "100%" }}
                         enterButton={<Icon type="plus-circle-o" />}
                     />
-                    <div className="invitorList" style={{marginTop: "15px"}}>
+                    <div className="contributorList" style={{marginTop: "15px"}}>
                         <p>目前的协作者有：</p>
                         <List
                             itemLayout="horizontal"
@@ -239,16 +195,15 @@ class Header extends React.Component {
     }
 
     confirmLeave(){
-        alert('跳转到首页');
+        window.location.href="/home";
     }
     cancelLeave(){
     }
     render(){
-        if(sessionStorage.getItem('username') == ''){
+        if(sessionStorage.getItem('username') == null){
             return <Redirect to="/login"/>;
         }
         const renderModal = this.renderModal();
-        const tags = this.renderKeyTags();
         return (
             <div className="menuHeader">
                 <Menu
@@ -263,15 +218,7 @@ class Header extends React.Component {
                         <Icon type="user-add" />协作者
                     </Menu.Item>
                     <Button type="primary" style={{float:"right", right:"80px", top:"8px"}} onClick={this.saveDoc}>保存</Button>
-                    <Popover
-                        content={tags}
-                        title="给你的文章添加关键词"
-                        trigger="click"
-                        visible={this.state.popoverVisible}
-                        onVisibleChange={this.handleVisibleChange}
-                    >
-                        <Button type="primary" style={{ float:"right", right:"100px", top:"8px"}}>发布</Button>
-                    </Popover>
+                    <Button type="primary" style={{ float:"right", right:"100px", top:"8px"}} onClick={this.publish}>发布</Button>
                 </Menu>
                 {renderModal}
             </div>
@@ -284,12 +231,11 @@ class ModifyDoc extends Component{
         initContent:''
     }
     componentWillMount = () => {
-        var urlDocID = window.location.search.substring(7);
-        let username = sessionStorage.getItem('username');
-        let that  = this;
+        information.docID = window.location.search.substring(7);
+        username = sessionStorage.getItem('username');
         let jsonbody = {};
         jsonbody.username = username;
-        jsonbody.docID = urlDocID;
+        jsonbody.docID = information.docID;
         var url = IPaddress + 'service/modify/docDetail';
         let options={};
         options.method='POST';
@@ -300,11 +246,13 @@ class ModifyDoc extends Component{
             .then(responseJson=>{
                 console.log(responseJson);
                 let data = eval('('+responseJson+')');
+                if(data == null){
+                    window.location.href='/user';
+                    return;
+                }
                 information.title = data.title;
                 information.contentHTML = data.content;
                 information.contributors = data.contributer;
-                that.setState({
-                })
             }).catch(function(e){
             console.log("Oops, error");
         })

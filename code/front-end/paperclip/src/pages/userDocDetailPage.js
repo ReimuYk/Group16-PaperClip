@@ -2,80 +2,26 @@ import React, { Component } from 'react';
 import { List, Avatar, Popconfirm, Menu, Anchor, Button } from 'antd';
 import { Link, Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
-import {username} from './loginpage';
 import UserFloatMenu from '../components/userFloatMenu';
 /* should get from server */
-import book1 from '../statics/book1.jpg';
 import { IPaddress } from '../App'
-const docs = [{
-    ID: 1,
-    title: 'doc 1',
-    cover: book1,
-    date: '2018-07-01',
-    description: 'description of doc 1',
-},{
-    ID: 2,
-    title: 'doc 2',
-    cover: book1,
-    date: '2018-07-01',
-    description: 'description of doc 2',
-},{
-    ID: 3,
-    title: 'doc 3',
-    cover: book1,
-    date: '2018-07-01',
-    description: 'description of doc 3',
-},{
-    ID: 4,
-    title: 'doc 4',
-    cover: book1,
-    date: '2018-07-01',
-    description: 'description of doc 4',
-},{
-    ID: 5,
-    title: 'doc 5',
-    cover: book1,
-    date: '2018-07-01',
-    description: 'description of doc 5',
-},{
-    ID: 6,
-    title: 'doc 6',
-    cover: book1,
-    date: '2018-07-01',
-    description: 'description of doc 6',
-},{
-    ID: 7,
-    title: 'doc 7',
-    cover: book1,
-    date: '2018-07-01',
-    description: 'description of doc 7',
-},{
-    ID: 8,
-    title: 'doc 8',
-    cover: book1,
-    date: '2018-07-01',
-    description: 'description of doc 8',
-}]
+
+var username ='';
+var docID = 0;
 
 class UserDocDetail extends Component{
     state = {
         data: [],
-        username:'',
-        docID:0
+        author: false
     }
     componentWillMount = () => {
-        var urlDocID = this.props.location.search.substring(7);//7 == 'docID='.length+1
+        docID = this.props.location.search.substring(7);//7 == 'docID='.length+1
+        username = sessionStorage.getItem('username');
+
         let that = this;
-        /* get username */
-        this.setState({
-            username: username,
-            docID: urlDocID
-        })
-        /* get docs according to username */
         let jsonbody = {};
         jsonbody.username = username;
-        console.log(username);
-        jsonbody.docID = urlDocID;
+        jsonbody.docID = docID;
         let url = IPaddress + 'service/userDocDetail';
         let options={};
         options.method='POST';
@@ -84,9 +30,16 @@ class UserDocDetail extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                let data = eval(responseJson);
+                let data = eval('(' + responseJson + ')');
+                if(data.result == 'fail'){
+                    window.location.href = '/user';
+                    return;
+                }
+                let obj = data.versions[0];
+                let result = (obj.author == username);
                 that.setState({
-                    data: data
+                    data: data.versions,
+                    author: result
                 })
             }).catch(function(e){
             console.log("Oops, error");
@@ -99,6 +52,7 @@ class UserDocDetail extends Component{
         let jsonbody = {};
         jsonbody.versionID = item.versionID;
         jsonbody.username = username;
+
         let url = IPaddress + 'service/delete/docVersion';
         let options={};
         options.method='POST';
@@ -107,6 +61,11 @@ class UserDocDetail extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
+                let result = eval('(' + responseJson + ')');
+                if(result.result == 'fail'){
+                    alert('删除失败，请重试');
+                    return;
+                }
                 var tmpdata = that.state.data;
                 var dataLen = tmpdata.length;
                 for(let i=0; i<dataLen; i++){
@@ -122,8 +81,54 @@ class UserDocDetail extends Component{
             console.log("Oops, error");
         })
     }
+    renderList(){
+        if(this.state.author){
+            return(
+                <List
+                    style={{textAlign:'left'}}
+                    itemLayout="horizontal"
+                    dataSource={this.state.data}
+                    renderItem={item => (
+                        <List.Item
+                            actions={[<p>
+                                <a style={{width:'75px'}} href={"/user/paperpage?ID="+item.ID}>查看内容</a>
+                                <Popconfirm title="确定删除吗？" onConfirm={() => this.deleteDoc(this, item)}>
+                                    <a style={{width:'75px',marginLeft:'20px'}}>删除该版本</a>
+                                </Popconfirm>
+                            </p>]}
+                        >
+                            <List.Item.Meta
+                                title={<a href={"/viewdoc?versionID="+item.versionID}>{item.title}</a>}
+                            />
+                            <p>{item.date}</p>
+                        </List.Item>
+                    )}
+                />
+            )
+        }
+        else{
+            return(
+                <List
+                    style={{textAlign:'left'}}
+                    itemLayout="horizontal"
+                    dataSource={this.state.data}
+                    renderItem={item => (
+                        <List.Item>
+                            <List.Item.Meta
+                                title={<a href={"/viewdoc?versionID="+item.versionID}>{item.title}</a>}
+                            />
+                            <p>{item.date}</p>
+                            <p>{item.version}</p>
+                        </List.Item>
+                    )}
+                />
+            )
+        }
+
+    }
     render(){
-        if(sessionStorage.getItem('username') == ''){
+        let renderList = this.renderList();
+        if(sessionStorage.getItem('username') == null){
             return <Redirect to="/login"/>;
         }
         return(
@@ -133,26 +138,7 @@ class UserDocDetail extends Component{
             <UserFloatMenu />
             <div style={{width:'60%',marginLeft:'200px'}}>
                 <div className="content">
-                    <List
-                        style={{textAlign:'left'}}
-                        itemLayout="horizontal"
-                        dataSource={this.state.data}
-                        renderItem={item => (
-                            <List.Item
-                                actions={[<p>
-                                    <a style={{width:'75px'}} href={"/user/paperpage?ID="+item.ID}>查看内容</a>
-                                    <Popconfirm title="确定删除吗？" onConfirm={() => this.deleteDoc(this, item)}>
-                                        <a style={{width:'75px',marginLeft:'20px'}}>删除该版本</a>
-                                    </Popconfirm>
-                                </p>]}
-                            >
-                                <List.Item.Meta
-                                    title={<a href={"/viewdoc?versionID="+item.versionID}>{item.title}</a>}
-                                />
-                                <p>{item.date}</p>
-                            </List.Item>
-                        )}
-                    />
+                    {renderList}
                 </div>
             </div>
         </div>

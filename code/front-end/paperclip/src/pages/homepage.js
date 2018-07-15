@@ -46,7 +46,7 @@ class Sider extends React.Component {
         )
     }
     renderSider(){
-        if(sessionStorage.getItem('username') != ''){
+        if(sessionStorage.getItem('username') != null){
             return (
                 <Menu
                     onClick={this.handleClick}

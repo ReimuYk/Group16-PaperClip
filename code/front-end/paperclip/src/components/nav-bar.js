@@ -21,7 +21,7 @@ class NavBar extends Component{
     }
 
     logout = () =>{
-        sessionStorage.setItem('username', '');
+        sessionStorage.removeItem('username');
         window.location.reload();
     }
 
@@ -119,7 +119,7 @@ class NavBar extends Component{
           );
         const message = this.renderMessage();
         const info = this.renderInfo();
-        if(sessionStorage.getItem('username') != ''){
+        if(sessionStorage.getItem('username') != null){
             return(
                 <Anchor>
                     <Row type="flex" align="middle" justify="center">

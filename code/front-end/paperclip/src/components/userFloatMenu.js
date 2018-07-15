@@ -19,11 +19,6 @@ class UserFloatMenu extends Component{
                             </Link>
                         </Menu.Item>
                         <Menu.Item>
-                            <Link to={'/user/stardoc'}>
-                            <span>收藏的文档</span>
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item>
                             <Link to={'/user/usernote'}>
                             <span>写过的笔记</span>
                             </Link>
@@ -31,6 +26,11 @@ class UserFloatMenu extends Component{
                         <Menu.Item>
                             <Link to={'/user/userdoc'}>
                             <span>写过的文档</span>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item>
+                            <Link to={'/user/assistdoc'}>
+                                <span>协作的文档</span>
                             </Link>
                         </Menu.Item>
                     </Menu>

@@ -14,11 +14,11 @@ import User from './pages/userpage';
 import FindBack from './pages/findbackpage';
 import StarNote from './pages/starNotePage';
 import StarPaper from './pages/starPaperPage';
-import StarDoc from './pages/starDocPage';
+import AssistDoc from './pages/assistDocPage';
 import StarUser from './pages/StarUserPage';
 import UserDoc from './pages/userDocPage';
 import UserNote from './pages/userNotePage';
-import UserFens from './pages/userFensPage';
+import UserFans from './pages/userFansPage';
 import UserSetting from './pages/userSettingPage';
 import ViewNote from './pages/viewNotePage';
 import Register from './pages/RegisterPage';
@@ -51,11 +51,11 @@ class App extends Component {
               <Route exact path='/user' component={User} />
               <Route path='/user/starpaper' component={StarPaper} />
               <Route path='/user/starnote' component={StarNote} />
-              <Route path='/user/stardoc' component={StarDoc} />
+              <Route path='/user/assistdoc' component={AssistDoc} />
               <Route path='/user/staruser' component={StarUser} />
               <Route path='/user/userdoc' component={UserDoc} />
               <Route path='/user/usernote' component={UserNote} />
-              <Route path='/user/userfens' component={UserFens} />
+              <Route path='/user/userfans' component={UserFans} />
               <Route path='/user/setting' component={UserSetting} />
                 <Route path='/user/modifyDoc' component={ModifyDoc} />
               <Route path='/user/modifyNote' component={ModifyNote} />
