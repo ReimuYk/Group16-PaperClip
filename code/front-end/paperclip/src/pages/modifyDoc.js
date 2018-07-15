@@ -134,8 +134,9 @@ class Header extends React.Component {
     saveDoc = () => {
         let jsonbody = {};
         jsonbody.docID = information.docID;
-        jsonbody.docTitle = information.title;
-        jsonbody.docContent = information.contentHTML;
+        jsonbody.title = information.title;
+        jsonbody.content = information.contentHTML;
+        jsonbody.username = username;
 
         var url = IPaddress + 'service/save/doc';
         let options={};
@@ -245,8 +246,8 @@ class ModifyDoc extends Component{
             .then(responseJson=>{
                 console.log(responseJson);
                 let data = eval('('+responseJson+')');
-                if(data.result = "fail"){
-                    window.location.href="/home";
+                if(data == null){
+                    window.location.href='/user';
                     return;
                 }
                 information.title = data.title;

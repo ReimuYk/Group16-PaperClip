@@ -10,8 +10,7 @@ var username ='';
 
 class StarPaper extends Component{
     state = {
-        data: [],
-        username:''
+        data: []
     }
     componentWillMount = () => {
         username = sessionStorage.getItem('username');
@@ -50,7 +49,7 @@ class StarPaper extends Component{
             .then(response=>response.text())
             .then(responseJson=>{
                 let result = eval('(' + responseJson + ')');
-                if(result == "success"){
+                if(result.result == "success"){
                     let tmpdata = that.state.data;
                     let dataLen = tmpdata.length;
                     for(let i=0; i<dataLen; i++){
@@ -82,12 +81,9 @@ class StarPaper extends Component{
                 <div style={{width:'60%',marginLeft:'200px'}}>
                 <div style={{width:'915px'}}>
                 <p style={{textAlign:'left'}}>
-                    <a style={{width:'100px',marginLeft:'48px'}}>论文名称/描述</a>
-                    <a style={{width:'40px',marginLeft:'200px'}}>作者</a>
-                    <a style={{width:'40px',marginLeft:'53px'}}>阅读量</a>
+                    <a style={{width:'100px',marginLeft:'48px'}}>论文名称</a>
                     <a style={{width:'40px',marginLeft:'53px'}}>批注量</a>
                     <a style={{wdith:'40px',marginLeft:'53px'}}>笔记量</a>
-                    <a style={{wdith:'50px',marginLeft:'70px'}}>发表日期</a>
                     <a style={{wdith:'50px',marginLeft:'90px'}}>操作</a>
                 </p>
                 </div>
@@ -105,13 +101,10 @@ class StarPaper extends Component{
                         <List.Item.Meta
                         /* 论文显示页 */
                         title={<a href={"/paper?ID="+item.ID}>{item.title}</a>}
-                        description={item.keywords}
+                        description={item.keywords + item.tags}
                         />
-                        <a style={{width:'80px',marginLeft:'20px'}}>{item.author}</a>
-                        <a style={{width:'80px',marginLeft:'20px'}}>{item.readno}</a>
-                        <a style={{width:'80px',marginLeft:'20px'}}>{item.commentno}</a>
+                        <a style={{width:'80px',marginLeft:'20px'}}>{item.postilno}</a>
                         <a style={{width:'80px',marginLeft:'20px'}}>{item.noteno}</a>
-                        <a style={{width:'80px',marginLeft:'0px'}}>{item.date}</a>
                     </List.Item>
                     )}
                 />

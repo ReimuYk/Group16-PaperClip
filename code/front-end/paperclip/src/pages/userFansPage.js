@@ -3,48 +3,18 @@ import { List, Avatar, Menu, Anchor } from 'antd';
 import { Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 /* should get from server */
-import uh from '../statics/uh.jpg'
 import UserFloatMenu from '../components/userFloatMenu';
 import { IPaddress } from '../App'
-const userID=1;
-const data = [{
-    fensName: 'fens 1',
-    description: 'description of fens 1',
-},{
-    fensName: 'fens 2',
-    description: 'description of fens 2',
-},{
-    fensName: 'fens 3',
-    description: 'description of fens 3',
-},{
-    fensName: 'fens 4',
-    description: 'description of fens 4',
-},{
-    fensName: 'fens 5',
-    description: 'description of fens 5',
-},{
-    fensName: 'fens 6',
-    description: 'description of fens 6',
-},{
-    fensName: 'fens 7',
-    description: 'description of fens 7',
-},{
-    fensName: 'fens 8',
-    description: 'description of fens 8',
-}]
 
+var username = '';
 class UserFans extends Component{
     state = {
-        data: [],
-        username:''
+        data: []
     }
     componentWillMount = () => {
         let that = this;
         /* get username */
-        let username = sessionStorage.getItem('username');
-        this.setState({
-            username: username
-        })
+        username = sessionStorage.getItem('username');
         /* get data according to username */
         let jsonbody = {};
         jsonbody.username = username;
@@ -68,7 +38,7 @@ class UserFans extends Component{
         let that = this;
         /* get data according to username */
         let jsonbody = {};
-        jsonbody.hostname = this.state.username;
+        jsonbody.hostname = username;
         jsonbody.clientname = item.username;
         let url = IPaddress + 'service/follow';
         let options={};
@@ -105,7 +75,7 @@ class UserFans extends Component{
                     renderItem={item => (
                     <List.Item actions={[<a onClick={this.follow.bind(this, item)}>关注</a>]}>
                         <List.Item.Meta
-                        avatar={<Avatar src={ item.avatar } />}
+                        avatar={<Avatar src={ item.userheader } />}
                         title={<a href={"/viewpage?username="+item.username}>{item.username}</a>}
                         />
                     </List.Item>

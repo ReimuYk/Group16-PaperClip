@@ -38,8 +38,15 @@ class RegisterPage extends Component {
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                that.setState({
-                })
+                let result = eval('(' + responseJson + ')');
+                if(result.result == 'duplicate username'){
+                    alert('重复的用户名，请重试');
+                    return false;
+                }
+                if(result.result == 'duplicate email'){
+                    alert('该邮箱已被注册过，可直接使用邮箱登录');
+                    return false;
+                }
             }).catch(function(e){
             console.log("Oops, error");
         });

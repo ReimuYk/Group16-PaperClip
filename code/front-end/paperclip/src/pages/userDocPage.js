@@ -40,7 +40,7 @@ class UserDoc extends Component{
         let that = this;
         let jsonbody = {};
         jsonbody.username = this.state.username;
-        jsonbody.paperID = item.ID;
+        jsonbody.docID = item.ID;
         let url = IPaddress + 'service/quitStar/paper';
         let options={};
         options.method='POST';
@@ -72,15 +72,6 @@ class UserDoc extends Component{
     }
     newDoc = () => {
         var tmpdata = this.state.data;
-        var obj = {
-            ID: 1,
-            title: '新建文档',
-            cover: book1,
-            date: '2018-07-01',
-            description: 'description of doc 1',
-        };
-        tmpdata.push(obj);
-
         let jsonbody = {};
         jsonbody.username = username;
         jsonbody.title = '新建文档';
@@ -94,10 +85,16 @@ class UserDoc extends Component{
             .then(response=>response.text())
             .then(responseJson=>{
                 let result = eval('(' + responseJson + ')');
-                if(result.result == "fail"){
+                if(result.result != "success"){
                     alert("新建失败，请重试");
                 }
                 else{
+                    let obj={
+                        ID: result.ID,
+                        title: '新建文档',
+                        date: result.date
+                    };
+                    tmpdata.push(obj);
                     this.setState({
                         data: tmpdata
                     })

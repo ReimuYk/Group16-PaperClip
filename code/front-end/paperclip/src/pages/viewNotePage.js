@@ -4,14 +4,20 @@ import '../css/style.css'
 import NavBar from '../components/nav-bar';
 import { IPaddress } from '../App'
 const { TextArea } = Input;
+
+var noteID = 0;
+var username = '';
+
+var information = {
+    author:'',
+    authorDescription:'',
+    authorAvatar:'',
+    title:'',
+    content:'',
+    data:''
+}
 class ViewNote extends Component{
     state = {
-        uh: '',
-        authorDescription: '',
-        author: '',
-        docID: 0,
-        docTitle: '',
-        docContent: '',
         commentVisible: false,
         visible: false,
         mailContent: '',
@@ -21,22 +27,17 @@ class ViewNote extends Component{
         comment:[],
         ifLike: false,
         ifStar: false,
-        username:''
     }
     componentWillMount = () => {
         /* get docID from url */
-        var urlNoteID = this.props.location.search.substring(8);//7 == 'noteID='.length+1
+        noteID = this.props.location.search.substring(8);//7 == 'noteID='.length+1
          /* get info from server */
         let that = this;
         /* get username */
-        let username = sessionStorage.getItem('username');
-        this.setState({
-            noteID : urlNoteID,
-            username: username
-        })
+        username = sessionStorage.getItem('username');
         /* get data according to username */
         let jsonbody = {};
-        jsonbody.noteID = urlNoteID;
+        jsonbody.noteID = noteID;
         let url = IPaddress + 'service/viewNote';
         let options={};
         options.method='POST';
@@ -45,8 +46,11 @@ class ViewNote extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                that.setState({
-                })
+                let data = eval('(' + responseJson + ')');
+                information.author = data.author;
+                information.title = data.title;
+                information.content = data.content;
+                information.data = data.date;
             }).catch(function(e){
             console.log("Oops, error");
         })
@@ -221,9 +225,27 @@ class ViewNote extends Component{
             />
         )
     }
+    renderButton(){
+        if(information.author != username){
+            return (
+                <p>
+                    <Button style={{width:"100px"}} size="large" type="primary" onClick={this.showModal}><Icon type='mail' />发私信</Button>
+                    <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary" onClick={this.followUser}><Icon type='plus-square-o' />关注</Button>
+                </p>
+            )
+        }
+        else{
+            return(
+                <Link to={"/modifyNote?noteID=" + noteID}>
+                    <Button style={{width:"100px"}} size="large" type="primary">修改笔记</Button>
+                </Link>
+            )
+        }
+    }
     render(){
         const bottomNav = this.renderBottomNav();
         const comment = this.renderComment();
+        const button = this.renderButton();
         return(
             <div>
                 <NavBar/>
@@ -252,28 +274,25 @@ class ViewNote extends Component{
                         <Button type="primary" onClick={this.commitComment}>添加评论</Button>
                     </Modal>
                     <div>
-                        <h1 class="Post-Title" style={{ fontWeight: "600", fontSize: "36px", textAlign:"left"}}> {this.state.docTitle} </h1>
+                        <h1 class="Post-Title" style={{ fontWeight: "600", fontSize: "36px", textAlign:"left"}}> {information.title} </h1>
                         <Divider />
                         <div style={{textAlign:'left'}}>
                             <div id='u1-1'>
-                                <img alt='' src={this.state.uh}
+                                <img alt='' src={information.authorAvatar}
                                      style={{width:'80px',height:'80px',borderRadius:'50%',margin:'0 auto',display:'block'}}
                                 />
                             </div>
 
                             <div id='u1-2'>
                                 <br />
-                                <h3>{ this.state.author }</h3>
-                                <p>{ this.state.authorDescription }</p>
+                                <h3>{ information.author }</h3>
+                                <p>{ information.authorDescription }</p>
                                 <br />
                                 <br />
                             </div>
                             <div id='u1-3'>
                                 <br />
-                                <p>
-                                    <Button style={{width:"100px"}} size="large" type="primary" onClick={this.showModal}><Icon type='mail' />发私信</Button>
-                                    <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary" onClick={this.followUser}><Icon type='plus-square-o' />关注</Button>
-                                </p>
+                                {button}
                                 <br />
                             </div>
 
@@ -281,7 +300,7 @@ class ViewNote extends Component{
 
                     </div>
                     <div style={{display:'inline-block', textAlign:'left'}}>
-                        <p style={{fontSize:"18px"}}>{this.state.docContent}</p>
+                        <p style={{fontSize:"18px"}}>{information.content}</p>
                     </div>
                 </div>
                 {bottomNav}
