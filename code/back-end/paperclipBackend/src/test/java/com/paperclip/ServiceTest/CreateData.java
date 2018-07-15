@@ -2,8 +2,12 @@ package com.paperclip.ServiceTest;
 
 import com.paperclip.dao.entityDao.*;
 import com.paperclip.dao.relationshipDao.BlockPostilRepository;
+import com.paperclip.dao.relationshipDao.StarNoteRepository;
+import com.paperclip.dao.relationshipDao.StarPaperRepository;
 import com.paperclip.model.Entity.*;
 import com.paperclip.model.Relationship.BlockPostil;
+import com.paperclip.model.Relationship.StarNote;
+import com.paperclip.model.Relationship.StarPaper;
 import com.paperclip.service.SearchService;
 import com.paperclip.service.UserService;
 import com.paperclip.service.UserStarService;
@@ -47,6 +51,21 @@ public class CreateData {
 
     @Autowired
     private PostilCommentRepository postilCommRepo;
+
+    @Autowired
+    private NoteRepository noteRepo;
+
+    @Autowired
+    private NoteCommentRepository noteCommRepo;
+
+    @Autowired
+    private StarPaperRepository starPaperRepo;
+
+    @Autowired
+    private StarNoteRepository starNoteRepo;
+
+    @Autowired
+    private UserStarService service;
 
     @Before
     public void before() {
@@ -115,6 +134,65 @@ public class CreateData {
             }
         }
         postilCommRepo.save(pcs);
+    }
+
+    @Test
+    public void createNoteAndNoteCommentData(){
+        Paper paper = paperRepo.findOne(new Long(1));
+        Iterable<User> uu = userRepo.findAll();
+        Iterator<User> users = uu.iterator();
+        List<Note> notes = new ArrayList<>();
+        List<NoteComment> ncs = new ArrayList<>();
+        for(int i = 0;i<6;i++){
+            Note note = new Note(paper,users.next(),"title"+i,"这是笔记内容"+i,paper.getKeyWords());
+            notes.add(note);
+            for(int j=0;j<3;j++) {
+                NoteComment nc = new NoteComment(note, users.next(), "哇说的好好" + (i + j) * 2);
+                ncs.add(nc);
+            }
+        }
+        noteRepo.save(notes);
+        noteCommRepo.save(ncs);
+    }
+
+    @Test
+    public void createStarData(){
+        Paper paper = paperRepo.findOne(new Long(1));
+        Iterable<User> users = userRepo.findAll();
+        Iterable<Note> nn = noteRepo.findAll();
+        Iterator<Note> notes = nn.iterator();
+        List<StarNote> sns = new ArrayList<>();
+        List<StarPaper> sps = new ArrayList<>();
+        for(User user: users){
+            if(notes.hasNext()){
+                StarNote sn = new StarNote(user,notes.next());
+                sns.add(sn);
+            }
+            else{
+                StarPaper sp = new StarPaper(user,paper);
+                sps.add(sp);
+                notes = nn.iterator();
+            }
+        }
+        starNoteRepo.save(sns);
+        starPaperRepo.save(sps);
+    }
+
+    @Test
+    public void createFollowData(){
+        Iterable<User> uu = userRepo.findAll();
+        Iterator<User> users = uu.iterator();
+        for(User user1: uu){
+            for(int i=0;i<3;i++){
+                if(!users.hasNext()){
+                    users = uu.iterator();
+                }
+                JSONObject data = new JSONObject();
+                data.accumulate("hostname",user1.getUsername());
+                data.accumulate("clientname",users.next().getUsername());
+                service.starUser(data);
+            }
+        }
     }
 
 }
