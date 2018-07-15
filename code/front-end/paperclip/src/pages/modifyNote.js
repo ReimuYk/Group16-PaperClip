@@ -205,7 +205,7 @@ class Header extends React.Component {
     cancelLeave(){
     }
     render(){
-        if(sessionStorage.getItem('username') == ''){
+        if(sessionStorage.getItem('username') == null){
             return <Redirect to="/login"/>;
         }
         const tags = this.renderKeyTags();

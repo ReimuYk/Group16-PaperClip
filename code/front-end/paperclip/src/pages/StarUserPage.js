@@ -70,7 +70,7 @@ class StarUser extends Component{
         })
     }
     render(){
-        if(sessionStorage.getItem('username') == ''){
+        if(sessionStorage.getItem('username') == null){
             return <Redirect to="/login"/>;
         }
         return(

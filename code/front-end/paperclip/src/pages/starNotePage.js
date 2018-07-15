@@ -70,7 +70,7 @@ class StarNote extends Component{
         /* send to server, refresh this page in get/post request */
     }
     render(){
-        if(sessionStorage.getItem('username') == ''){
+        if(sessionStorage.getItem('username') == null){
             return <Redirect to="/login"/>;
         }
         return(

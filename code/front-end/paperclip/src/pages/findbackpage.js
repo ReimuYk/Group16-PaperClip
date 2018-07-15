@@ -49,7 +49,7 @@ class Findback extends Component {
         return true;
     }
     render() {
-        if(sessionStorage.getItem('username') != ''){
+        if(sessionStorage.getItem('username') != null){
             return <Redirect to="/user"/>;
         }
         return (

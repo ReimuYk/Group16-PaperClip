@@ -19,7 +19,7 @@ class Login extends Component {
         sessionStorage.setItem('username', username);
     }
     render() {
-        if(sessionStorage.getItem('username') != ''){
+        if(sessionStorage.getItem('username') != null){
             return <Redirect to="/user"/>;
         }
         return (
