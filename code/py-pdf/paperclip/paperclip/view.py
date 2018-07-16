@@ -2,8 +2,10 @@
 from django.http import HttpResponse,JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from paperclip.pdftools import miner
+from paperclip.pdftools import miner,htmlParse,pdf2pic
 import base64
+import json
+import os
 
 def hello(request):
     resp = [{'errorcode': '100', 'detail': 'Get success'}]
@@ -21,3 +23,17 @@ def page(req):
     res = "data:image/jpg;base64,"+str(data)
     res = {'data':res}
     return HttpResponse(json.dumps(res), content_type="application/json")
+
+@csrf_exempt
+def html2pdf(req):
+    postBody = req.read().decode()
+    json_data = json.loads(postBody)
+    pid = json_data['paperID']
+    print('paperid',json_data['paperID'])
+    data = json_data['data']
+    print('data',json_data['data'])
+    pdf_uri = '../../back-end/paperclipBackend/data/pdf/'+str(pid)+'.pdf'
+    htmlParse.run(json_data['data'],pdf_uri)
+    os.mkdir('../../back-end/paperclipBackend/data/pic/%d'%pid)
+    pdf2pic.pdf2jpeg(pdf_uri,'../../back-end/paperclipBackend/data/pic/%d/%d'%(pid,pid))
+    return HttpResponse(json.dumps({'res':'ok'}), content_type="application/json")
