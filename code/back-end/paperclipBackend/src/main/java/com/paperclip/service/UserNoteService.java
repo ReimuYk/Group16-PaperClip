@@ -25,10 +25,7 @@ public interface UserNoteService {
     JSONObject agreeNote(JSONObject data);
     JSONObject starNote(JSONObject data);
 
-    //paperpage.js
-    JSONObject addPostilComment(JSONObject data);
-    JSONObject addPostil(JSONObject data);
-    JSONObject starPaper(JSONObject data);
+
 
 
 }

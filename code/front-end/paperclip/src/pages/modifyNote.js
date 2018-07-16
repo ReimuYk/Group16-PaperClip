@@ -24,7 +24,7 @@ class Editor extends React.Component {
     }
 
     componentDidMount(){
-        information.content = this.props.initText;
+        information.contentHTML = this.props.initText;
     }
 
     handleChange(content, delta, source, editor) {
@@ -39,7 +39,7 @@ class Editor extends React.Component {
                 onChange={this.handleChange}
                 modules={Editor.modules}
                 formats={Editor.formats}
-                value={information.content}
+                value={information.contentHTML}
                 bounds={'.app'}
                 placeholder="请输入内容"
             />
@@ -189,7 +189,7 @@ class Header extends React.Component {
             .then(response=>response.text())
             .then(responseJson=>{
                 let data = eval('('+responseJson+')');
-                if(data.result = "fail"){
+                if(data.result == "fail"){
                     alert("保存失败，请重试")
                     return;
                 }
@@ -280,7 +280,7 @@ class ModifyNote extends Component{
                         onChange={this.handleInputChange}
                     />
                     <div className="editor" style={{marginTop:"30px"}}>
-                        <Editor initText={<p>{this.state.initContent}</p>}/>
+                        <Editor initText={<p>{information.contentHTML}</p>}/>
                     </div>
                 </div>
             </div>

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Divider, Input, Modal, Icon, Button, List } from 'antd';
+import { Link} from 'react-router-dom'
 import '../css/style.css'
 import NavBar from '../components/nav-bar';
-import { IPaddress } from '../App'
+import { IPaddress } from '../App';
 const { TextArea } = Input;
 
 var noteID = 0;
@@ -27,6 +28,7 @@ class ViewNote extends Component{
         comment:[],
         ifLike: false,
         ifStar: false,
+        ifFollow:false
     }
     componentWillMount = () => {
         /* get docID from url */
@@ -37,6 +39,7 @@ class ViewNote extends Component{
         username = sessionStorage.getItem('username');
         /* get data according to username */
         let jsonbody = {};
+        jsonbody.username = username;
         jsonbody.noteID = noteID;
         let url = IPaddress + 'service/viewNote';
         let options={};
@@ -62,9 +65,26 @@ class ViewNote extends Component{
         });
     }
     showComment = () => {
-        this.setState({
-            commentVisible: true,
-        });
+        let that = this;
+        /* get data according to username */
+        let jsonbody = {};
+        jsonbody.noteID = noteID;
+        let url = IPaddress + 'service/getNoteComment';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let data = eval(responseJson);
+                that.setState({
+                    comment: data,
+                    commentVisible: true
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
     }
     handleOk = (e) => {
         console.log('write mail');
@@ -109,14 +129,36 @@ class ViewNote extends Component{
             alert('内容不能为空！')
             return;
         }
+        let that = this;
         var tmp = this.state.comment;
         var number = this.state.commentNo;
-        tmp.push({user:this.state.username, comment: this.state.commentContent});
-        this.setState({
-            comment: tmp,
-            commentContent: '',
-            commentNo: number+1
-        });
+        let jsonbody = {};
+        jsonbody.noteID = this.
+        jsonbody.username = username;
+        jsonbody.content = this.state.commentContent;
+        let url = IPaddress + 'service/addNoteComment';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let result = eval('(' + responseJson + ')');
+                if(result == "fail"){
+                    alert("发布评论失败，请重试");
+                    return;
+                }
+                tmp.push({user:username, comment: that.state.commentContent});
+                that.setState({
+                    comment: tmp,
+                    commentContent: '',
+                    commentNo: number+1
+                });
+            }).catch(function(e) {
+            console.log("Oops, error");
+        })
+
     }
     like = () => {
         var like = this.state.likeNo;
@@ -138,16 +180,37 @@ class ViewNote extends Component{
         })
     }
     cancelStar = () => {
-        this.setState({
-            ifStar: false
+        let that = this;
+        let jsonbody = {};
+        jsonbody.username = username;
+        jsonbody.noteID = noteID;
+        let url = IPaddress + 'service/quitStar/note';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let result = eval('(' + responseJson + ')');
+                if(result.result == "success"){
+                    that.setState({
+                        ifStar: false
+                    })
+                }
+                else{
+                    alert("取消错误，请重试");
+                }
+            }).catch(function(e){
+            console.log("Oops, error");
         })
     }
 
     followUser = () => {
         /* get data according to username */
         let jsonbody = {};
-        jsonbody.hostname = this.state.username;
-        jsonbody.clientname = this.state.author;
+        jsonbody.hostname = username;
+        jsonbody.clientname = information.author;
         let url = IPaddress + 'service/follow';
         let options={};
         options.method='POST';
@@ -164,6 +227,41 @@ class ViewNote extends Component{
             console.log("Oops, error");
         })
     }
+
+    quitFollow = () => {
+        let that = this;
+        /* tell the server to do something */
+        let jsonbody = {};
+        jsonbody.hostname = username;
+        jsonbody.clientname = information.author;
+        let url = IPaddress + 'service/quitStar/user';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let result = eval('(' + responseJson + ')');
+                if(result.result == "success"){
+                    that.setState({
+                        ifFollow: false
+                    })
+                }
+                else{
+                    alert("取消错误，请重试");
+                }
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
+    }
+
+    shareLink = () => {
+        var content = window.location.href;
+        window.clipboardData.setData("Text",content);
+        alert(content + "已经成功复制到剪贴板");
+    }
+
     renderLikeButton(){
         if(!this.state.ifLike)
         {
@@ -202,7 +300,7 @@ class ViewNote extends Component{
                             {likeButton}
                             {starButton}
                             <a style={{width:"25%"}} class="navbar-brand" href="#" onClick={this.showComment}><Icon type="message" /> 评论 ( {this.state.commentNo} )</a>
-                            <a style={{width:"25%"}} class="navbar-brand" href="#"><Icon type="fork" /> 分享</a>
+                            <a style={{width:"25%"}} class="navbar-brand" href="#" onClick={this.shareLink}><Icon type="fork" /> 分享</a>
                         </div>
                     </div>
                 </nav>
@@ -227,10 +325,18 @@ class ViewNote extends Component{
     }
     renderButton(){
         if(information.author != username){
+            if(!this.state.ifFollow){
+                return(
+                    <p>
+                        <Button style={{width:"100px"}} size="large" type="primary" onClick={this.showModal}><Icon type='mail' />发私信</Button>
+                        <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary" onClick={this.followUser}><Icon type='plus-square-o' />关注</Button>
+                    </p>
+                )
+            }
             return (
                 <p>
                     <Button style={{width:"100px"}} size="large" type="primary" onClick={this.showModal}><Icon type='mail' />发私信</Button>
-                    <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary" onClick={this.followUser}><Icon type='plus-square-o' />关注</Button>
+                    <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary" onClick={this.quitFollow}><Icon type='plus-square-o' />取消关注</Button>
                 </p>
             )
         }

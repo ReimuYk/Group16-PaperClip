@@ -2,21 +2,26 @@ package com.paperclip.service.impl;
 
 import com.paperclip.dao.entityDao.*;
 import com.paperclip.dao.relationshipDao.BlockPostilRepository;
+import com.paperclip.dao.relationshipDao.StarPaperRepository;
 import com.paperclip.dao.relationshipDao.UserPostilRepository;
 import com.paperclip.model.Entity.*;
 import com.paperclip.model.Relationship.BlockPostil;
+import com.paperclip.model.Relationship.StarPaper;
 import com.paperclip.model.Relationship.UserPostil;
 import com.paperclip.service.PaperService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sun.misc.BASE64Encoder;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -46,6 +51,9 @@ public class PaperServiceImpl implements PaperService {
 
     @Autowired
     UserRepository userRepo;
+
+    @Autowired
+    private StarPaperRepository starPaperRepo;
 
 
     public String GetImageStrFromPath(String imgPath) {
@@ -82,7 +90,7 @@ public class PaperServiceImpl implements PaperService {
         String username = data.getString("username");
         int pagination = data.getInt("pagination");
 
-        User user = userRepo.findOne("testuser1");
+        User user = userRepo.findOne("user1");
 
         Paper p = paperRepo.findOne(paperID);
         List<PaperPage> pagelist = paperPageRepo.findByPaper(p);
@@ -95,7 +103,7 @@ public class PaperServiceImpl implements PaperService {
         }
         List<Block> blist = blockRepo.findByPaperPage(page);
         String pageurl = page.getContentUrl();
-        pageurl = "C:\\Users\\Administrator\\Desktop\\pdfSplit\\page-0.jpeg";
+        pageurl = String.format("./data/pic/%d/%s",paperID,pageurl);
         String b64str = this.GetImageStrFromPath(pageurl);
         b64str = "data:image/jpg;base64,"+b64str;
 
@@ -235,5 +243,78 @@ public class PaperServiceImpl implements PaperService {
         JSONObject res = new JSONObject();
         res.accumulate("stat","success");
         return res;
+    }
+
+    // 传入：username，postilID，content  ---------------对批注进行评论
+    public JSONObject addPostilComment(JSONObject data){
+        Long postilID = data.getLong("postilID");
+        String username = data.getString("username");
+        String content = data.getString("content");
+
+        Postil postil = postilRepo.findOne(postilID);
+        User user = userRepo.findOne(username);
+        JSONObject result = new JSONObject();
+        if(postil == null || user == null){
+            result.accumulate("result","fail");
+        }
+        else{
+            PostilComment pc = new PostilComment(postil,user,content);
+            postilCommRepo.save(pc);
+            result.accumulate("result","success");
+        }
+        return result;
+    }
+
+    // 传入：blockList,username,content  ---------------对选中的block做批注
+    @SuppressWarnings("unchecked")
+    public JSONObject addPostil(JSONObject data){
+        String username = data.getString("username");
+        String content = data.getString("content");
+        JSONArray list = data.getJSONArray("blockList");
+        List<Block> blocklist = JSONArray.toList(list,new Block(),new JsonConfig());
+        Iterator<Block> blocks = blocklist.iterator();
+
+        JSONObject result = new JSONObject();
+        User user = userRepo.findOne(username);
+        if(user == null){
+            result.accumulate("result","fail");
+        }
+        else {
+            Postil postil = new Postil(user, content);
+            postilRepo.save(postil);
+            while (blocks.hasNext()) {
+                BlockPostil bp = new BlockPostil(blocks.next(), postil);
+                blockPRepo.save(bp);
+                result.accumulate("result","success");
+            }
+        }
+        return result;
+    }
+
+    // 传入：paperID,username  ---------------收藏/取消收藏论文
+    public JSONObject starPaper(JSONObject data){
+        String username = data.getString("username");
+        Long paperID = data.getLong("paperID");
+
+        Paper paper = paperRepo.findOne(paperID);
+        User user = userRepo.findOne(username);
+        JSONObject result = new JSONObject();
+        if(paper == null || user == null){
+            result.accumulate("result","fail");
+        }
+        else{
+            StarPaper sp = starPaperRepo.findDistinctByUserAndPaper(user,paper);
+            if(sp == null){//收藏
+                sp = new StarPaper(user,paper);
+                starPaperRepo.save(sp);
+                paper.setStar(paper.getStar()+1);
+            }
+            else {
+                result.accumulate("result","fail");
+            }
+            paperRepo.save(paper);
+            result.accumulate("result","success");
+        }
+        return result;
     }
 }

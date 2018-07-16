@@ -54,7 +54,7 @@ class Postil extends Component{
     refreshStat(pos,flag){
         let that  = this;
         let jsonbody = {};
-        jsonbody.username = 'testuser1';
+        jsonbody.username = 'user1';
         jsonbody.posID = pos.postils.posID;
         jsonbody.marked = pos.marked;
         jsonbody.agreement = pos.agreement;

@@ -31,16 +31,19 @@ class UserDocDetail extends Component{
             .then(response=>response.text())
             .then(responseJson=>{
                 let data = eval('(' + responseJson + ')');
+                console.log(data);
                 if(data.result == 'fail'){
                     window.location.href = '/user';
                     return;
                 }
-                let obj = data.versions[0];
-                let result = (obj.author == username);
-                that.setState({
-                    data: data.versions,
-                    author: result
-                })
+                if(data.version.length > 0){
+                    let obj = data.version[0];
+                    let result = (obj.author == username);
+                    that.setState({
+                        data: data.version,
+                        author: result
+                    })
+                }
             }).catch(function(e){
             console.log("Oops, error");
         })
@@ -50,9 +53,10 @@ class UserDocDetail extends Component{
         /* get username */
         /* get docs according to username */
         let jsonbody = {};
-        jsonbody.versionID = item.versionID;
+        jsonbody.versionID = item.docPdfID;
+        console.log(item);
         jsonbody.username = username;
-
+        console.log(jsonbody);
         let url = IPaddress + 'service/delete/docVersion';
         let options={};
         options.method='POST';
@@ -91,15 +95,16 @@ class UserDocDetail extends Component{
                     renderItem={item => (
                         <List.Item
                             actions={[<p>
-                                <a style={{width:'75px'}} href={"/user/paperpage?ID="+item.ID}>查看内容</a>
+                                <a style={{width:'75px'}} href={"/paper?ID="+item.docPdfID}>查看内容</a>
                                 <Popconfirm title="确定删除吗？" onConfirm={() => this.deleteDoc(this, item)}>
                                     <a style={{width:'75px',marginLeft:'20px'}}>删除该版本</a>
                                 </Popconfirm>
                             </p>]}
                         >
                             <List.Item.Meta
-                                title={<a href={"/viewdoc?versionID="+item.versionID}>{item.title}</a>}
+                                title={<a href={"/paper?ID="+item.docPdfID}>{item.title}</a>}
                             />
+                            <p>{item.version}</p>
                             <p>{item.date}</p>
                         </List.Item>
                     )}
@@ -115,7 +120,7 @@ class UserDocDetail extends Component{
                     renderItem={item => (
                         <List.Item>
                             <List.Item.Meta
-                                title={<a href={"/viewdoc?versionID="+item.versionID}>{item.title}</a>}
+                                title={<a href={"/paper?ID="+item.docPdfID}>{item.title}</a>}
                             />
                             <p>{item.date}</p>
                             <p>{item.version}</p>
