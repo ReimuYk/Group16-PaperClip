@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Divider, Input, Modal, Icon, Button, List } from 'antd';
+import { Link} from 'react-router-dom'
 import '../css/style.css'
 import NavBar from '../components/nav-bar';
 import { IPaddress } from '../App'

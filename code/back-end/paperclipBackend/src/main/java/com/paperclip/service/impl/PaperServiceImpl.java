@@ -82,7 +82,7 @@ public class PaperServiceImpl implements PaperService {
         String username = data.getString("username");
         int pagination = data.getInt("pagination");
 
-        User user = userRepo.findOne("testuser1");
+        User user = userRepo.findOne("user1");
 
         Paper p = paperRepo.findOne(paperID);
         List<PaperPage> pagelist = paperPageRepo.findByPaper(p);

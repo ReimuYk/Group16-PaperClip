@@ -15,7 +15,7 @@ class PDFView extends Component{
         }
         let that  = this;
         let jsonbody = {};
-        jsonbody.username = '';
+        jsonbody.username = 'user1';
         jsonbody.paperID = 1;
         jsonbody.pagination = 1;
         var url = 'http://192.168.1.159:8080/service/paperDetail';
@@ -102,7 +102,7 @@ class PDFView extends Component{
     refreshPostil = (selectid) => {
         let that  = this;
         let jsonbody = {};
-        jsonbody.username = 'testuser1';
+        jsonbody.username = 'user1';
         jsonbody.paperID = 1;
         jsonbody.pagination = 1;
         jsonbody.selectid = selectid;
