@@ -210,7 +210,6 @@ public class CreateData {
                 notes = nn.iterator();
             }
             UserNote un = new UserNote(user,notes.next());
-            un.setMark(count/2);
             un.setAgreement(count%3-1);
             uns.add(un);
             count += 1;
