@@ -28,10 +28,10 @@ public class Note {
     private Date date;
     @Column(name = "agreement",nullable = false)
     private Integer agreement;
-    @Column(name = "disagreement",nullable = false)
-    private Integer disagreement;
+    @Column(name = "star",nullable = false)
+    private Integer star;
 
-    public Note(){};
+    public Note(){}
     public Note(Paper paper,User user){
         this.paper = paper;
         this.user = user;
@@ -40,7 +40,7 @@ public class Note {
         this.keyWords = "";
         this.date = new Date();
         this.agreement = 0;
-        this.disagreement = 0;
+        this.star = 0;
     }
     public Note(Paper paper,User user,String title,String content,String keyWords){
         this.paper = paper;
@@ -50,7 +50,7 @@ public class Note {
         this.keyWords = keyWords;
         this.date = new Date();
         this.agreement = 0;
-        this.disagreement = 0;
+        this.star = 0;
     }
 
     public Long getId() {
@@ -111,5 +111,13 @@ public class Note {
 
     public Integer getAgreement() {
         return agreement;
+    }
+
+    public Integer getStar() {
+        return star;
+    }
+
+    public void setStar(Integer star) {
+        this.star = star;
     }
 }
