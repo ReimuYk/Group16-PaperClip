@@ -12,12 +12,16 @@ class PDFView extends Component{
         super(props);
         this.state = {
             isLoading:true,
+            page:1
         }
+        this.getData(1,1)
+    }
+    getData = (paperID,pagination) =>{
         let that  = this;
         let jsonbody = {};
         jsonbody.username = 'user1';
-        jsonbody.paperID = 1;
-        jsonbody.pagination = 1;
+        jsonbody.paperID = paperID;
+        jsonbody.pagination = pagination;
         var url = 'http://192.168.1.159:8080/service/paperDetail';
         let options={};
         options.method='POST';
@@ -32,6 +36,8 @@ class PDFView extends Component{
             that.setState({
                 isLoading: false,
                 //page state
+                paperID:paperID,
+                pages:data.pagenum,
                 b64str:data.b64str,
                 pageloc: null,
                 pagesize:[700,1000],
@@ -74,30 +80,15 @@ class PDFView extends Component{
     }
     handlePrevious = () => {
         if (this.state.page==1) return
-        this.setState({ page: this.state.page - 1 });
-
-        //test event
-        var postilsData = [
-            {
-                postils:{posID:1,user:"大哥大哥",content:"来测试一下",agree:10,disagree:2},
-                comments:[{user:"咸鱼",content:"nn"},{user:"哇",content:"2"}],
-                marked:0,
-                agreement:{agreed:false,disagreed:false},
-                bid:[]
-            }
-        ]
-        var keyWords=["机智","好机智啊"];
-        var notes=[
-                {title:"你好",intro:"How are you"},
-                {title:"我很好",intro:"I`m fine, thank you, and you?"},        
-        ];
-        emitter.emit("changePostils",postilsData);
-        emitter.emit("changeNoteList",keyWords,notes);
-        //以上部分是为了测试组件之间通信
+        let old = this.state.page
+        this.setState({ page: old - 1 });
+        this.getData(this.state.paperID,old-1)
     }
     handleNext = () => {
         if (this.state.page==this.state.pages) return
-        this.setState({ page: this.state.page + 1 });
+        let old = this.state.page
+        this.setState({ page: old + 1 });
+        this.getData(this.state.paperID,old+1)
     }
     refreshPostil = (selectid) => {
         let that  = this;

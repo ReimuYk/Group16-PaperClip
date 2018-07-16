@@ -3,8 +3,7 @@ import { Divider, Input, Modal, Icon, Button, List } from 'antd';
 import { Link} from 'react-router-dom'
 import '../css/style.css'
 import NavBar from '../components/nav-bar';
-import { IPaddress } from '../App'
-import { Link } from 'react-router-dom';
+import { IPaddress } from '../App';
 const { TextArea } = Input;
 
 var noteID = 0;
