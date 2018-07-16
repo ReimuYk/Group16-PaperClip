@@ -12,4 +12,6 @@ import java.util.List;
 @Repository("docPdfRepo")
 public interface DocumentPdfRepository extends CrudRepository<DocumentPdf,Long>{
     List<DocumentPdf> findByDocument(Document doc);
+
+    List<DocumentPdf> findByDocumentAndVersion(Document doc, int version);
 }

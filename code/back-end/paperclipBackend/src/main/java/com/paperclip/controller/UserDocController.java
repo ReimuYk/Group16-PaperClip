@@ -40,7 +40,7 @@ public class UserDocController {
     @RequestMapping(value = "/service/userDocDetail",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONArray userDocDetail(@RequestBody JSONObject data){
+    JSONObject userDocDetail(@RequestBody JSONObject data){
         return userDocService.getUserDocDetail(data);
     }
     // user want to delete particular versions of this doc
