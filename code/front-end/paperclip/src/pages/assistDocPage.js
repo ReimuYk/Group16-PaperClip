@@ -16,7 +16,7 @@ class AssistDoc extends Component{
         let that  = this;
         let jsonbody = {};
         jsonbody.username = username;
-        var url = IPaddress + 'service/starDoc';
+        var url = IPaddress + 'service/contributeDoc';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -45,7 +45,7 @@ class AssistDoc extends Component{
                 <div style={{width:'60%',marginLeft:'200px'}}>
                 <div style={{width:'915px'}}>
                 <p style={{textAlign:'left'}}>
-                    <a style={{width:'100px',marginLeft:'48px'}}>文档名称/描述</a>
+                    <a style={{width:'100px',marginLeft:'48px'}}>文档名称</a>
                     <a style={{width:'40px',marginLeft:'300px'}}>作者</a>
                     <a style={{width:'70px',marginLeft:'60px'}}>创作日期</a>
                 </p>
@@ -58,7 +58,6 @@ class AssistDoc extends Component{
                     <List.Item>
                         <List.Item.Meta
                         title={<a href={"/user/docdetial?docID="+item.ID}>{item.title}</a>}
-                        description={item.keywords}
                         />
                         <a style={{width:'80px',marginLeft:'20px'}}>{item.author}</a>
                         <a style={{width:'80px',marginLeft:'0px'}}>{item.date}</a>

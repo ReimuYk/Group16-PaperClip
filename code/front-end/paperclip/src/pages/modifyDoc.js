@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Popconfirm, Popover,Icon,Button,Tag, Input, Tooltip,List,Avatar, Menu, Modal} from 'antd';
+import {Popconfirm, Popover,Icon,Button, Input, Tooltip,List,Avatar, Menu, Modal} from 'antd';
 import { IPaddress } from '../App'
 import  { Redirect, Link } from 'react-router-dom'
 import ReactQuill from 'react-quill';
@@ -9,7 +9,6 @@ var username ='';
 var information = {
     docID: 0,
     title:'',
-    tags:[],
     contentHTML:'',
     contentText:'',
     contributors:[]
@@ -25,7 +24,7 @@ class Editor extends React.Component {
     }
 
     componentDidMount(){
-        information.content = this.props.initText;
+        information.contentHTML = this.props.initText;
     }
 
     handleChange(content, delta, source, editor) {
@@ -40,7 +39,7 @@ class Editor extends React.Component {
                 onChange={this.handleChange}
                 modules={Editor.modules}
                 formats={Editor.formats}
-                value={information.content}
+                value={information.contentHTML}
                 bounds={'.app'}
                 placeholder="请输入内容"
             />
@@ -137,7 +136,6 @@ class Header extends React.Component {
         jsonbody.title = information.title;
         jsonbody.content = information.contentHTML;
         jsonbody.username = username;
-
         var url = IPaddress + 'service/save/doc';
         let options={};
         options.method='POST';
@@ -147,7 +145,7 @@ class Header extends React.Component {
             .then(response=>response.text())
             .then(responseJson=>{
                 let data = eval('('+responseJson+')');
-                if(data.result = "fail"){
+                if(data.result == "fail"){
                     alert("保存失败，请重试")
                     return;
                 }
@@ -231,6 +229,7 @@ class ModifyDoc extends Component{
         initContent:''
     }
     componentWillMount = () => {
+        let that = this;
         information.docID = window.location.search.substring(7);
         username = sessionStorage.getItem('username');
         let jsonbody = {};
@@ -253,6 +252,10 @@ class ModifyDoc extends Component{
                 information.title = data.title;
                 information.contentHTML = data.content;
                 information.contributors = data.contributer;
+                that.setState({
+
+                })
+                console.log()
             }).catch(function(e){
             console.log("Oops, error");
         })
@@ -274,7 +277,7 @@ class ModifyDoc extends Component{
                         onChange={this.handleInputChange}
                     />
                     <div className="editor" style={{marginTop:"30px"}}>
-                        <Editor initText={<p>{this.state.initContent}</p>}/>
+                        <Editor initText={<p>{information.contentHTML}</p>}/>
                     </div>
                 </div>
             </div>
