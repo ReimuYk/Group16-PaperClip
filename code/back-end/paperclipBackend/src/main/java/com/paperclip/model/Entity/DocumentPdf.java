@@ -39,6 +39,7 @@ public class DocumentPdf extends Paper{
         return version;
     }
 
+
     public Document getDocument() {
         return document;
     }
