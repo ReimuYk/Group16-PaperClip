@@ -76,7 +76,8 @@ public class UserNoteServiceImpl implements UserNoteService {
             note.accumulate("ID",n.getId());
             note.accumulate("title",n.getTitle());
             note.accumulate("keywords",n.getKeyWords());
-            note.accumulate("date",n.getDate());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            note.accumulate("date",sdf.format(n.getDate()));
             notes.add(note);
         }
         return notes;
