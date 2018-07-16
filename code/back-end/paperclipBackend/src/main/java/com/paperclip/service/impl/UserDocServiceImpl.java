@@ -160,11 +160,12 @@ public class UserDocServiceImpl implements UserDocService {
         Long docID = data.getLong("docID");
         User user = userRepo.findOne(username);
         JSONObject docJson = new JSONObject();
-        if(!hasAccess(user, docID)){
+
+        Document doc = docRepo.findOne(docID);
+        if(!doc.getUser().getUsername().equals(username)){
             docJson.accumulate("result", "fail");
 
         }else{
-            Document doc = docRepo.findOne(docID);
             docJson.accumulate("result", "success");
             docJson.accumulate("docID", docID);
             docJson.accumulate("title", doc.getTitle());

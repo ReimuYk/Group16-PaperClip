@@ -14,4 +14,5 @@ public interface UserNoteRepository extends CrudRepository<UserNote,Long> {
     List<UserNote> findByUser(User user);
 
     List<UserNote> findByNote(Note note);
+    UserNote findDistinctByUserAndNote(User user,Note note);
 }

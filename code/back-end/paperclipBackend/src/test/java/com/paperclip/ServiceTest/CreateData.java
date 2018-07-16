@@ -1,13 +1,9 @@
 package com.paperclip.ServiceTest;
 
 import com.paperclip.dao.entityDao.*;
-import com.paperclip.dao.relationshipDao.BlockPostilRepository;
-import com.paperclip.dao.relationshipDao.StarNoteRepository;
-import com.paperclip.dao.relationshipDao.StarPaperRepository;
+import com.paperclip.dao.relationshipDao.*;
 import com.paperclip.model.Entity.*;
-import com.paperclip.model.Relationship.BlockPostil;
-import com.paperclip.model.Relationship.StarNote;
-import com.paperclip.model.Relationship.StarPaper;
+import com.paperclip.model.Relationship.*;
 import com.paperclip.service.SearchService;
 import com.paperclip.service.UserService;
 import com.paperclip.service.UserStarService;
@@ -66,6 +62,13 @@ public class CreateData {
 
     @Autowired
     private UserStarService service;
+
+    @Autowired
+    private UserNoteRepository userNRepo;
+
+    @Autowired
+    private UserPostilRepository userPRepo;
+
 
     @Before
     public void before() {
@@ -193,6 +196,30 @@ public class CreateData {
                 service.starUser(data);
             }
         }
+    }
+
+    @Test
+    public void createUserNoteData(){
+        Iterable<User> uu = userRepo.findAll();
+        Iterable<Note> nn = noteRepo.findAll();
+        Iterator<Note> notes = nn.iterator();
+        List<UserNote> uns = new ArrayList<>();
+        int count = 0;
+        for(User user: uu){
+            if(!notes.hasNext()){
+                notes = nn.iterator();
+            }
+            UserNote un = new UserNote(user,notes.next());
+            un.setAgreement(count%3-1);
+            uns.add(un);
+            count += 1;
+        }
+        userNRepo.save(uns);
+    }
+
+    @Test
+    public void createUserPostilData(){
+
     }
 
 }

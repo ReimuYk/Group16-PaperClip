@@ -5,11 +5,13 @@ import com.paperclip.dao.entityDao.NoteRepository;
 import com.paperclip.dao.entityDao.PaperRepository;
 import com.paperclip.dao.entityDao.UserRepository;
 import com.paperclip.dao.relationshipDao.StarNoteRepository;
+import com.paperclip.dao.relationshipDao.UserNoteRepository;
 import com.paperclip.model.Entity.Note;
 import com.paperclip.model.Entity.NoteComment;
 import com.paperclip.model.Entity.Paper;
 import com.paperclip.model.Entity.User;
 import com.paperclip.model.Relationship.StarNote;
+import com.paperclip.model.Relationship.UserNote;
 import com.paperclip.service.UserNoteService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -38,6 +40,9 @@ public class UserNoteServiceImpl implements UserNoteService {
 
     @Autowired
     private StarNoteRepository starNoteRepo;
+
+    @Autowired
+    private UserNoteRepository userNRepo;
 
     // 传入：username，paperID 传出：noteID ---------------新建note
     public JSONObject addNote(JSONObject data){
@@ -71,6 +76,7 @@ public class UserNoteServiceImpl implements UserNoteService {
             note.accumulate("ID",n.getId());
             note.accumulate("title",n.getTitle());
             note.accumulate("keywords",n.getKeyWords());
+            note.accumulate("date",n.getDate());
             notes.add(note);
         }
         return notes;
@@ -100,10 +106,11 @@ public class UserNoteServiceImpl implements UserNoteService {
 
     public JSONObject getNoteDetail(JSONObject data) {
         Long noteID = data.getLong("noteID");
+        String username = data.getString("username");
 
         Note n = noteRepo.findOne(noteID);
         JSONObject note = new JSONObject();
-        if(n == null){
+        if((n == null) || (!n.getUser().getUsername().equals(username))){
             return note;
         }
         note.accumulate("ID", n.getId());
@@ -137,17 +144,35 @@ public class UserNoteServiceImpl implements UserNoteService {
 
     public JSONObject getViewNoteDetail(JSONObject data) {
         Long noteID = data.getLong("noteID");
+        String username = data.getString("username");
 
-        Note n = noteRepo.findOne(noteID);
         JSONObject note = new JSONObject();
+        Note n = noteRepo.findOne(noteID);
         if(n == null){
             return note;
         }
+
+        User user = userRepo.findOne(username);
+        boolean ifLike = false;
+        boolean ifStar = false;
+        if(starNoteRepo.findByNote(n) != null){
+            ifStar = true;
+        }
+        UserNote un = userNRepo.findDistinctByUserAndNote(user,n);
+        if((un != null) && (un.getAgreement()==1)){
+            ifLike = true;
+        }
+        User author = n.getUser();
         note.accumulate("noteID", n.getId());
-        note.accumulate("author", n.getUser().getUsername());
+        note.accumulate("author", author.getUsername());
+        note.accumulate("avatar", author.getAvatar());
+        note.accumulate("description",author.getDescription());
         note.accumulate("title", n.getTitle());
         note.accumulate("content", n.getContent());
         note.accumulate("date", n.getDate());
+        note.accumulate("commentNo",noteCommRepo.findByNote(n).size());
+        note.accumulate("ifLike",ifLike);
+        note.accumulate("ifStar",ifStar);
         return note;
     }
 
@@ -186,6 +211,44 @@ public class UserNoteServiceImpl implements UserNoteService {
             noteCommRepo.save(nc);
             result.accumulate("result","success");
         }
+        return result;
+    }
+
+    // 传入：username，paperID  ---------------赞/取消赞 note
+    public JSONObject agreeNote(JSONObject data){
+        Long noteID = data.getLong("noteID");
+        String username = data.getString("username");
+        Note note = noteRepo.findOne(noteID);
+        User user = userRepo.findOne(username);
+        UserNote un = userNRepo.findDistinctByUserAndNote(user,note);
+        if(un == null){
+            un = new UserNote(user,note);
+            un.setAgreement(1);
+        }else{
+            un.setAgreement((un.getAgreement()+1)%2);
+        }
+        userNRepo.save(un);
+        JSONObject result = new JSONObject();
+        result.accumulate("result","success");
+        return result;
+    }
+
+    // 传入：username，paperID  ---------------收藏/取消收藏 note
+    public JSONObject starNote(JSONObject data){
+        Long noteID = data.getLong("noteID");
+        String username = data.getString("username");
+        Note note = noteRepo.findOne(noteID);
+        User user = userRepo.findOne(username);
+        StarNote sn = starNoteRepo.findDistinctByUserAndNote(user,note);
+        if(sn == null){
+            sn = new StarNote(user,note);
+            starNoteRepo.save(sn);
+        }
+        else{
+            starNoteRepo.delete(sn);
+        }
+        JSONObject result = new JSONObject();
+        result.accumulate("result","success");
         return result;
     }
 }
