@@ -238,6 +238,7 @@ class User extends Component{
         let that = this;
         /* get username */
         let username = sessionStorage.getItem('username');
+        console.log(username);
         this.setState({
             username: username
         })
@@ -259,7 +260,7 @@ class User extends Component{
         })
     }
     render() {
-        if(sessionStorage.getItem('username') == ''){
+        if(sessionStorage.getItem('username') == null){
             return <Redirect to="/login"/>;
         }
         return(

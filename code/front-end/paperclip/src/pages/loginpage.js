@@ -10,20 +10,16 @@ class Login extends Component {
     constructor(props){
         super(props);
         this.login = this.login.bind(this);
-        this.state={
-            isLog:false
-        }
     }
     login(){
         username = document.getElementById("username").value;
         password = document.getElementById("password").value;
         //alert(username);
         //alert(password);
-        this.setState({isLog:true});
         sessionStorage.setItem('username', username);
     }
     render() {
-        if(sessionStorage.getItem('username') != ''){
+        if(sessionStorage.getItem('username') != null){
             return <Redirect to="/user"/>;
         }
         return (
