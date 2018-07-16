@@ -88,7 +88,7 @@ class UserDoc extends Component{
                 }
                 else{
                     let obj={
-                        ID: result.ID,
+                        ID: result.docID,
                         title: '新建文档',
                         date: result.date
                     };
