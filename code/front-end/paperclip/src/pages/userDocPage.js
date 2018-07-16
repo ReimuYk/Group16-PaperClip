@@ -4,7 +4,6 @@ import { Link, Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import UserFLoatMenu from '../components/userFloatMenu';
 /* should get from server */
-import book1 from '../statics/book1.jpg';
 import { IPaddress } from '../App'
 
 var username = '';
@@ -19,7 +18,6 @@ class UserDoc extends Component{
         /* get docs according to username */
         let jsonbody = {};
         jsonbody.username = username;
-        console.log(jsonbody);
         let url = IPaddress + 'service/userDoc';
         let options={};
         options.method='POST';
@@ -41,7 +39,7 @@ class UserDoc extends Component{
         let jsonbody = {};
         jsonbody.username = this.state.username;
         jsonbody.docID = item.ID;
-        let url = IPaddress + 'service/quitStar/paper';
+        let url = IPaddress + 'service/delete/doc';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -132,6 +130,9 @@ class UserDoc extends Component{
                                     </Popconfirm>
                                 </p>]}
                             >
+                                <List.Item.Meta
+                                    title={<a href={"/user/docdetail?docID="+item.ID}>{item.title}</a>}
+                                />
                                 <p>{item.date}</p>
                             </List.Item>
                         )}

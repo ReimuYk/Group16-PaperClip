@@ -14,9 +14,30 @@ class Login extends Component {
     login(){
         username = document.getElementById("username").value;
         password = document.getElementById("password").value;
-        //alert(username);
-        //alert(password);
-        sessionStorage.setItem('username', username);
+        let that  = this;
+        let jsonbody = {};
+        jsonbody.password = password;
+        jsonbody.username = username;
+        let url = IPaddress + 'service/login';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let result = eval('(' + responseJson + ')');
+                if(result == null){
+                    alert('登录错误，请验证您的用户名和密码！');
+                    return;
+                }
+                else{
+                    username = result.username;
+                    sessionStorage.setItem('username', username);
+                }
+            }).catch(function(e){
+            console.log("Oops, error");
+        });
     }
     render() {
         if(sessionStorage.getItem('username') != null){
