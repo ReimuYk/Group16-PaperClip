@@ -10,10 +10,15 @@ import com.paperclip.model.Entity.DocumentPdf;
 import com.paperclip.model.Entity.User;
 import com.paperclip.model.Relationship.Assist;
 import com.paperclip.service.UserDocService;
+import com.sun.xml.internal.ws.api.server.HttpEndpoint;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
@@ -245,6 +250,26 @@ public class UserDocServiceImpl implements UserDocService {
         result.accumulate("docID", docID);
         result.accumulate("result", "success");
         return result;
+    }
+
+    public JSONObject publishDoc(JSONObject data){
+        String username = data.getString("username");
+        String doc_content = data.getString("docContent");
+        String title = data.getString("docTitle");
+        Long docID = data.getLong("docID");
+
+        //fake data
+        username = "user1";
+        doc_content = "<p> this is a test html </p>";
+        title = "test title";
+        docID = new Long((long)3);
+
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://localhost:8000/html2pdf/";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        JSONObject body = new JSONObject();
+        HttpEntity<JSONObject> entity = new HttpEntity<JSONObject>(body,headers);
     }
 
 }

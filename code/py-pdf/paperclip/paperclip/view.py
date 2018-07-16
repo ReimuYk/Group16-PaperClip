@@ -32,8 +32,32 @@ def html2pdf(req):
     print('paperid',json_data['paperID'])
     data = json_data['data']
     print('data',json_data['data'])
+    # create pdf & jpeg files
     pdf_uri = '../../back-end/paperclipBackend/data/pdf/'+str(pid)+'.pdf'
     htmlParse.run(json_data['data'],pdf_uri)
     os.mkdir('../../back-end/paperclipBackend/data/pic/%d'%pid)
     pdf2pic.pdf2jpeg(pdf_uri,'../../back-end/paperclipBackend/data/pic/%d/%d'%(pid,pid))
-    return HttpResponse(json.dumps({'res':'ok'}), content_type="application/json")
+    # create response body
+    resp = {}
+    paper = miner.parse(pdf_uri)
+    pagenum = 0
+    blocks = []
+    for page in paper.body:
+        pagenum+=1
+        location=0
+        for box in page:
+            for line in box:
+                for word in line:
+                    location+=1
+                    b = {}
+                    if word["content"].isprintable():
+                        b["content"] = word["content"]
+                    else:
+                        b["content"] = ''
+                    b["start"] = word["start"]
+                    b["end"] = word["end"]
+                    b["location"] = location
+                    blocks.append(b)
+    resp["pagenum"] = pagenum
+    resp["blocks"] = blocks
+    return HttpResponse(json.dumps(resp), content_type="application/json")
