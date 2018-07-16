@@ -5,7 +5,7 @@ import java.util.Date;
 
 @Entity
 public class DocumentPdf extends Paper{
-    @OneToOne(cascade = {CascadeType.MERGE,CascadeType.REMOVE})
+    @OneToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name="documentId",referencedColumnName = "id")
     private Document document;//foreign key
 
@@ -39,6 +39,7 @@ public class DocumentPdf extends Paper{
         return version;
     }
 
+
     public Document getDocument() {
         return document;
     }
@@ -70,16 +71,6 @@ public class DocumentPdf extends Paper{
     @Override
     public void setAuthor(String author) {
         super.setAuthor(author);
-    }
-
-    @Override
-    public String getKeyWords() {
-        return super.getKeyWords();
-    }
-
-    @Override
-    public void setKeyWords(String keyWords) {
-        super.setKeyWords(keyWords);
     }
 
     @Override

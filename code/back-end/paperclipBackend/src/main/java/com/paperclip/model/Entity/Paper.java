@@ -20,6 +20,8 @@ public class Paper {
     private String keyWords;
     @Column(name = "tag")
     private String tag;
+    @Column(name = "star")
+    private Integer star;
 
 
     public Paper() {}
@@ -30,6 +32,7 @@ public class Paper {
         this.pageNum = pageNum;
         this.keyWords = keyWords;
         this.tag = tag;
+        this.star = 0;
     }
 
     public Long getId() {
@@ -52,14 +55,6 @@ public class Paper {
         return title;
     }
 
-    public void setKeyWords(String keyWords) {
-        this.keyWords = keyWords;
-    }
-
-    public String getKeyWords() {
-        return keyWords;
-    }
-
     public void setPageNum(Integer pageNum) {
         this.pageNum = pageNum;
     }
@@ -74,6 +69,22 @@ public class Paper {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public void setKeyWords(String keyWords) {
+        this.keyWords = keyWords;
+    }
+
+    public String getKeyWords() {
+        return keyWords;
+    }
+
+    public void setStar(Integer star) {
+        this.star = star;
+    }
+
+    public Integer getStar() {
+        return star;
     }
 }
 
