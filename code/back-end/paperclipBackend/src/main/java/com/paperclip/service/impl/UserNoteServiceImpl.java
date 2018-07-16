@@ -214,26 +214,35 @@ public class UserNoteServiceImpl implements UserNoteService {
         return result;
     }
 
-    // 传入：username，paperID  ---------------赞/取消赞 note
+    // 传入：username，noteID  ---------------赞/取消赞 note
     public JSONObject agreeNote(JSONObject data){
         Long noteID = data.getLong("noteID");
         String username = data.getString("username");
         Note note = noteRepo.findOne(noteID);
         User user = userRepo.findOne(username);
         UserNote un = userNRepo.findDistinctByUserAndNote(user,note);
-        if(un == null){
+        if(un == null){//赞
             un = new UserNote(user,note);
             un.setAgreement(1);
+            note.setAgreement(note.getAgreement()+1);
         }else{
-            un.setAgreement((un.getAgreement()+1)%2);
+            if(un.getAgreement() == 1){//取消赞
+                un.setAgreement(0);
+                note.setAgreement(note.getAgreement()-1);
+            }else{//赞
+                un.setAgreement(1);
+                note.setAgreement(note.getAgreement()+1);
+            }
+
         }
         userNRepo.save(un);
+        noteRepo.save(note);
         JSONObject result = new JSONObject();
         result.accumulate("result","success");
         return result;
     }
 
-    // 传入：username，paperID  ---------------收藏/取消收藏 note
+    // 传入：username，noteID  ---------------收藏/取消收藏 note
     public JSONObject starNote(JSONObject data){
         Long noteID = data.getLong("noteID");
         String username = data.getString("username");
@@ -242,11 +251,14 @@ public class UserNoteServiceImpl implements UserNoteService {
         StarNote sn = starNoteRepo.findDistinctByUserAndNote(user,note);
         if(sn == null){
             sn = new StarNote(user,note);
+            note.setStar(note.getStar()+1);
             starNoteRepo.save(sn);
         }
         else{
             starNoteRepo.delete(sn);
+            note.setStar(note.getStar()-1);
         }
+        noteRepo.save(note);
         JSONObject result = new JSONObject();
         result.accumulate("result","success");
         return result;
