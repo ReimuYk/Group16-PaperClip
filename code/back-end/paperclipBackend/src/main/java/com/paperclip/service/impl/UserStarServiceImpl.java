@@ -123,10 +123,12 @@ public class UserStarServiceImpl implements UserStarService {
             JSONObject paper = new JSONObject();
             Paper p = it2.next();
             paper.accumulate("ID",p.getId());
+            paper.accumulate("title", p.getTitle());
             paper.accumulate("noteno",noteRepo.findByPaper(p).size());
             paper.accumulate("postilno",getPostilNo(p));
             paper.accumulate("keywords",p.getKeyWords());
-            paper.accumulate("tag",p.getTag());
+            paper.accumulate("tags",p.getTag());
+            System.out.println("paper: "+p.getTitle());
             papers.add(paper);
         }
         return papers;
