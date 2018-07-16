@@ -16,13 +16,8 @@ public interface UserService {
     public JSONObject userLogin(JSONObject data);
 
 
-
-
-
-
     // message.js
     public JSONArray getMessageInfo(JSONObject data);
     public JSONObject sendMessage(JSONObject data);
-
 
 }

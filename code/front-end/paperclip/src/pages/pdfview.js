@@ -15,7 +15,7 @@ class PDFView extends Component{
         }
         let that  = this;
         let jsonbody = {};
-        jsonbody.username = '';
+        jsonbody.username = 'user1';
         jsonbody.paperID = 1;
         jsonbody.pagination = 1;
         var url = 'http://192.168.1.159:8080/service/paperDetail';
@@ -38,15 +38,16 @@ class PDFView extends Component{
                 blocklist:data.blocklist,
                 selectid:[1],
                 selectRender:null,
-                marked:[
-                    {id:[2],content:'this is id 2 block',visible:false},
-                    {id:[3],content:'this is id 3 block',visible:false},
-                    {id:[5],content:'拥挤的两个批注',visible:false},
-                    {id:[6],content:'拥挤的第二个批注',visible:false}
-                ],
+                // marked:[
+                //     {id:[2],content:'this is id 2 block',visible:false},
+                //     {id:[3],content:'this is id 3 block',visible:false},
+                //     {id:[5],content:'拥挤的两个批注',visible:false},
+                //     {id:[6],content:'拥挤的第二个批注',visible:false}
+                // ],
+                marked:data.marked,
                 marked_note:[
-                    {id:[4],title:'note4',content:'this is id 4 note addr',visible:false},
-                    {id:[5],title:'note5',content:'int stands integer',visible:false}
+                    // {id:[4],title:'note4',content:'this is id 4 note addr',visible:false},
+                    // {id:[5],title:'note5',content:'int stands integer',visible:false}
                 ],
                 sel_content:[
                     {ids:[2],like:11,dislike:22,marked:false,content:'this is an unmarked',user:'user1',time:'2019.01.01'}
@@ -59,7 +60,7 @@ class PDFView extends Component{
                     {cid:1,tag:'1',render:[]}
                 ],
                 noteRender:[
-                    {nid:1,tag:'1',render:[]}
+                    // {nid:1,tag:'1',render:[]}
                 ]
             })
         }).catch(function(e){
@@ -78,10 +79,11 @@ class PDFView extends Component{
         //test event
         var postilsData = [
             {
-                postils:{user:"大哥大哥",content:"来测试一下",agree:10,disagree:2},
+                postils:{posID:1,user:"大哥大哥",content:"来测试一下",agree:10,disagree:2},
                 comments:[{user:"咸鱼",content:"nn"},{user:"哇",content:"2"}],
                 marked:0,
-                agreement:{agreed:false,disagreed:false}
+                agreement:{agreed:false,disagreed:false},
+                bid:[]
             }
         ]
         var keyWords=["机智","好机智啊"];
@@ -100,7 +102,7 @@ class PDFView extends Component{
     refreshPostil = (selectid) => {
         let that  = this;
         let jsonbody = {};
-        jsonbody.username = 'testuser1';
+        jsonbody.username = 'user1';
         jsonbody.paperID = 1;
         jsonbody.pagination = 1;
         jsonbody.selectid = selectid;
@@ -119,6 +121,9 @@ class PDFView extends Component{
         }).catch(function(e){
             console.log("Oops, error");
         })
+    }
+    refreshMark = () => {
+
     }
     mouseDown = (e) => {
         console.log('mouse down')

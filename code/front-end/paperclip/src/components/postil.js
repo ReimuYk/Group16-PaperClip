@@ -51,42 +51,74 @@ class Postil extends Component{
     componentWillUnmount() {
         //emitter.removeListener(this.postilEvent);
     }
+    refreshStat(pos,flag){
+        let that  = this;
+        let jsonbody = {};
+        jsonbody.username = 'user1';
+        jsonbody.posID = pos.postils.posID;
+        jsonbody.marked = pos.marked;
+        jsonbody.agreement = pos.agreement;
+        jsonbody.flag = flag;
+        var url = 'http://192.168.1.159:8080/service/statPostil';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+        .then(response=>response.text())
+        .then(responseJson=>{
+            console.log(responseJson);
+            let data = eval('('+responseJson+')');
+            console.log(data)
+        }).catch(function(e){
+            console.log("Oops, error");
+        })
+    }
     agree(e){
         e.stopPropagation();
         var idx = e.target.value;
         var data = this.state.data;
+        var flag = [0,0]//stands number changed from agreed and disagreed
         if(data[idx].agreement.agreed){
             data[idx].postils.agree -= 1;
+            flag[0] = -1;
         }else{
             data[idx].postils.agree += 1;
+            flag[0] = 1;
         }
         data[idx].agreement.agreed = !data[idx].agreement.agreed;
         if(data[idx].agreement.disagreed){
             data[idx].postils.disagree -= 1;
+            flag[1] = -1;
             data[idx].agreement.disagreed = false;
         }
         this.setState({
             data:data
         })
+        this.refreshStat(data[idx],flag)
     }
     disagree(e){
         e.stopPropagation();
         var idx = e.target.value;
         var data = this.state.data;
-
+        var flag = [0,0]
         if(data[idx].agreement.disagreed){
             data[idx].postils.disagree -= 1;
+            flag[1] = -1;
         }else{
             data[idx].postils.disagree += 1;
+            flag[1] = 1;
         }
         data[idx].agreement.disagreed = !data[idx].agreement.disagreed;
         if(data[idx].agreement.agreed){
             data[idx].postils.agree -= 1;
+            flag[0] = -1
             data[idx].agreement.agreed = false;
         }
         this.setState({
             data:data
         })
+        this.refreshStat(data[idx],flag)
     }
     mark(e){
         e.stopPropagation();
@@ -94,6 +126,7 @@ class Postil extends Component{
         var data = this.state.data;
         data[idx].marked = 1 - data[idx].marked
         this.setState({data:data})
+        this.refreshStat(data[idx],[0,0])
     }
     getPostil = (item,idx)=>{
         return(

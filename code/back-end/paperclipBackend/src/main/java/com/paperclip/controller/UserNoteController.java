@@ -101,5 +101,19 @@ public class UserNoteController {
         return userNoteService.addNoteComment(data);
     }
 
+    @RequestMapping(value = "/service/agreeNote",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONObject agreeNote(@RequestBody JSONObject data){
+        return userNoteService.agreeNote(data);
+    }
+
+    @RequestMapping(value = "/service/starTheNote",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONObject starNote(@RequestBody JSONObject data){
+        return userNoteService.starNote(data);
+    }
+
 
 }

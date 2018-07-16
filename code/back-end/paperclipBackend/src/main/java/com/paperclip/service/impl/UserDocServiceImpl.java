@@ -2,6 +2,7 @@ package com.paperclip.service.impl;
 
 import com.paperclip.dao.entityDao.DocumentPdfRepository;
 import com.paperclip.dao.entityDao.DocumentRepository;
+import com.paperclip.dao.entityDao.PaperRepository;
 import com.paperclip.dao.entityDao.UserRepository;
 import com.paperclip.dao.relationshipDao.AssistRepository;
 import com.paperclip.model.Entity.Document;
@@ -14,9 +15,7 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
@@ -35,8 +34,13 @@ public class UserDocServiceImpl implements UserDocService {
     @Autowired
     AssistRepository assistRepo;
 
+    @Autowired
+    PaperRepository paperRepo;
+
     private Boolean hasAccess(User user, Long docID) {
         Document doc = docRepo.findOne(docID);
+        if(doc==null)
+            return false;
         if (doc.getUser().getUsername().equals(user.getUsername()))
             return true;
         List<Assist> assistIist = assistRepo.findByDocument(doc);
@@ -58,10 +62,8 @@ public class UserDocServiceImpl implements UserDocService {
         System.out.println("username: "+username);
         User user = userRepo.findOne(username);
         List<Document> docList = docRepo.findByUser(user);
-        Iterator<Document> docIt = docList.iterator();
 
-        while(docIt.hasNext()){
-            Document doc = docIt.next();
+        for (Document doc : docList) {
             JSONObject docJson = new JSONObject();
             docJson.accumulate("ID", doc.getId());
             docJson.accumulate("title", doc.getTitle());
@@ -72,58 +74,6 @@ public class UserDocServiceImpl implements UserDocService {
 
     // delete this user's doc( which matches this docID and docVersion)
     public JSONObject deleteUserDoc(JSONObject data) {
-        System.out.println("data: " + data);
-        JSONObject result = new JSONObject();
-
-        String username = data.getString("username");
-        Long docID = data.getLong("docID");
-        System.out.println("username: "+username);
-        User user = userRepo.findOne(username);
-        Document doc = docRepo.findOne(docID);
-        System.out.println("doc author:"+doc.getUser().getUsername());
-        if(doc.getUser().getUsername().equals(username)){
-            docRepo.delete(doc);
-            System.out.println("delete success");
-            result.accumulate("result", "success");
-        }else{
-            System.out.println("delete fail");
-            result.accumulate("result", "fail");
-        }
-        return result;
-    }
-
-    // get all versions of this doc
-    public JSONArray getUserDocDetail(JSONObject data) {
-        JSONArray docDetails = new JSONArray();
-        String username = data.getString("username");
-        Long docId = data.getLong("docID");
-        Document doc = docRepo.findOne(docId);
-        System.out.println("username: "+username);
-        User user = userRepo.findOne(username);
-        // if the user is not the author nor the contributor of this doc, this user does not have access to this doc
-        if(!hasAccess(user, docId))
-            return null;
-
-        System.out.println("docId: " + doc.getId());
-        List<DocumentPdf> docPdfList = docPdfRepo.findByDocument(doc);
-        Iterator<DocumentPdf> docPdfIt = docPdfList.iterator();
-        while(docPdfIt.hasNext()){
-            DocumentPdf docPdf = docPdfIt.next();
-            System.out.println("docPdfId: "+docPdf.getId());
-            JSONObject docPdfJson = new JSONObject();
-            docPdfJson.accumulate("title", docPdf.getTitle());
-            java.text.SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            docPdfJson.accumulate("date", sdf.format(docPdf.getDate()));
-            docPdfJson.accumulate("author", docPdf.getAuthor());
-            docPdfJson.accumulate("version", docPdf.getVersion());
-            docPdfJson.accumulate("keywords", docPdf.getKeyWords());
-            docDetails.add(docPdfJson);
-        }
-        return docDetails;
-    }
-
-    // delete all version of this doc( whose ID is docID)
-    public JSONObject deleteUserDocVersion(JSONObject data) {
         JSONObject result = new JSONObject();
         String username = data.getString("username");
         Long docID = data.getLong("docID");
@@ -136,14 +86,70 @@ public class UserDocServiceImpl implements UserDocService {
         }else {
 
             List<DocumentPdf> docPdfList = docPdfRepo.findByDocument(doc);
-            Iterator<DocumentPdf> documentPdfIterator = docPdfList.iterator();
 
-            while (documentPdfIterator.hasNext()) {
-                DocumentPdf docPdf = documentPdfIterator.next();
+            for (DocumentPdf docPdf : docPdfList) {
                 docPdfRepo.delete(docPdf.getId());
             }
             docRepo.delete(doc.getId());
             result.accumulate("result", "success");
+        }
+        return result;
+
+    }
+
+    // get all versions of this doc
+    public JSONObject getUserDocDetail(JSONObject data) {
+        JSONArray docDetails = new JSONArray();
+        String username = data.getString("username");
+        Long docId = data.getLong("docID");
+        Document doc = docRepo.findOne(docId);
+        System.out.println("username: "+username);
+        User user = userRepo.findOne(username);
+        JSONObject result = new JSONObject();
+        // if the user is not the author nor the contributor of this doc, this user does not have access to this doc
+        if(!doc.getUser().getUsername().equals(username)) {
+            result.accumulate("result", "fail");
+        }else {
+            result.accumulate("result", "success");
+            System.out.println("docId: " + doc.getId());
+            List<DocumentPdf> docPdfList = docPdfRepo.findByDocument(doc);
+            for (DocumentPdf docPdf : docPdfList) {
+                System.out.println("docPdfId: " + docPdf.getId());
+                JSONObject docPdfJson = new JSONObject();
+                docPdfJson.accumulate("result", "success");
+                docPdfJson.accumulate("title", docPdf.getTitle());
+                docPdfJson.accumulate("docPdfID", docPdf.getId());
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                docPdfJson.accumulate("date", sdf.format(docPdf.getDate()));
+                docPdfJson.accumulate("author", docPdf.getAuthor());
+                docPdfJson.accumulate("version", docPdf.getVersion());
+                docPdfJson.accumulate("keywords", docPdf.getKeyWords());
+                docDetails.add(docPdfJson);
+            }
+        }
+        result.accumulate("version", docDetails);
+        return result;
+    }
+
+    public JSONObject deleteUserDocVersion(JSONObject data) {
+        System.out.println("data: " + data);
+        JSONObject result = new JSONObject();
+
+        String username = data.getString("username");
+        Long versionID = data.getLong("versionID");
+        System.out.println("username: "+username);
+        User user = userRepo.findOne(username);
+        DocumentPdf docPdf = docPdfRepo.findOne(versionID);
+
+        if(docPdf!=null){
+            System.out.println("docPdfID" + docPdf.getId());
+            System.out.println("pdf title"+docPdf.getTitle());
+
+            docPdfRepo.delete(docPdf);
+            result.accumulate("result", "success");
+        }
+        else{
+            result.accumulate("result", "fail");
         }
         return result;
     }
@@ -153,14 +159,19 @@ public class UserDocServiceImpl implements UserDocService {
         String username = data.getString("username");
         Long docID = data.getLong("docID");
         User user = userRepo.findOne(username);
-        if(!hasAccess(user, docID))
-            return null;
-        Document doc = docRepo.findOne(docID);
         JSONObject docJson = new JSONObject();
-        docJson.accumulate("docID", docID);
-        docJson.accumulate("title", doc.getTitle());
-        docJson.accumulate("author", doc.getUser());
-        docJson.accumulate("content", doc.getContent());
+
+        Document doc = docRepo.findOne(docID);
+        if(!doc.getUser().getUsername().equals(username)){
+            docJson.accumulate("result", "fail");
+
+        }else{
+            docJson.accumulate("result", "success");
+            docJson.accumulate("docID", docID);
+            docJson.accumulate("title", doc.getTitle());
+            docJson.accumulate("author", doc.getUser());
+            docJson.accumulate("content", doc.getContent());
+        }
         return docJson;
     }
 
@@ -168,12 +179,13 @@ public class UserDocServiceImpl implements UserDocService {
     public JSONObject saveDoc(JSONObject data){
         String username = data.getString("username");
         Long docID = data.getLong("docID");
+        Document doc = docRepo.findOne(docID);
         User user = userRepo.findOne(username);
         JSONObject result = new JSONObject();
-        if(!hasAccess(user, docID)) {
+        if(!doc.getUser().getUsername().equals(username)) {
             result.accumulate("result", "fail");
         }else{
-            Document doc = docRepo.findOne(docID);
+
             String content = data.getString("content");
             String title = data.getString("title");
             doc.setContent(content);
@@ -209,14 +221,13 @@ public class UserDocServiceImpl implements UserDocService {
         String username = data.getString("username");
         User user = userRepo.findOne(username);
         List<Assist> assistList = assistRepo.findByUser(user);
-        Iterator<Assist> assistIterator = assistList.iterator();
-        while(assistIterator.hasNext()){
-            Assist assist = assistIterator.next();
+        for (Assist assist : assistList) {
             Document doc = assist.getDocument();
             JSONObject docJson = new JSONObject();
             docJson.accumulate("docID", doc.getId());
             docJson.accumulate("title", doc.getTitle());
             docJson.accumulate("author", doc.getUser().getUsername());
+            docJson.accumulate("result", "success");
             docs.add(doc);
         }
         return docs;
@@ -230,6 +241,8 @@ public class UserDocServiceImpl implements UserDocService {
         User user = userRepo.findOne(username);
         Document doc = new Document(user, title, content);
         docRepo.save(doc);
+        Long docID = doc.getId();
+        result.accumulate("docID", docID);
         result.accumulate("result", "success");
         return result;
     }

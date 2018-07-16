@@ -58,6 +58,8 @@ public class ViewInfoServiceImpl implements ViewInfoService {
         docJson.accumulate("title", doc.getTitle());
         docJson.accumulate("content", doc.getContent());
         docJson.accumulate("author", doc.getUser().getUsername());
+        docJson.accumulate("userheader", doc.getUser().getAvatar());
+        docJson.accumulate("userDescription", doc.getUser().getDescription());
         return docJson;
     }
 
