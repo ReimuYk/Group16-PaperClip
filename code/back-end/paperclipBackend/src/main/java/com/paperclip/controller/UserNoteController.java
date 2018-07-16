@@ -108,7 +108,7 @@ public class UserNoteController {
         return userNoteService.agreeNote(data);
     }
 
-    @RequestMapping(value = "/service/starNote",method = RequestMethod.POST)
+    @RequestMapping(value = "/service/starTheNote",method = RequestMethod.POST)
     public
     @ResponseBody
     JSONObject starNote(@RequestBody JSONObject data){
