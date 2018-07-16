@@ -180,7 +180,7 @@ class Header extends React.Component {
         jsonbody.noteContent = information.contentHTML;
         jsonbody.keywords = keywords;
 
-        var url = IPaddress + 'service/publish/doc';
+        var url = IPaddress + 'service/save/note';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -257,6 +257,7 @@ class ModifyNote extends Component{
                 let data = eval('('+responseJson+')');
                 information.title = data.title;
                 information.contentHTML = data.content;
+                information.tags = data.keywords.split(";");
                 that.setState({
                 })
             }).catch(function(e){

@@ -97,6 +97,9 @@ public class UserStarServiceImpl implements UserStarService {
             User user = userRepo.findOne(username);
             Note note = noteRepo.findOne(noteID);
             starNoteRepo.deleteDistinctByNoteAndUser(note,user);
+            note.setStar(note.getStar()-1);
+            noteRepo.save(note);
+
             result.accumulate("result", "success");
         }catch (JSONException e){
             result.accumulate("result", "fail");
@@ -158,6 +161,8 @@ public class UserStarServiceImpl implements UserStarService {
             User user = userRepo.findOne(username);
             Paper paper = paperRepo.findOne(paperID);
             starPaperRepo.deleteDistinctByPaperAndUser(paper,user);
+            paper.setStar(paper.getStar()-1);
+            paperRepo.save(paper);
             result.accumulate("result", "success");
         }catch (JSONException e){
             result.accumulate("result", "fail");
@@ -199,7 +204,7 @@ public class UserStarServiceImpl implements UserStarService {
 
         User followee = userRepo.findOne(clientname);
         User follower = userRepo.findOne(hostname);
-        Follow ff = followRepo.findDistinctByFolloweeAndAndFollower(followee,follower);
+        Follow ff = followRepo.findDistinctByFolloweeAndFollower(followee,follower);
 
         if(ff != null) {
             followRepo.delete(ff);

@@ -8,4 +8,10 @@ public interface PaperService {
     JSONObject getPaperDetail(JSONObject data);
     JSONArray getBlockPostils(JSONObject data);
     JSONObject statPostil(JSONObject data);
+
+    //paperpage.js
+    JSONObject addPostilComment(JSONObject data);
+    JSONObject addPostil(JSONObject data);
+    JSONObject starPaper(JSONObject data);
 }
+

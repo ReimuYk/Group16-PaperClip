@@ -74,16 +74,6 @@ public class DocumentPdf extends Paper{
     }
 
     @Override
-    public String getKeyWords() {
-        return super.getKeyWords();
-    }
-
-    @Override
-    public void setKeyWords(String keyWords) {
-        super.setKeyWords(keyWords);
-    }
-
-    @Override
     public String getTitle() {
         return super.getTitle();
     }
