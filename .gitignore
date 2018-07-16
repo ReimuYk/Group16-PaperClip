@@ -4,3 +4,4 @@ code/back-end/paperclipBackend/paperclip.iml
 __pycache__/
 *.properties
 target/
+data/

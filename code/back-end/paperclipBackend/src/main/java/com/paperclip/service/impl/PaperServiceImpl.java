@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sun.misc.BASE64Encoder;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -95,7 +96,7 @@ public class PaperServiceImpl implements PaperService {
         }
         List<Block> blist = blockRepo.findByPaperPage(page);
         String pageurl = page.getContentUrl();
-        pageurl = "C:\\Users\\Administrator\\Desktop\\pdfSplit\\page-0.jpeg";
+        pageurl = String.format("./data/pic/%d/%s",paperID,pageurl);
         String b64str = this.GetImageStrFromPath(pageurl);
         b64str = "data:image/jpg;base64,"+b64str;
 
