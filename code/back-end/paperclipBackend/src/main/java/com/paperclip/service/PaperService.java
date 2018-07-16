@@ -5,7 +5,7 @@ import net.sf.json.JSONObject;
 
 public interface PaperService {
     // paperpage.js
-    public JSONObject getPaperDetail(JSONObject data);
-
-    public JSONArray getBlockPostils(JSONObject data);
+    JSONObject getPaperDetail(JSONObject data);
+    JSONArray getBlockPostils(JSONObject data);
+    JSONObject statPostil(JSONObject data);
 }

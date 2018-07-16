@@ -4,6 +4,7 @@ import com.paperclip.dao.entityDao.*;
 import com.paperclip.dao.relationshipDao.BlockPostilRepository;
 import com.paperclip.dao.relationshipDao.UserPostilRepository;
 import com.paperclip.model.Entity.*;
+import com.paperclip.model.Relationship.BlockPostil;
 import com.paperclip.model.Relationship.UserPostil;
 import com.paperclip.service.PaperService;
 import net.sf.json.JSONArray;
@@ -43,6 +44,9 @@ public class PaperServiceImpl implements PaperService {
     @Autowired
     UserPostilRepository userPRepo;
 
+    @Autowired
+    UserRepository userRepo;
+
 
     public String GetImageStrFromPath(String imgPath) {
         InputStream in = null;
@@ -78,6 +82,8 @@ public class PaperServiceImpl implements PaperService {
         String username = data.getString("username");
         int pagination = data.getInt("pagination");
 
+        User user = userRepo.findOne("testuser1");
+
         Paper p = paperRepo.findOne(paperID);
         List<PaperPage> pagelist = paperPageRepo.findByPaper(p);
         PaperPage page = null;
@@ -104,7 +110,22 @@ public class PaperServiceImpl implements PaperService {
             blk.accumulate("end",parsePoint(ed));
             blocklist.add(blk);
         }
+
         JSONArray marked = new JSONArray();
+        List<Postil> poslist = blockPRepo.findDistinctPostilByBlock(blist);
+        List<UserPostil> uplist = userPRepo.findByUserAndMarkAndPostilIn(user,1,poslist);
+        for (UserPostil up:uplist){
+            JSONObject obj = new JSONObject();
+            List<BlockPostil> bplist = blockPRepo.findByPostil(up.getPostil());
+            JSONArray bid = new JSONArray();
+            for (BlockPostil bp:bplist){
+                bid.add(bp.getBlock().getId());
+            }
+            obj.accumulate("id",bid);
+            obj.accumulate("content",up.getPostil().getContent());
+            obj.accumulate("visible",false);
+            marked.add(obj);
+        }
         int pagenum = p.getPageNum();
 
         paper.accumulate("b64str",b64str);
@@ -131,7 +152,8 @@ public class PaperServiceImpl implements PaperService {
             JSONObject obj = new JSONObject();
             //postils:{user:xxx,content:xxx,agree:xxx,disagree:xxx}
             JSONObject postils = new JSONObject();
-            User user = p.getUser();
+            User user = userRepo.findOne(username);
+            postils.accumulate("posID",p.getId());
             postils.accumulate("user",user.getUsername());
             postils.accumulate("content",p.getContent());
             postils.accumulate("agree",p.getAgreement());
@@ -175,6 +197,43 @@ public class PaperServiceImpl implements PaperService {
             obj.accumulate("agreement",agreement);
             res.add(obj);
         }
+        return res;
+    }
+
+    public JSONObject statPostil(JSONObject data){
+        Long posID = data.getLong("posID");
+        String username = data.getString("username");
+        int marked = data.getInt("marked");
+        JSONObject agreement = data.getJSONObject("agreement");
+        JSONArray flag = data.getJSONArray("flag");
+        System.out.println(posID);
+        System.out.println(marked);
+        System.out.println(agreement);
+        System.out.print(flag);
+
+        Postil pos = postilRepo.findOne(posID);
+        pos.setAgreement(pos.getAgreement()+flag.getInt(0));
+        pos.setDisagreement(pos.getDisagreement()+flag.getInt(1));
+        postilRepo.save(pos);
+        User user = userRepo.findOne(username);
+        List<UserPostil> uplist = userPRepo.findByUserAndPostil(user,pos);
+        UserPostil up;
+        if (uplist.isEmpty()){
+            up = new UserPostil(user,pos);
+        }else{
+            up = uplist.get(0);
+        }
+        up.setMark(marked);
+        if (agreement.getBoolean("agreed")){
+            up.setAgreement(1);
+        }else if (agreement.getBoolean("disagreed")){
+            up.setAgreement(-1);
+        }else{
+            up.setAgreement(0);
+        }
+        userPRepo.save(up);
+        JSONObject res = new JSONObject();
+        res.accumulate("stat","success");
         return res;
     }
 }
