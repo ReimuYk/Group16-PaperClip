@@ -1,6 +1,7 @@
 package com.paperclip.model.Entity;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class Document {
@@ -17,12 +18,15 @@ public class Document {
     private String title;
     @Column(name = "content",nullable = false)
     private String content;
+    @Column(name = "date",nullable = false)
+    private Date date;
 
     public Document(){};
     public Document(User user, String title, String content){
         this.user = user;
         this.title = title;
         this.content = content;
+        this.date = new Date();
     }
 
     public Long getId() {
@@ -51,5 +55,13 @@ public class Document {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public Date getDate() {
+        return date;
     }
 }

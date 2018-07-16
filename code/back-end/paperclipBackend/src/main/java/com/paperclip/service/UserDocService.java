@@ -10,7 +10,7 @@ public interface UserDocService {
     public JSONObject deleteUserDoc(JSONObject data);
 
     // UserDocDetailPage
-    public JSONArray getUserDocDetail(JSONObject data);
+    public JSONObject getUserDocDetail(JSONObject data);
     public JSONObject deleteUserDocVersion(JSONObject data);
 
     // UserModifyDocPage.js

@@ -12,7 +12,6 @@ public interface UserNoteService {
     public JSONObject deleteUserNote(JSONObject data);
 
 
-
     // UserModifyNotePage.js
     public JSONObject getNoteDetail(JSONObject data);
     public JSONObject saveNote(JSONObject data);
@@ -23,6 +22,7 @@ public interface UserNoteService {
     public JSONObject getViewNoteDetail(JSONObject data);
     JSONArray getNoteComment(JSONObject data);
     JSONObject addNoteComment(JSONObject data);
-
+    JSONObject agreeNote(JSONObject data);
+    JSONObject starNote(JSONObject data);
 
 }

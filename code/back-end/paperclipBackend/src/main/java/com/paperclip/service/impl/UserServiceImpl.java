@@ -2,21 +2,26 @@ package com.paperclip.service.impl;
 
 import com.paperclip.dao.entityDao.DocumentPdfRepository;
 import com.paperclip.dao.entityDao.DocumentRepository;
+import com.paperclip.dao.entityDao.MessageRespository;
 import com.paperclip.dao.entityDao.UserRepository;
 import com.paperclip.model.Entity.Document;
 import com.paperclip.model.Entity.DocumentPdf;
+import com.paperclip.model.Entity.Message;
 import com.paperclip.model.Entity.User;
 import com.paperclip.service.MailService;
 import com.paperclip.service.UserService;
+import net.sf.json.JSON;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
+import java.util.List;
 
 /*
 * 罗宇辰
@@ -33,6 +38,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private DocumentPdfRepository docPdfRepo;
+
+    @Autowired
+    private MessageRespository messageRepo;
 
     private static final String dafaultAvatar = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEBAAEAAAD//gAmUGFpbnQgVG9vbCAtU0FJLSBKUEVHIEVuY29kZXIgdjEuMDAA/9sAhAAjGhoaGholJSUlMzMzMzNERERERERVVVVVVVVVampqampqamqCgoKCgoKCmpqampqatra2trbV1dXV9PT0////ATwsLCwsLD8/Pz9WVlZWVnFxcXFxcY+Pj4+Pj4+ysrKysrKystjY2NjY2Nj/////////////////////////////wAARCADYANgDAREAAhEBAxEB/8QBogAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoLEAACAQMDAgQDBQUEBAAAAX0BAgMABBEFEiExQQYTUW" +
             "EHInEUMoGRoQgjQrHBFVLR8CQzYnKCCQoWFxgZGiUmJygpKjQ1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4eLj5OXm5+jp6vHy8/T19vf4+foBAAMBAQEBAQEBAQEAAAAAAAABAgMEBQYHCAkKCxEAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmq" +
@@ -99,17 +107,11 @@ public class UserServiceImpl implements UserService {
         User user = userRepo.findOne(username);
         if((user != null) && (password.equals(user.getPassword()))){
             userinfo.accumulate("username", username);
-            userinfo.accumulate("password", password);
-            userinfo.accumulate("userheader",user.getAvatar() );
-            userinfo.accumulate("userDescription", user.getDescription());
         }
         else {
             user = userRepo.findDistinctByEmail(username);
             if ((user != null) && (password.equals(user.getPassword()))) {
-                userinfo.accumulate("username", username);
-                userinfo.accumulate("password", password);
-                userinfo.accumulate("userheader", user.getAvatar());
-                userinfo.accumulate("userDescription", user.getDescription());
+                userinfo.accumulate("username", user.getUsername());
             }
         }
         return userinfo;
@@ -118,30 +120,35 @@ public class UserServiceImpl implements UserService {
 
     /* 以下内容与私信有关，有待后期拓展 */
     public JSONArray getMessageInfo(JSONObject data) {
-        JSONObject content1 = new JSONObject();
-        content1.accumulate("hostname", "我");
-        content1.accumulate("time", "2018-07-06:11:30");
-        content1.accumulate("content", "吃饭去吧！");
+        return null;
 
-        JSONArray messageContent = new JSONArray();
-        messageContent.add(content1);
+    }
 
-        JSONObject message = new JSONObject();
-        message.accumulate("clientname", "小妹妹");
-        message.accumulate("content", messageContent);
+    public JSONArray getMessageList(JSONObject data){
+        JSONArray messageArray = new JSONArray();
+        String username = data.getString("username");
+        User hostAsSender = userRepo.findOne(username);
+        List<Message> messageList = messageRepo.findBySender(hostAsSender);
+        for (Message message : messageList) {
+            User receviever = message.getReceiver();
+            JSONObject messageJson = new JSONObject();
+            messageJson.accumulate("sender", username);
+            messageJson.accumulate("receiver", receviever.getUsername());
 
-        JSONArray messages = new JSONArray();
-        messages.add(message);
-        return messages;
+        }
+        return messageArray;
     }
 
     public JSONObject sendMessage(JSONObject data) {
         JSONObject result = new JSONObject();
-        if(true){
-            result.accumulate("result", "success");
-        }else{
-            result.accumulate("result", "fail");
-        }
+        String senderName = data.getString("senderName");
+        String receiverName = data.getString("receiverName");
+        String content = data.getString("content");
+        User sender = userRepo.findOne(senderName);
+        User receiver = userRepo.findOne(receiverName);
+        Message message = new Message(sender, receiver, content);
+        messageRepo.save(message);
+        result.accumulate("result", "success");
         return result;
     }
 

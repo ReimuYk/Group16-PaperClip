@@ -16,7 +16,7 @@ public class Paper {
     private String author;
     @Column(name = "pageNum",nullable = false)
     private Integer pageNum;
-    @Column(name = "keyWords",nullable = false)
+    @Column(name = "keyWords")
     private String keyWords;
     @Column(name = "tag")
     private String tag;
