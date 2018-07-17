@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -78,7 +79,8 @@ public class UserStarServiceImpl implements UserStarService {
             note.accumulate("title", n.getTitle());
             note.accumulate("author", n.getUser().getUsername());
             note.accumulate("starno", starNoteRepo.findByNote(n).size());
-            note.accumulate("date", n.getDate());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            note.accumulate("date", sdf.format(n.getDate()));
             note.accumulate("keywords", n.getKeyWords());
             note.accumulate("paperID", n.getPaper().getId());
             note.accumulate("paperTitle", n.getPaper().getTitle());

@@ -223,8 +223,10 @@ public class UserDocServiceImpl implements UserDocService {
             docJson.accumulate("title", doc.getTitle());
             docJson.accumulate("author", doc.getUser().getUsername());
             docJson.accumulate("result", "success");
-            docs.add(doc);
+            System.out.println("doc: "+docJson.toString());
+            docs.add(docJson);
         }
+        System.out.println("docs: "+docs.toString());
         return docs;
     }
 
