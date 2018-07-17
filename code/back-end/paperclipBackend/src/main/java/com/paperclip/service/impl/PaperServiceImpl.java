@@ -250,9 +250,9 @@ public class PaperServiceImpl implements PaperService {
         return res;
     }
 
-    // 传入：username，postilID，content  ---------------对批注进行评论
+    // 传入：username，posID，content  ---------------对批注进行评论
     public JSONObject addPostilComment(JSONObject data){
-        Long postilID = data.getLong("postilID");
+        Long postilID = data.getLong("posID");
         String username = data.getString("username");
         String content = data.getString("content");
 
@@ -275,8 +275,13 @@ public class PaperServiceImpl implements PaperService {
     public JSONObject addPostil(JSONObject data){
         String username = data.getString("username");
         String content = data.getString("content");
-        JSONArray list = data.getJSONArray("blockList");
-        List<Block> blocklist = JSONArray.toList(list,new Block(),new JsonConfig());
+        JSONArray blist = data.getJSONArray("blockList");
+        List<Block> blocklist = new ArrayList<Block>();
+        for (int i=0;i<blist.size();i++){
+            Long bid = blist.getLong(i);
+            Block b = blockRepo.findOne(bid);
+            blocklist.add(b);
+        }
         Iterator<Block> blocks = blocklist.iterator();
 
         JSONObject result = new JSONObject();

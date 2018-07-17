@@ -185,8 +185,12 @@ public class UserServiceImpl implements UserService {
         while(it2.hasNext()){
             Message m = it2.next();
             JSONObject message = new JSONObject();
-            message.accumulate("sender", m.getSender().getUsername());
-            message.accumulate("receiver",m.getReceiver().getUsername());
+            if(m.getSender().getUsername().equals(username)){
+                message.accumulate("another",m.getReceiver().getUsername());
+            }
+            else {
+                message.accumulate("another", m.getSender().getUsername());
+            }
             message.accumulate("content",m.getContent());
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             message.accumulate("time",sdf.format(m.getTime()));
@@ -216,6 +220,7 @@ public class UserServiceImpl implements UserService {
                 m.setHasRead(1);
                 messageRepo.save(m);
             }
+            message.accumulate("sender",m.getSender().getUsername());
             message.accumulate("content",m.getContent());
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             message.accumulate("time",sdf.format(m.getTime()));
@@ -235,7 +240,8 @@ public class UserServiceImpl implements UserService {
         User receiver = userRepo.findOne(receiverName);
         Message message = new Message(sender, receiver, content);
         messageRepo.save(message);
-        result.accumulate("result", "success");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        result.accumulate("time", sdf.format(message.getTime()));
         return result;
     }
 

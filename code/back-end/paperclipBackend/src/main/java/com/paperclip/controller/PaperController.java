@@ -33,4 +33,25 @@ public class PaperController {
     JSONObject markPostil(@RequestBody JSONObject data){
         return paperService.statPostil(data);
     }
+
+    @RequestMapping(value = "/service/addPostil",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONObject addPostil(@RequestBody JSONObject data){
+        return paperService.addPostil(data);
+    }
+
+    @RequestMapping(value = "/service/addPostilComment",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONObject addPostilComment(@RequestBody JSONObject data){
+        return paperService.addPostilComment(data);
+    }
+
+    @RequestMapping(value = "/service/starThePaper",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONObject starPaper(@RequestBody JSONObject data){
+        return paperService.starPaper(data);
+    }
 }

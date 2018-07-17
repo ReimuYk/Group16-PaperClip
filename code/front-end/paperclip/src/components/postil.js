@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Collapse ,List,Input,Icon,Button,Avatar,Divider,Anchor} from 'antd';
 import Comment from "./comment";
 import emitter from '.././util/events';
+import { IPaddress } from '../App';
 const Panel = Collapse.Panel;
 const Search = Input.Search;
 const ButtonGroup = Button.Group;
@@ -36,15 +37,25 @@ class Postil extends Component{
             ],
             postilIdx:null,
             inputValue:"",
+            selectid:null
         }
     }
     componentWillMount(){
+        this.setState({
+            //username:sessionStorage.getItem('username')
+            username:"user1"
+        })
     }
     componentDidMount() {
         this.postilEvent = emitter.addListener('changePostils', (data) => {
-            //alert("postils change!");
             this.setState({
                 data:data
+            })
+        });
+        this.blockEvent = emitter.addListener('getBlockList', (data) =>{
+            console.log(data);
+            this.setState({
+                selectid:data
             })
         });
     }
@@ -59,7 +70,7 @@ class Postil extends Component{
         jsonbody.marked = pos.marked;
         jsonbody.agreement = pos.agreement;
         jsonbody.flag = flag;
-        var url = 'http://192.168.1.159:8080/service/statPostil';
+        var url = 'http://localhost:8080/service/statPostil';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -158,6 +169,48 @@ class Postil extends Component{
     changeInputValue(e){
         this.setState({inputValue:e.target.value});
     }
+    addPostilComment(content){
+        let that  = this;
+        let jsonbody = {};
+        jsonbody.username = this.state.username;
+        jsonbody.posID = this.state.data[this.state.postilIdx].postils.posID;
+        jsonbody.content = content;
+        var url = 'http://localhost:8080/service/addPostilComment';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+        .then(response=>response.text())
+        .then(responseJson=>{
+            console.log(responseJson);
+            let data = eval('('+responseJson+')');
+            console.log(data)
+        }).catch(function(e){
+            console.log("Oops, error");
+        })
+    }
+    addPostil(content){
+        let that  = this;
+        let jsonbody = {};
+        jsonbody.username = this.state.username;
+        jsonbody.blockList = this.state.selectid;
+        jsonbody.content = content;
+        var url = 'http://localhost:8080/service/addPostil';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+        .then(response=>response.text())
+        .then(responseJson=>{
+            console.log(responseJson);
+            let data = eval('('+responseJson+')');
+            console.log(data)
+        }).catch(function(e){
+            console.log("Oops, error");
+        })
+    }
     handleInput(value){
         if(!value){
             alert("输入不能为空");
@@ -173,16 +226,18 @@ class Postil extends Component{
         
         if(idx){           //添加评论
             data[idx].comments.push(obj);
+            this.addPostilComment(value);
         }
         else{               //添加批注
             obj.agree = 0;
             obj.disagree = 0;
+            this.addPostil(value);
             data.push({
                 postils:obj,
                 comments:[],
                 marked:0,
                 agreement:{agreed:false,disagreed:false}
-            })
+            })            
         }
         this.setState({
             data:data,

@@ -22,7 +22,7 @@ class PDFView extends Component{
         jsonbody.username = 'user1';
         jsonbody.paperID = paperID;
         jsonbody.pagination = pagination;
-        var url = 'http://192.168.1.159:8080/service/paperDetail';
+        var url = 'http://localhost:8080/service/paperDetail';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -97,7 +97,7 @@ class PDFView extends Component{
         jsonbody.paperID = 1;
         jsonbody.pagination = 1;
         jsonbody.selectid = selectid;
-        var url = 'http://192.168.1.159:8080/service/blockPostils';
+        var url = 'http://localhost:8080/service/blockPostils';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -143,6 +143,7 @@ class PDFView extends Component{
         console.log('clienty-objy',e.clientY-e.target.getBoundingClientRect().top)
         // alert(this.state.selectid)
         if (this.state.selectid.length!=0){
+            emitter.emit("getBlockList",this.state.selectid);
             this.refreshPostil(this.state.selectid)
         }
     }
