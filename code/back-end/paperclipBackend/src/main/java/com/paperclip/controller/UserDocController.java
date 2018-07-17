@@ -96,4 +96,12 @@ public class UserDocController {
     JSONObject addDoc(@RequestBody JSONObject data){
         return userDocService.addDoc(data);
     }
+
+
+    @RequestMapping(value = "/service/publish/doc",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONObject testpublish(@RequestBody JSONObject data){
+        return userDocService.publishDoc(data);
+    }
 }
