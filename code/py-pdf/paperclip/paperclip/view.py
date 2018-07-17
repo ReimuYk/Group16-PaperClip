@@ -40,9 +40,11 @@ def html2pdf(req):
     # create response body
     resp = {}
     paper = miner.parse(pdf_uri)
+    paper.changeWidthTo(700)
     pagenum = 0
     blocks = []
     for page in paper.body:
+        blocks.append([])
         pagenum+=1
         location=0
         for box in page:
@@ -54,10 +56,10 @@ def html2pdf(req):
                         b["content"] = word["content"]
                     else:
                         b["content"] = ''
-                    b["start"] = word["start"]
-                    b["end"] = word["end"]
+                    b["start"] = str(word["start"])
+                    b["end"] = str(word["end"])
                     b["location"] = location
-                    blocks.append(b)
+                    blocks[-1].append(b)
     resp["pagenum"] = pagenum
     resp["blocks"] = blocks
     return HttpResponse(json.dumps(resp), content_type="application/json")
