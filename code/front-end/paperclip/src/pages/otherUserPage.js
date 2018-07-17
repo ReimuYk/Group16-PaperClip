@@ -159,12 +159,12 @@ class OtherUserPage extends Component{
     renderButton = () => {
         if(this.state.ifFollow){
             return(
-                <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary" onClick={this.quitFollow}>取消关注 { information.fansno }</Button>
+                <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary" onClick={this.quitFollow}>取消关注</Button>
             )
         }
         else{
             return(
-                <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary" onClick={this.followUser}><Icon type='plus-square-o' />关注 { information.fansno }</Button>
+                <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary" onClick={this.followUser}><Icon type='plus-square-o' />关注 { (information.fansno) }</Button>
             )
         }
     }
