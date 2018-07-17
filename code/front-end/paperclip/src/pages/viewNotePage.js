@@ -98,13 +98,36 @@ class ViewNote extends Component{
         })
     }
     handleOk = (e) => {
-        console.log('write mail');
-        this.setState({
-            visible: false,
-        });
+        if(this.state.mailContent == ''){
+            alert("内容不能为空！");
+            return;
+        }
+        let that  = this;
+        let jsonbody = {};
+        jsonbody.senderName = username;
+        jsonbody.receiverName = information.author;
+        jsonbody.content = that.state.mailContent;
+        var url = IPaddress + 'service/sendMessage';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                console.log(responseJson);
+                let data = eval('(' + responseJson + ')');
+                if(data.result == "success"){
+                    that.setState({
+                        mailContent: '',
+                        visible: false
+                    })
+                }
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
     }
     handleCancel = (e) => {
-        console.log(e);
         this.setState({
             visible: false,
         });
@@ -116,17 +139,16 @@ class ViewNote extends Component{
     }
     handleCommentCancel = () => {
         this.setState({
+            commentContent: '',
             commentVisible: false,
         });
     }
     handleMailChange = (event) => {
-        console.log('send mail', event.target.value);
         this.setState({ mailContent: event.target.value });
         /* send to server, server => that user */
     }
     handleCommentChange = (event) => {
         this.setState({ commentContent: event.target.value });
-        /* send to server, server => that user */
     }
     clearInput = () => {
         this.setState({ mailContent: '' });
@@ -169,7 +191,6 @@ class ViewNote extends Component{
             }).catch(function(e) {
             console.log("Oops, error");
         })
-
     }
     like = () => {
         let that = this;

@@ -35,10 +35,10 @@ class OtherUserPage extends Component{
         }
         let that  = this;
         let jsonbody = {};
-        jsonbody.hostname = username;
-        jsonbody.clientname = information.username;
-        jsonbody.content = this.state.mailContent;
-        let url = IPaddress + 'service/sendMessage';
+        jsonbody.senderName = username;
+        jsonbody.receiverName = information.username;
+        jsonbody.content = that.state.mailContent;
+        var url = IPaddress + 'service/sendMessage';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -46,17 +46,17 @@ class OtherUserPage extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                let result = eval('('+responseJson+')');
-                if(result.result == "fail"){
-                    alert("关注失败，请重试");
+                console.log(responseJson);
+                let data = eval('(' + responseJson + ')');
+                if(data.result == "success"){
+                    that.setState({
+                        mailContent: '',
+                        visible: false
+                    })
                 }
             }).catch(function(e){
             console.log("Oops, error");
-        });
-        this.setState({
-            visible: false,
-        });
-        this.clearInput();
+        })
     }
     handleCancel = (e) => {
         this.setState({
@@ -72,7 +72,8 @@ class OtherUserPage extends Component{
         }
 
         let jsonbody = {};
-        jsonbody.username = information.username;
+        jsonbody.hostname = username;
+        jsonbody.clientname = information.username;
         let url = IPaddress + 'service/clientInfo';
         let options={};
         options.method='POST';
@@ -87,7 +88,7 @@ class OtherUserPage extends Component{
                 information.fansno = data.fensno;
                 information.userDescription = data.userDescription;
                 this.setState({
-                    ifFollow: data.ifFollow
+                    ifFollow: data.isStar
                 })
             }).catch(function(e){
             console.log("Oops, error");
@@ -158,12 +159,12 @@ class OtherUserPage extends Component{
     renderButton = () => {
         if(this.state.ifFollow){
             return(
-                <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary" onClick={this.quitFollow}>取消关注 { information.fansno }</Button>
+                <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary" onClick={this.quitFollow}>取消关注</Button>
             )
         }
         else{
             return(
-                <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary" onClick={this.followUser}><Icon type='plus-square-o' />关注 { information.fansno }</Button>
+                <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary" onClick={this.followUser}><Icon type='plus-square-o' />关注 { (information.fansno) }</Button>
             )
         }
     }

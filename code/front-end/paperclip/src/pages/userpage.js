@@ -80,7 +80,7 @@ class User extends Component{
                         <br />
                         <br />
                         <br />
-                        <h6>{ information.username }</h6>
+                        <h6>{ username }</h6>
                         <p>{ information.userDescription }</p>
                     </div>
                     <div id='u1-3' style={{marginTop:"40px"}}>

@@ -38,6 +38,7 @@ class UserDocDetail extends Component{
                 if(data.version.length > 0){
                     let obj = data.version[0];
                     let result = (obj.author == username);
+                    data.version.sort(that.sortArray);
                     that.setState({
                         data: data.version,
                         author: result
@@ -83,6 +84,17 @@ class UserDocDetail extends Component{
             }).catch(function(e){
             console.log("Oops, error");
         })
+    }
+    sortArray(obj1, obj2){
+        if(obj1.date < obj2.date){
+            return 1;
+        }
+        else if(obj1.date > obj2.date){
+            return -1;
+        }
+        else{
+            return 0;
+        }
     }
     renderList(){
         if(this.state.data.length == 0){
