@@ -41,7 +41,7 @@ class ViewNote extends Component{
         let jsonbody = {};
         jsonbody.username = username;
         jsonbody.noteID = noteID;
-        let url = IPaddress + 'service/viewNote';
+        let url = IPaddress + 'service/noteDetail';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -49,11 +49,20 @@ class ViewNote extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
+                console.log(responseJson);
                 let data = eval('(' + responseJson + ')');
                 information.author = data.author;
                 information.title = data.title;
                 information.content = data.content;
                 information.data = data.date;
+                information.authorAvatar = data.avatar;
+                information.authorDescription = data.description;
+                that.setState({
+                    ifLike: data.ifLike,
+                    ifStar: data.ifStar,
+                    ifFollow: data.ifFollow,
+                    commentNo: data.commentNo
+                })
             }).catch(function(e){
             console.log("Oops, error");
         })
@@ -149,7 +158,7 @@ class ViewNote extends Component{
                     alert("发布评论失败，请重试");
                     return;
                 }
-                tmp.push({user:username, comment: that.state.commentContent});
+                tmp.push({username:username, content: that.state.commentContent});
                 that.setState({
                     comment: tmp,
                     commentContent: '',
@@ -161,20 +170,86 @@ class ViewNote extends Component{
 
     }
     like = () => {
-        var like = this.state.likeNo;
-        this.setState( {
-            likeNo: like + 1,
-            ifLike: true
-        } )
+        let that = this;
+        let jsonbody = {};
+        jsonbody.username = username;
+        jsonbody.noteID = noteID;
+        let url = IPaddress + 'service/agreeNote';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let result = eval('(' + responseJson + ')');
+                if(result.result == "success"){
+                    var like = that.state.likeNo;
+                    this.setState( {
+                        likeNo: like + 1,
+                        ifLike: true
+                    } );
+                }
+                else{
+                    alert("点赞错误，请重试");
+                }
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
     }
     cancelLike = () => {
-        var like = this.state.likeNo;
-        this.setState( {
-            likeNo: like - 1,
-            ifLike: false
+        let that = this;
+        let jsonbody = {};
+        jsonbody.username = username;
+        jsonbody.noteID = noteID;
+        let url = IPaddress + 'service/agreeNote';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let result = eval('(' + responseJson + ')');
+                if(result.result == "success"){
+                    var like = that.state.likeNo;
+                    this.setState( {
+                        likeNo: like - 1,
+                        ifLike: false
+                    } );
+                }
+                else{
+                    alert("取消错误，请重试");
+                }
+            }).catch(function(e){
+            console.log("Oops, error");
         })
     }
     star = () => {
+        let that = this;
+        let jsonbody = {};
+        jsonbody.username = username;
+        jsonbody.noteID = noteID;
+        let url = IPaddress + 'service/starTheNote';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let result = eval('(' + responseJson + ')');
+                if(result.result == "success"){
+                    that.setState({
+                        ifStar: true
+                    })
+                }
+                else{
+                    alert("收藏错误，请重试");
+                }
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
         this.setState({
             ifStar: true
         })
@@ -207,6 +282,7 @@ class ViewNote extends Component{
     }
 
     followUser = () => {
+        let that = this;
         /* get data according to username */
         let jsonbody = {};
         jsonbody.hostname = username;
@@ -222,7 +298,11 @@ class ViewNote extends Component{
                 let result = eval(responseJson);
                 if(result == "fail"){
                     alert("关注失败，请重试");
+                    return;
                 }
+                that.setState({
+                    ifFollow: true
+                })
             }).catch(function(e) {
             console.log("Oops, error");
         })
@@ -315,8 +395,8 @@ class ViewNote extends Component{
                 renderItem={item => (
                     <List.Item>
                         <List.Item.Meta
-                            title={<a>{item.user}</a>}
-                            description={item.comment}
+                            title={<a>{item.username}</a>}
+                            description={item.content}
                         />
                     </List.Item>
                 )}

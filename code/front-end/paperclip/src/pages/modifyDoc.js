@@ -263,6 +263,7 @@ class ModifyDoc extends Component{
 
     handleInputChange = (e) => {
         information.title = e.target.value;
+        this.setState({})
     }
     render(){
         //const side = this.renderSideCard();
