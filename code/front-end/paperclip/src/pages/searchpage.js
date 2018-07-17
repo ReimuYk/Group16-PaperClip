@@ -9,7 +9,7 @@ const { CheckableTag } = Tag;
  * 
  * should get 'tags' from server
  */
-
+var searchContent = '';
 const tagsFromServer1 = ['tag1-1', 'tag1-2', 'tag1-3', 'tag1-4'];
 const tagsFromServer2 = ['tag2-1', 'tag2-2', 'tag2-3', 'tag2-4'];
 
@@ -75,53 +75,10 @@ class MyTag extends React.Component {
 
 const { Meta } = Card;
 
-const paper = [{
-    key: '1',
-    title: 'title 1',
-    author: 'author 1',
-    keyWord: 'key word 1',
-    readno: 233,
-    noteno: 5,
-},{
-    key: '2',
-    title: 'title 2',
-    author: 'author 2',
-    keyWord: 'key word 2, key word 3',
-    readno: 555,
-    noteno: 42,
-},{
-    key: '3',
-    title :'title 3',
-    author: 'author 1',
-    keyWord: 'key word 1, key word 2',
-    readno: 123,
-    noteno: 2,
-},{
-    key: '4',
-    title :'title 4',
-    author: 'author 1',
-    keyWord: 'key word 1, key word 2',
-    readno: 123,
-    noteno: 2,
-},{
-    key: '5',
-    title :'title 5',
-    author: 'author 1',
-    keyWord: 'key word 1, key word 2',
-    readno: 123,
-    noteno: 2,
-},{
-    key: '6',
-    title :'title 6',
-    author: 'author 1',
-    keyWord: 'key word 1, key word 2',
-    readno: 123,
-    noteno: 2,
-}]
 class Search extends Component{
     state = {
         paperData: [],
-        searchContent:''
+        recommendData: []
     }
     constructor(props) {
         super(props);
@@ -132,11 +89,8 @@ class Search extends Component{
     }
     componentWillMount = () => {
         /* get searchContent from url */
-        var searchContent = this.props.location.search.substring(8);//8 == 'search='.length+1
+        searchContent = this.props.location.search.substring(9);//8 == 'content='.length+1
         /* get info from server */
-        this.setState({
-            searchContent:searchContent
-        });
         let that = this;
         /* get search content according to username */
         let jsonbody = {};
@@ -149,7 +103,10 @@ class Search extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
+                let data = eval(responseJson);
                 that.setState({
+                    paperData: data[0],
+                    recommendData: data[1]
                 })
             }).catch(function(e){
             console.log("Oops, error");
@@ -157,6 +114,7 @@ class Search extends Component{
 
     }
     readnoDESC(){
+        let paper = this.state.paperData;
         var compare = function(obj1, obj2) {
             var val1 = obj1.readno;
             var val2 = obj2.readno;
@@ -169,6 +127,7 @@ class Search extends Component{
         })
     }
     readnoASC(){
+        let paper = this.state.paperData;
         var compare = function(obj1, obj2) {
             var val1 = obj1.readno;
             var val2 = obj2.readno;
@@ -181,6 +140,7 @@ class Search extends Component{
         })
     }
     notenoDESC(){
+        let paper = this.state.paperData;
         var compare = function(obj1, obj2) {
             var val1 = obj1.noteno;
             var val2 = obj2.noteno;
@@ -193,6 +153,7 @@ class Search extends Component{
         })
     }
     notenoASC(){
+        let paper = this.state.paperData;
         var compare = function(obj1, obj2) {
             var val1 = obj1.noteno;
             var val2 = obj2.noteno;
@@ -205,24 +166,6 @@ class Search extends Component{
         })
     }
     renderSideBar(){
-        const data = [
-            {
-                key: 1,
-                title: 'Ant Design Title 1',
-            },
-            {
-                key: 2,
-                title: 'Ant Design Title 2',
-            },
-            {
-                key: 3,
-                title: 'Ant Design Title 3',
-            },
-            {
-                key: 4,
-                title: 'Ant Design Title 4',
-            },
-        ];
         return(
             <div class="sidebar" style={{width: "20%", float: "right", marginRight: "10%"}}>
                 <div class="icon" style={{width: "130px", marginBottom: "30px"}}>
@@ -231,13 +174,13 @@ class Search extends Component{
                 </div>
                 <List
                     itemLayout="horizontal"
-                    dataSource={data}
+                    dataSource={this.state.recommendData}
                     renderItem={item => (
-                        <Link to={"/paper/"+item.key}>
+                        <Link to={"/paper/"+item.paperID}>
                             <List.Item>
                                 <List.Item.Meta
                                     title={<a>{item.title}</a>}
-                                    description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                                    description={item.keyword}
                                 />
                             </List.Item>
                         </Link>
@@ -252,16 +195,15 @@ class Search extends Component{
                 grid={{ gutter: 16, column: 3 }}
                 dataSource={this.state.paperData}
                 renderItem={item => (
-                    <Link to={"/paper/"+item.key}>
+                    <Link to={"/paper/"+item.paperID}>
                         <List.Item>
                             <Card
                                 style={{ width: 200 }}
-                                cover={<img alt="example" src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" />}
                                 actions={[<span>阅读量：{item.readno}</span>, <span>笔记数：{item.noteno}</span>]}
                             >
                                 <Meta
                                     title={item.title}
-                                    description={item.keyWord}
+                                    description={item.keyword}
                                 />
                             </Card>
                         </List.Item>

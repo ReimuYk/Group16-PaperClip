@@ -124,6 +124,7 @@ class NavBar extends Component{
                 <Search
                 placeholder="input search text"
                 onChange={this.changeSearchIdx}
+                onSearch={value => window.location.href = '/search?content=' + value}
                 />
         )
         const menu = (

@@ -47,7 +47,7 @@ class App extends Component {
               <Route path='/findback' component={FindBack} />
               <Route path='/register' component={Register} />
               <Route path='/paper' component={Paper} />
-              <Route path='/search/:data' component={Search} />
+              <Route path='/search' component={Search} />
               <Route exact path='/user' component={User} />
               <Route path='/user/starpaper' component={StarPaper} />
               <Route path='/user/starnote' component={StarNote} />
