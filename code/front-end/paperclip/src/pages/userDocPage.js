@@ -97,6 +97,7 @@ class UserDoc extends Component{
                     this.setState({
                         data: tmpdata
                     })
+                    window.location.href='/user/modifyDoc?docID='+result.docID;
                 }
             }).catch(function(e){
             console.log("Oops, error");
