@@ -17,7 +17,9 @@ public interface UserService {
 
 
     // message.js
-    public JSONArray getMessageInfo(JSONObject data);
+    public JSONArray getUnreadMessage(JSONObject data);
+    public JSONArray getBriefMessageList(JSONObject data);
+    public JSONArray getConversation(JSONObject data);
     public JSONObject sendMessage(JSONObject data);
 
 }

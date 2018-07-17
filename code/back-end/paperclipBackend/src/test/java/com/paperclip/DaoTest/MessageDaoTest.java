@@ -1,6 +1,6 @@
 package com.paperclip.DaoTest;
 
-import com.paperclip.dao.entityDao.MessageRespository;
+import com.paperclip.dao.entityDao.MessageRepository;
 import com.paperclip.dao.entityDao.UserRepository;
 import com.paperclip.model.Entity.Message;
 import com.paperclip.model.Entity.User;
@@ -24,7 +24,7 @@ import java.util.List;
 @Rollback(false)
 public class MessageDaoTest {
     @Autowired
-    MessageRespository messageRepo;
+    MessageRepository messageRepo;
 
     @Autowired
     UserRepository userRepo;
@@ -35,11 +35,11 @@ public class MessageDaoTest {
         User user1 = userRepo.findOne("user1");
         User user2 = userRepo.findOne("user2");
 
-        Message m1 = new Message(user0,user1,"1-1");
-        Message m2 = new Message(user1,user0,"1-2");
-        Message m3 = new Message(user1,user0,"1-3");
-        Message m4 = new Message(user1,user2,"2-1");
-        Message m5 = new Message(user2,user1,"2-2");
+        Message m1 = new Message(user0,user1,"1-4");
+        Message m2 = new Message(user1,user0,"1-5");
+        Message m3 = new Message(user1,user0,"1-6");
+        Message m4 = new Message(user1,user2,"2-3");
+        Message m5 = new Message(user2,user1,"2-4");
 
         messageRepo.save(m1);
         messageRepo.save(m2);
@@ -50,13 +50,28 @@ public class MessageDaoTest {
 
     @Test
     public void getConversation() {
-        User user0 = userRepo.findOne("user0");
+        User user0 = userRepo.findOne("user2");
         User user1 = userRepo.findOne("user1");
 
         List<User> users = new ArrayList<>();
         users.add(user0);
         users.add(user1);
         List<Message> c = messageRepo.getConversation(users);
+        Iterator<Message> it = c.iterator();
+        while (it.hasNext()){
+            System.out.println(it.next().getContent());
+        }
+    }
+
+    @Test
+    public void getUnread(){
+        User user1 = userRepo.findOne("user1");
+        User user2 = userRepo.findOne("user2");
+        Message m1 = messageRepo.findOne(new Long(5));
+        m1.setHasRead(1);
+        messageRepo.save(m1);
+
+        List<Message> c = messageRepo.getUnreadMessage(user1);
         Iterator<Message> it = c.iterator();
         while (it.hasNext()){
             System.out.println(it.next().getContent());
