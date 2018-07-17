@@ -81,4 +81,38 @@ public class UserServiceTest {
         JSONObject rr2 = service.userLogin(data2);
         System.out.println("result:\n" + rr2.toString());
     }
+
+    @Test
+    public void getUnreadMessage(){
+        JSONObject data = new JSONObject();
+        data.accumulate("username", "user2");
+        JSONArray aa = service.getUnreadMessage(data);
+        System.out.println(aa.toString());
+    }
+
+    @Test
+    public void sendMessage(){
+        JSONObject data = new JSONObject();
+        data.accumulate("senderName", "user2");
+        data.accumulate("receiverName","user3");
+        data.accumulate("content","3-2");
+        service.sendMessage(data);
+    }
+
+    @Test
+    public void getConversation(){
+        JSONObject data = new JSONObject();
+        data.accumulate("hostname", "user2");
+        data.accumulate("clientname","user1");
+        JSONArray aa = service.getConversation(data);
+        System.out.println(aa.toString());
+    }
+
+    @Test
+    public void getBriefMessageList(){
+        JSONObject data = new JSONObject();
+        data.accumulate("username", "user2");
+        JSONArray aa = service.getBriefMessageList(data);
+        System.out.println(aa.toString());
+    }
 }

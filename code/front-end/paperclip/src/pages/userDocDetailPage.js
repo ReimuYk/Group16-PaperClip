@@ -17,7 +17,6 @@ class UserDocDetail extends Component{
     componentWillMount = () => {
         docID = this.props.location.search.substring(7);//7 == 'docID='.length+1
         username = sessionStorage.getItem('username');
-
         let that = this;
         let jsonbody = {};
         jsonbody.username = username;
@@ -86,47 +85,58 @@ class UserDocDetail extends Component{
         })
     }
     renderList(){
+        if(this.state.data.length == 0){
+            return(
+                <p>没有任何文档版本</p>
+            )
+        }
         if(this.state.author){
             return(
-                <List
-                    style={{textAlign:'left'}}
-                    itemLayout="horizontal"
-                    dataSource={this.state.data}
-                    renderItem={item => (
-                        <List.Item
-                            actions={[<p>
-                                <a style={{width:'75px'}} href={"/paper?ID="+item.docPdfID}>查看内容</a>
-                                <Popconfirm title="确定删除吗？" onConfirm={() => this.deleteDoc(this, item)}>
-                                    <a style={{width:'75px',marginLeft:'20px'}}>删除该版本</a>
-                                </Popconfirm>
-                            </p>]}
-                        >
-                            <List.Item.Meta
-                                title={<a href={"/paper?ID="+item.docPdfID}>{item.title}</a>}
-                            />
-                            <p>{item.version}</p>
-                            <p>{item.date}</p>
-                        </List.Item>
-                    )}
-                />
+                <div className="content">
+                    <a style={{marginLeft:'450px'}}>修改日期</a>
+                    <List
+                        style={{textAlign:'left'}}
+                        itemLayout="horizontal"
+                        dataSource={this.state.data}
+                        renderItem={item => (
+                            <List.Item
+                                actions={[<p>
+                                    <a style={{width:'75px'}} href={"/paper?ID="+item.docPdfID}>查看内容</a>
+                                    <Popconfirm title="确定删除吗？" onConfirm={() => this.deleteDoc(this, item)}>
+                                        <a style={{width:'75px',marginLeft:'20px'}}>删除该版本</a>
+                                    </Popconfirm>
+                                </p>]}
+                            >
+                                <List.Item.Meta
+                                    title={<a href={"/paper?ID="+item.docPdfID}>{item.title}</a>}
+                                    description={'版本 ' + item.version}
+                                />
+                                <p>{item.date}</p>
+                            </List.Item>
+                        )}
+                    />
+                </div>
             )
         }
         else{
             return(
-                <List
-                    style={{textAlign:'left'}}
-                    itemLayout="horizontal"
-                    dataSource={this.state.data}
-                    renderItem={item => (
-                        <List.Item>
-                            <List.Item.Meta
-                                title={<a href={"/paper?ID="+item.docPdfID}>{item.title}</a>}
-                            />
-                            <p>{item.date}</p>
-                            <p>{item.version}</p>
-                        </List.Item>
-                    )}
-                />
+                <div className="content">
+                    <a style={{marginLeft:'850px'}}>修改日期</a>
+                    <List
+                        style={{textAlign:'left'}}
+                        itemLayout="horizontal"
+                        dataSource={this.state.data}
+                        renderItem={item => (
+                            <List.Item>
+                                <List.Item.Meta
+                                    title={<a href={"/paper?ID="+item.docPdfID}>{item.title}</a>}
+                                    description={'版本 ' + item.version }
+                                />
+                                <p>{item.date}</p>
+                            </List.Item>
+                        )}
+                    />
+                </div>
             )
         }
 
@@ -141,10 +151,8 @@ class UserDocDetail extends Component{
                 <NavBar />
             
             <UserFloatMenu />
-            <div style={{width:'60%',marginLeft:'200px'}}>
-                <div className="content">
-                    {renderList}
-                </div>
+            <div style={{width:'60%',marginLeft:'200px', paddingTop:'40px'}}>
+                {renderList}
             </div>
         </div>
         )

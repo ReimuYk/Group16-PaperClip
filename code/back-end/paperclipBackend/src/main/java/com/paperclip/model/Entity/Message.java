@@ -77,4 +77,5 @@ public class Message {
     public void setHasRead(int hasRead) {
         this.hasRead = hasRead;
     }
+
 }

@@ -21,6 +21,7 @@ class OtherUserPage extends Component{
         visible: false,
         mailContent: '',
         moment: [],
+        ifFollow: false
     }
     showModal = () => {
         this.setState({
@@ -80,11 +81,14 @@ class OtherUserPage extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
+                console.log(responseJson);
                 let data = eval('('+responseJson+')');
                 information.avatar = data.userheader;
                 information.fansno = data.fensno;
                 information.userDescription = data.userDescription;
-
+                this.setState({
+                    ifFollow: data.ifFollow
+                })
             }).catch(function(e){
             console.log("Oops, error");
         })
@@ -107,7 +111,39 @@ class OtherUserPage extends Component{
                 if(result.result == "fail"){
                     alert("关注失败，请重试");
                 }
+                information.fansno = result.fansno;
+                that.setState({
+                    ifFollow:true
+                })
             }).catch(function(e) {
+            console.log("Oops, error");
+        })
+    }
+    quitFollow = () => {
+        let that = this;
+        /* tell the server to do something */
+        let jsonbody = {};
+        jsonbody.hostname = username;
+        jsonbody.clientname = information.username;
+        let url = IPaddress + 'service/quitStar/user';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let result = eval('(' + responseJson + ')');
+                if(result.result == "success"){
+                    information.fansno = result.fansno;
+                    that.setState({
+                        ifFollow: false
+                    })
+                }
+                else{
+                    alert("取消错误，请重试");
+                }
+            }).catch(function(e){
             console.log("Oops, error");
         })
     }
@@ -119,7 +155,20 @@ class OtherUserPage extends Component{
     clearInput = () => {
         this.setState({ mailContent: '' });
     }
+    renderButton = () => {
+        if(this.state.ifFollow){
+            return(
+                <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary" onClick={this.quitFollow}>取消关注 { information.fansno }</Button>
+            )
+        }
+        else{
+            return(
+                <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary" onClick={this.followUser}><Icon type='plus-square-o' />关注 { information.fansno }</Button>
+            )
+        }
+    }
     render() {
+        const button = this.renderButton();
         return(
             <div>
             <NavBar />
@@ -152,7 +201,7 @@ class OtherUserPage extends Component{
                     </div>
                     <div id='u1-3'>
                         <Button style={{width:"100px"}} size="large" type="primary" onClick={this.showModal}><Icon type='mail' />发私信</Button>
-                        <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary" onClick={this.followUser}><Icon type='plus-square-o' />关注 { information.fansno }</Button>
+                        {button}
                     </div>
                 </div>
                 </div>

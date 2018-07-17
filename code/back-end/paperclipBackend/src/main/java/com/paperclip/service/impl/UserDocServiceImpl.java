@@ -1,20 +1,20 @@
 package com.paperclip.service.impl;
 
-import com.paperclip.dao.entityDao.DocumentPdfRepository;
-import com.paperclip.dao.entityDao.DocumentRepository;
-import com.paperclip.dao.entityDao.PaperRepository;
-import com.paperclip.dao.entityDao.UserRepository;
+import com.paperclip.dao.entityDao.*;
 import com.paperclip.dao.relationshipDao.AssistRepository;
-import com.paperclip.model.Entity.Document;
-import com.paperclip.model.Entity.DocumentPdf;
-import com.paperclip.model.Entity.User;
+import com.paperclip.model.Entity.*;
 import com.paperclip.model.Relationship.Assist;
 import com.paperclip.service.UserDocService;
+import com.sun.xml.internal.ws.api.server.HttpEndpoint;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.jcp.xml.dsig.internal.dom.DOMCanonicalizationMethod;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import javax.xml.crypto.Data;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
@@ -37,6 +37,12 @@ public class UserDocServiceImpl implements UserDocService {
 
     @Autowired
     PaperRepository paperRepo;
+
+    @Autowired
+    BlockRepository blockRepo;
+
+    @Autowired
+    PaperPageRepository paperPageRepo;
 
     private Boolean hasAccess(User user, Long docID) {
         Document doc = docRepo.findOne(docID);
@@ -243,6 +249,68 @@ public class UserDocServiceImpl implements UserDocService {
         result.accumulate("docID", docID);
         result.accumulate("result", "success");
         return result;
+    }
+
+    public JSONObject publishDoc(JSONObject data){
+        String username = data.getString("username");
+        String doc_content = data.getString("docContent");
+        String title = data.getString("docTitle");
+        Long docID = data.getLong("docID");
+
+        //fake data
+        username = "user1";
+        title = "test title";
+        docID = new Long((long)1);
+        Document doc = docRepo.findOne(docID);
+
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://localhost:8000/html2pdf/";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        //create pdf data
+        DocumentPdf pdf = new DocumentPdf();
+        pdf.setAuthor(username);
+        pdf.setTitle(title);
+        pdf.setDocument(doc);
+        pdf.setDate(new Date());
+        pdf.setVersion(1);
+        pdf.setKeyWords("");
+        pdf.setTag("");
+        pdf.setPageNum(0);
+        docPdfRepo.save(pdf);
+        //create json_body & POST req
+        JSONObject json_body = new JSONObject();
+        json_body.accumulate("paperID",pdf.getId());
+        json_body.accumulate("data",doc_content);
+        String body = json_body.toString();
+        HttpEntity<String> entity = new HttpEntity<>(body,headers);
+        ResponseEntity<JSONObject> resp = restTemplate.exchange(url, HttpMethod.POST, entity, JSONObject.class);
+        JSONObject resp_body = resp.getBody();
+        System.out.println(resp_body);
+        pdf.setPageNum(resp_body.getInt("pagenum"));
+        JSONArray pagelist = resp_body.getJSONArray("blocks");
+        //insert blocks
+        for (int i=0;i<pagelist.size();i++){
+            JSONArray page = pagelist.getJSONArray(i);
+            PaperPage newPage = new PaperPage();
+            newPage.setPagination(i+1);
+            newPage.setPaper(pdf);
+            newPage.setContentUrl(String.format("%d-%d.jpeg",pdf.getId(),i));
+            paperPageRepo.save(newPage);
+            for (int j=0;j<page.size();j++){
+                JSONObject b = page.getJSONObject(j);
+                Block newblock = new Block();
+                newblock.setContent(b.getString("content"));
+                newblock.setEndPoint(b.getString("end"));
+                newblock.setStartPoint(b.getString("start"));
+                newblock.setLocation(b.getInt("location"));
+                newblock.setPaperPage(newPage);
+                blockRepo.save(newblock);
+            }
+            paperPageRepo.save(newPage);
+        }
+        paperRepo.save(pdf);
+        return new JSONObject();
     }
 
 }

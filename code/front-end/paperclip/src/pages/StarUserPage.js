@@ -26,6 +26,7 @@ class StarUser extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
+                console.log(responseJson);
                 let data = eval(responseJson);
                 that.setState({
                     data:data
@@ -39,7 +40,9 @@ class StarUser extends Component{
         /* tell the server to do something */
         let jsonbody = {};
         jsonbody.hostname = username;
+        console.log(item);
         jsonbody.clientname = item.username;
+        console.log(jsonbody);
         let url = IPaddress + 'service/quitStar/user';
         let options={};
         options.method='POST';
@@ -85,7 +88,7 @@ class StarUser extends Component{
                     itemLayout="horizontal"
                     dataSource={this.state.data}
                     renderItem={item => (
-                    <List.Item actions={[<a onClick={this.quitFollow.bind(this, item)}>取消关注</a>]}>
+                    <List.Item actions={[<a onClick={() => this.quitFollow(this, item)}>取消关注</a>]}>
                         <List.Item.Meta
                         avatar={<Avatar src={ item.avatar } />}
                         title={<a href={"/viewpage?username="+item.username}>{item.username}</a>}

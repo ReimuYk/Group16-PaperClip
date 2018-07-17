@@ -2,7 +2,7 @@ package com.paperclip.service.impl;
 
 import com.paperclip.dao.entityDao.DocumentPdfRepository;
 import com.paperclip.dao.entityDao.DocumentRepository;
-import com.paperclip.dao.entityDao.MessageRespository;
+import com.paperclip.dao.entityDao.MessageRepository;
 import com.paperclip.dao.entityDao.UserRepository;
 import com.paperclip.model.Entity.Document;
 import com.paperclip.model.Entity.DocumentPdf;
@@ -14,14 +14,13 @@ import net.sf.json.JSON;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Iterator;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /*
 * 罗宇辰
@@ -39,8 +38,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private DocumentPdfRepository docPdfRepo;
 
-    @Autowired
-    private MessageRespository messageRepo;
 
     private static final String dafaultAvatar = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEBAAEAAAD//gAmUGFpbnQgVG9vbCAtU0FJLSBKUEVHIEVuY29kZXIgdjEuMDAA/9sAhAAjGhoaGholJSUlMzMzMzNERERERERVVVVVVVVVampqampqamqCgoKCgoKCmpqampqatra2trbV1dXV9PT0////ATwsLCwsLD8/Pz9WVlZWVnFxcXFxcY+Pj4+Pj4+ysrKysrKystjY2NjY2Nj/////////////////////////////wAARCADYANgDAREAAhEBAxEB/8QBogAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoLEAACAQMDAgQDBQUEBAAAAX0BAgMABBEFEiExQQYTUW" +
             "EHInEUMoGRoQgjQrHBFVLR8CQzYnKCCQoWFxgZGiUmJygpKjQ1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4eLj5OXm5+jp6vHy8/T19vf4+foBAAMBAQEBAQEBAQEAAAAAAAABAgMEBQYHCAkKCxEAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmq" +
@@ -119,31 +116,121 @@ public class UserServiceImpl implements UserService {
 
 
     /* 以下内容与私信有关，有待后期拓展 */
-    public JSONArray getMessageInfo(JSONObject data) {
-        return null;
+    @Autowired
+    private MessageRepository messageRepo;
 
+    //使用List判断元素是否已经存在于数组中
+    public static boolean inList(List<String> myList,String targetValue){
+        String[] arr = myList.toArray(new String[myList.size()]);
+        return ArrayUtils.contains(arr,targetValue);
     }
 
-    public JSONArray getMessageList(JSONObject data){
+    //输入:username ----------------导航栏中展示的未读私信列表（类比QQ右下角消息提示）
+    public JSONArray getUnreadMessage(JSONObject data) {
+        String username = data.getString("username");
+        User user = userRepo.findOne(username);
+        List<Message> list = messageRepo.getUnreadMessage(user);
+        Iterator<Message> it = list.iterator();
+
+        List<Message> mm = new ArrayList<>();//最终返回的List
+        List<String> users = new ArrayList<>();//存储出现过的username
+        while(it.hasNext()){
+            Message m = it.next();
+            String sname = m.getSender().getUsername();
+            if(!inList(users,sname)){
+                users.add(sname);
+                mm.add(m);
+            }
+        }
+        Iterator<Message> it2 = mm.iterator();
+        JSONArray messages = new JSONArray();
+        while(it2.hasNext()){
+            Message m = it2.next();
+            JSONObject message = new JSONObject();
+            message.accumulate("sender", m.getSender().getUsername());
+            message.accumulate("content",m.getContent());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            message.accumulate("time",sdf.format(m.getTime()));
+            messages.add(message);
+        }
+        return messages;
+    }
+
+    //输入：username -------------------简略的展示私信列表（类比QQ的只显示最新一个消息的对话框列表）
+    public JSONArray getBriefMessageList(JSONObject data){
         JSONArray messageArray = new JSONArray();
         String username = data.getString("username");
-        User hostAsSender = userRepo.findOne(username);
-        List<Message> messageList = messageRepo.findBySender(hostAsSender);
-        for (Message message : messageList) {
-            User receviever = message.getReceiver();
-            JSONObject messageJson = new JSONObject();
-            messageJson.accumulate("sender", username);
-            messageJson.accumulate("receiver", receviever.getUsername());
 
+        User user = userRepo.findOne(username);
+        List<Message> list = messageRepo.getAllMessage(user);
+        Iterator<Message> it = list.iterator();
+
+        List<Message> mm = new ArrayList<>();//最终返回的List
+        List<String> users = new ArrayList<>();//存储出现过的username
+        while(it.hasNext()){
+            Message m = it.next();
+            String sname = m.getSender().getUsername();
+            String rname = m.getReceiver().getUsername();
+            if(!sname.equals(username) && !inList(users,sname)){
+                users.add(sname);
+                mm.add(m);
+            }
+            else if(!rname.equals(username) && !inList(users,rname)){
+                users.add(rname);
+                mm.add(m);
+            }
+        }
+
+        Iterator<Message> it2 = mm.iterator();
+        while(it2.hasNext()){
+            Message m = it2.next();
+            JSONObject message = new JSONObject();
+            message.accumulate("sender", m.getSender().getUsername());
+            message.accumulate("receiver",m.getReceiver().getUsername());
+            message.accumulate("content",m.getContent());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            message.accumulate("time",sdf.format(m.getTime()));
+            messageArray.add(message);
         }
         return messageArray;
     }
 
+    //输入：hostname，clientname---------------两个用户之间的对话展示
+    public JSONArray getConversation(JSONObject data){
+        JSONArray conversation = new JSONArray();
+        String hostname = data.getString("hostname");
+        String clientname = data.getString("clientname");
+
+        User host = userRepo.findOne(hostname);
+        User client = userRepo.findOne(clientname);
+        List<User> user = new ArrayList<>();
+        user.add(host);
+        user.add(client);
+        List<Message> list = messageRepo.getConversation(user);
+        Iterator<Message> it = list.iterator();
+
+        while (it.hasNext()){
+            Message m = it.next();
+            JSONObject message = new JSONObject();
+            if (m.getReceiver().getUsername().equals(hostname)){
+                m.setHasRead(1);
+                messageRepo.save(m);
+            }
+            message.accumulate("content",m.getContent());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            message.accumulate("time",sdf.format(m.getTime()));
+            conversation.add(message);
+        }
+        return conversation;
+    }
+
+    //输入：senderName,receiverName -------------发私信
     public JSONObject sendMessage(JSONObject data) {
         JSONObject result = new JSONObject();
         String senderName = data.getString("senderName");
         String receiverName = data.getString("receiverName");
         String content = data.getString("content");
+
         User sender = userRepo.findOne(senderName);
         User receiver = userRepo.findOne(receiverName);
         Message message = new Message(sender, receiver, content);
