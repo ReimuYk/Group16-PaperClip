@@ -21,4 +21,5 @@ public interface UserDocService {
 
     // writeDocPage.js
     public JSONObject addDoc(JSONObject data);
+    public JSONObject publishDoc(JSONObject data);
 }

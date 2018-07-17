@@ -1,6 +1,7 @@
 package com.paperclip.controller;
 
 //import com.paperclip.service.S1Service;
+import com.paperclip.service.UserDocService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +17,27 @@ import javax.servlet.http.HttpServletResponse;
 @CrossOrigin
 @RestController
 public class helloController {
+    @Autowired
+    protected UserDocService userDocService;
+
     protected static Logger logger=LoggerFactory.getLogger(helloController.class);
 
     //@Autowired
     //private S1Service s1Service;
+
 
     @RequestMapping(value = "/hello",method = RequestMethod.GET)
     public
     @ResponseBody
     String hello(){
         return "this is a hello world page";
+    }
+
+    @RequestMapping(value = "/pub",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONObject testpublish(@RequestBody JSONObject data){
+        return userDocService.publishDoc(data);
     }
 
     /*@RequestMapping(value = "/findtest",method = RequestMethod.GET)

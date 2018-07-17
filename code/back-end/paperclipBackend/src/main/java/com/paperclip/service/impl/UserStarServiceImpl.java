@@ -15,7 +15,9 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.text.SimpleDateFormat;
@@ -90,6 +92,8 @@ public class UserStarServiceImpl implements UserStarService {
     }
 
     // user want to stop star this note(whose ID is noteID)
+    @Modifying
+    @Transactional
     public JSONObject quitStarNote(JSONObject data){
         JSONObject result = new JSONObject();
         try {
@@ -154,6 +158,8 @@ public class UserStarServiceImpl implements UserStarService {
     }
 
     // user want to stop star this paper
+    @Modifying
+    @Transactional
     public JSONObject quitStarPaper(JSONObject data){
         JSONObject result = new JSONObject();
         try {
@@ -163,6 +169,11 @@ public class UserStarServiceImpl implements UserStarService {
             User user = userRepo.findOne(username);
             Paper paper = paperRepo.findOne(paperID);
             starPaperRepo.deleteDistinctByPaperAndUser(paper,user);
+            if(paper == null){
+                System.out.println("find null: paper");
+                return null;
+            }
+            System.out.println("paper: "+paper.toString());
             paper.setStar(paper.getStar()-1);
             paperRepo.save(paper);
             result.accumulate("result", "success");
@@ -210,8 +221,12 @@ public class UserStarServiceImpl implements UserStarService {
 
         if(ff != null) {
             followRepo.delete(ff);
-            userRepo.updateFollowings(follower.getFollowing()-1,hostname);
-            userRepo.updateFollowers(followee.getFollower()-1,clientname);
+//            userRepo.updateFollowings(follower.getFollowing()-1,hostname);
+//            userRepo.updateFollowers(followee.getFollower()-1,clientname);
+            follower.setFollowing(follower.getFollowing() - 1);
+            follower.setFollower(followee.getFollower() - 1);
+            userRepo.save(followee);
+            userRepo.save(follower);
             result.accumulate("result", "success");
         }
         else{
@@ -222,17 +237,27 @@ public class UserStarServiceImpl implements UserStarService {
 
     // hostname want to star clientname
     public JSONObject starUser(JSONObject data) {
+        System.out.println("data " +data);
         String hostname = data.getString("hostname");
         String clientname = data.getString("clientname");
 
+        System.out.println("before find user");
         User followee = userRepo.findOne(clientname);
         User follower = userRepo.findOne(hostname);
-        userRepo.updateFollowers(followee.getFollower()+1,clientname);
-        userRepo.updateFollowings(follower.getFollowing()+1,hostname);
 
+        System.out.println("update user");
+//        userRepo.updateFollowers(followee.getFollower()+1,clientname);
+//        userRepo.updateFollowings(follower.getFollowing()+1,hostname);
+        followee.setFollower(followee.getFollower() + 1);
+        follower.setFollowing(follower.getFollowing() + 1);
+        userRepo.save(followee);
+        userRepo.save(follower);
+
+        System.out.println("add follow info");
         Follow f = new Follow(followee,follower);
         followRepo.save(f);
 
+        System.out.println("return");
         JSONObject result = new JSONObject();
         if(true){
             result.accumulate("result", "success");

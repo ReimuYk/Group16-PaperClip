@@ -78,7 +78,12 @@ public class PaperServiceImpl implements PaperService {
         ptrStr = ptrStr.substring(1,ptrStr.length()-1);
         String[] p = ptrStr.split(",");
         int x = Integer.parseInt(p[0]);
-        int y = Integer.parseInt(p[1].substring(1));
+        int y;
+        if (p[1].charAt(0)==' '){
+            y = Integer.parseInt(p[1].substring(1));
+        }else{
+            y = Integer.parseInt(p[1]);
+        }
         JSONArray res = new JSONArray();
         res.add(x);
         res.add(y);
