@@ -41,6 +41,7 @@ class ViewNote extends Component{
         let jsonbody = {};
         jsonbody.username = username;
         jsonbody.noteID = noteID;
+        console.log(jsonbody);
         let url = IPaddress + 'service/noteDetail';
         let options={};
         options.method='POST';
@@ -87,6 +88,7 @@ class ViewNote extends Component{
             .then(response=>response.text())
             .then(responseJson=>{
                 let data = eval(responseJson);
+                console.log(data);
                 that.setState({
                     comment: data,
                     commentVisible: true
@@ -142,7 +144,7 @@ class ViewNote extends Component{
         var tmp = this.state.comment;
         var number = this.state.commentNo;
         let jsonbody = {};
-        jsonbody.noteID = this.
+        jsonbody.noteID = noteID
         jsonbody.username = username;
         jsonbody.content = this.state.commentContent;
         let url = IPaddress + 'service/addNoteComment';
@@ -393,7 +395,9 @@ class ViewNote extends Component{
                 itemLayout="horizontal"
                 dataSource={this.state.comment}
                 renderItem={item => (
-                    <List.Item>
+                    <List.Item
+                        actions={[<p>{item.date}</p>]}
+                    >
                         <List.Item.Meta
                             title={<a>{item.username}</a>}
                             description={item.content}
@@ -428,10 +432,17 @@ class ViewNote extends Component{
             )
         }
     }
+    renderContent(){
+        return(
+            <div dangerouslySetInnerHTML={{ __html: information.content}}></div>
+        )
+    }
+
     render(){
         const bottomNav = this.renderBottomNav();
         const comment = this.renderComment();
         const button = this.renderButton();
+        const content = this.renderContent();
         return(
             <div>
                 <NavBar/>
@@ -481,13 +492,12 @@ class ViewNote extends Component{
                                 {button}
                                 <br />
                             </div>
-
                         </div>
 
                     </div>
-                    <div style={{display:'inline-block', textAlign:'left'}}>
-                        <p style={{fontSize:"18px"}}>{information.content}</p>
-                    </div>
+                </div>
+                <div style={{display:'inline-block', textAlign:'left', width:"50%", margin: "auto"}}>
+                    <p style={{fontSize:"18px"}}>{content}</p>
                 </div>
                 {bottomNav}
             </div>
