@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -78,7 +79,8 @@ public class UserStarServiceImpl implements UserStarService {
             note.accumulate("title", n.getTitle());
             note.accumulate("author", n.getUser().getUsername());
             note.accumulate("starno", starNoteRepo.findByNote(n).size());
-            note.accumulate("date", n.getDate());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            note.accumulate("date", sdf.format(n.getDate()));
             note.accumulate("keywords", n.getKeyWords());
             note.accumulate("paperID", n.getPaper().getId());
             note.accumulate("paperTitle", n.getPaper().getTitle());
@@ -97,6 +99,9 @@ public class UserStarServiceImpl implements UserStarService {
             User user = userRepo.findOne(username);
             Note note = noteRepo.findOne(noteID);
             starNoteRepo.deleteDistinctByNoteAndUser(note,user);
+            note.setStar(note.getStar()-1);
+            noteRepo.save(note);
+
             result.accumulate("result", "success");
         }catch (JSONException e){
             result.accumulate("result", "fail");
@@ -123,10 +128,12 @@ public class UserStarServiceImpl implements UserStarService {
             JSONObject paper = new JSONObject();
             Paper p = it2.next();
             paper.accumulate("ID",p.getId());
+            paper.accumulate("title", p.getTitle());
             paper.accumulate("noteno",noteRepo.findByPaper(p).size());
             paper.accumulate("postilno",getPostilNo(p));
             paper.accumulate("keywords",p.getKeyWords());
-            paper.accumulate("tag",p.getTag());
+            paper.accumulate("tags",p.getTag());
+            System.out.println("paper: "+p.getTitle());
             papers.add(paper);
         }
         return papers;
@@ -156,6 +163,8 @@ public class UserStarServiceImpl implements UserStarService {
             User user = userRepo.findOne(username);
             Paper paper = paperRepo.findOne(paperID);
             starPaperRepo.deleteDistinctByPaperAndUser(paper,user);
+            paper.setStar(paper.getStar()-1);
+            paperRepo.save(paper);
             result.accumulate("result", "success");
         }catch (JSONException e){
             result.accumulate("result", "fail");
@@ -197,7 +206,7 @@ public class UserStarServiceImpl implements UserStarService {
 
         User followee = userRepo.findOne(clientname);
         User follower = userRepo.findOne(hostname);
-        Follow ff = followRepo.findDistinctByFolloweeAndAndFollower(followee,follower);
+        Follow ff = followRepo.findDistinctByFolloweeAndFollower(followee,follower);
 
         if(ff != null) {
             followRepo.delete(ff);

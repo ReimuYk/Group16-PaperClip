@@ -88,9 +88,10 @@ class Header extends React.Component {
     }
 
     handleClose = (removedTag) => {
-        const tags = this.state.tags.filter(tag => tag !== removedTag);
+        const tags = information.tags.filter(tag => tag !== removedTag);
+        information.tags = tags;
         console.log(tags);
-        this.setState({ tags:tags });
+        this.setState({ });
     }
 
     handleInputChange = (e) => {
@@ -175,12 +176,12 @@ class Header extends React.Component {
             keywords += information.tags[i] + ';';
         }
         let jsonbody = {};
-        jsonbody.noteID = information.docID;
+        jsonbody.noteID = information.noteID;
         jsonbody.noteTitle = information.title;
         jsonbody.noteContent = information.contentHTML;
         jsonbody.keywords = keywords;
 
-        var url = IPaddress + 'service/publish/doc';
+        var url = IPaddress + 'service/save/note';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -257,6 +258,9 @@ class ModifyNote extends Component{
                 let data = eval('('+responseJson+')');
                 information.title = data.title;
                 information.contentHTML = data.content;
+                information.tags = data.keywords.split(";");
+                information.tags.pop();
+                console.log(information.tags);
                 that.setState({
                 })
             }).catch(function(e){
@@ -266,6 +270,7 @@ class ModifyNote extends Component{
 
     handleInputChange = (e) => {
         information.title = e.target.value;
+        this.setState({})
     }
     render(){
         //const side = this.renderSideCard();

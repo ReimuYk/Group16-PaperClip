@@ -78,13 +78,13 @@ class StarPaper extends Component{
                 <NavBar />
                 
                 <UserFloatMenu />
-                <div style={{width:'60%',marginLeft:'200px'}}>
+                <div style={{width:'60%',marginLeft:'200px', paddingTop:'40px'}}>
                 <div style={{width:'915px'}}>
                 <p style={{textAlign:'left'}}>
-                    <a style={{width:'100px',marginLeft:'48px'}}>论文名称</a>
-                    <a style={{width:'40px',marginLeft:'53px'}}>批注量</a>
-                    <a style={{wdith:'40px',marginLeft:'53px'}}>笔记量</a>
-                    <a style={{wdith:'50px',marginLeft:'90px'}}>操作</a>
+                    <a style={{width:'100px'}}>论文名称</a>
+                    <a style={{width:'40px',marginLeft:'540px'}}>批注量</a>
+                    <a style={{wdith:'40px',marginLeft:'63px'}}>笔记量</a>
+                    <a style={{wdith:'50px',marginLeft:'130px'}}>操作</a>
                 </p>
                 </div>
                 <List
@@ -101,7 +101,7 @@ class StarPaper extends Component{
                         <List.Item.Meta
                         /* 论文显示页 */
                         title={<a href={"/paper?ID="+item.ID}>{item.title}</a>}
-                        description={item.keywords + item.tags}
+                        description={item.keywords + '          |           ' + item.tags}
                         />
                         <a style={{width:'80px',marginLeft:'20px'}}>{item.postilno}</a>
                         <a style={{width:'80px',marginLeft:'20px'}}>{item.noteno}</a>

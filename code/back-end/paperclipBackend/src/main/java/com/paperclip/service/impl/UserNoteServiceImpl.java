@@ -1,24 +1,21 @@
 package com.paperclip.service.impl;
 
-import com.paperclip.dao.entityDao.NoteCommentRepository;
-import com.paperclip.dao.entityDao.NoteRepository;
-import com.paperclip.dao.entityDao.PaperRepository;
-import com.paperclip.dao.entityDao.UserRepository;
-import com.paperclip.dao.relationshipDao.StarNoteRepository;
-import com.paperclip.dao.relationshipDao.UserNoteRepository;
-import com.paperclip.model.Entity.Note;
-import com.paperclip.model.Entity.NoteComment;
-import com.paperclip.model.Entity.Paper;
-import com.paperclip.model.Entity.User;
+import com.paperclip.dao.entityDao.*;
+import com.paperclip.dao.relationshipDao.*;
+import com.paperclip.model.Entity.*;
+import com.paperclip.model.Relationship.BlockPostil;
 import com.paperclip.model.Relationship.StarNote;
+import com.paperclip.model.Relationship.StarPaper;
 import com.paperclip.model.Relationship.UserNote;
 import com.paperclip.service.UserNoteService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.AccessType;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -43,6 +40,9 @@ public class UserNoteServiceImpl implements UserNoteService {
 
     @Autowired
     private UserNoteRepository userNRepo;
+
+    @Autowired
+    private FollowRepository followRepo;
 
     // 传入：username，paperID 传出：noteID ---------------新建note
     public JSONObject addNote(JSONObject data){
@@ -76,7 +76,8 @@ public class UserNoteServiceImpl implements UserNoteService {
             note.accumulate("ID",n.getId());
             note.accumulate("title",n.getTitle());
             note.accumulate("keywords",n.getKeyWords());
-            note.accumulate("date",n.getDate());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            note.accumulate("date",sdf.format(n.getDate()));
             notes.add(note);
         }
         return notes;
@@ -155,6 +156,7 @@ public class UserNoteServiceImpl implements UserNoteService {
         User user = userRepo.findOne(username);
         boolean ifLike = false;
         boolean ifStar = false;
+        boolean ifFollow = false;
         if(starNoteRepo.findByNote(n) != null){
             ifStar = true;
         }
@@ -162,17 +164,34 @@ public class UserNoteServiceImpl implements UserNoteService {
         if((un != null) && (un.getAgreement()==1)){
             ifLike = true;
         }
+
+        int likeNo = 0;
+        List<UserNote> l1 = userNRepo.findByNote(n);
+        Iterator<UserNote> it = l1.iterator();
+        while (it.hasNext()){
+            if(it.next().getAgreement() == 1)
+                likeNo += 1;
+        }
+
         User author = n.getUser();
+        if(followRepo.findDistinctByFolloweeAndFollower(author,user) != null){
+            ifFollow = true;
+        }
+
         note.accumulate("noteID", n.getId());
         note.accumulate("author", author.getUsername());
         note.accumulate("avatar", author.getAvatar());
         note.accumulate("description",author.getDescription());
         note.accumulate("title", n.getTitle());
         note.accumulate("content", n.getContent());
-        note.accumulate("date", n.getDate());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        note.accumulate("date", sdf.format(n.getDate()));
         note.accumulate("commentNo",noteCommRepo.findByNote(n).size());
         note.accumulate("ifLike",ifLike);
         note.accumulate("ifStar",ifStar);
+        note.accumulate("likeNo",likeNo);
+        note.accumulate("ifFollow",ifFollow);
         return note;
     }
 
@@ -189,7 +208,9 @@ public class UserNoteServiceImpl implements UserNoteService {
             JSONObject com = new JSONObject();
             com.accumulate("username",c.getUser().getUsername());
             com.accumulate("content",c.getContent());
-            com.accumulate("date",c.getDate());
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            com.accumulate("date",sdf.format(c.getDate()));
             noteComment.add(com);
         }
         return noteComment;
@@ -214,41 +235,54 @@ public class UserNoteServiceImpl implements UserNoteService {
         return result;
     }
 
-    // 传入：username，paperID  ---------------赞/取消赞 note
+    // 传入：username，noteID  ---------------赞/取消赞 note
     public JSONObject agreeNote(JSONObject data){
         Long noteID = data.getLong("noteID");
         String username = data.getString("username");
         Note note = noteRepo.findOne(noteID);
         User user = userRepo.findOne(username);
         UserNote un = userNRepo.findDistinctByUserAndNote(user,note);
-        if(un == null){
+        if(un == null){//赞
             un = new UserNote(user,note);
             un.setAgreement(1);
+            note.setAgreement(note.getAgreement()+1);
         }else{
-            un.setAgreement((un.getAgreement()+1)%2);
+            if(un.getAgreement() == 1){//取消赞
+                un.setAgreement(0);
+                note.setAgreement(note.getAgreement()-1);
+            }else{//赞
+                un.setAgreement(1);
+                note.setAgreement(note.getAgreement()+1);
+            }
+
         }
         userNRepo.save(un);
+        noteRepo.save(note);
         JSONObject result = new JSONObject();
         result.accumulate("result","success");
         return result;
     }
 
-    // 传入：username，paperID  ---------------收藏/取消收藏 note
+    // 传入：username，noteID  ---------------收藏/取消收藏 note
     public JSONObject starNote(JSONObject data){
         Long noteID = data.getLong("noteID");
         String username = data.getString("username");
         Note note = noteRepo.findOne(noteID);
         User user = userRepo.findOne(username);
         StarNote sn = starNoteRepo.findDistinctByUserAndNote(user,note);
+        JSONObject result = new JSONObject();
         if(sn == null){
             sn = new StarNote(user,note);
+            note.setStar(note.getStar()+1);
             starNoteRepo.save(sn);
+            noteRepo.save(note);
+            result.accumulate("result","success");
         }
         else{
-            starNoteRepo.delete(sn);
+            result.accumulate("result","fail");
         }
-        JSONObject result = new JSONObject();
-        result.accumulate("result","success");
         return result;
     }
+
+
 }

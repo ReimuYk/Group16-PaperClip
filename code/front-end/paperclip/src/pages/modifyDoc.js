@@ -251,7 +251,7 @@ class ModifyDoc extends Component{
                 }
                 information.title = data.title;
                 information.contentHTML = data.content;
-                information.contributors = data.contributer;
+                information.contributors = data.contributors;
                 that.setState({
 
                 })
@@ -263,6 +263,7 @@ class ModifyDoc extends Component{
 
     handleInputChange = (e) => {
         information.title = e.target.value;
+        this.setState({})
     }
     render(){
         //const side = this.renderSideCard();

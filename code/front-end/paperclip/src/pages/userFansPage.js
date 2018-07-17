@@ -73,7 +73,7 @@ class UserFans extends Component{
                     itemLayout="horizontal"
                     dataSource={this.state.data}
                     renderItem={item => (
-                    <List.Item actions={[<a onClick={this.follow.bind(this, item)}>关注</a>]}>
+                    <List.Item actions={[<a onClick={() => this.follow(this, item)}>关注</a>]}>
                         <List.Item.Meta
                         avatar={<Avatar src={ item.userheader } />}
                         title={<a href={"/viewpage?username="+item.username}>{item.username}</a>}
