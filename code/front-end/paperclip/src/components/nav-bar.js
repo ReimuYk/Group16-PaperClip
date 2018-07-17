@@ -4,9 +4,15 @@ import { Input,Icon, Avatar, Select,Menu, Dropdown, Popover,List, Button } from 
 import { Row, Col } from 'antd';
 import { Anchor } from 'antd';
 import { Tabs } from 'antd';
+import { IPaddress } from '../App'
 
 import {Link} from 'react-router-dom';
 
+
+var username = '';
+var information = {
+    unreadMessage:[]
+}
 
 const Search = Input.Search;
 const TabPane = Tabs.TabPane
@@ -25,6 +31,32 @@ class NavBar extends Component{
         window.location.reload();
     }
 
+    getUnreadMessage = () =>{
+        /* get info from server */
+        let that = this;
+        /* get username */
+        username = sessionStorage.getItem('username');
+        /* get data according to username */
+        let jsonbody = {};
+        jsonbody.username = username;
+        console.log(jsonbody);
+        let url = IPaddress + 'service/user/unreadMessage';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                console.log(responseJson);
+                let data = eval(responseJson);
+                information.unreadMessage = data;
+                that.setState({
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
+    }
     renderInfo(){
         const data1=[
             "一个桃子",
@@ -64,32 +96,19 @@ class NavBar extends Component{
       );
     }
     renderMessage(){
-        const data = [
-            {
-              title: 'Ant Design Title 1',
-            },
-            {
-              title: 'Ant Design Title 2',
-            },
-            {
-              title: 'Ant Design Title 3',
-            },
-            {
-              title: 'Ant Design Title 4',
-            },
-          ];
-          
         return(
         <div className="message">
             <List
                 itemLayout="horizontal"
-                dataSource={data}
+                dataSource={information.unreadMessage}
                 renderItem={item => (
-                    <List.Item>
+                    <List.Item
+                        actions={[<p>{item.time}</p>]}
+                    >
                         <List.Item.Meta
                             avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                            title={<a href="#">{item.title}</a>}
-                            description="Ant Design is refined by Ant UED Team"
+                            title={<a>{item.sender}</a>}
+                            description={item.content}
                         />
                     </List.Item>
                 )}
@@ -100,6 +119,7 @@ class NavBar extends Component{
     }
 
     render() {
+
         const search = (
                 <Search
                 placeholder="input search text"
@@ -136,7 +156,7 @@ class NavBar extends Component{
                         </Col>
                         <Col span={1}>
                             <Popover placement="bottom" title="我的私信" content={message} trigger="click">
-                                <Icon type="message" style={{ fontSize: 19, color: '#08c' }}/>
+                                <Icon onClick={this.getUnreadMessage} type="message" style={{ fontSize: 19, color: '#08c' }}/>
                             </Popover>
                         </Col>
                         <Col span={1}>
