@@ -81,12 +81,13 @@ public class UserDocServiceImpl implements UserDocService {
         String username = data.getString("username");
         Long docID = data.getLong("docID");
         Document doc = docRepo.findOne(docID);
-         List<DocumentPdf> docPdfList = docPdfRepo.findByDocument(doc);
-         for (DocumentPdf docPdf : docPdfList) {
+        List<DocumentPdf> docPdfList = docPdfRepo.findByDocument(doc);
+        for (DocumentPdf docPdf : docPdfList) {
+
              docPdfRepo.delete(docPdf.getId());
-             docRepo.delete(doc.getId());
-             result.accumulate("result", "success");
         }
+        docRepo.delete(doc.getId());
+        result.accumulate("result", "success");
         return result;
     }
 

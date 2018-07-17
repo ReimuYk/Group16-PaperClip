@@ -127,7 +127,7 @@ public class UserNoteServiceImpl implements UserNoteService {
         String content = data.getString("noteContent");
         String keywords = data.getString("keywords");
         Long noteID = data.getLong("noteID");
-
+        System.out.println("data: "+data);
         Note note = noteRepo.findOne(noteID);
         if(note != null){
             note.setTitle(title);
@@ -135,6 +135,7 @@ public class UserNoteServiceImpl implements UserNoteService {
             note.setKeyWords(keywords);
             note.setDate(new Date());
             noteRepo.save(note);
+            System.out.println("note: "+note.toString());
             result.accumulate("result", "success");
         }else{
             result.accumulate("result", "fail");
@@ -144,6 +145,7 @@ public class UserNoteServiceImpl implements UserNoteService {
 
 
     public JSONObject getViewNoteDetail(JSONObject data) {
+        System.out.println("data: "+data);
         Long noteID = data.getLong("noteID");
         String username = data.getString("username");
 
