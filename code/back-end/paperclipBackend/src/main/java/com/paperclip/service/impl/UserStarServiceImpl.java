@@ -224,10 +224,11 @@ public class UserStarServiceImpl implements UserStarService {
 //            userRepo.updateFollowings(follower.getFollowing()-1,hostname);
 //            userRepo.updateFollowers(followee.getFollower()-1,clientname);
             follower.setFollowing(follower.getFollowing() - 1);
-            follower.setFollower(followee.getFollower() - 1);
+            followee.setFollower(followee.getFollower() - 1);
             userRepo.save(followee);
             userRepo.save(follower);
             result.accumulate("result", "success");
+            result.accumulate("fansno", followee.getFollower());
         }
         else{
             result.accumulate("result", "fail");
@@ -259,11 +260,11 @@ public class UserStarServiceImpl implements UserStarService {
 
         System.out.println("return");
         JSONObject result = new JSONObject();
-        if(true){
-            result.accumulate("result", "success");
-        }else{
-            result.accumulate("result", "fail");
-        }
+
+        result.accumulate("fansno", followee.getFollower());
+
+        result.accumulate("result", "success");
+
         return result;
     }
 }

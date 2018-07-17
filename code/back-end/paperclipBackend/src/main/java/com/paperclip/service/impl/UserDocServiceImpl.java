@@ -252,6 +252,7 @@ public class UserDocServiceImpl implements UserDocService {
     }
 
     public JSONObject publishDoc(JSONObject data){
+        System.out.println("get json: "+data);
         String username = data.getString("username");
         String doc_content = data.getString("docContent");
         String title = data.getString("docTitle");
