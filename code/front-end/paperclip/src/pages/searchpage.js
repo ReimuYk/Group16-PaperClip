@@ -94,7 +94,7 @@ class Search extends Component{
         let that = this;
         /* get search content according to username */
         let jsonbody = {};
-        jsonbody.searchText = this.state.searchContent;
+        jsonbody.searchText = searchContent;
         let url = IPaddress + 'service/search';
         let options={};
         options.method='POST';
@@ -104,9 +104,19 @@ class Search extends Component{
             .then(response=>response.text())
             .then(responseJson=>{
                 let data = eval(responseJson);
+                let papers = data[0].papers;
+                for(var i = 0; i<papers.length; i++){
+                    if(papers[i].keyword.length > 15){
+                        papers[i].keyword = papers[i].keyword.substring(0,15);
+                        papers[i].keyword += '...';
+                    }
+                    if(papers[i].keyword.length == 0){
+                        papers[i].keyword = 'null';
+                    }
+                }
                 that.setState({
-                    paperData: data[0],
-                    recommendData: data[1]
+                    paperData: papers,
+                    recommendData: data[1].recommand
                 })
             }).catch(function(e){
             console.log("Oops, error");
@@ -195,19 +205,20 @@ class Search extends Component{
                 grid={{ gutter: 16, column: 3 }}
                 dataSource={this.state.paperData}
                 renderItem={item => (
-                    <Link to={"/paper/"+item.paperID}>
-                        <List.Item>
-                            <Card
-                                style={{ width: 200 }}
-                                actions={[<span>阅读量：{item.readno}</span>, <span>笔记数：{item.noteno}</span>]}
-                            >
-                                <Meta
-                                    title={item.title}
-                                    description={item.keyword}
-                                />
-                            </Card>
-                        </List.Item>
-                    </Link>
+                <List.Item>
+                    <Card
+                        style={{ width: 200 }}
+                        actions={[<span>阅读量：{item.readno}</span>, <span>笔记数：{item.noteno}</span>]}
+                    >
+                        <Meta
+                            title={
+                                <Link to={"/paper/" + item.paperID}>
+                                    {item.title}
+                                </Link>}
+                            description={item.keyword}
+                        />
+                    </Card>
+                </List.Item>
                 )}
             />
         )
