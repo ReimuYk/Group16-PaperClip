@@ -55,14 +55,15 @@ class ViewNote extends Component{
                 information.author = data.author;
                 information.title = data.title;
                 information.content = data.content;
-                information.data = data.date;
+                information.date = data.date;
                 information.authorAvatar = data.avatar;
                 information.authorDescription = data.description;
                 that.setState({
                     ifLike: data.ifLike,
                     ifStar: data.ifStar,
                     ifFollow: data.ifFollow,
-                    commentNo: data.commentNo
+                    commentNo: data.commentNo,
+                    likeNo: data.likeNo
                 })
             }).catch(function(e){
             console.log("Oops, error");
@@ -164,7 +165,6 @@ class ViewNote extends Component{
         }
         let that = this;
         var tmp = this.state.comment;
-        var number = this.state.commentNo;
         let jsonbody = {};
         jsonbody.noteID = noteID
         jsonbody.username = username;
@@ -178,7 +178,7 @@ class ViewNote extends Component{
             .then(response=>response.text())
             .then(responseJson=>{
                 let result = eval('(' + responseJson + ')');
-                if(result == "fail"){
+                if(result.result == "fail"){
                     alert("发布评论失败，请重试");
                     return;
                 }
@@ -186,7 +186,7 @@ class ViewNote extends Component{
                 that.setState({
                     comment: tmp,
                     commentContent: '',
-                    commentNo: number+1
+                    commentNo: result.commNo
                 });
             }).catch(function(e) {
             console.log("Oops, error");
@@ -207,9 +207,8 @@ class ViewNote extends Component{
             .then(responseJson=>{
                 let result = eval('(' + responseJson + ')');
                 if(result.result == "success"){
-                    var like = that.state.likeNo;
                     this.setState( {
-                        likeNo: like + 1,
+                        likeNo: result.likeNo,
                         ifLike: true
                     } );
                 }
@@ -235,9 +234,8 @@ class ViewNote extends Component{
             .then(responseJson=>{
                 let result = eval('(' + responseJson + ')');
                 if(result.result == "success"){
-                    var like = that.state.likeNo;
-                    this.setState( {
-                        likeNo: like - 1,
+                    that.setState( {
+                        likeNo: result.likeNo,
                         ifLike: false
                     } );
                 }
