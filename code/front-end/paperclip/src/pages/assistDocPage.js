@@ -24,6 +24,7 @@ class AssistDoc extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
+                console.log(responseJson);
                 let data = eval(responseJson);
                 that.setState({
                     data:data
@@ -42,12 +43,10 @@ class AssistDoc extends Component{
                 <NavBar />
                 
                 <UserFloatMenu />
-                <div style={{width:'60%',marginLeft:'200px'}}>
+                <div style={{width:'60%',marginLeft:'200px', paddingTop:'40px'}}>
                 <div style={{width:'915px'}}>
                 <p style={{textAlign:'left'}}>
-                    <a style={{width:'100px',marginLeft:'48px'}}>文档名称</a>
-                    <a style={{width:'40px',marginLeft:'300px'}}>作者</a>
-                    <a style={{width:'70px',marginLeft:'60px'}}>创作日期</a>
+                    <a style={{width:'100px'}}>文档名称</a>
                 </p>
                 </div>
                 <List
@@ -57,11 +56,9 @@ class AssistDoc extends Component{
                     renderItem={item => (
                     <List.Item>
                         <List.Item.Meta
-                        title={<a href={"/user/docdetial?docID="+item.ID}>{item.title}</a>}
+                        title={<a href={"/user/docdetail?docID="+item.docID}>{item.title}</a>}
+                        description = {'作者：' + item.author}
                         />
-                        <a style={{width:'80px',marginLeft:'20px'}}>{item.author}</a>
-                        <a style={{width:'80px',marginLeft:'0px'}}>{item.date}</a>
-
                     </List.Item>
                     )}
                 />

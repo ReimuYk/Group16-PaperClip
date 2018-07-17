@@ -37,8 +37,9 @@ class UserDoc extends Component{
     deleteDoc = (record, item) => {
         let that = this;
         let jsonbody = {};
-        jsonbody.username = this.state.username;
+        jsonbody.username = username;
         jsonbody.docID = item.ID;
+        console.log(jsonbody);
         let url = IPaddress + 'service/delete/doc';
         let options={};
         options.method='POST';
@@ -72,7 +73,7 @@ class UserDoc extends Component{
         var tmpdata = this.state.data;
         let jsonbody = {};
         jsonbody.username = username;
-        jsonbody.title = '新建文档';
+        jsonbody.title = 'new doc';
         jsonbody.content='';
         let url = IPaddress + 'service/addDoc';
         let options={};
@@ -89,7 +90,7 @@ class UserDoc extends Component{
                 else{
                     let obj={
                         ID: result.docID,
-                        title: '新建文档',
+                        title: 'new doc',
                         date: result.date
                     };
                     tmpdata.push(obj);
@@ -110,12 +111,12 @@ class UserDoc extends Component{
                 <NavBar />
             
             <UserFLoatMenu />
-            <div style={{width:'60%',marginLeft:'200px'}}>
+            <div style={{width:'60%',marginLeft:'200px', paddingTop:'40px'}}>
                 <div className="button" style={{width:"100%", height:"50px"}}>
                     <Button style={{float:"right"}} type="primary" onClick={this.newDoc}>新建文档</Button>
                 </div>
                 <div className="content">
-                    <p style={{marginLeft:'490px'}}>上次修改日期</p>
+                    <a style={{marginLeft:'270px'}}>上次修改日期</a>
                     <List
                         style={{textAlign:'left'}}
                         itemLayout="horizontal"

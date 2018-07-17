@@ -77,14 +77,14 @@ class StarNote extends Component{
             <div>
             <NavBar />
             <UserFloatMenu />
-            <div style={{width:'60%',marginLeft:'200px'}}>
+            <div style={{width:'60%',marginLeft:'200px', paddingTop:'40px'}}>
                 <div style={{width:'915px'}}>
                 <p style={{textAlign:'left'}}>
-                    <a style={{width:'100px',marginLeft:'48px'}}>笔记名称</a>
-                    <a style={{width:'40px',marginLeft:'300px'}}>作者</a>
-                    <a style={{width:'40px',marginLeft:'53px'}}>收藏量</a>
-                    <a style={{width:'70px',marginLeft:'80px'}}>最近修改日期</a>
-                    <a style={{wdith:'50px',marginLeft:'90px'}}>操作</a>
+                    <a style={{width:'100px'}}>笔记名称</a>
+                    <a style={{width:'40px',marginLeft:'460px'}}>作者</a>
+                    <a style={{width:'40px',marginLeft:'63px'}}>收藏量</a>
+                    <a style={{width:'70px',marginLeft:'50px'}}>最近修改日期</a>
+                    <a style={{wdith:'50px',marginLeft:'80px'}}>操作</a>
                 </p>
                 </div>
                 <List
@@ -101,7 +101,7 @@ class StarNote extends Component{
                         <List.Item.Meta
                         /* 笔记显示页 */
                         title={<a href={'/viewnote?noteID='+item.ID}>{item.title}</a>}
-                        description={item.paperTitle + item.keywords}
+                        description={item.paperTitle + '    |   ' + item.keywords}
                         />
                         <a style={{width:'80px',marginLeft:'20px'}}>{item.author}</a>
                         <a style={{width:'80px',marginLeft:'20px'}}>{item.starno}</a>

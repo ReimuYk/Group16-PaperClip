@@ -89,6 +89,7 @@ class Header extends React.Component {
 
     handleClose = (removedTag) => {
         const tags = information.tags.filter(tag => tag !== removedTag);
+        information.tags = tags;
         console.log(tags);
         this.setState({ });
     }
@@ -259,6 +260,7 @@ class ModifyNote extends Component{
                 information.contentHTML = data.content;
                 information.tags = data.keywords.split(";");
                 information.tags.pop();
+                console.log(information.tags);
                 that.setState({
                 })
             }).catch(function(e){
@@ -268,6 +270,7 @@ class ModifyNote extends Component{
 
     handleInputChange = (e) => {
         information.title = e.target.value;
+        this.setState({})
     }
     render(){
         //const side = this.renderSideCard();

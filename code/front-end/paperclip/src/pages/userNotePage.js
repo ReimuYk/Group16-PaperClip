@@ -77,8 +77,8 @@ class UserNote extends Component{
             <div>
             <NavBar />
             <UserFloatMenu />
-            <div style={{width:'60%',marginLeft:'200px'}}>
-            <p style={{marginLeft:'465px'}}>上次修改日期</p>
+            <div style={{width:'60%',marginLeft:'200px', paddingTop:'40px'}}>
+            <a style={{marginLeft:'480px'}}>上次修改日期</a>
                 <List
                     style={{textAlign:'left'}}
                     className="demo-loadmore-list"
