@@ -83,7 +83,7 @@ class StarNote extends Component{
                     <a style={{width:'100px',marginLeft:'48px'}}>笔记名称</a>
                     <a style={{width:'40px',marginLeft:'300px'}}>作者</a>
                     <a style={{width:'40px',marginLeft:'53px'}}>收藏量</a>
-                    <a style={{width:'70px',marginLeft:'80px'}}>创作日期</a>
+                    <a style={{width:'70px',marginLeft:'80px'}}>最近修改日期</a>
                     <a style={{wdith:'50px',marginLeft:'90px'}}>操作</a>
                 </p>
                 </div>
