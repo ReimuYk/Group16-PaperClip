@@ -26,7 +26,7 @@ class NoteList extends Component{
         //get NoteList
         let jsonbody = {};
         jsonbody.paperID = this.props.paperID;
-        var url = IPaddress+'/service/getNoteList';
+        var url = IPaddress+'service/getNoteList';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -45,7 +45,7 @@ class NoteList extends Component{
         //get keywords
         jsonbody = {};
         jsonbody.paperID = this.props.paperID;
-        var url = IPaddress+'/service/getKeywords';        
+        var url = IPaddress+'service/getKeywords';        
         fetch(url, options)
         .then(response=>response.text())
         .then(responseJson=>{

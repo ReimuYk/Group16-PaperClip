@@ -67,7 +67,7 @@ class Postil extends Component{
         jsonbody.marked = pos.marked;
         jsonbody.agreement = pos.agreement;
         jsonbody.flag = flag;
-        var url = IPaddress+'/service/statPostil';
+        var url = IPaddress+'service/statPostil';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -172,7 +172,7 @@ class Postil extends Component{
         jsonbody.username = this.state.username;
         jsonbody.posID = this.state.data[this.state.postilIdx].postils.posID;
         jsonbody.content = content;
-        var url = IPaddress+'/service/addPostilComment';
+        var url = IPaddress+'service/addPostilComment';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -193,7 +193,7 @@ class Postil extends Component{
         jsonbody.username = this.state.username;
         jsonbody.blockList = this.state.selectid;
         jsonbody.content = content;
-        var url = IPaddress+'/service/addPostil';
+        var url = IPaddress+'service/addPostil';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};

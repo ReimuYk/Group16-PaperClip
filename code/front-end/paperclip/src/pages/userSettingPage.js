@@ -90,9 +90,10 @@ class UserSetting extends Component{
           return;
         }
         if (info.file.status === 'done') {
-            console.log('...');
+            console.log('3');
             // Get this url from response in real world.
             getBase64(info.file.originFileObj, imageUrl => function(){
+                console.log('upload avatar');
                 let that  = this;
                 let jsonbody = {};
                 jsonbody.username = username;
