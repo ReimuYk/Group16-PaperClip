@@ -27,13 +27,15 @@ class Login extends Component {
             .then(response=>response.text())
             .then(responseJson=>{
                 let result = eval('(' + responseJson + ')');
-                if(result == null){
+                if(result.result == "fail"){
                     alert('登录错误，请验证您的用户名和密码！');
                     return;
                 }
                 else{
                     username = result.username;
                     sessionStorage.setItem('username', username);
+                    window.location.href='/user'
+                    that.setState({});
                 }
             }).catch(function(e){
             console.log("Oops, error");
@@ -41,6 +43,7 @@ class Login extends Component {
     }
     render() {
         if(sessionStorage.getItem('username') != null){
+            console.log('123');
             return <Redirect to="/user"/>;
         }
         return (
