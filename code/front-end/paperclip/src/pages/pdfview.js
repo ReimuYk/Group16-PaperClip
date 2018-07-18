@@ -13,7 +13,8 @@ class PDFView extends Component{
         this.state = {
             isLoading:true,
             page:1,
-            paperID:this.props.paperID
+            paperID:this.props.paperID,
+            username:sessionStorage.getItem('username')
         }
         //console.log(this.props.paperID);
         this.getData(this.props.paperID,1)
@@ -21,7 +22,7 @@ class PDFView extends Component{
     getData = (paperID,pagination) =>{
         let that  = this;
         let jsonbody = {};
-        jsonbody.username = 'user1';
+        jsonbody.username = this.state.username;
         jsonbody.paperID = paperID;
         jsonbody.pagination = pagination;
         var url = IPaddress+'/service/paperDetail';
@@ -95,7 +96,7 @@ class PDFView extends Component{
     refreshPostil = (selectid) => {
         let that  = this;
         let jsonbody = {};
-        jsonbody.username = 'user1';
+        jsonbody.username = this.state.username;
         jsonbody.paperID = 1;
         jsonbody.pagination = 1;
         jsonbody.selectid = selectid;

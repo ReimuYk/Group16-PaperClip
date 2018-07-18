@@ -19,6 +19,7 @@ class Tool extends Component{
         this.openShare = this.openShare.bind(this);
         this.cancelShare = this.cancelShare.bind(this);
         this.confirmShare = this.confirmShare.bind(this);
+        this.newNote = this.newNote.bind(this);
 
         this.state={
             paperID:this.props.paperID,
@@ -176,6 +177,25 @@ class Tool extends Component{
             onCancel:this.cancelShare
         }); 
     }
+    newNote(e){
+        e.preventDefault();
+        let jsonbody = {};
+        jsonbody.username = this.state.username;
+        jsonbody.paperID = this.state.paperID;
+        let url = IPaddress + 'service/addNote';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let result = eval('(' + responseJson + ')');
+                window.location.href='/user/modifyNote?noteID='+result.noteID;
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
+    }
     rederToolContent(){
         return(
             <Card style={{ width: 240,height:90 }}>
@@ -191,9 +211,10 @@ class Tool extends Component{
                 onMouseEnter={()=>{this.setState({toolIdx:2})}} onMouseLeave={()=>{this.setState({toolIdx:null})}}
                 onClick={this.openShare}/>
                 <Divider type="vertical" />
-                <Link to="/writedoc"><Button shape="circle" icon="edit"
-                onMouseEnter={()=>{this.setState({toolIdx:3})}} onMouseLeave={()=>{this.setState({toolIdx:null})}}>
-                </Button></Link>
+                <Button shape="circle" icon="edit"
+                onMouseEnter={()=>{this.setState({toolIdx:3})}} onMouseLeave={()=>{this.setState({toolIdx:null})}}
+                onClick={this.newNote}>
+                </Button>
                 <br/>
                 <div style={{marginTop:10}}>
                     <span style={{marginLeft:"2%"}}>{this.state.toolIdx==0?"导出":""}</span>

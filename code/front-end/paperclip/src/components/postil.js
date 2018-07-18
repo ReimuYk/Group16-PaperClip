@@ -21,20 +21,7 @@ class Postil extends Component{
 
         this.state = {
             username:sessionStorage.getItem('username'),
-            data:[
-                {
-                    postils:{user:"baibai",content:"我觉得OK",agree:10,disagree:2},
-                    comments:[{user:"b",content:"1"},{user:"ai",content:"2"}],
-                    marked:0,
-                    agreement:{agreed:false,disagreed:false}
-                },
-                {
-                    postils:{user:"haliai",content:"我觉得不行",agree:2,disagree:1},
-                    comments:[{user:"1",content:"asdd"},{user:"a445i",content:"倍v"}],
-                    marked:0,
-                    agreement:{agreed:false,disagreed:false}
-                }
-            ],
+            data:[],
             postilIdx:null,
             inputValue:"",
             selectid:null
@@ -187,7 +174,7 @@ class Postil extends Component{
             console.log("Oops, error");
         })
     }
-    addPostil(content){
+    addPostil(content,newPos){
         let that  = this;
         let jsonbody = {};
         jsonbody.username = this.state.username;
@@ -203,6 +190,10 @@ class Postil extends Component{
         .then(responseJson=>{
             console.log(responseJson);
             let data = eval('('+responseJson+')');
+            var old = that.state.data;
+            newPos.postils.posID = data.posID;
+            old.push(newPos);
+            that.setState({data:old});
             console.log(data)
         }).catch(function(e){
             console.log("Oops, error");
@@ -228,13 +219,13 @@ class Postil extends Component{
         else{               //添加批注
             obj.agree = 0;
             obj.disagree = 0;
-            this.addPostil(value);
-            data.push({
+            var newPos = {
                 postils:obj,
                 comments:[],
-                marked:0,
+                marked:1,
                 agreement:{agreed:false,disagreed:false}
-            })            
+                };            
+            this.addPostil(value,newPos);         
         }
         this.setState({
             data:data,

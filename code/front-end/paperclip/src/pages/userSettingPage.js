@@ -10,23 +10,6 @@ import url from '../statics/uh.jpg'
 
 const { Header, Content, Sider } = Layout;
 var username = '';
-function getBase64(img, callback) {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
-  }
-  
-function beforeUpload(file) {
-    const isJPG = file.type === 'image/jpeg';
-    if (!isJPG) {
-      message.error('You can only upload JPG file!');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error('Image must smaller than 2MB!');
-    }
-    return isJPG && isLt2M;
-}
 
 class UserSetting extends Component{
     constructor(props){
@@ -34,6 +17,10 @@ class UserSetting extends Component{
         this.edit = this.edit.bind(this);
         this.commitEdit = this.commitEdit.bind(this);
         this.changeMenuKey = this.changeMenuKey.bind(this);
+        this.beforeUpload = this.beforeUpload.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.uploadAvatar = this.uploadAvatar.bind(this);
+
         this.state = {
             collapsed: false,
             content:'',
@@ -60,6 +47,20 @@ class UserSetting extends Component{
         username = sessionStorage.getItem('username');
         return;
     }
+
+    beforeUpload(file) {
+        const isJPG = file.type === 'image/jpeg';
+        if (!isJPG) {
+          message.error('You can only upload JPG file!');
+        }
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+          message.error('Image must smaller than 2MB!');
+        }        
+        this.uploadAvatar(file);
+        return isJPG && isLt2M;
+    }
+
     toggle = () => {
         this.setState({
           collapsed: !this.state.collapsed,
@@ -84,6 +85,39 @@ class UserSetting extends Component{
             inputContent:''
         })
     }
+    uploadAvatar(file){
+        let that  = this;
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function(e) {
+            var base64 = e.target.result;
+            //console.log(base64);
+            let jsonbody = {};
+            jsonbody.username = username;
+            jsonbody.imgStr = base64;
+            var url = IPaddress + 'service/uploadAvatar';
+            let options={};
+            options.method='POST';
+            options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+            options.body = JSON.stringify(jsonbody);
+            fetch(url, options)
+                .then(response=>response.text())
+                .then(responseJson=>{
+                    console.log(responseJson);
+                    let data = eval('(' + responseJson + ')');
+                    if(data.result == "fail"){
+                        alert('请上传正确的图片');
+                        return;
+                    }                
+                    that.setState({
+                        imageUrl: base64,
+                        loading: false
+                    })
+                }).catch(function(e){
+                    console.log("Oops, error");
+                })
+        }
+    }
     handleChange = (info) => {
         if (info.file.status === 'uploading') {
           this.setState({ loading: true });
@@ -91,35 +125,6 @@ class UserSetting extends Component{
         }
         if (info.file.status === 'done') {
             console.log('...');
-            // Get this url from response in real world.
-            getBase64(info.file.originFileObj, imageUrl => function(){
-                let that  = this;
-                let jsonbody = {};
-                jsonbody.username = username;
-                jsonbody.imgStr = imageUrl;
-                var url = IPaddress + 'service/uploadAvatar';
-                let options={};
-                options.method='POST';
-                options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
-                options.body = JSON.stringify(jsonbody);
-                fetch(url, options)
-                    .then(response=>response.text())
-                    .then(responseJson=>{
-                        console.log(responseJson);
-                        let data = eval('(' + responseJson + ')');
-                        if(data.result == "fail"){
-                            alert('请上传正确的图片');
-                        }
-                        else{
-                            that.setState({
-                                imageUrl: imageUrl,
-                                loading: false
-                            })
-                        }
-                    }).catch(function(e){
-                    console.log("Oops, error");
-                })
-            });
         }
       }
     renderAvatar(){
@@ -136,11 +141,11 @@ class UserSetting extends Component{
                 listType="picture-card"
                 className="avatar-uploader"
                 showUploadList={false}
-                action="//jsonplaceholder.typicode.com/posts/"
-                beforeUpload={beforeUpload}
+                action="#"
+                beforeUpload={this.beforeUpload}
                 onChange={this.handleChange}
             >
-                {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton}
+                {imageUrl ? <img src={imageUrl} alt="avatar" style={{width:"234px",height:"232px"}}/> : uploadButton}
             </Upload>
         );
     }

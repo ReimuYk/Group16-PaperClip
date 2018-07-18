@@ -99,7 +99,7 @@ public class PaperServiceImpl implements PaperService {
         String username = data.getString("username");
         int pagination = data.getInt("pagination");
 
-        User user = userRepo.findOne("user1");
+        User user = userRepo.findOne(username);
 
         Paper p = paperRepo.findOne(paperID);
         List<PaperPage> pagelist = paperPageRepo.findByPaper(p);
@@ -169,9 +169,8 @@ public class PaperServiceImpl implements PaperService {
             JSONObject obj = new JSONObject();
             //postils:{user:xxx,content:xxx,agree:xxx,disagree:xxx}
             JSONObject postils = new JSONObject();
-            User user = userRepo.findOne(username);
             postils.accumulate("posID",p.getId());
-            postils.accumulate("user",user.getUsername());
+            postils.accumulate("user",p.getUser().getUsername());
             postils.accumulate("content",p.getContent());
             postils.accumulate("agree",p.getAgreement());
             postils.accumulate("disagree",p.getDisagreement());
@@ -189,6 +188,7 @@ public class PaperServiceImpl implements PaperService {
             obj.accumulate("comments",comments);
             //marked: 0/1
             //agreement:{agreed:T/F,disagreed:T/F}
+            User user = userRepo.findOne(username);
             List<UserPostil> uplist = userPRepo.findByUserAndPostil(user,p);
             JSONObject agreement = new JSONObject();
             if (uplist.isEmpty()){
@@ -197,6 +197,7 @@ public class PaperServiceImpl implements PaperService {
                 agreement.accumulate("disagreed",false);
             }else{
                 UserPostil up = uplist.get(0);
+                System.out.println("pos:"+up.getPostil().getContent()+" mark:"+up.getMark());
                 int marked = up.getMark();
                 obj.accumulate("marked",marked);
                 int agr = up.getAgreement();
@@ -296,11 +297,15 @@ public class PaperServiceImpl implements PaperService {
         else {
             Postil postil = new Postil(user, content);
             postilRepo.save(postil);
+            result.accumulate("posID",postil.getId());
             while (blocks.hasNext()) {
                 BlockPostil bp = new BlockPostil(blocks.next(), postil);
                 blockPRepo.save(bp);
                 result.accumulate("result","success");
             }
+            UserPostil up = new UserPostil(user,postil);
+            up.setMark(1);
+            userPRepo.save(up);
         }
         return result;
     }

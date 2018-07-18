@@ -99,7 +99,7 @@ class NoteList extends Component{
                     <a href="#"><List.Item>                       
                         <List.Item.Meta          
                         title={item.title}
-                        description={item.intro}
+                        description={<div dangerouslySetInnerHTML={{ __html: item.intro}}></div>}
                         />
                     </List.Item></a>
                     )}
@@ -111,7 +111,7 @@ class NoteList extends Component{
         const notes = this.renderNotes();
         return(
             <div id="notelist" 
-            style={{position:"fixed",width:"18%",height:"500px",overflowY:"hidden",
+            style={{position:"fixed",width:"18%",height:"500px",overflowY:"scroll",
             left:"2%"}}>
                 <div style={{zIndex:"1",backgroundColor:"#FFFFFF"}}>
                     <Search

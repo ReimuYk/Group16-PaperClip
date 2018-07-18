@@ -33,11 +33,6 @@ public class UserNoteController {
     @Autowired
     UserNoteService userNoteService;
 
-
-
-
-
-
     /********************************************* note ****************************************************/
     /*******************
      * userNotePage
@@ -115,5 +110,11 @@ public class UserNoteController {
         return userNoteService.starNote(data);
     }
 
+    @RequestMapping(value = "/service/addNote",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONObject addNote(@RequestBody JSONObject data){
+        return userNoteService.addNote(data);
+    }
 
 }
