@@ -16,7 +16,7 @@ class Paper extends Component{
             paperID:this.props.location.search.substring(9),//9 == 'paperID='.length+1,
             username:sessionStorage.getItem('username')
         }
-        console.log("paperID:"+this.props.paperID);
+        console.log("paperID:"+this.props.location.search.substring(9));
     }
     componentWillMount(){
         
