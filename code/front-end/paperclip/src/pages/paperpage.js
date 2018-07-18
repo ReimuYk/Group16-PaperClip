@@ -41,7 +41,7 @@ class Paper extends Component{
         let jsonbody = {};
         jsonbody.username = this.state.username;
         jsonbody.paperID = this.state.paperID;
-        var url = 'http://localhost:8080/service/starThePaper';
+        var url = IPaddress+'/service/starThePaper';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -61,7 +61,7 @@ class Paper extends Component{
         let jsonbody = {};
         jsonbody.username = this.state.username;
         jsonbody.paperID = this.state.paperID;
-        var url = 'http://localhost:8080/service/quitStar/paper';
+        var url = IPaddress+'/service/quitStar/paper';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
