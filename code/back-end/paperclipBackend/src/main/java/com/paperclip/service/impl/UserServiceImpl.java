@@ -105,11 +105,15 @@ public class UserServiceImpl implements UserService {
         User user = userRepo.findOne(username);
         if((user != null) && (password.equals(user.getPassword()))){
             userinfo.accumulate("username", username);
+            userinfo.accumulate("result", "success");
         }
         else {
             user = userRepo.findDistinctByEmail(username);
             if ((user != null) && (password.equals(user.getPassword()))) {
                 userinfo.accumulate("username", user.getUsername());
+                userinfo.accumulate("result", "success");
+            }else{
+                userinfo.accumulate("result", "fail");
             }
         }
         return userinfo;
