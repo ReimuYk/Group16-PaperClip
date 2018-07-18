@@ -9,7 +9,7 @@ import url from '../statics/uh.jpg'
 /* fake data */
 
 const { Header, Content, Sider } = Layout;
-
+var username = '';
 function getBase64(img, callback) {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result));
@@ -56,7 +56,10 @@ class UserSetting extends Component{
             inputContent:''
         }
     }
-    
+    componentWillMount(){
+        username = sessionStorage.getItem('username');
+        return;
+    }
     toggle = () => {
         this.setState({
           collapsed: !this.state.collapsed,
@@ -87,11 +90,36 @@ class UserSetting extends Component{
           return;
         }
         if (info.file.status === 'done') {
+            console.log('...');
             // Get this url from response in real world.
-            getBase64(info.file.originFileObj, imageUrl => this.setState({
-                imageUrl:imageUrl,
-                loading: false,
-            }));
+            getBase64(info.file.originFileObj, imageUrl => function(){
+                let that  = this;
+                let jsonbody = {};
+                jsonbody.username = username;
+                jsonbody.imgStr = imageUrl;
+                var url = IPaddress + 'service/uploadAvatar';
+                let options={};
+                options.method='POST';
+                options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+                options.body = JSON.stringify(jsonbody);
+                fetch(url, options)
+                    .then(response=>response.text())
+                    .then(responseJson=>{
+                        console.log(responseJson);
+                        let data = eval('(' + responseJson + ')');
+                        if(data.result == "fail"){
+                            alert('请上传正确的图片');
+                        }
+                        else{
+                            that.setState({
+                                imageUrl: imageUrl,
+                                loading: false
+                            })
+                        }
+                    }).catch(function(e){
+                    console.log("Oops, error");
+                })
+            });
         }
       }
     renderAvatar(){
