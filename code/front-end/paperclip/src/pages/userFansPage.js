@@ -66,7 +66,7 @@ class UserFans extends Component{
             <NavBar />
             
             <UserFloatMenu />
-            <div style={{width:'60%',marginLeft:'200px'}}>
+            <div style={{width:'60%',marginLeft:'200px', padding:'40px'}}>
                 <List
                     style={{textAlign:'left'}}
                     className="demo-loadmore-list"

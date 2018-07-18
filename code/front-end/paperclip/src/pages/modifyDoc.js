@@ -85,6 +85,7 @@ class Header extends React.Component {
 
     publish = () => {
         let jsonbody = {};
+        jsonbody.username = username;
         jsonbody.docID = information.docID;
         jsonbody.docTitle = information.title;
         jsonbody.docContent = information.contentHTML;

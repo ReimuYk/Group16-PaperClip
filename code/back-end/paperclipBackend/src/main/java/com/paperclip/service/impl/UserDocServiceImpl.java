@@ -87,12 +87,13 @@ public class UserDocServiceImpl implements UserDocService {
         String username = data.getString("username");
         Long docID = data.getLong("docID");
         Document doc = docRepo.findOne(docID);
-         List<DocumentPdf> docPdfList = docPdfRepo.findByDocument(doc);
-         for (DocumentPdf docPdf : docPdfList) {
+        List<DocumentPdf> docPdfList = docPdfRepo.findByDocument(doc);
+        for (DocumentPdf docPdf : docPdfList) {
+
              docPdfRepo.delete(docPdf.getId());
-             docRepo.delete(doc.getId());
-             result.accumulate("result", "success");
         }
+        docRepo.delete(doc.getId());
+        result.accumulate("result", "success");
         return result;
     }
 
@@ -251,6 +252,7 @@ public class UserDocServiceImpl implements UserDocService {
     }
 
     public JSONObject publishDoc(JSONObject data){
+        System.out.println("get json: "+data);
         String username = data.getString("username");
         String doc_content = data.getString("docContent");
         String title = data.getString("docTitle");

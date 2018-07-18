@@ -41,6 +41,7 @@ class ViewNote extends Component{
         let jsonbody = {};
         jsonbody.username = username;
         jsonbody.noteID = noteID;
+        console.log(jsonbody);
         let url = IPaddress + 'service/noteDetail';
         let options={};
         options.method='POST';
@@ -54,14 +55,15 @@ class ViewNote extends Component{
                 information.author = data.author;
                 information.title = data.title;
                 information.content = data.content;
-                information.data = data.date;
+                information.date = data.date;
                 information.authorAvatar = data.avatar;
                 information.authorDescription = data.description;
                 that.setState({
                     ifLike: data.ifLike,
                     ifStar: data.ifStar,
                     ifFollow: data.ifFollow,
-                    commentNo: data.commentNo
+                    commentNo: data.commentNo,
+                    likeNo: data.likeNo
                 })
             }).catch(function(e){
             console.log("Oops, error");
@@ -87,6 +89,7 @@ class ViewNote extends Component{
             .then(response=>response.text())
             .then(responseJson=>{
                 let data = eval(responseJson);
+                console.log(data);
                 that.setState({
                     comment: data,
                     commentVisible: true
@@ -96,13 +99,36 @@ class ViewNote extends Component{
         })
     }
     handleOk = (e) => {
-        console.log('write mail');
-        this.setState({
-            visible: false,
-        });
+        if(this.state.mailContent == ''){
+            alert("内容不能为空！");
+            return;
+        }
+        let that  = this;
+        let jsonbody = {};
+        jsonbody.senderName = username;
+        jsonbody.receiverName = information.author;
+        jsonbody.content = that.state.mailContent;
+        var url = IPaddress + 'service/sendMessage';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                console.log(responseJson);
+                let data = eval('(' + responseJson + ')');
+                if(data.result == "success"){
+                    that.setState({
+                        mailContent: '',
+                        visible: false
+                    })
+                }
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
     }
     handleCancel = (e) => {
-        console.log(e);
         this.setState({
             visible: false,
         });
@@ -114,17 +140,16 @@ class ViewNote extends Component{
     }
     handleCommentCancel = () => {
         this.setState({
+            commentContent: '',
             commentVisible: false,
         });
     }
     handleMailChange = (event) => {
-        console.log('send mail', event.target.value);
         this.setState({ mailContent: event.target.value });
         /* send to server, server => that user */
     }
     handleCommentChange = (event) => {
         this.setState({ commentContent: event.target.value });
-        /* send to server, server => that user */
     }
     clearInput = () => {
         this.setState({ mailContent: '' });
@@ -140,9 +165,8 @@ class ViewNote extends Component{
         }
         let that = this;
         var tmp = this.state.comment;
-        var number = this.state.commentNo;
         let jsonbody = {};
-        jsonbody.noteID = this.
+        jsonbody.noteID = noteID
         jsonbody.username = username;
         jsonbody.content = this.state.commentContent;
         let url = IPaddress + 'service/addNoteComment';
@@ -154,7 +178,7 @@ class ViewNote extends Component{
             .then(response=>response.text())
             .then(responseJson=>{
                 let result = eval('(' + responseJson + ')');
-                if(result == "fail"){
+                if(result.result == "fail"){
                     alert("发布评论失败，请重试");
                     return;
                 }
@@ -162,12 +186,11 @@ class ViewNote extends Component{
                 that.setState({
                     comment: tmp,
                     commentContent: '',
-                    commentNo: number+1
+                    commentNo: result.commNo
                 });
             }).catch(function(e) {
             console.log("Oops, error");
         })
-
     }
     like = () => {
         let that = this;
@@ -184,9 +207,8 @@ class ViewNote extends Component{
             .then(responseJson=>{
                 let result = eval('(' + responseJson + ')');
                 if(result.result == "success"){
-                    var like = that.state.likeNo;
                     this.setState( {
-                        likeNo: like + 1,
+                        likeNo: result.likeNo,
                         ifLike: true
                     } );
                 }
@@ -212,9 +234,8 @@ class ViewNote extends Component{
             .then(responseJson=>{
                 let result = eval('(' + responseJson + ')');
                 if(result.result == "success"){
-                    var like = that.state.likeNo;
-                    this.setState( {
-                        likeNo: like - 1,
+                    that.setState( {
+                        likeNo: result.likeNo,
                         ifLike: false
                     } );
                 }
@@ -393,7 +414,9 @@ class ViewNote extends Component{
                 itemLayout="horizontal"
                 dataSource={this.state.comment}
                 renderItem={item => (
-                    <List.Item>
+                    <List.Item
+                        actions={[<p>{item.date}</p>]}
+                    >
                         <List.Item.Meta
                             title={<a>{item.username}</a>}
                             description={item.content}
@@ -428,10 +451,17 @@ class ViewNote extends Component{
             )
         }
     }
+    renderContent(){
+        return(
+            <div dangerouslySetInnerHTML={{ __html: information.content}}></div>
+        )
+    }
+
     render(){
         const bottomNav = this.renderBottomNav();
         const comment = this.renderComment();
         const button = this.renderButton();
+        const content = this.renderContent();
         return(
             <div>
                 <NavBar/>
@@ -481,13 +511,12 @@ class ViewNote extends Component{
                                 {button}
                                 <br />
                             </div>
-
                         </div>
 
                     </div>
-                    <div style={{display:'inline-block', textAlign:'left'}}>
-                        <p style={{fontSize:"18px"}}>{information.content}</p>
-                    </div>
+                </div>
+                <div style={{display:'inline-block', textAlign:'left', width:"50%", margin: "auto"}}>
+                    <p style={{fontSize:"18px"}}>{content}</p>
                 </div>
                 {bottomNav}
             </div>

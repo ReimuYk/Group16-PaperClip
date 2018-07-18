@@ -33,12 +33,6 @@ public class helloController {
         return "this is a hello world page";
     }
 
-    @RequestMapping(value = "/pub",method = RequestMethod.POST)
-    public
-    @ResponseBody
-    JSONObject testpublish(@RequestBody JSONObject data){
-        return userDocService.publishDoc(data);
-    }
 
     /*@RequestMapping(value = "/findtest",method = RequestMethod.GET)
     public

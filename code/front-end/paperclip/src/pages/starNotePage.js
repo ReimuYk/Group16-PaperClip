@@ -27,6 +27,7 @@ class StarNote extends Component{
             .then(response=>response.text())
             .then(responseJson=>{
                 let data = eval(responseJson);
+                data.sort(that.sortArray);
                 that.setState({
                     data:data
                 })
@@ -68,6 +69,17 @@ class StarNote extends Component{
             console.log("Oops, error");
         })
         /* send to server, refresh this page in get/post request */
+    }
+    sortArray(obj1, obj2){
+        if(obj1.date < obj2.date){
+            return 1;
+        }
+        else if(obj1.date > obj2.date){
+            return -1;
+        }
+        else{
+            return 0;
+        }
     }
     render(){
         if(sessionStorage.getItem('username') == null){

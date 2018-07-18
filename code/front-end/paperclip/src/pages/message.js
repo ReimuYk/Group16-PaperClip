@@ -3,87 +3,68 @@ import { List, Avatar, Menu, Anchor, Modal, Button, Input} from 'antd';
 import { Link } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 /* should get from server */
-import uh from '../statics/uh.jpg'
 import { IPaddress } from '../App'
+var username = '';
 const { TextArea } = Input;
-const userID=1;
-const constUsername = 'user2'
-const constUsernameSelf = 'user1'
-const constData = [{
-    key: 1,
-    userName: 'user 1',
-},{
-    key: 2,
-    userName: 'user 2',
-},{
-    key: 3,
-    userName: 'user 3',
-},{
-    key: 4,
-    userName: 'user 4',
-},{
-    key: 5,
-    userName: 'user 5',
-},{
-    key: 6,
-    userName: 'user 6',
-},{
-    key: 7,
-    userName: 'user 7',
-},{
-    key: 8,
-    userName: 'user 8',
-}]
-
-const constMessage = [{
-    userName: 'user 1',
-    content:'......'
-},{
-    userName: 'user 2',
-    content:'.....'
-},{
-    userName: 'user 1',
-    content:'......'
-},{
-    userName: 'user 2',
-    content:'.....'
-},{
-    userName: 'user 1',
-    content:'......'
-},{
-    userName: 'user 2',
-    content:'.....'
-},{
-    userName: 'user 1',
-    content:'......'
-},{
-    userName: 'user 2',
-    content:'.....'
-}]
 
 class Message extends Component{
     state = {
         data: [],
         message: [],
         modalShow: false,
-        username: '',
         messageContent: '',
-        usernameSelf: ''
+        receiverName:''
     }
     componentWillMount = () => {
-        this.setState({
-            data: constData,
-            message: constMessage,
-            username: constUsername,
-            usernameSelf:constUsernameSelf
-            }
-        )
-    }
-    showMessage = () => {
-        this.setState({
-            modalShow: true
+        /* get info from server */
+        let that = this;
+        /* get username */
+        username = sessionStorage.getItem('username');
+        /* get data according to username */
+        let jsonbody = {};
+        jsonbody.username = username;
+        let url = IPaddress + 'service/user/messageList';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                console.log(responseJson);
+                let data = eval(responseJson);
+                that.setState({
+                    data: data
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
         })
-
+    }
+    showMessage = (record, item) => {
+        let that = this;
+        /* get username */
+        /* get data according to username */
+        let jsonbody = {};
+        jsonbody.hostname = username;
+        jsonbody.clientname = item.another;
+        let url = IPaddress + 'service/user/messageDetail';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                console.log(responseJson);
+                let data = eval(responseJson);
+                that.setState({
+                    message: data,
+                    modalShow: true,
+                    receiverName: item.another
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
     }
     handleCancel = () => {
         this.setState({
@@ -96,12 +77,31 @@ class Message extends Component{
         /* send to server, server => that user */
     }
     commitMessage = () => {
-        var that = this;
+        let that  = this;
         var tmp = this.state.message;
-        tmp.push({userName: that.state.usernameSelf, content:that.state.messageContent});
-        this.setState({
-            message: tmp,
-            messageContent: ''
+        let jsonbody = {};
+        jsonbody.senderName = username;
+        jsonbody.receiverName = that.state.receiverName;
+        jsonbody.content = that.state.messageContent;
+        var url = IPaddress + 'service/sendMessage';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                console.log(responseJson);
+                let data = eval('(' + responseJson + ')');
+                if(data.result == "success"){
+                    tmp.push({sender:username, content:that.state.messageContent, time:data.time});
+                    that.setState({
+                        message:tmp,
+                        messageContent: ''
+                    })
+                }
+            }).catch(function(e){
+            console.log("Oops, error");
         })
     }
 
@@ -116,10 +116,10 @@ class Message extends Component{
                     itemLayout="horizontal"
                     dataSource={this.state.data}
                     renderItem={item => (
-                    <List.Item  actions={[<a onClick={this.showMessage}> 查看对话 </a>]}>
+                        <List.Item  actions={[<p><a>{item.time}</a><a onClick={() => this.showMessage(this, item)}> 查看对话 </a></p>]}>
                         <List.Item.Meta
-                        avatar={<Avatar src={ uh } />}
-                        title={<a href="https://ant.design">{item.userName}</a>}
+                        title={<a>{item.another}</a>}
+                        description={item.content}
                         />
                     </List.Item>
                     )}
@@ -140,10 +140,11 @@ class Message extends Component{
                             itemLayout="horizontal"
                             dataSource={this.state.message}
                             renderItem={item => (
-                                <List.Item>
+                                <List.Item
+                                    actions={[<p>{item.time}</p>]}
+                                >
                                     <List.Item.Meta
-                                        avatar={<Avatar src={ uh } />}
-                                        title={item.userName}
+                                        title={item.sender}
                                         description={item.content}
                                     />
                                 </List.Item>
