@@ -150,6 +150,9 @@ class Header extends React.Component {
                     alert("保存失败，请重试")
                     return;
                 }
+                else{
+                    alert("保存成功");
+                }
             }).catch(function(e){
             console.log("Oops, error");
         })

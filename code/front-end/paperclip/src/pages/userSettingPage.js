@@ -9,7 +9,7 @@ import url from '../statics/uh.jpg'
 /* fake data */
 
 const { Header, Content, Sider } = Layout;
-
+var username = '';
 function getBase64(img, callback) {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result));
@@ -52,10 +52,14 @@ class UserSetting extends Component{
                 {
                 idx:2, title: '居住地',info:"思源湖底"
                 }
-            ]
+            ],
+            inputContent:''
         }
     }
-    
+    componentWillMount(){
+        username = sessionStorage.getItem('username');
+        return;
+    }
     toggle = () => {
         this.setState({
           collapsed: !this.state.collapsed,
@@ -65,18 +69,19 @@ class UserSetting extends Component{
     edit(e){
         var idx = e.target.id;
         this.setState({
-            openEdit:!this.state.openEdit,
+            openEdit:true,
             editIdx:idx
         })
     }
-    commitEdit(e){
-        var value = e.target.value;
+    commitEdit = (item) =>{
+        var value = this.state.inputContent;
         var data = this.state.data;
         var idx = this.state.editIdx;
         data[idx].info = value;
         this.setState({
             data:data,
             openEdit:false,
+            inputContent:''
         })
     }
     handleChange = (info) => {
@@ -85,11 +90,36 @@ class UserSetting extends Component{
           return;
         }
         if (info.file.status === 'done') {
+            console.log('...');
             // Get this url from response in real world.
-            getBase64(info.file.originFileObj, imageUrl => this.setState({
-                imageUrl:imageUrl,
-                loading: false,
-            }));
+            getBase64(info.file.originFileObj, imageUrl => function(){
+                let that  = this;
+                let jsonbody = {};
+                jsonbody.username = username;
+                jsonbody.imgStr = imageUrl;
+                var url = IPaddress + 'service/uploadAvatar';
+                let options={};
+                options.method='POST';
+                options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+                options.body = JSON.stringify(jsonbody);
+                fetch(url, options)
+                    .then(response=>response.text())
+                    .then(responseJson=>{
+                        console.log(responseJson);
+                        let data = eval('(' + responseJson + ')');
+                        if(data.result == "fail"){
+                            alert('请上传正确的图片');
+                        }
+                        else{
+                            that.setState({
+                                imageUrl: imageUrl,
+                                loading: false
+                            })
+                        }
+                    }).catch(function(e){
+                    console.log("Oops, error");
+                })
+            });
         }
       }
     renderAvatar(){
@@ -114,13 +144,31 @@ class UserSetting extends Component{
             </Upload>
         );
     }
+    handleInputChange = (e) =>{
+        let content = e.target.value;
+        this.setState({
+            inputContent: content
+        })
 
+    }
     renderUserSetting(){
         const getContent = (item) => {
             if(this.state.openEdit && (item.idx == this.state.editIdx)){
-                return(<Input onPressEnter={this.commitEdit} placeholder={this.state.data[item.idx].info}/>);
+                return(<Input onChange={this.handleInputChange} onPressEnter={() => this.commitEdit(item)} value={this.state.inputContent}/>);
             }
             return(<div>{item.info}</div>);
+        }
+        const modifyButton = (item) => {
+            if(this.state.openEdit && (this.state.editIdx == item.idx)){
+                return(
+                    <a id={item.idx} onClick={() => this.commitEdit(item)}>确定</a>
+                )
+            }
+            else{
+                return(
+                    <a id={item.idx} onClick={this.edit}>修改</a>
+                )
+            }
         }
         const avatar = this.renderAvatar();
         return(   
@@ -131,9 +179,7 @@ class UserSetting extends Component{
               dataSource={this.state.data}
               renderItem={item => (
                 <List.Item actions={
-                    [<a id={item.idx} onClick={this.edit}>
-                    {this.state.openEdit&&(this.state.editIdx==item.idx)?"确定":"修改"}
-                    </a>]}>
+                    [ modifyButton(item) ]}>
                   <List.Item.Meta
                     title={item.title}
                   />

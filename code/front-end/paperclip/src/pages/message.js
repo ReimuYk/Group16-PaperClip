@@ -116,7 +116,7 @@ class Message extends Component{
                     itemLayout="horizontal"
                     dataSource={this.state.data}
                     renderItem={item => (
-                        <List.Item  actions={[<p><a>{item.time}</a><a onClick={() => this.showMessage(this, item)}> 查看对话 </a></p>]}>
+                        <List.Item  actions={[<p>{item.time}<a style={{marginLeft:'20px'}} onClick={() => this.showMessage(this, item)}> 查看对话 </a></p>]}>
                         <List.Item.Meta
                         title={<a>{item.another}</a>}
                         description={item.content}
@@ -133,7 +133,7 @@ class Message extends Component{
                         <Button key="back" onClick={this.handleCancel}>关闭</Button>,
                     ]}
                 >
-                    <div>
+                    <div style={{paddingTop:'30px'}}>
                         <List
                             style={{textAlign:'left', height:'300px', overflowY:'scroll'}}
                             className="messageContent"

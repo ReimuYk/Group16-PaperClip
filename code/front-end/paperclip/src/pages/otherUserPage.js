@@ -48,12 +48,10 @@ class OtherUserPage extends Component{
             .then(responseJson=>{
                 console.log(responseJson);
                 let data = eval('(' + responseJson + ')');
-                if(data.result == "success"){
-                    that.setState({
-                        mailContent: '',
-                        visible: false
-                    })
-                }
+                that.setState({
+                    mailContent: '',
+                    visible: false
+                })
             }).catch(function(e){
             console.log("Oops, error");
         })
