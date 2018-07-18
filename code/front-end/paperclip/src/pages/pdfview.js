@@ -12,9 +12,11 @@ class PDFView extends Component{
         super(props);
         this.state = {
             isLoading:true,
-            page:1
+            page:1,
+            paperID:this.props.paperID
         }
-        this.getData(1,1)
+        //console.log(this.props.paperID);
+        this.getData(this.props.paperID,1)
     }
     getData = (paperID,pagination) =>{
         let that  = this;

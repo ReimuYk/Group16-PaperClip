@@ -317,13 +317,17 @@ public class PaperServiceImpl implements PaperService {
             if(sp == null){//收藏
                 sp = new StarPaper(user,paper);
                 starPaperRepo.save(sp);
-                paper.setStar(paper.getStar()+1);
+                if(paper.getStar()!=null){
+                    paper.setStar(paper.getStar()+1);
+                }else{
+                    paper.setStar(1);
+                }
+                paperRepo.save(paper);
+                result.accumulate("result","success");
             }
             else {
                 result.accumulate("result","fail");
             }
-            paperRepo.save(paper);
-            result.accumulate("result","success");
         }
         return result;
     }

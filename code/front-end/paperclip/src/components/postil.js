@@ -20,7 +20,7 @@ class Postil extends Component{
         this.mark = this.mark.bind(this);
 
         this.state = {
-            username:"fakeName",
+            username:sessionStorage.getItem('username'),
             data:[
                 {
                     postils:{user:"baibai",content:"我觉得OK",agree:10,disagree:2},
@@ -41,10 +41,7 @@ class Postil extends Component{
         }
     }
     componentWillMount(){
-        this.setState({
-            //username:sessionStorage.getItem('username')
-            username:"user1"
-        })
+        
     }
     componentDidMount() {
         this.postilEvent = emitter.addListener('changePostils', (data) => {
@@ -65,7 +62,7 @@ class Postil extends Component{
     refreshStat(pos,flag){
         let that  = this;
         let jsonbody = {};
-        jsonbody.username = 'user1';
+        jsonbody.username = this.state.username;
         jsonbody.posID = pos.postils.posID;
         jsonbody.marked = pos.marked;
         jsonbody.agreement = pos.agreement;
