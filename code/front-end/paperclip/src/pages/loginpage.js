@@ -12,6 +12,7 @@ class Login extends Component {
         this.login = this.login.bind(this);
     }
     login(){
+        console.log('log in');
         username = document.getElementById("username").value;
         password = document.getElementById("password").value;
         let that  = this;
@@ -34,7 +35,7 @@ class Login extends Component {
                 else{
                     username = result.username;
                     sessionStorage.setItem('username', username);
-                    window.location.href='/user'
+                    //window.location.href='/user'
                     that.setState({});
                 }
             }).catch(function(e){

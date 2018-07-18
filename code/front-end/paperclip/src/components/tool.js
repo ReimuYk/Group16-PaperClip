@@ -35,7 +35,7 @@ class Tool extends Component{
         let jsonbody = {};
         jsonbody.username = this.state.username;
         jsonbody.paperID = this.state.paperID;
-        var url = IPaddress+'/service/ifStar';
+        var url = IPaddress+'service/ifStar';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -63,7 +63,7 @@ class Tool extends Component{
         let jsonbody = {};
         jsonbody.username = this.state.username;
         jsonbody.paperID = this.state.paperID;
-        var url = IPaddress+'/service/starThePaper';
+        var url = IPaddress+'service/starThePaper';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -83,7 +83,7 @@ class Tool extends Component{
         let jsonbody = {};
         jsonbody.username = this.state.username;
         jsonbody.paperID = this.state.paperID;
-        var url = IPaddress+'/service/quitStar/paper';
+        var url = IPaddress+'service/quitStar/paper';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};

@@ -25,7 +25,7 @@ class PDFView extends Component{
         jsonbody.username = this.state.username;
         jsonbody.paperID = paperID;
         jsonbody.pagination = pagination;
-        var url = IPaddress+'/service/paperDetail';
+        var url = IPaddress+'service/paperDetail';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -100,7 +100,7 @@ class PDFView extends Component{
         jsonbody.paperID = 1;
         jsonbody.pagination = 1;
         jsonbody.selectid = selectid;
-        var url = IPaddress+'/service/blockPostils';
+        var url = IPaddress+'service/blockPostils';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
