@@ -100,7 +100,7 @@ class StarPaper extends Component{
                         </p>]}>
                         <List.Item.Meta
                         /* 论文显示页 */
-                        title={<a href={"/paper?ID="+item.ID}>{item.title}</a>}
+                        title={<a href={"/paper?paperID="+item.ID}>{item.title}</a>}
                         description={item.keywords + '          |           ' + item.tags}
                         />
                         <a style={{width:'80px',marginLeft:'20px'}}>{item.postilno}</a>

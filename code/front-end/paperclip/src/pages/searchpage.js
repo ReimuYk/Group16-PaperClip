@@ -212,7 +212,7 @@ class Search extends Component{
                     >
                         <Meta
                             title={
-                                <Link to={"/paper/" + item.paperID}>
+                                <Link to={"/paper?paperID=" + item.paperID}>
                                     {item.title}
                                 </Link>}
                             description={item.keyword}
