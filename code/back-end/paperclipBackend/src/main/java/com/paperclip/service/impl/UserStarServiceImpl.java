@@ -247,8 +247,12 @@ public class UserStarServiceImpl implements UserStarService {
         User follower = userRepo.findOne(hostname);
 
         System.out.println("update user");
-//        userRepo.updateFollowers(followee.getFollower()+1,clientname);
-//        userRepo.updateFollowings(follower.getFollowing()+1,hostname);
+        Follow follow = followRepo.findDistinctByFolloweeAndFollower(followee, follower);
+        JSONObject result = new JSONObject();
+        if(follow != null){
+            result.accumulate("result", "fail");
+            return result;
+        }
         followee.setFollower(followee.getFollower() + 1);
         follower.setFollowing(follower.getFollowing() + 1);
         userRepo.save(followee);
@@ -259,7 +263,6 @@ public class UserStarServiceImpl implements UserStarService {
         followRepo.save(f);
 
         System.out.println("return");
-        JSONObject result = new JSONObject();
 
         result.accumulate("fansno", followee.getFollower());
 

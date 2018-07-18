@@ -97,6 +97,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public JSONObject userLogin(JSONObject data) {
+        System.out.println("userLogin get json: "+data);
         String username = data.getString("username");
         String password = data.getString("password");
         JSONObject userinfo = new JSONObject();

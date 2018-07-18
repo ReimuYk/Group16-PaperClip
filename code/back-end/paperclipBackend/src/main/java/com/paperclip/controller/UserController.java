@@ -1,6 +1,7 @@
 package com.paperclip.controller;
 
 import com.paperclip.service.UserService;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -66,7 +67,7 @@ public class UserController {
     @RequestMapping(value = "/service/sendMessage",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONArray sendMessage(@RequestBody JSONObject message){
+    JSONObject sendMessage(@RequestBody JSONObject message){
         return userService.sendMessage(message);
     }
 }
