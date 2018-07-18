@@ -99,7 +99,7 @@ class Header extends React.Component {
             .then(response=>response.text())
             .then(responseJson=>{
                 let data = eval('('+responseJson+')');
-                if(data.result = "fail"){
+                if(data.result == "fail"){
                     alert("保存失败，请重试")
                     return;
                 }
@@ -149,6 +149,9 @@ class Header extends React.Component {
                 if(data.result == "fail"){
                     alert("保存失败，请重试")
                     return;
+                }
+                else{
+                    alert("保存成功");
                 }
             }).catch(function(e){
             console.log("Oops, error");

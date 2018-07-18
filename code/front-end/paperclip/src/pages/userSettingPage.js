@@ -52,7 +52,8 @@ class UserSetting extends Component{
                 {
                 idx:2, title: '居住地',info:"思源湖底"
                 }
-            ]
+            ],
+            inputContent:''
         }
     }
     
@@ -65,18 +66,19 @@ class UserSetting extends Component{
     edit(e){
         var idx = e.target.id;
         this.setState({
-            openEdit:!this.state.openEdit,
+            openEdit:true,
             editIdx:idx
         })
     }
-    commitEdit(e){
-        var value = e.target.value;
+    commitEdit = (item) =>{
+        var value = this.state.inputContent;
         var data = this.state.data;
         var idx = this.state.editIdx;
         data[idx].info = value;
         this.setState({
             data:data,
             openEdit:false,
+            inputContent:''
         })
     }
     handleChange = (info) => {
@@ -114,13 +116,31 @@ class UserSetting extends Component{
             </Upload>
         );
     }
+    handleInputChange = (e) =>{
+        let content = e.target.value;
+        this.setState({
+            inputContent: content
+        })
 
+    }
     renderUserSetting(){
         const getContent = (item) => {
             if(this.state.openEdit && (item.idx == this.state.editIdx)){
-                return(<Input onPressEnter={this.commitEdit} placeholder={this.state.data[item.idx].info}/>);
+                return(<Input onChange={this.handleInputChange} onPressEnter={() => this.commitEdit(item)} value={this.state.inputContent}/>);
             }
             return(<div>{item.info}</div>);
+        }
+        const modifyButton = (item) => {
+            if(this.state.openEdit && (this.state.editIdx == item.idx)){
+                return(
+                    <a id={item.idx} onClick={() => this.commitEdit(item)}>确定</a>
+                )
+            }
+            else{
+                return(
+                    <a id={item.idx} onClick={this.edit}>修改</a>
+                )
+            }
         }
         const avatar = this.renderAvatar();
         return(   
@@ -131,9 +151,7 @@ class UserSetting extends Component{
               dataSource={this.state.data}
               renderItem={item => (
                 <List.Item actions={
-                    [<a id={item.idx} onClick={this.edit}>
-                    {this.state.openEdit&&(this.state.editIdx==item.idx)?"确定":"修改"}
-                    </a>]}>
+                    [ modifyButton(item) ]}>
                   <List.Item.Meta
                     title={item.title}
                   />
