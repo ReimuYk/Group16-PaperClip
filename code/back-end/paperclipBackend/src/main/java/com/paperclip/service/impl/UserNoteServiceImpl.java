@@ -233,6 +233,7 @@ public class UserNoteServiceImpl implements UserNoteService {
             NoteComment nc = new NoteComment(note,user,content);
             noteCommRepo.save(nc);
             result.accumulate("result","success");
+            result.accumulate("commNo",noteCommRepo.findByNote(note).size());
         }
         return result;
     }
@@ -262,6 +263,7 @@ public class UserNoteServiceImpl implements UserNoteService {
         noteRepo.save(note);
         JSONObject result = new JSONObject();
         result.accumulate("result","success");
+        result.accumulate("likeNo",noteRepo.findOne(noteID).getAgreement());
         return result;
     }
 

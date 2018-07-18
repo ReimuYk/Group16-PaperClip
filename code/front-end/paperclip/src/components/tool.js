@@ -28,7 +28,7 @@ class Tool extends Component{
     star(){
         var star = this.state.isStar;
         this.setState({isStar:!star});
-        emitter.emit('star',"ok");
+        emitter.emit('star',!star);
     }
     downloadCheck(checkvalue){
         console.log(checkvalue);
