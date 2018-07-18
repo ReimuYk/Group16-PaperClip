@@ -129,7 +129,7 @@ class Discover extends Component{
                             >
                                 <Meta
                                     title={
-                                        <Link to={"/paper/"+item.key}>
+                                        <Link to={"/paper?paperID="+item.key}>
                                             {item.title}
                                         </Link>}
                                     description={item.description}

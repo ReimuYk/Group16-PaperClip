@@ -42,4 +42,31 @@ public class UserController {
         return userService.userLogin(username);
     }
 
+    @RequestMapping(value = "/service/user/messageList",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONArray messageList(@RequestBody JSONObject username){
+        return userService.getBriefMessageList(username);
+    }
+
+    @RequestMapping(value = "/service/user/messageDetail",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONArray messageDetail(@RequestBody JSONObject username){
+        return userService.getConversation(username);
+    }
+
+    @RequestMapping(value = "/service/user/unreadMessage",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONArray unreadMessage(@RequestBody JSONObject username){
+        return userService.getUnreadMessage(username);
+    }
+
+    @RequestMapping(value = "/service/sendMessage",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONArray sendMessage(@RequestBody JSONObject message){
+        return userService.sendMessage(message);
+    }
 }

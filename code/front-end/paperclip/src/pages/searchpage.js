@@ -186,7 +186,7 @@ class Search extends Component{
                     itemLayout="horizontal"
                     dataSource={this.state.recommendData}
                     renderItem={item => (
-                        <Link to={"/paper/"+item.paperID}>
+                        <Link to={"/paper?paperID="+item.paperID}>
                             <List.Item>
                                 <List.Item.Meta
                                     title={<a>{item.title}</a>}
@@ -212,7 +212,7 @@ class Search extends Component{
                     >
                         <Meta
                             title={
-                                <Link to={"/paper/" + item.paperID}>
+                                <Link to={"/paper?paperID=" + item.paperID}>
                                     {item.title}
                                 </Link>}
                             description={item.keyword}
