@@ -23,6 +23,8 @@ public class ImgServiceImpl implements ImgService {
         JSONObject result = new JSONObject();
         String username = data.getString("username");
         String imgStr = data.getString("imgStr");
+        int pos = imgStr.indexOf(",");
+        imgStr = imgStr.substring(pos+1);
 
         User user = userRepo.findOne(username);
         //对字节数组字符串进行Base64解码并生成图片

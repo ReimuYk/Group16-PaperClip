@@ -12,6 +12,7 @@ import com.paperclip.service.PaperService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
+import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sun.misc.BASE64Encoder;
@@ -54,6 +55,9 @@ public class PaperServiceImpl implements PaperService {
 
     @Autowired
     private StarPaperRepository starPaperRepo;
+
+    @Autowired
+    private NoteRepository noteRepo;
 
 
     public String GetImageStrFromPath(String imgPath) {
@@ -301,6 +305,30 @@ public class PaperServiceImpl implements PaperService {
         return result;
     }
 
+    // 传入：paperID,username  ---------------是否收藏过这篇论文
+    public JSONObject ifStar(JSONObject data){
+        String username = data.getString("username");
+        Long paperID = data.getLong("paperID");
+
+        Paper paper = paperRepo.findOne(paperID);
+        User user = userRepo.findOne(username);
+
+        JSONObject result = new JSONObject();
+        if(paper == null || user == null){
+            result.accumulate("result","fail");
+        }
+        else{
+            result.accumulate("result","success");
+            if(starPaperRepo.findDistinctByUserAndPaper(user,paper)!=null){
+                result.accumulate("ifStar",true);
+            }
+            else{
+                result.accumulate("ifStar",false);
+            }
+        }
+        return result;
+    }
+
     // 传入：paperID,username  ---------------收藏/取消收藏论文
     public JSONObject starPaper(JSONObject data){
         String username = data.getString("username");
@@ -330,5 +358,63 @@ public class PaperServiceImpl implements PaperService {
             }
         }
         return result;
+    }
+
+    //输入：paperID ---------------- 获取与某一篇论文有关的笔记列表
+    public JSONArray getNoteList(JSONObject data){
+        Long paperID = data.getLong("paperID");
+        Paper paper = paperRepo.findOne(paperID);
+        List<Note> l = noteRepo.findByPaper(paper);
+        Iterator<Note> it = l.iterator();
+        JSONArray notes = new JSONArray();
+        while(it.hasNext()){
+            JSONObject note = new JSONObject();
+            Note n = it.next();
+            note.accumulate("title",n.getTitle());
+            int end = 30;
+            if(n.getContent().length()<30){
+                end = n.getContent().length();
+            }
+            note.accumulate("intro",n.getContent().substring(0,end));
+            notes.add(note);
+        }
+        return notes;
+    }
+
+    //使用List判断元素是否已经存在于数组中
+    public static boolean inList(List<String> myList,String targetValue){
+        String[] arr = myList.toArray(new String[myList.size()]);
+        return ArrayUtils.contains(arr,targetValue);
+    }
+    //输入：paperID
+    public JSONArray getKeywords(JSONObject data){
+        JSONArray keywords = new JSONArray();
+        Long paperID = data.getLong("paperID");
+        Paper paper = paperRepo.findOne(paperID);
+        List<Note> l = noteRepo.findByPaper(paper);
+        Iterator<Note> it = l.iterator();
+
+        List<String> keys = new ArrayList<>();
+        while(it.hasNext()){
+            Note n = it.next();
+            String str = n.getKeyWords();
+            String[] ll = str.split("\\s+");
+            for(String word:ll){
+                if(!inList(keys,word)){
+                    keys.add(word);
+                    keywords.add(word);
+                }
+            }
+        }
+        String str = paper.getKeyWords();
+        String[] ll = str.split("\\s+");
+        for(String word:ll){
+            if(!inList(keys,word)){
+                keys.add(word);
+                keywords.add(word);
+            }
+        }
+        System.out.println(keywords.toString());
+        return keywords;
     }
 }

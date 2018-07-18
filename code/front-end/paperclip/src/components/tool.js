@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Divider ,Modal,Avatar,Checkbox,Icon,Button,Popover,Card} from 'antd';
 import {Link } from 'react-router-dom';
 import emitter from '.././util/events'
+import { IPaddress } from '../App';
 const confirm = Modal.confirm;
 const CheckboxGroup = Checkbox.Group;
 
@@ -20,15 +21,91 @@ class Tool extends Component{
         this.confirmShare = this.confirmShare.bind(this);
 
         this.state={
+            paperID:this.props.paperID,
+            username:sessionStorage.getItem('username'),
             toolIdx:null,
             isStar:false,
             clickTool:false,
         }
     }
+    componentWillMount(){
+        //是否收藏过
+        let that  = this;
+        let jsonbody = {};
+        jsonbody.username = this.state.username;
+        jsonbody.paperID = this.state.paperID;
+        var url = IPaddress+'/service/ifStar';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+        .then(response=>response.text())
+        .then(responseJson=>{
+            console.log(responseJson);
+            let data = eval('('+responseJson+')');
+            if(data.result == "fail"){
+                alert("error");
+            }
+            else{
+                that.setState({
+                    isStar:data.ifStar
+                })
+            }
+            console.log(data)
+        }).catch(function(e){
+            console.log("Oops, error");
+        })
+    }
+    starPaper(){
+        let that  = this;
+        let jsonbody = {};
+        jsonbody.username = this.state.username;
+        jsonbody.paperID = this.state.paperID;
+        var url = IPaddress+'/service/starThePaper';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+        .then(response=>response.text())
+        .then(responseJson=>{
+            console.log(responseJson);
+            let data = eval('('+responseJson+')');
+            console.log(data)
+        }).catch(function(e){
+            console.log("Oops, error");
+        })
+    }
+    quitStarPaper(){
+        let that  = this;
+        let jsonbody = {};
+        jsonbody.username = this.state.username;
+        jsonbody.paperID = this.state.paperID;
+        var url = IPaddress+'/service/quitStar/paper';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+        .then(response=>response.text())
+        .then(responseJson=>{
+            console.log(responseJson);
+            let data = eval('('+responseJson+')');
+            console.log(data)
+        }).catch(function(e){
+            console.log("Oops, error");
+        })
+    }
     star(){
         var star = this.state.isStar;
         this.setState({isStar:!star});
-        emitter.emit('star',!star);
+        if(!star){
+            this.starPaper();
+        }
+        else{
+            this.quitStarPaper();
+        }
     }
     downloadCheck(checkvalue){
         console.log(checkvalue);

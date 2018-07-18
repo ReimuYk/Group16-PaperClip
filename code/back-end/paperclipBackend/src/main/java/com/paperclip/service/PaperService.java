@@ -13,5 +13,8 @@ public interface PaperService {
     JSONObject addPostilComment(JSONObject data);
     JSONObject addPostil(JSONObject data);
     JSONObject starPaper(JSONObject data);
+    JSONObject ifStar(JSONObject data);
+    JSONArray getNoteList(JSONObject data);
+    JSONArray getKeywords(JSONObject data);
 }
 

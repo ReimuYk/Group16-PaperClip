@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { Collapse ,List,Input,Icon,Button,Avatar,Divider,Anchor,Tag} from 'antd';
 import emitter from '.././util/events';
+import { IPaddress } from '../App';
+
 const Panel = Collapse.Panel;
 const Search = Input.Search;
 const ButtonGroup = Button.Group;
+
 
 class NoteList extends Component{  
     constructor(props){
@@ -15,14 +18,46 @@ class NoteList extends Component{
         this.state = {
             inputValue:"",
             keyWords:["宇宙和平","世界"],
-            notes:[
-                {title:"小黄鸡",intro:"小黄鸡很黄很黄很黄很黄哈哈哈哈哈哈哈哈"},
-                {title:"大黄鸡",intro:"大黄鸡更黄"},
-                
-            ],
+            notes:[],
         }
     }
-    componentDidMount() {
+    componentWillMount(){
+        let that  = this;
+        //get NoteList
+        let jsonbody = {};
+        jsonbody.paperID = this.props.paperID;
+        var url = IPaddress+'/service/getNoteList';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+        .then(response=>response.text())
+        .then(responseJson=>{
+            console.log(responseJson);
+            let data = eval('('+responseJson+')');
+            that.setState({notes:data});
+            console.log(data)
+        }).catch(function(e){
+            console.log("Oops, error");
+        })
+
+        //get keywords
+        jsonbody = {};
+        jsonbody.paperID = this.props.paperID;
+        var url = IPaddress+'/service/getKeywords';        
+        fetch(url, options)
+        .then(response=>response.text())
+        .then(responseJson=>{
+            console.log(responseJson);
+            let data = eval('('+responseJson+')');
+            that.setState({keyWords:data});
+            console.log(data)
+        }).catch(function(e){
+            console.log("Oops, error");
+        })
+    }
+    /*componentDidMount() {
         this.noteEvent = emitter.addListener('changeNoteList', (keyWordData,noteData) => {
             //alert("notelist change!");
             this.setState({
@@ -33,7 +68,7 @@ class NoteList extends Component{
     }
     componentWillUnmount() {
         //emitter.removeListener(this.noteEvent);
-    }
+    }*/
     changeInputValue(e){
         this.setState({inputValue:e.target.value});
     }

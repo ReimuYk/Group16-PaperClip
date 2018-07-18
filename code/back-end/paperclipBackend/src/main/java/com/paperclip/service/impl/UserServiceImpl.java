@@ -116,6 +116,7 @@ public class UserServiceImpl implements UserService {
                 userinfo.accumulate("result", "fail");
             }
         }
+        System.out.println(userinfo.toString());
         return userinfo;
     }
 

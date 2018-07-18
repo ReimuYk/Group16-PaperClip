@@ -141,7 +141,7 @@ class UserDocDetail extends Component{
                         renderItem={item => (
                             <List.Item>
                                 <List.Item.Meta
-                                    title={<a href={"/paper?ID="+item.docPdfID}>{item.title}</a>}
+                                    title={<a href={"/paper?paperID="+item.docPdfID}>{item.title}</a>}
                                     description={'版本 ' + item.version }
                                 />
                                 <p>{item.date}</p>

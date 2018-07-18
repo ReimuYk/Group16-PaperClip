@@ -18,73 +18,16 @@ class Paper extends Component{
         }
         console.log("paperID:"+this.props.location.search.substring(9));
     }
-    componentWillMount(){
         
-    }
-    componentDidMount() {
-        this.starEvent = emitter.addListener('star', (ifStar) => {
-            if(ifStar){
-                this.starPaper();
-            }
-            else{
-                this.quitStarPaper();
-            }
-            
-        });
-    }
-    componentWillUnmount() {
-        //console.log((this.starEvent));
-        //emitter.removeListener("star",this.starEvent);
-    }
-    starPaper(){
-        let that  = this;
-        let jsonbody = {};
-        jsonbody.username = this.state.username;
-        jsonbody.paperID = this.state.paperID;
-        var url = IPaddress+'/service/starThePaper';
-        let options={};
-        options.method='POST';
-        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
-        options.body = JSON.stringify(jsonbody);
-        fetch(url, options)
-        .then(response=>response.text())
-        .then(responseJson=>{
-            console.log(responseJson);
-            let data = eval('('+responseJson+')');
-            console.log(data)
-        }).catch(function(e){
-            console.log("Oops, error");
-        })
-    }
-    quitStarPaper(){
-        let that  = this;
-        let jsonbody = {};
-        jsonbody.username = this.state.username;
-        jsonbody.paperID = this.state.paperID;
-        var url = IPaddress+'/service/quitStar/paper';
-        let options={};
-        options.method='POST';
-        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
-        options.body = JSON.stringify(jsonbody);
-        fetch(url, options)
-        .then(response=>response.text())
-        .then(responseJson=>{
-            console.log(responseJson);
-            let data = eval('('+responseJson+')');
-            console.log(data)
-        }).catch(function(e){
-            console.log("Oops, error");
-        })
-    }
     render() {
         return(
             <div style={{position:"relative"}}>
                 <NavBar />
-                <NoteList />                
+                <NoteList paperID={this.state.paperID}/>                
                 <PDFView paperID={this.state.paperID}/>        
                 <Postil />
                 <br/>
-                <Tool />
+                <Tool paperID={this.state.paperID}/>
             </div>
         )
     }

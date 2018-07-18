@@ -54,4 +54,25 @@ public class PaperController {
     JSONObject starPaper(@RequestBody JSONObject data){
         return paperService.starPaper(data);
     }
+
+    @RequestMapping(value = "/service/getNoteList",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONArray getNoteList(@RequestBody JSONObject data){
+        return paperService.getNoteList(data);
+    }
+
+    @RequestMapping(value = "/service/getKeywords",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONArray getKeywords(@RequestBody JSONObject data){
+        return paperService.getKeywords(data);
+    }
+
+    @RequestMapping(value = "/service/ifStar",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONObject ifStar(@RequestBody JSONObject data){
+        return paperService.ifStar(data);
+    }
 }
