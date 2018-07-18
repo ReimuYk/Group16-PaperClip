@@ -403,7 +403,7 @@ public class PaperServiceImpl implements PaperService {
         while(it.hasNext()){
             Note n = it.next();
             String str = n.getKeyWords();
-            String[] ll = str.split("\\s+");
+            String[] ll = str.split(";");
             for(String word:ll){
                 if(!inList(keys,word)){
                     keys.add(word);
@@ -412,7 +412,7 @@ public class PaperServiceImpl implements PaperService {
             }
         }
         String str = paper.getKeyWords();
-        String[] ll = str.split("\\s+");
+        String[] ll = str.split(";");
         for(String word:ll){
             if(!inList(keys,word)){
                 keys.add(word);
