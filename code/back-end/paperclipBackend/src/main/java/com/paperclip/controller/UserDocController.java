@@ -6,6 +6,8 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+
 @CrossOrigin
 @RestController
 public class UserDocController {
@@ -66,7 +68,7 @@ public class UserDocController {
     @RequestMapping(value = "/service/save/doc",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject saveDoc(@RequestBody JSONObject data){
+    JSONObject saveDoc(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return userDocService.saveDoc(data);
     }
 
@@ -93,7 +95,7 @@ public class UserDocController {
     @RequestMapping(value = "/service/addDoc",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject addDoc(@RequestBody JSONObject data){
+    JSONObject addDoc(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return userDocService.addDoc(data);
     }
 
@@ -101,7 +103,7 @@ public class UserDocController {
     @RequestMapping(value = "/service/publish/doc",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject testpublish(@RequestBody JSONObject data){
+    JSONObject testpublish(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return userDocService.publishDoc(data);
     }
 }

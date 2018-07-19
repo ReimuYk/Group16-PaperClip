@@ -5,6 +5,7 @@ import com.paperclip.dao.relationshipDao.FollowRepository;
 import com.paperclip.model.Entity.User;
 import com.paperclip.dao.entityDao.UserRepository;
 import com.paperclip.model.Relationship.Follow;
+import net.sf.json.JSONObject;
 import org.assertj.core.util.Compatibility;
 import org.junit.After;
 import org.junit.Before;
@@ -73,8 +74,19 @@ public class FollowDaoTest {
         while(iter2.hasNext()){  //执行过程中会执行数据锁定，性能稍差，若在循环过程中要去掉某个元素只能调用iter.remove()方法。
             System.out.println(iter2.next().getFollowee().getUsername());
         }
-
-
     }
 
+    @Test
+    public void testGetRecent(){
+        User user = userRepo.findOne("7");
+        List<Follow> followList = followRepo.findByFolloweeOrderById(user);
+        int count=0;
+        for(Follow follow : followList){
+            count++;
+            if(count==5)
+                break;
+            System.out.println("followee" + follow.getFollowee().getUsername());
+            System.out.println("follower" + follow.getFollower().getUsername());
+        }
+    }
 }

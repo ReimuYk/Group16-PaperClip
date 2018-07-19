@@ -97,5 +97,5 @@ public class BlockPostilDaoTest {
         System.out.println(a);
         System.out.println(URLDecoder.decode(a,"UTF-8"));//还原
         System.out.println(URLDecoder.decode("English txt", "UTF-8"));
-    }
+        System.out.println(URLDecoder.decode("%a1", "UTF-8"));   }
 }
