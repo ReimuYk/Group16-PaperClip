@@ -34,9 +34,9 @@ class UserFans extends Component{
             console.log("Oops, error");
         })
     }
-    follow = (record, item) => {
+    /*follow = (record, item) => {
         let that = this;
-        /* get data according to username */
+        /* get data according to username
         let jsonbody = {};
         jsonbody.hostname = username;
         jsonbody.clientname = item.username;
@@ -55,7 +55,7 @@ class UserFans extends Component{
              }).catch(function(e) {
             console.log("Oops, error");
         })
-    }
+    }*/
 
     render(){
         if(sessionStorage.getItem('username') == null){
@@ -73,7 +73,7 @@ class UserFans extends Component{
                     itemLayout="horizontal"
                     dataSource={this.state.data}
                     renderItem={item => (
-                    <List.Item actions={[<a onClick={() => this.follow(this, item)}>关注</a>]}>
+                    <List.Item>
                         <List.Item.Meta
                         avatar={<Avatar src={ item.userheader } />}
                         title={<a href={"/viewpage?username="+item.username}>{item.username}</a>}

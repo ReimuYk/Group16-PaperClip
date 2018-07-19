@@ -197,7 +197,7 @@ class Header extends React.Component {
     }
 
     confirmLeave(){
-        window.location.href="/home";
+        window.location.href="/user/userdoc";
     }
     cancelLeave(){
     }
@@ -212,8 +212,8 @@ class Header extends React.Component {
                     mode="horizontal"
                 >
                     <Menu.Item key="index">
-                        <Popconfirm placement="bottomLeft" title="跳回首页可能会丢失您现在的编辑，您确定要跳转吗？" onConfirm={this.confirmLeave} onCancel={this.cancelLeave} okText="Yes" cancelText="No">
-                            <span>PaperClip</span>
+                        <Popconfirm placement="bottomLeft" title="跳回我的文档可能会丢失您现在的编辑，您确定要跳转吗？" onConfirm={this.confirmLeave} onCancel={this.cancelLeave} okText="Yes" cancelText="No">
+                            <span>我的文档</span>
                         </Popconfirm>
                     </Menu.Item>
                     <Menu.Item key="invite" onClick={this.showModal}>
