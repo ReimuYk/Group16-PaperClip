@@ -47,6 +47,9 @@ class RegisterPage extends Component {
                     alert('该邮箱已被注册过，可直接使用邮箱登录');
                     return false;
                 }
+                else{
+                    alert('注册成功，请检查您的邮箱');
+                }
             }).catch(function(e){
             console.log("Oops, error");
         });

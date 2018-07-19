@@ -13,7 +13,9 @@ import java.io.*;
 
 @Service
 public class ImgServiceImpl implements ImgService {
-    private static final String dirPath = "./data/avatar/";
+
+    private static final String dirPath = "./data/avatar";
+
 
     @Autowired
     private UserRepository userRepo;

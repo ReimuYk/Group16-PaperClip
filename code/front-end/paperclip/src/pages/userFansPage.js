@@ -26,7 +26,7 @@ class UserFans extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                let fans = eval(responseJson);
+                let fans = eval('('+responseJson+')');
                 that.setState({
                     data:fans
                 })
@@ -34,9 +34,9 @@ class UserFans extends Component{
             console.log("Oops, error");
         })
     }
-    follow = (record, item) => {
+    /*follow = (record, item) => {
         let that = this;
-        /* get data according to username */
+        /* get data according to username
         let jsonbody = {};
         jsonbody.hostname = username;
         jsonbody.clientname = item.username;
@@ -48,14 +48,15 @@ class UserFans extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                let result = eval(responseJson);
+                let result = eval('('+responseJson+')');
                 if(result == "fail"){
                     alert("关注失败，请重试");
                 }
+                console.log(result);
              }).catch(function(e) {
             console.log("Oops, error");
         })
-    }
+    }*/
 
     render(){
         if(sessionStorage.getItem('username') == null){
@@ -73,7 +74,7 @@ class UserFans extends Component{
                     itemLayout="horizontal"
                     dataSource={this.state.data}
                     renderItem={item => (
-                    <List.Item actions={[<a onClick={() => this.follow(this, item)}>关注</a>]}>
+                    <List.Item>
                         <List.Item.Meta
                         avatar={<Avatar src={ item.userheader } />}
                         title={<a href={"/viewpage?username="+item.username}>{item.username}</a>}
