@@ -3,23 +3,23 @@ package com.paperclip.service;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-public interface UserDocService {
+  public interface UserDocService {
 
     // UserDocPage.js
-    public JSONArray getUserDoc(JSONObject data);
-    public JSONObject deleteUserDoc(JSONObject data);
+      JSONArray getUserDoc(JSONObject data);
+      JSONObject deleteUserDoc(JSONObject data);
 
     // UserDocDetailPage
-    public JSONObject getUserDocDetail(JSONObject data);
-    public JSONObject deleteUserDocVersion(JSONObject data);
+      JSONObject getUserDocDetail(JSONObject data);
+      JSONObject deleteUserDocVersion(JSONObject data);
 
     // UserModifyDocPage.js
-    public JSONObject getDocDetail(JSONObject data);
-    public JSONObject saveDoc(JSONObject data);
-    public JSONObject addDocContributer(JSONObject data);
-    public JSONArray getContributeDoc(JSONObject data);
+      JSONObject getDocDetail(JSONObject data);
+      JSONObject saveDoc(JSONObject data);
+      JSONObject addDocContributer(JSONObject data);
+      JSONArray getContributeDoc(JSONObject data);
 
     // writeDocPage.js
-    public JSONObject addDoc(JSONObject data);
-    public JSONObject publishDoc(JSONObject data);
+      JSONObject addDoc(JSONObject data);
+      JSONObject publishDoc(JSONObject data);
 }

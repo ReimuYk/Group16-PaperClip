@@ -10,6 +10,7 @@ import com.paperclip.model.Relationship.BlockPostil;
 import com.paperclip.model.Relationship.Follow;
 import com.paperclip.model.Relationship.StarNote;
 import com.paperclip.model.Relationship.StarPaper;
+import com.paperclip.service.ImgService;
 import com.paperclip.service.UserStarService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
@@ -59,6 +60,9 @@ public class UserStarServiceImpl implements UserStarService {
     @Autowired
     private FollowRepository followRepo;
 
+    @Autowired
+    private ImgService imgService;
+
 
     // get all the notes that the user has stared
     public JSONArray getStarNote(JSONObject data) {
@@ -81,7 +85,7 @@ public class UserStarServiceImpl implements UserStarService {
             note.accumulate("title", n.getTitle());
             note.accumulate("author", n.getUser().getUsername());
             note.accumulate("starno", starNoteRepo.findByNote(n).size());
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             note.accumulate("date", sdf.format(n.getDate()));
             note.accumulate("keywords", n.getKeyWords());
             note.accumulate("paperID", n.getPaper().getId());
@@ -202,7 +206,7 @@ public class UserStarServiceImpl implements UserStarService {
             User uu = it2.next();
             JSONObject user = new JSONObject();
             user.accumulate("username",uu.getUsername());
-            user.accumulate("avatar",uu.getAvatar());
+            user.accumulate("avatar",imgService.getUserHeader(uu));
             users.add(user);
         }
         return users;

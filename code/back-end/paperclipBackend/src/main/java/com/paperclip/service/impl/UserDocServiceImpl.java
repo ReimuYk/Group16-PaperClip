@@ -74,7 +74,7 @@ public class UserDocServiceImpl implements UserDocService {
             JSONObject docJson = new JSONObject();
             docJson.accumulate("ID", doc.getId());
             docJson.accumulate("title", doc.getTitle());
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             docJson.accumulate("date", sdf.format(doc.getDate()));
             docs.add(docJson);
         }
@@ -141,7 +141,7 @@ public class UserDocServiceImpl implements UserDocService {
                 docPdfJson.accumulate("result", "success");
                 docPdfJson.accumulate("title", docPdf.getTitle());
                 docPdfJson.accumulate("docPdfID", docPdf.getId());
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 docPdfJson.accumulate("date", sdf.format(docPdf.getDate()));
                 docPdfJson.accumulate("author", docPdf.getAuthor());
                 docPdfJson.accumulate("version", docPdf.getVersion());
