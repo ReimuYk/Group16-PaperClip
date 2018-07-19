@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { List, Avatar, Anchor, Menu, Popconfirm } from 'antd';
+import { List, Avatar, Anchor, Menu, Popconfirm, Table } from 'antd';
 import { Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import UserFloatMenu from '../components/userFloatMenu';
@@ -10,7 +10,29 @@ var username ='';
 
 class StarPaper extends Component{
     state = {
-        data: []
+        data: [],
+        columns: [{
+            title: '论文名称',
+            dataIndex: 'title',
+            key: 'title',
+            render: (text, record) => (
+                <a href={"/paper?paperID=" + record.ID}>{text}</a>
+            )
+        }, {
+            title: '批注量',
+            dataIndex: 'postilno',
+            key: 'postilno',
+        },  {
+            title: '笔记量',
+            dataIndex:'noteno',
+            key: 'noteno'
+        }, {
+            title:'操作',
+            key:'action',
+            render: (text, record) => (
+                <a onClick={() => this.quitStar(text, record)}>取消收藏</a>
+            )
+        }],
     }
     componentWillMount = () => {
         username = sessionStorage.getItem('username');
@@ -108,6 +130,7 @@ class StarPaper extends Component{
                     </List.Item>
                     )}
                 />
+                    <Table columns={this.state.columns} dataSource={this.state.data} />
                 </div>
             </div>
         )

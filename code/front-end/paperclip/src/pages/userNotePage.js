@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, Avatar, Popconfirm, Menu, Anchor } from 'antd';
+import { List, Avatar, Popconfirm, Menu, Anchor, Table } from 'antd';
 import { Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import UserFloatMenu from '../components/userFloatMenu';
@@ -10,6 +10,28 @@ var username = '';
 class UserNote extends Component{
     state = {
         data: [],
+        columns: [{
+            title: '笔记名称',
+            dataIndex: 'title',
+            key: 'title',
+            render: (text, record) => (
+                <span>
+                    <a href={"/user/modifyNote?noteID=" + record.ID}>编辑笔记</a>
+                    <Divider type="vertical" />
+                    <a onClick={() => this.deleteNote(text, record)}>删除笔记</a>
+                </span>
+            )
+        },  {
+            title: '最近修改日期',
+            dataIndex:'date',
+            key:'date'
+        }, {
+            title:'操作',
+            key:'action',
+            render: (text, record) => (
+                <a onClick={() => this.quitStar(text, record)}>取消收藏</a>
+            )
+        }]
     }
     componentWillMount = () => {
         let that = this;
@@ -110,6 +132,7 @@ class UserNote extends Component{
                     </List.Item>
                     )}
                 />
+                <Table columns={this.state.columns} dataSource={this.state.data} />
             </div>
             </div>
         )

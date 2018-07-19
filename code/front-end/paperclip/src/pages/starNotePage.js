@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, Avatar, Anchor, Menu, Popconfirm } from 'antd';
+import { List, Avatar, Anchor, Menu, Popconfirm, Table, Divider } from 'antd';
 import { Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import UserFloatMenu from '../components/userFloatMenu';
@@ -9,6 +9,39 @@ var username ='';
 class StarNote extends Component{
     state = {
         data: [],
+        columns: [{
+            title: '笔记名称',
+            dataIndex: 'title',
+            key: 'title',
+            render: (text, record) => (
+                <a href={"/user/viewNote?noteID=" + record.ID}>{text}</a>
+            )
+        }, {
+            title: '作者',
+            dataIndex: 'author',
+            key: 'author',
+            render: (text, record) => (
+                <a href={"/viewpage?username=" + record.author}>{text}</a>
+            )
+        },  {
+            title: '对应论文',
+            dataIndex:'paperTitle',
+            key: 'paperTitle'
+        },  {
+            title: '收藏量',
+            dataIndex:'starno',
+            key:'starno'
+        }, {
+            title: '最近修改日期',
+            dataIndex:'date',
+            key:'date'
+        }, {
+            title:'操作',
+            key:'action',
+            render: (text, record) => (
+                <a onClick={() => this.quitStar(text, record)}>取消收藏</a>
+            )
+        }],
     }
     componentWillMount = () => {
         /* notes should get from server */
@@ -118,10 +151,10 @@ class StarNote extends Component{
                         <a style={{width:'80px',marginLeft:'20px'}} href={'/viewpage?username=' + item.author}>{item.author}</a>
                         <a style={{width:'80px',marginLeft:'20px'}}>{item.starno}</a>
                         <a style={{width:'80px',marginLeft:'0px'}}>{item.date}</a>
-                        
                     </List.Item>
                     )}
                 />
+                <Table columns={this.state.columns} dataSource={this.state.data} />
             </div>
             </div>
         )
