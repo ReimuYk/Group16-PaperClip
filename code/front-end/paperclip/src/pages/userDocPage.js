@@ -124,28 +124,33 @@ class UserDoc extends Component{
                 <NavBar />
             
             <UserFLoatMenu />
-            <div style={{width:'60%',marginLeft:'200px', paddingTop:'40px'}}>
+            <div style={{width:'60%',marginLeft:'10%', paddingTop:'40px'}}>
                 <div className="button" style={{width:"100%", height:"50px"}}>
                     <Button style={{float:"right"}} type="primary" onClick={this.newDoc}>新建文档</Button>
                 </div>
-                <div className="content">
-                    <a style={{marginLeft:'220px'}}>上次修改日期</a>
+                <div className="content" style={{width:'90%', marginLeft:'15%'}}>
                     <List
                         style={{textAlign:'left'}}
                         itemLayout="horizontal"
                         dataSource={this.state.data}
+                        header={<div><a style={{width:'30%'}}>标题</a><a style={{marginLeft:'50%'}}>上次修改日期</a></div>}
                         renderItem={item => (
                             <List.Item
-                                actions={[<p>
-                                    <Link style={{width:'75px'}} to={"/user/modifyDoc?docID="+item.ID}>编辑文档</Link>
-                                    <Link style={{width:'75px', marginLeft:'20px'}} to={"/user/docdetail?docID="+item.ID}>查看文档版本</Link>
+                                actions={[
+                                    <a>
+                                    <Link to={"/user/modifyDoc?docID="+item.ID}>编辑文档</Link>
+                                    </a>,
+                                    <a>
+                                    <Link to={"/user/docdetail?docID="+item.ID}>查看文档版本</Link>
+                                    </a>,
                                     <Popconfirm title="确定删除吗？" onConfirm={() => this.deleteDoc(this, item)}>
-                                        <a style={{width:'75px',marginLeft:'20px'}}>删除文档</a>
+                                        <a>删除文档</a>
                                     </Popconfirm>
-                                </p>]}
+                                ]}
                             >
                                 <List.Item.Meta
-                                    title={<a href={"/user/docdetail?docID="+item.ID}>{item.title}</a>}
+                                    title={<a stye={{wdith:'30%'}} href={"/user/docdetail?docID="+item.ID}>{item.title}</a>}
+                                    
                                 />
                                 <p>{item.date}</p>
                             </List.Item>
