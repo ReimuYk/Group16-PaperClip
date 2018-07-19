@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.xml.crypto.Data;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
@@ -73,7 +76,7 @@ public class UserDocServiceImpl implements UserDocService {
         for (Document doc : docList) {
             JSONObject docJson = new JSONObject();
             docJson.accumulate("ID", doc.getId());
-            docJson.accumulate("title", doc.getTitle());
+            docJson.accumulate("title", URLDecoder.decode(doc.getTitle()));
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             docJson.accumulate("date", sdf.format(doc.getDate()));
             docs.add(docJson);
@@ -139,13 +142,13 @@ public class UserDocServiceImpl implements UserDocService {
                 System.out.println("docPdfId: " + docPdf.getId());
                 JSONObject docPdfJson = new JSONObject();
                 docPdfJson.accumulate("result", "success");
-                docPdfJson.accumulate("title", docPdf.getTitle());
+                docPdfJson.accumulate("title", URLDecoder.decode(docPdf.getTitle()));
                 docPdfJson.accumulate("docPdfID", docPdf.getId());
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 docPdfJson.accumulate("date", sdf.format(docPdf.getDate()));
-                docPdfJson.accumulate("author", docPdf.getAuthor());
+                docPdfJson.accumulate("author", URLDecoder.decode(docPdf.getAuthor()));
                 docPdfJson.accumulate("version", docPdf.getVersion());
-                docPdfJson.accumulate("keywords", docPdf.getKeyWords());
+                docPdfJson.accumulate("keywords", URLDecoder.decode(docPdf.getKeyWords()));
                 docDetails.add(docPdfJson);
             }
         }
@@ -169,15 +172,15 @@ public class UserDocServiceImpl implements UserDocService {
         }else{
             docJson.accumulate("result", "success");
             docJson.accumulate("docID", docID);
-            docJson.accumulate("title", doc.getTitle());
-            docJson.accumulate("author", doc.getUser());
-            docJson.accumulate("content", doc.getContent());
+            docJson.accumulate("title", URLDecoder.decode(doc.getTitle()));
+            docJson.accumulate("author", URLDecoder.decode(doc.getUser().getUsername()));
+            docJson.accumulate("content", URLDecoder.decode(doc.getContent()));
         }
         return docJson;
     }
 
     // save doc details (after user has modified it)
-    public JSONObject saveDoc(JSONObject data){
+    public JSONObject saveDoc(JSONObject data) throws UnsupportedEncodingException {
         String username = data.getString("username");
         Long docID = data.getLong("docID");
         Document doc = docRepo.findOne(docID);
@@ -188,7 +191,9 @@ public class UserDocServiceImpl implements UserDocService {
         }else{
 
             String content = data.getString("content");
+            content = URLEncoder.encode(content, "UTF-8");
             String title = data.getString("title");
+            title = URLEncoder.encode(title, "UTF-8");
             doc.setContent(content);
             doc.setTitle(title);
             doc.setDate(new Date());
@@ -227,8 +232,8 @@ public class UserDocServiceImpl implements UserDocService {
             Document doc = assist.getDocument();
             JSONObject docJson = new JSONObject();
             docJson.accumulate("docID", doc.getId());
-            docJson.accumulate("title", doc.getTitle());
-            docJson.accumulate("author", doc.getUser().getUsername());
+            docJson.accumulate("title", URLDecoder.decode(doc.getTitle()));
+            docJson.accumulate("author", URLDecoder.decode(doc.getUser().getUsername()));
             docJson.accumulate("result", "success");
             System.out.println("doc: "+docJson.toString());
             docs.add(docJson);
@@ -237,11 +242,13 @@ public class UserDocServiceImpl implements UserDocService {
         return docs;
     }
 
-    public JSONObject addDoc(JSONObject data) {
+    public JSONObject addDoc(JSONObject data) throws UnsupportedEncodingException {
         JSONObject result = new JSONObject();
         String username = data.getString("username");
         String title = data.getString("title");
+        title = URLEncoder.encode(title, "UTF-8");
         String content = data.getString("content");
+        content = URLEncoder.encode(content, "UTF-8");
         User user = userRepo.findOne(username);
         Document doc = new Document(user, title, content);
         docRepo.save(doc);
@@ -251,17 +258,19 @@ public class UserDocServiceImpl implements UserDocService {
         return result;
     }
 
-    public JSONObject publishDoc(JSONObject data){
+    public JSONObject publishDoc(JSONObject data) throws UnsupportedEncodingException {
         System.out.println("get json: "+data);
         String username = data.getString("username");
         String doc_content = data.getString("docContent");
         String title = data.getString("docTitle");
+        doc_content = URLEncoder.encode(doc_content, "UTF-8");
+        title = URLEncoder.encode(title, "UTF-8");
         Long docID = data.getLong("docID");
 
         //fake data
         username = "user1";
         title = "test title";
-        docID = new Long((long)1);
+        docID = (long) 1;
         Document doc = docRepo.findOne(docID);
 
         RestTemplate restTemplate = new RestTemplate();
@@ -282,7 +291,7 @@ public class UserDocServiceImpl implements UserDocService {
         //create json_body & POST req
         JSONObject json_body = new JSONObject();
         json_body.accumulate("paperID",pdf.getId());
-        json_body.accumulate("data",doc_content);
+        json_body.accumulate("data",URLDecoder.decode(doc_content));
         String body = json_body.toString();
         HttpEntity<String> entity = new HttpEntity<>(body,headers);
         ResponseEntity<JSONObject> resp = restTemplate.exchange(url, HttpMethod.POST, entity, JSONObject.class);

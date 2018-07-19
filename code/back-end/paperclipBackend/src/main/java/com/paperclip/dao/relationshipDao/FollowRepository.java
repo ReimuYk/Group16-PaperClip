@@ -12,5 +12,7 @@ public interface FollowRepository extends CrudRepository<Follow,Long>{
     List<Follow> findByFollowee(User followee);
     List<Follow> findByFollower(User follower);
     Follow findDistinctByFolloweeAndFollower(User followee,User follower);
+
+    List<Follow> findByFolloweeOrderById(User user);
 }
 

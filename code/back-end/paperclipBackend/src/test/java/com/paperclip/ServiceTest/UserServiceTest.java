@@ -46,7 +46,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testAddUser() {
+    public void testAddUser() throws UnsupportedEncodingException {
         JSONObject data = new JSONObject();
         data.accumulate("username", "guoguo");
         data.accumulate("password", "gg123");
@@ -84,7 +84,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void getUnreadMessage(){
+    public void getUnreadMessage() throws UnsupportedEncodingException {
         JSONObject data = new JSONObject();
         data.accumulate("username", "user2");
         JSONArray aa = service.getUnreadMessage(data);

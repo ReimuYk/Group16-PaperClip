@@ -16,6 +16,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -210,6 +211,24 @@ public class UserStarServiceImpl implements UserStarService {
             users.add(user);
         }
         return users;
+    }
+
+    public JSONArray getRecentlyFollow(JSONObject data){
+        JSONArray followArray = new JSONArray();
+        String username = data.getString("username");
+        User user = userRepo.findOne(username);
+        List<Follow> followList = followRepo.findByFolloweeOrderById(user);
+        int count=0;
+        for(Follow follow : followList){
+            count++;
+            if(count==5)
+                break;
+            JSONObject followJson = new JSONObject();
+            followJson.accumulate("followee", follow.getFollowee().getUsername());
+            followJson.accumulate("follower", follow.getFollower().getUsername());
+            followArray.add(followJson);
+        }
+        return followArray;
     }
 
     // hostname want to stop star clientname

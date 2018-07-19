@@ -12,14 +12,14 @@ public interface UserService {
     JSONObject findPassword(JSONObject data);
 
     // registerPage
-    JSONObject addUser(JSONObject data);
+    JSONObject addUser(JSONObject data) throws UnsupportedEncodingException;
 
     // loginpage
     JSONObject userLogin(JSONObject data);
 
 
     // message.js
-    JSONArray getUnreadMessage(JSONObject data);
+    JSONArray getUnreadMessage(JSONObject data) throws UnsupportedEncodingException;
     JSONArray getBriefMessageList(JSONObject data);
     JSONArray getConversation(JSONObject data);
     JSONObject sendMessage(JSONObject data) throws UnsupportedEncodingException;
