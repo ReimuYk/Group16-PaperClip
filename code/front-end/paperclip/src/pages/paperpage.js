@@ -18,7 +18,31 @@ class Paper extends Component{
         }
         console.log("paperID:"+this.props.location.search.substring(9));
     }
-        
+    componentWillMount(){
+        //是否有权限
+        let that  = this;
+        let jsonbody = {};
+        jsonbody.username = this.state.username;
+        jsonbody.paperID = this.state.paperID;
+        var url = IPaddress+'service/hasAccess';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+        .then(response=>response.text())
+        .then(responseJson=>{
+            console.log(responseJson);
+            let data = eval('('+responseJson+')');
+            if(data.result == "fail"){
+                alert("无浏览权限");
+                window.location.href='/';
+            }
+            console.log(data)
+        }).catch(function(e){
+            console.log("Oops, error");
+        })
+    }    
     render() {
         return(
             <div style={{position:"relative"}}>

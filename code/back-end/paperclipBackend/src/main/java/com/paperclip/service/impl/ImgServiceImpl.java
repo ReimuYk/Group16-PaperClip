@@ -13,7 +13,7 @@ import java.io.*;
 
 @Service
 public class ImgServiceImpl implements ImgService {
-    private static final String dirPath = "C:\\Users\\lyc\\Desktop\\paperclip";
+    private static final String dirPath = "./data/avatar";
 
     @Autowired
     private UserRepository userRepo;

@@ -159,7 +159,7 @@ public class UserNoteServiceImpl implements UserNoteService {
         boolean ifLike = false;
         boolean ifStar = false;
         boolean ifFollow = false;
-        if(starNoteRepo.findByNote(n) != null){
+        if(starNoteRepo.findDistinctByUserAndNote(user,n) != null){
             ifStar = true;
         }
         UserNote un = userNRepo.findDistinctByUserAndNote(user,n);

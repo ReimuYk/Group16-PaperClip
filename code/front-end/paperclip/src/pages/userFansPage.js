@@ -26,7 +26,7 @@ class UserFans extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                let fans = eval(responseJson);
+                let fans = eval('('+responseJson+')');
                 that.setState({
                     data:fans
                 })
@@ -48,10 +48,11 @@ class UserFans extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                let result = eval(responseJson);
+                let result = eval('('+responseJson+')');
                 if(result == "fail"){
                     alert("关注失败，请重试");
                 }
+                console.log(result);
              }).catch(function(e) {
             console.log("Oops, error");
         })

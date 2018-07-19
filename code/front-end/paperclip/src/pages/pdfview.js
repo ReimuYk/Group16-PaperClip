@@ -35,7 +35,7 @@ class PDFView extends Component{
         .then(responseJson=>{
             // console.log(responseJson);
             let data = eval('('+responseJson+')');
-            console.log(data)
+            console.log(data);
             that.setState({
                 isLoading: false,
                 //page state

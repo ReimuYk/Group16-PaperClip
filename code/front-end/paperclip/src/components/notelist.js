@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Collapse ,List,Input,Icon,Button,Avatar,Divider,Anchor,Tag} from 'antd';
 import emitter from '.././util/events';
+import {Link } from 'react-router-dom';
 import { IPaddress } from '../App';
 
 const Panel = Collapse.Panel;
@@ -18,12 +19,13 @@ class NoteList extends Component{
         this.state = {
             inputValue:"",
             keyWords:["宇宙和平","世界"],
-            notes:[],
+            data:[],
+            type:"",
         }
     }
     componentWillMount(){
         let that  = this;
-        //get NoteList
+        //get NoteList or versionList
         let jsonbody = {};
         jsonbody.paperID = this.props.paperID;
         var url = IPaddress+'service/getNoteList';
@@ -35,9 +37,12 @@ class NoteList extends Component{
         .then(response=>response.text())
         .then(responseJson=>{
             console.log(responseJson);
-            let data = eval('('+responseJson+')');
-            that.setState({notes:data});
-            console.log(data)
+            let result = eval('('+responseJson+')');
+            that.setState({
+                type:result.type,
+                data:result.data
+            });
+            console.log(result);
         }).catch(function(e){
             console.log("Oops, error");
         })
@@ -57,18 +62,7 @@ class NoteList extends Component{
             console.log("Oops, error");
         })
     }
-    /*componentDidMount() {
-        this.noteEvent = emitter.addListener('changeNoteList', (keyWordData,noteData) => {
-            //alert("notelist change!");
-            this.setState({
-                keyWords:keyWordData,
-                notes:noteData
-            })
-        });
-    }
-    componentWillUnmount() {
-        //emitter.removeListener(this.noteEvent);
-    }*/
+    
     changeInputValue(e){
         this.setState({inputValue:e.target.value});
     }
@@ -88,26 +82,28 @@ class NoteList extends Component{
             </div>
         );
     }
+    
     renderNotes(){
         return(
             <List
                 style={{textAlign:"left"}}
                 header={<div><Icon type="bars" />相关笔记</div>}
                 bordered={false}
-                dataSource={this.state.notes}
+                dataSource={this.state.data}
                 renderItem={item => (
-                    <a href="#"><List.Item>                       
+                    <Link to={this.state.type="note"?'viewNote?noteID='+item.id:'paper?paperID='+item.id}><List.Item>                       
                         <List.Item.Meta          
                         title={item.title}
                         description={<div dangerouslySetInnerHTML={{ __html: item.intro}}></div>}
                         />
-                    </List.Item></a>
+                    </List.Item>
+                    </Link>
                     )}
                 />
         );
     }
     render() {
-        const keys = this.renderKey();
+        const keys = this.state.type == "note"?this.renderKey():<div></div>;
         const notes = this.renderNotes();
         return(
             <div id="notelist" 

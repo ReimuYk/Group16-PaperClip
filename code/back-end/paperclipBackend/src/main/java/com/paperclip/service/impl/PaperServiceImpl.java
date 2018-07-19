@@ -1,10 +1,12 @@
 package com.paperclip.service.impl;
 
 import com.paperclip.dao.entityDao.*;
+import com.paperclip.dao.relationshipDao.AssistRepository;
 import com.paperclip.dao.relationshipDao.BlockPostilRepository;
 import com.paperclip.dao.relationshipDao.StarPaperRepository;
 import com.paperclip.dao.relationshipDao.UserPostilRepository;
 import com.paperclip.model.Entity.*;
+import com.paperclip.model.Relationship.Assist;
 import com.paperclip.model.Relationship.BlockPostil;
 import com.paperclip.model.Relationship.StarPaper;
 import com.paperclip.model.Relationship.UserPostil;
@@ -21,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -59,6 +62,8 @@ public class PaperServiceImpl implements PaperService {
     @Autowired
     private NoteRepository noteRepo;
 
+    @Autowired
+    private DocumentPdfRepository docPdfRepo;
 
     public String GetImageStrFromPath(String imgPath) {
         InputStream in = null;
@@ -95,6 +100,7 @@ public class PaperServiceImpl implements PaperService {
     }
 
     public JSONObject getPaperDetail(JSONObject data) {
+        JSONObject paper = new JSONObject();
         Long paperID = data.getLong("paperID");
         String username = data.getString("username");
         int pagination = data.getInt("pagination");
@@ -116,7 +122,7 @@ public class PaperServiceImpl implements PaperService {
         String b64str = this.GetImageStrFromPath(pageurl);
         b64str = "data:image/jpg;base64,"+b64str;
 
-        JSONObject paper = new JSONObject();
+
         JSONArray blocklist = new JSONArray();
         for (Block b:blist){
             JSONObject blk = new JSONObject();
@@ -366,24 +372,45 @@ public class PaperServiceImpl implements PaperService {
     }
 
     //输入：paperID ---------------- 获取与某一篇论文有关的笔记列表
-    public JSONArray getNoteList(JSONObject data){
+    public JSONObject getNoteList(JSONObject data){
+        JSONObject result = new JSONObject();
+        JSONArray datas = new JSONArray();
         Long paperID = data.getLong("paperID");
         Paper paper = paperRepo.findOne(paperID);
+
+        DocumentPdf docP = docPdfRepo.findOne(paperID);
+        if(docP != null) {//是docPdf,则获取版本列表
+            List<DocumentPdf> docPs = docPdfRepo.findByDocument(docP.getDocument());
+            for(DocumentPdf d: docPs){
+                JSONObject version = new JSONObject();
+                version.accumulate("id",d.getId());
+                version.accumulate("title",d.getTitle()+" - version: "+d.getVersion());
+                SimpleDateFormat sdf = new SimpleDateFormat("EEEE-MMMM-dd-yyyy");
+                version.accumulate("intro","编辑于"+sdf.format(d.getDate()));
+                datas.add(version);
+            }
+            result.accumulate("type","version");
+            result.accumulate("data",datas);
+            return result;
+        }
+
         List<Note> l = noteRepo.findByPaper(paper);
         Iterator<Note> it = l.iterator();
-        JSONArray notes = new JSONArray();
         while(it.hasNext()){
             JSONObject note = new JSONObject();
             Note n = it.next();
+            note.accumulate("id",n.getId());
             note.accumulate("title",n.getTitle());
-            int end = 30;
-            if(n.getContent().length()<30){
+            int end = 20;
+            if(n.getContent().length()<20){
                 end = n.getContent().length();
             }
             note.accumulate("intro",n.getContent().substring(0,end));
-            notes.add(note);
+            datas.add(note);
         }
-        return notes;
+        result.accumulate("type","note");
+        result.accumulate("data",datas);
+        return result;
     }
 
     //使用List判断元素是否已经存在于数组中
@@ -421,5 +448,31 @@ public class PaperServiceImpl implements PaperService {
         }
         System.out.println(keywords.toString());
         return keywords;
+    }
+
+    @Autowired
+    private AssistRepository assistRepo;
+    //输入paperID,username ------------ 判断是否是docPDF，如果是，访问者是否有权限访问
+    public JSONObject hasAccess(JSONObject data){
+        Long paperID = data.getLong("paperID");
+        String username = data.getString("username");
+        JSONObject result = new JSONObject();
+
+        DocumentPdf docP = docPdfRepo.findOne(paperID);
+        if(docP != null){//是docPdf
+            if(!docP.getAuthor().equals(username)){
+                List<Assist> ass = assistRepo.findByDocument(docP.getDocument());
+                for(Assist a:ass){
+                    if(a.getUser().getUsername().equals(username)){
+                        result.accumulate("result","success");
+                        return result;
+                    }
+                }
+                result.accumulate("result","fail");
+                return result;
+            }
+        }
+        result.accumulate("result","success");
+        return result;
     }
 }

@@ -58,7 +58,7 @@ public class PaperController {
     @RequestMapping(value = "/service/getNoteList",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONArray getNoteList(@RequestBody JSONObject data){
+    JSONObject getNoteList(@RequestBody JSONObject data){
         return paperService.getNoteList(data);
     }
 
@@ -74,5 +74,12 @@ public class PaperController {
     @ResponseBody
     JSONObject ifStar(@RequestBody JSONObject data){
         return paperService.ifStar(data);
+    }
+
+    @RequestMapping(value = "/service/hasAccess",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONObject hasAccess(@RequestBody JSONObject data){
+        return paperService.hasAccess(data);
     }
 }
