@@ -316,12 +316,8 @@ class ViewNote extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-<<<<<<< HEAD
                 let result = eval('('+responseJson+')');
-=======
-                let result = eval('(' + responseJson + ')');
->>>>>>> 29465973cb685b82efb0e5d2beccd2aa42ff5738
-                if(result == "fail"){
+                if(result.result == "fail"){
                     alert("关注失败，请重试");
                     return;
                 }
