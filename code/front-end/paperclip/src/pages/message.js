@@ -13,7 +13,7 @@ class Message extends Component{
         message: [],
         modalShow: false,
         messageContent: '',
-        receiverName:''
+        receiverName:'',
     }
     componentWillMount = () => {
         /* get info from server */
@@ -40,7 +40,7 @@ class Message extends Component{
             console.log("Oops, error");
         })
     }
-    showMessage = (record, item) => {
+    showMessage = (record, item, e) => {
         let that = this;
         /* get username */
         /* get data according to username */
@@ -62,6 +62,8 @@ class Message extends Component{
                     modalShow: true,
                     receiverName: item.another
                 })
+                var messageDOM = document.getElementById('message');
+                messageDOM.scrollTop = messageDOM.scrollHeight;
             }).catch(function(e){
             console.log("Oops, error");
         })
@@ -93,12 +95,15 @@ class Message extends Component{
             .then(responseJson=>{
                 console.log(responseJson);
                 let data = eval('(' + responseJson + ')');
-                if(data.result == "success"){
+                if(data.result != "fail"){
                     tmp.push({sender:username, content:that.state.messageContent, time:data.time});
+                    console.log(tmp);
                     that.setState({
                         message:tmp,
                         messageContent: ''
                     })
+                    var messageDOM = document.getElementById('message');
+                    messageDOM.scrollTop = messageDOM.scrollHeight;
                 }
             }).catch(function(e){
             console.log("Oops, error");
@@ -118,7 +123,7 @@ class Message extends Component{
                     renderItem={item => (
                         <List.Item  actions={[<p>{item.time}<a style={{marginLeft:'20px'}} onClick={() => this.showMessage(this, item)}> 查看对话 </a></p>]}>
                         <List.Item.Meta
-                        title={<a>{item.another}</a>}
+                        title={<a onClick = {() => this.showMessage(this,item)}>{item.another}</a>}
                         description={item.content}
                         />
                     </List.Item>
@@ -128,13 +133,16 @@ class Message extends Component{
                 <Modal
                     visible={this.state.modalShow}
                     onCancel={this.handleCancel}
+                    onOK={this.commitMessage}
                     title={this.state.username}
                     footer={[
                         <Button key="back" onClick={this.handleCancel}>关闭</Button>,
+                        <Button type="primary" onClick={this.commitMessage}>发送</Button>
                     ]}
                 >
                     <div style={{paddingTop:'30px'}}>
                         <List
+                            id = 'message'
                             style={{textAlign:'left', height:'300px', overflowY:'scroll'}}
                             className="messageContent"
                             itemLayout="horizontal"
@@ -144,7 +152,7 @@ class Message extends Component{
                                     actions={[<p>{item.time}</p>]}
                                 >
                                     <List.Item.Meta
-                                        title={item.sender}
+                                        title={<a href={'/viewpage?username=' + item.sender}>{item.sender}</a>}
                                         description={item.content}
                                     />
                                 </List.Item>
@@ -152,7 +160,6 @@ class Message extends Component{
                         />
                     </div>
                     <TextArea rows={2} value={this.state.messageContent} onChange={this.handleMessageChange} placeholder='发送私信' />
-                    <Button type="primary" onClick={this.commitMessage}>发送</Button>
                 </Modal>
             </div>
         )

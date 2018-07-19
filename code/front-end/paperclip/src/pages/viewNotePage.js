@@ -418,7 +418,7 @@ class ViewNote extends Component{
                         actions={[<p>{item.date}</p>]}
                     >
                         <List.Item.Meta
-                            title={<a>{item.username}</a>}
+                            title={<Link to={"/viewpage?username=" + item.username}>{item.username}</Link>}
                             description={item.content}
                         />
                     </List.Item>

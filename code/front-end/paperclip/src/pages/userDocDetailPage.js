@@ -105,7 +105,7 @@ class UserDocDetail extends Component{
         if(this.state.author){
             return(
                 <div className="content">
-                    <a style={{marginLeft:'450px'}}>修改日期</a>
+                    <a style={{marginLeft:'400px'}}>修改日期</a>
                     <List
                         style={{textAlign:'left'}}
                         itemLayout="horizontal"

@@ -129,7 +129,7 @@ class UserDoc extends Component{
                     <Button style={{float:"right"}} type="primary" onClick={this.newDoc}>新建文档</Button>
                 </div>
                 <div className="content">
-                    <a style={{marginLeft:'270px'}}>上次修改日期</a>
+                    <a style={{marginLeft:'220px'}}>上次修改日期</a>
                     <List
                         style={{textAlign:'left'}}
                         itemLayout="horizontal"

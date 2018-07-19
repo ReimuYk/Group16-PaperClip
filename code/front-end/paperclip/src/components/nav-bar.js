@@ -106,8 +106,7 @@ class NavBar extends Component{
                         actions={[<p>{item.time}</p>]}
                     >
                         <List.Item.Meta
-                            avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                            title={<a>{item.sender}</a>}
+                            title={<a href={'/viewpage?username=' + item.sender}>{item.sender}</a>}
                             description={item.content}
                         />
                     </List.Item>

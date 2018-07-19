@@ -115,7 +115,7 @@ class StarNote extends Component{
                         title={<a href={'/viewnote?noteID='+item.ID}>{item.title}</a>}
                         description={item.paperTitle + '    |   ' + item.keywords}
                         />
-                        <a style={{width:'80px',marginLeft:'20px'}}>{item.author}</a>
+                        <a style={{width:'80px',marginLeft:'20px'}} href={'/viewpage?username=' + item.author}>{item.author}</a>
                         <a style={{width:'80px',marginLeft:'20px'}}>{item.starno}</a>
                         <a style={{width:'80px',marginLeft:'0px'}}>{item.date}</a>
                         

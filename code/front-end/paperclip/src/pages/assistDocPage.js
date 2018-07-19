@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { IPaddress } from '../App'
 import { List, Avatar, Anchor, Menu, Popconfirm } from 'antd';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import UserFloatMenu from '../components/userFloatMenu';
 
@@ -57,7 +57,7 @@ class AssistDoc extends Component{
                     <List.Item>
                         <List.Item.Meta
                         title={<a href={"/user/docdetail?docID="+item.docID}>{item.title}</a>}
-                        description = {'作者：' + item.author}
+                        description = {<p>作者：<Link to={'/viewpage?username=' + item.author}>{item.author}</Link></p>}
                         />
                     </List.Item>
                     )}
