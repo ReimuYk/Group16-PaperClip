@@ -21,6 +21,8 @@ public class DocumentPdf extends Paper{
         this.date = new Date();
         this.setTitle(document.getTitle());
         this.setAuthor(document.getUser().getUsername());
+        this.setStar(0);
+        this.setPageNum(0);
     }
 
     public void setDate(Date date) {
@@ -81,5 +83,15 @@ public class DocumentPdf extends Paper{
     @Override
     public void setTitle(String title) {
         super.setTitle(title);
+    }
+
+    @Override
+    public Integer getStar() {
+        return super.getStar();
+    }
+
+    @Override
+    public void setStar(Integer star) {
+        super.setStar(star);
     }
 }

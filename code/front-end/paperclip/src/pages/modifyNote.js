@@ -201,7 +201,7 @@ class Header extends React.Component {
     }
 
     confirmLeave = () =>{
-        window.location.href="/home";
+        window.location.href="/user/usernote";
     }
     cancelLeave(){
     }
@@ -216,8 +216,8 @@ class Header extends React.Component {
                     mode="horizontal"
                 >
                     <Menu.Item key="index">
-                        <Popconfirm placement="bottomLeft" title="跳回首页可能会丢失您现在的编辑，您确定要跳转吗？" onConfirm={this.confirmLeave} onCancel={this.cancelLeave} okText="Yes" cancelText="No">
-                            <span>PaperClip</span>
+                        <Popconfirm placement="bottomLeft" title="跳回我的笔记可能会丢失您现在的编辑，您确定要跳转吗？" onConfirm={this.confirmLeave} onCancel={this.cancelLeave} okText="Yes" cancelText="No">
+                            <span>我的笔记</span>
                         </Popconfirm>
                     </Menu.Item>
                     <Popover
@@ -251,6 +251,7 @@ class ModifyNote extends Component{
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
         options.body = JSON.stringify(jsonbody);
+        console.log('reach here');
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{

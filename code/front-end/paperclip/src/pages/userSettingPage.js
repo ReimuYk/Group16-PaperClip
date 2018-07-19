@@ -4,8 +4,6 @@ import { Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar.js';
 import '../css/style.css';
 import { IPaddress } from '../App'
-import User from './userpage.js';
-import url from '../statics/uh.jpg'
 /* fake data */
 
 const { Header, Content, Sider } = Layout;
@@ -28,7 +26,7 @@ class UserSetting extends Component{
             openEdit:false,
             editIdx:null,
             loading: false,
-            imageUrl:url,
+            imageUrl:'',
             data:[
                 {
                 idx:0, title: '性别',info:"男"
@@ -45,6 +43,26 @@ class UserSetting extends Component{
     }
     componentWillMount(){
         username = sessionStorage.getItem('username');
+        let that = this;
+        /* get data according to username */
+        let jsonbody = {};
+        jsonbody.username = username;
+        let url = IPaddress + 'service/hostInfo';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                console.log(responseJson);
+                let data = eval('(' + responseJson + ')');
+                that.setState({
+                    imageUrl: data.userheader
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
         return;
     }
 

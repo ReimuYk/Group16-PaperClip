@@ -2,8 +2,10 @@ package com.paperclip.service.impl;
 
 import com.paperclip.dao.entityDao.*;
 import com.paperclip.dao.relationshipDao.AssistRepository;
+import com.paperclip.dao.relationshipDao.InviteRepository;
 import com.paperclip.model.Entity.*;
 import com.paperclip.model.Relationship.Assist;
+import com.paperclip.model.Relationship.Invite;
 import com.paperclip.service.UserDocService;
 import com.sun.xml.internal.ws.api.server.HttpEndpoint;
 import net.sf.json.JSONArray;
@@ -34,6 +36,9 @@ public class UserDocServiceImpl implements UserDocService {
 
     @Autowired
     AssistRepository assistRepo;
+
+    @Autowired
+    InviteRepository inviteRepo;
 
     @Autowired
     PaperRepository paperRepo;
@@ -198,7 +203,7 @@ public class UserDocServiceImpl implements UserDocService {
         return result;
     }
 
-    // add a contributer to this doc
+    // invite a contributer to this doc
     public JSONObject addDocContributer(JSONObject data){
         JSONObject result = new JSONObject();
         String hostname = data.getString("hostname");
@@ -207,11 +212,13 @@ public class UserDocServiceImpl implements UserDocService {
         User host = userRepo.findOne(hostname);
         User client = userRepo.findOne(clientname);
         Document doc = docRepo.findOne(docID);
-        if(!doc.getUser().getUsername().equals(hostname)){
+        if(!doc.getUser().getUsername().equals(hostname) || client==null){
             result.accumulate("result", "fail");
         }else{
-            Assist assist = new Assist(client, doc);
-            assistRepo.save(assist);
+            /*Assist assist = new Assist(client, doc);
+            assistRepo.save(assist);*/
+            Invite invite = new Invite(client,doc);
+            inviteRepo.save(invite);
             result.accumulate("result", "success");
         }
         return result;
@@ -259,9 +266,9 @@ public class UserDocServiceImpl implements UserDocService {
         Long docID = data.getLong("docID");
 
         //fake data
-        username = "user1";
+        /*username = "user1";
         title = "test title";
-        docID = new Long((long)1);
+        docID = new Long((long)1);*/
         Document doc = docRepo.findOne(docID);
 
         RestTemplate restTemplate = new RestTemplate();
@@ -269,15 +276,16 @@ public class UserDocServiceImpl implements UserDocService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
         //create pdf data
-        DocumentPdf pdf = new DocumentPdf();
-        pdf.setAuthor(username);
-        pdf.setTitle(title);
-        pdf.setDocument(doc);
-        pdf.setDate(new Date());
-        pdf.setVersion(1);
-        pdf.setKeyWords("");
-        pdf.setTag("");
-        pdf.setPageNum(0);
+        Integer version = docPdfRepo.getMaxVersion(doc);
+        DocumentPdf pdf = new DocumentPdf(doc,version);
+        //pdf.setAuthor(username);
+        //pdf.setTitle(title);
+        //pdf.setDocument(doc);
+        //pdf.setDate(new Date());
+        //pdf.setVersion(1);
+        //pdf.setKeyWords("");
+        //pdf.setTag("");
+        //pdf.setPageNum(0);
         docPdfRepo.save(pdf);
         //create json_body & POST req
         JSONObject json_body = new JSONObject();

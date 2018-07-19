@@ -460,6 +460,7 @@ public class PaperServiceImpl implements PaperService {
 
         DocumentPdf docP = docPdfRepo.findOne(paperID);
         if(docP != null){//是docPdf
+            System.out.println("user:"+username+" author:"+docP.getAuthor());
             if(!docP.getAuthor().equals(username)){
                 List<Assist> ass = assistRepo.findByDocument(docP.getDocument());
                 for(Assist a:ass){

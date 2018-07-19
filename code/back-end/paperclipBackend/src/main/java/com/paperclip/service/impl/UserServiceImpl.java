@@ -4,10 +4,15 @@ import com.paperclip.dao.entityDao.DocumentPdfRepository;
 import com.paperclip.dao.entityDao.DocumentRepository;
 import com.paperclip.dao.entityDao.MessageRepository;
 import com.paperclip.dao.entityDao.UserRepository;
+import com.paperclip.dao.relationshipDao.AssistRepository;
+import com.paperclip.dao.relationshipDao.InviteRepository;
 import com.paperclip.model.Entity.Document;
 import com.paperclip.model.Entity.DocumentPdf;
 import com.paperclip.model.Entity.Message;
 import com.paperclip.model.Entity.User;
+import com.paperclip.model.Relationship.Assist;
+import com.paperclip.model.Relationship.Invite;
+import com.paperclip.service.ImgService;
 import com.paperclip.service.MailService;
 import com.paperclip.service.UserService;
 import net.sf.json.JSON;
@@ -41,6 +46,14 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private DocumentPdfRepository docPdfRepo;
 
+    @Autowired
+    private InviteRepository inviteRepo;
+
+    @Autowired
+    private AssistRepository assistRepo;
+
+    @Autowired
+    private ImgService service;
 
     private static final String dafaultAvatar = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEBAAEAAAD//gAmUGFpbnQgVG9vbCAtU0FJLSBKUEVHIEVuY29kZXIgdjEuMDAA/9sAhAAjGhoaGholJSUlMzMzMzNERERERERVVVVVVVVVampqampqamqCgoKCgoKCmpqampqatra2trbV1dXV9PT0////ATwsLCwsLD8/Pz9WVlZWVnFxcXFxcY+Pj4+Pj4+ysrKysrKystjY2NjY2Nj/////////////////////////////wAARCADYANgDAREAAhEBAxEB/8QBogAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoLEAACAQMDAgQDBQUEBAAAAX0BAgMABBEFEiExQQYTUW" +
             "EHInEUMoGRoQgjQrHBFVLR8CQzYnKCCQoWFxgZGiUmJygpKjQ1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4eLj5OXm5+jp6vHy8/T19vf4+foBAAMBAQEBAQEBAQEAAAAAAAABAgMEBQYHCAkKCxEAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmq" +
@@ -257,5 +270,60 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
+    //输入：username,type---------------显示邀请信息
+    public JSONArray getInvitations(JSONObject data){
+        JSONArray invitations = new JSONArray();
+
+        String username = data.getString("username");
+        String type = data.getString("type");
+        User user = userRepo.findOne(username);
+        List<Invite> invites = inviteRepo.findByUser(user);
+
+        if(type.equals("small")){
+            Iterator<Invite> it = invites.iterator();
+            int n = 0;
+            while(it.hasNext() && n<3){
+                Invite i = it.next();
+                JSONObject invitation = new JSONObject();
+                invitation.accumulate("sender",i.getDocument().getUser().getUsername());
+                invitation.accumulate("title",i.getDocument().getTitle());
+                invitation.accumulate("inviteID",i.getId());
+                invitations.add(invitation);
+            }
+        }
+        else{
+            for(Invite i:invites){
+                JSONObject invitation = new JSONObject();
+                invitation.accumulate("sender",i.getDocument().getUser().getUsername());
+                invitation.accumulate("avatar",service.getUserHeader(i.getDocument().getUser()));
+                invitation.accumulate("title",i.getDocument().getTitle());
+                invitation.accumulate("inviteID",i.getId());
+                invitations.add(invitation);
+            }
+        }
+
+        return invitations;
+    }
+
+    //输入：inviteID,reply--------------被邀请者对邀请进行接收或拒绝
+    public JSONObject replyInvitation(JSONObject data){
+        JSONObject result = new JSONObject();
+
+        Long inviteID = data.getLong("inviteID");
+        int reply = data.getInt("reply");
+
+        Invite i = inviteRepo.findOne(inviteID);
+        if(i == null){
+            result.accumulate("result","fail");
+            return result;
+        }
+        if(reply == 1){
+            Assist assist = new Assist(i.getUser(),i.getDocument());
+            assistRepo.save(assist);
+        }
+        inviteRepo.delete(i);
+        result.accumulate("result","success");
+        return result;
+    }
 
 }
