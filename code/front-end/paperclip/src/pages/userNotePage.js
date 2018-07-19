@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, Avatar, Popconfirm, Menu, Anchor, Table } from 'antd';
+import { List, Avatar, Popconfirm, Menu, Anchor, Table, Divider } from 'antd';
 import { Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import UserFloatMenu from '../components/userFloatMenu';
@@ -15,11 +15,7 @@ class UserNote extends Component{
             dataIndex: 'title',
             key: 'title',
             render: (text, record) => (
-                <span>
-                    <a href={"/user/modifyNote?noteID=" + record.ID}>编辑笔记</a>
-                    <Divider type="vertical" />
-                    <a onClick={() => this.deleteNote(text, record)}>删除笔记</a>
-                </span>
+                <a href={'/viewnote?noteID=' + record.ID}>{text}</a>
             )
         },  {
             title: '最近修改日期',
@@ -29,7 +25,11 @@ class UserNote extends Component{
             title:'操作',
             key:'action',
             render: (text, record) => (
-                <a onClick={() => this.quitStar(text, record)}>取消收藏</a>
+                <span>
+                    <a href={"/user/modifyNote?noteID=" + record.ID}>编辑笔记</a>
+                    <Divider type="vertical" />
+                    <a onClick={() => this.deleteNote(text, record)}>删除笔记</a>
+                </span>
             )
         }]
     }
@@ -111,27 +111,7 @@ class UserNote extends Component{
             <div>
             <NavBar />
             <UserFloatMenu />
-            <div style={{width:'60%',marginLeft:'200px', paddingTop:'40px'}}>
-            <a style={{marginLeft:'430px'}}>上次修改日期</a>
-                <List
-                    style={{textAlign:'left'}}
-                    className="demo-loadmore-list"
-                    itemLayout="horizontal"
-                    dataSource={this.state.data}
-                    renderItem={item => (
-                    <List.Item actions={[<p>
-                                            <a style={{width:'75px'}} href={"modifyNote?noteID="+item.ID}>编辑笔记</a>
-                                            <Popconfirm title="确定删除吗？" onConfirm={() => this.deleteNote(this, item)}>
-                                                <a style={{width:'75px',marginLeft:'20px'}}>删除笔记</a>
-                                            </Popconfirm>
-                                        </p>]}>
-                        <List.Item.Meta
-                        title={<a href={"/viewNote?noteID="+item.ID}>{item.title}</a>}
-                        />
-                        <p>{item.date}</p>
-                    </List.Item>
-                    )}
-                />
+            <div style={{width:'60%',marginLeft:'200px', paddingTop:'60px', float:'left'}}>
                 <Table columns={this.state.columns} dataSource={this.state.data} />
             </div>
             </div>

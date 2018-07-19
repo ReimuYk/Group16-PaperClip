@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, Avatar, Popconfirm, Menu, Anchor, Button } from 'antd';
+import { List, Avatar, Popconfirm, Menu, Anchor, Button, Divider, Table } from 'antd';
 import { Link, Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import UserFloatMenu from '../components/userFloatMenu';
@@ -12,7 +12,55 @@ var docID = 0;
 class UserDocDetail extends Component{
     state = {
         data: [],
-        author: false
+        author: false,
+        columns1: [{
+            title: '标题',
+            dataIndex: 'title',
+            key: 'title',
+            render: (text, record) => (
+                <a href={"/paper?paperID=" + record.docPdfId}>{text}</a>
+            )
+        }, {
+            title: '版本',
+            dataIndex: 'version',
+            key: 'version',
+        },  {
+            title: '发布日期',
+            dataIndex:'date',
+            key: 'date'
+        }, {
+            title:'操作',
+            key:'action',
+            render: (text, record) => (
+                <a href={"/paper?paperID=" + record.docPdfId}>查看内容</a>
+            )
+        }],
+        columns2: [{
+            title: '标题',
+            dataIndex: 'title',
+            key: 'title',
+            render: (text, record) => (
+                <a href={"/paper?paperID=" + record.docPdfId}>{text}</a>
+            )
+        }, {
+            title: '版本',
+            dataIndex: 'version',
+            key: 'version',
+        },  {
+            title: '发布日期',
+            dataIndex:'date',
+            key: 'date'
+        }, {
+            title:'操作',
+            key:'action',
+            render: (text, record) => (
+            <span>
+                <a href={"/paper?paperID=" + record.docPdfId}>查看内容</a>
+                <Divider type="vertical" />
+                <a onClick={() => this.deleteDoc(record)}>删除该版本</a>
+            </span>
+            )
+        }],
     }
     componentWillMount = () => {
         docID = this.props.location.search.substring(7);//7 == 'docID='.length+1
@@ -153,8 +201,21 @@ class UserDocDetail extends Component{
         }
 
     }
+    renderTable(){
+        if(this.state.author){
+            return(
+                <Table columns={this.state.columns2} dataSource={this.state.data} />
+            )
+        }
+        else{
+            return(
+                <Table columns={this.state.columns1} dataSource={this.state.data} />
+            )
+        }
+    }
     render(){
         let renderList = this.renderList();
+        let renderTable = this.renderTable();
         if(sessionStorage.getItem('username') == null){
             return <Redirect to="/login"/>;
         }
@@ -163,8 +224,8 @@ class UserDocDetail extends Component{
                 <NavBar />
             
             <UserFloatMenu />
-            <div style={{width:'60%',marginLeft:'200px', paddingTop:'40px'}}>
-                {renderList}
+            <div style={{width:'60%',marginLeft:'200px', paddingTop:'60px', float:'left'}}>
+                {renderTable}
             </div>
         </div>
         )
