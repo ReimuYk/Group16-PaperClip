@@ -44,7 +44,6 @@ class Login extends Component {
     }
     render() {
         if(sessionStorage.getItem('username') != null){
-            console.log('123');
             return <Redirect to="/user"/>;
         }
         return (
