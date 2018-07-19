@@ -17,4 +17,6 @@ public interface UserStarService {
     JSONArray getStarUser(JSONObject data);
     JSONObject quitStarUser(JSONObject data);
     JSONObject starUser(JSONObject data);
+
+    JSONArray getRecentFans(JSONObject data);
 }
