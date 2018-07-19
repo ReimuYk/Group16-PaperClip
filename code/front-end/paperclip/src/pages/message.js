@@ -7,6 +7,15 @@ import { IPaddress } from '../App'
 var username = '';
 const { TextArea } = Input;
 
+var sortData = function(x,y){
+    if(x.time < y.time){
+        return 1;
+    }
+    else if(x.time > y.time){
+        return -1;
+    }
+    else return 0;
+}
 class Message extends Component{
     state = {
         data: [],
@@ -31,7 +40,6 @@ class Message extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                console.log(responseJson);
                 let data = eval(responseJson);
                 that.setState({
                     data: data
@@ -55,12 +63,11 @@ class Message extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                console.log(responseJson);
                 let data = eval(responseJson);
                 that.setState({
                     message: data,
                     modalShow: true,
-                    receiverName: item.another
+                    receiverName: item.another,
                 })
                 var messageDOM = document.getElementById('message');
                 messageDOM.scrollTop = messageDOM.scrollHeight;
@@ -78,9 +85,19 @@ class Message extends Component{
         this.setState({ messageContent: event.target.value });
         /* send to server, server => that user */
     }
+    calculateIdx (username){
+        for(var i=0;i<this.state.data.length; ++i){
+            if(this.state.data[i].another == username){
+                return i;
+            }
+        }
+        return -1;
+    }
     commitMessage = () => {
         let that  = this;
         var tmp = this.state.message;
+        let data = this.state.data;
+        let index = this.calculateIdx(this.state.receiverName);
         let jsonbody = {};
         jsonbody.senderName = username;
         jsonbody.receiverName = that.state.receiverName;
@@ -93,14 +110,18 @@ class Message extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                console.log(responseJson);
-                let data = eval('(' + responseJson + ')');
-                if(data.result != "fail"){
-                    tmp.push({sender:username, content:that.state.messageContent, time:data.time});
-                    console.log(tmp);
+                let result = eval('(' + responseJson + ')');
+                if(result.result != "fail"){
+                    tmp.push({sender:username, content:that.state.messageContent, time:result.time});
+                    if(index > -1){
+                        data[index].content = that.state.messageContent;
+                        data[index].time = result.time;
+                        data.sort(sortData);
+                    }
                     that.setState({
                         message:tmp,
-                        messageContent: ''
+                        messageContent: '',
+                        data: data
                     })
                     var messageDOM = document.getElementById('message');
                     messageDOM.scrollTop = messageDOM.scrollHeight;
@@ -134,13 +155,13 @@ class Message extends Component{
                     visible={this.state.modalShow}
                     onCancel={this.handleCancel}
                     onOK={this.commitMessage}
-                    title={this.state.username}
+                    title={'和' + this.state.receiverName + '的对话'}
                     footer={[
                         <Button key="back" onClick={this.handleCancel}>关闭</Button>,
                         <Button type="primary" onClick={this.commitMessage}>发送</Button>
                     ]}
                 >
-                    <div style={{paddingTop:'30px'}}>
+                    <div>
                         <List
                             id = 'message'
                             style={{textAlign:'left', height:'300px', overflowY:'scroll'}}
