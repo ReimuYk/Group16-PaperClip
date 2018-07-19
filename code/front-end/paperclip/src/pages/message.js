@@ -155,7 +155,7 @@ class Message extends Component{
                     visible={this.state.modalShow}
                     onCancel={this.handleCancel}
                     onOK={this.commitMessage}
-                    title={'和' + this.state.receiverName + '的对话'}
+                    title={<p>和 <a href={"/viewpage?username=" + this.state.receiverName}>{this.state.receiverName}</a> 的对话</p>}
                     footer={[
                         <Button key="back" onClick={this.handleCancel}>关闭</Button>,
                         <Button type="primary" onClick={this.commitMessage}>发送</Button>
