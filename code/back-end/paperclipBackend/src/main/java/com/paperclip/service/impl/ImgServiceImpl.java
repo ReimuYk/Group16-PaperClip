@@ -13,13 +13,16 @@ import java.io.*;
 
 @Service
 public class ImgServiceImpl implements ImgService {
+
     private static final String dirPath = "./data/avatar";
+
 
     @Autowired
     private UserRepository userRepo;
 
     //输入:username,imgStr-------------base64字符串转图片保存在服务器
     public JSONObject uploadAvatar(JSONObject data) {
+        System.out.println("upload data:"+data);
         JSONObject result = new JSONObject();
         String username = data.getString("username");
         String imgStr = data.getString("imgStr");
@@ -88,5 +91,25 @@ public class ImgServiceImpl implements ImgService {
         BASE64Encoder encoder = new BASE64Encoder();
         avatar.accumulate("imgStr","data:image/jpeg;base64,"+encoder.encode(data));//返回Base64编码过的字节数组字符串
         return avatar;
+    }
+
+    public String getUserHeader(User user){
+        String imgFile = user.getAvatar();
+        InputStream in = null;
+        byte[] data=null;
+        try
+        {
+            in = new FileInputStream(imgFile);
+            data = new byte[in.available()];
+            in.read(data);
+            in.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        //对字节数组Base64编码
+        BASE64Encoder encoder = new BASE64Encoder();
+        return "data:image/jpeg;base64,"+encoder.encode(data);
     }
 }

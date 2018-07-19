@@ -76,7 +76,7 @@ public class UserNoteServiceImpl implements UserNoteService {
             note.accumulate("ID",n.getId());
             note.accumulate("title",n.getTitle());
             note.accumulate("keywords",n.getKeyWords());
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             note.accumulate("date",sdf.format(n.getDate()));
             notes.add(note);
         }
@@ -187,7 +187,7 @@ public class UserNoteServiceImpl implements UserNoteService {
         note.accumulate("title", n.getTitle());
         note.accumulate("content", n.getContent());
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         note.accumulate("date", sdf.format(n.getDate()));
         note.accumulate("commentNo",noteCommRepo.findByNote(n).size());
         note.accumulate("ifLike",ifLike);
@@ -211,7 +211,7 @@ public class UserNoteServiceImpl implements UserNoteService {
             com.accumulate("username",c.getUser().getUsername());
             com.accumulate("content",c.getContent());
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             com.accumulate("date",sdf.format(c.getDate()));
             noteComment.add(com);
         }

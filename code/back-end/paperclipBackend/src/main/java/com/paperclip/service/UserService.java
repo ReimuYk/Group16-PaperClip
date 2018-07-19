@@ -3,23 +3,25 @@ package com.paperclip.service;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+
 public interface UserService {
 
 
     // findback
-    public JSONObject findPassword(JSONObject data);
+    JSONObject findPassword(JSONObject data);
 
     // registerPage
-    public JSONObject addUser(JSONObject data);
+    JSONObject addUser(JSONObject data);
 
     // loginpage
-    public JSONObject userLogin(JSONObject data);
+    JSONObject userLogin(JSONObject data);
 
 
     // message.js
-    public JSONArray getUnreadMessage(JSONObject data);
-    public JSONArray getBriefMessageList(JSONObject data);
-    public JSONArray getConversation(JSONObject data);
-    public JSONObject sendMessage(JSONObject data);
+    JSONArray getUnreadMessage(JSONObject data);
+    JSONArray getBriefMessageList(JSONObject data);
+    JSONArray getConversation(JSONObject data);
+    JSONObject sendMessage(JSONObject data) throws UnsupportedEncodingException;
 
 }

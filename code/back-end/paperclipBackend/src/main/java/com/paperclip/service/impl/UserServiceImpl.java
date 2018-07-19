@@ -19,6 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -154,11 +157,12 @@ public class UserServiceImpl implements UserService {
             Message m = it2.next();
             JSONObject message = new JSONObject();
             message.accumulate("sender", m.getSender().getUsername());
-            message.accumulate("content",m.getContent());
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            message.accumulate("content",URLDecoder.decode(m.getContent()));
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             message.accumulate("time",sdf.format(m.getTime()));
             messages.add(message);
         }
+        System.out.println("messages: "+messages);
         return messages;
     }
 
@@ -197,8 +201,8 @@ public class UserServiceImpl implements UserService {
             else {
                 message.accumulate("another", m.getSender().getUsername());
             }
-            message.accumulate("content",m.getContent());
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            message.accumulate("content",URLDecoder.decode(m.getContent()));
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             message.accumulate("time",sdf.format(m.getTime()));
             messageArray.add(message);
         }
@@ -227,8 +231,8 @@ public class UserServiceImpl implements UserService {
                 messageRepo.save(m);
             }
             message.accumulate("sender",m.getSender().getUsername());
-            message.accumulate("content",m.getContent());
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            message.accumulate("content",URLDecoder.decode(m.getContent()));
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             message.accumulate("time",sdf.format(m.getTime()));
             conversation.add(message);
         }
@@ -236,17 +240,19 @@ public class UserServiceImpl implements UserService {
     }
 
     //输入：senderName,receiverName -------------发私信
-    public JSONObject sendMessage(JSONObject data) {
+    public JSONObject sendMessage(JSONObject data) throws UnsupportedEncodingException {
         JSONObject result = new JSONObject();
         String senderName = data.getString("senderName");
         String receiverName = data.getString("receiverName");
         String content = data.getString("content");
 
+        System.out.println("message content:\n"+content);
+        content = URLEncoder.encode(content, "UTF-8");
         User sender = userRepo.findOne(senderName);
         User receiver = userRepo.findOne(receiverName);
         Message message = new Message(sender, receiver, content);
         messageRepo.save(message);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         result.accumulate("time", sdf.format(message.getTime()));
         return result;
     }

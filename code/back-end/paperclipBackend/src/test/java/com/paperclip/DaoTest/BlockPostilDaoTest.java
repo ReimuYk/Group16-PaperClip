@@ -21,6 +21,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.List;
 
@@ -88,4 +91,11 @@ public class BlockPostilDaoTest {
         System.out.println(num);
     }
 
+    @Test
+    public void testEncoder() throws UnsupportedEncodingException {
+        String a = URLEncoder.encode("中文测试", "UTF-8");//编码
+        System.out.println(a);
+        System.out.println(URLDecoder.decode(a,"UTF-8"));//还原
+        System.out.println(URLDecoder.decode("English txt", "UTF-8"));
+    }
 }

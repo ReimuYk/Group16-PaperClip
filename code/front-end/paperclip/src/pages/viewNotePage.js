@@ -316,7 +316,11 @@ class ViewNote extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
+<<<<<<< HEAD
                 let result = eval('('+responseJson+')');
+=======
+                let result = eval('(' + responseJson + ')');
+>>>>>>> 29465973cb685b82efb0e5d2beccd2aa42ff5738
                 if(result == "fail"){
                     alert("关注失败，请重试");
                     return;
@@ -418,7 +422,7 @@ class ViewNote extends Component{
                         actions={[<p>{item.date}</p>]}
                     >
                         <List.Item.Meta
-                            title={<a>{item.username}</a>}
+                            title={<Link to={"/viewpage?username=" + item.username}>{item.username}</Link>}
                             description={item.content}
                         />
                     </List.Item>

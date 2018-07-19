@@ -6,6 +6,8 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+
 /*
  * user login, register, findback password
  *
@@ -67,7 +69,7 @@ public class UserController {
     @RequestMapping(value = "/service/sendMessage",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject sendMessage(@RequestBody JSONObject message){
+    JSONObject sendMessage(@RequestBody JSONObject message) throws UnsupportedEncodingException {
         return userService.sendMessage(message);
     }
 }

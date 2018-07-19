@@ -7,13 +7,22 @@ import { IPaddress } from '../App'
 var username = '';
 const { TextArea } = Input;
 
+var sortData = function(x,y){
+    if(x.time < y.time){
+        return 1;
+    }
+    else if(x.time > y.time){
+        return -1;
+    }
+    else return 0;
+}
 class Message extends Component{
     state = {
         data: [],
         message: [],
         modalShow: false,
         messageContent: '',
-        receiverName:''
+        receiverName:'',
     }
     componentWillMount = () => {
         /* get info from server */
@@ -31,7 +40,6 @@ class Message extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                console.log(responseJson);
                 let data = eval(responseJson);
                 that.setState({
                     data: data
@@ -40,7 +48,7 @@ class Message extends Component{
             console.log("Oops, error");
         })
     }
-    showMessage = (record, item) => {
+    showMessage = (record, item, e) => {
         let that = this;
         /* get username */
         /* get data according to username */
@@ -55,13 +63,14 @@ class Message extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                console.log(responseJson);
                 let data = eval(responseJson);
                 that.setState({
                     message: data,
                     modalShow: true,
-                    receiverName: item.another
+                    receiverName: item.another,
                 })
+                var messageDOM = document.getElementById('message');
+                messageDOM.scrollTop = messageDOM.scrollHeight;
             }).catch(function(e){
             console.log("Oops, error");
         })
@@ -76,9 +85,19 @@ class Message extends Component{
         this.setState({ messageContent: event.target.value });
         /* send to server, server => that user */
     }
+    calculateIdx (username){
+        for(var i=0;i<this.state.data.length; ++i){
+            if(this.state.data[i].another == username){
+                return i;
+            }
+        }
+        return -1;
+    }
     commitMessage = () => {
         let that  = this;
         var tmp = this.state.message;
+        let data = this.state.data;
+        let index = this.calculateIdx(this.state.receiverName);
         let jsonbody = {};
         jsonbody.senderName = username;
         jsonbody.receiverName = that.state.receiverName;
@@ -91,14 +110,21 @@ class Message extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                console.log(responseJson);
-                let data = eval('(' + responseJson + ')');
-                if(data.result == "success"){
-                    tmp.push({sender:username, content:that.state.messageContent, time:data.time});
+                let result = eval('(' + responseJson + ')');
+                if(result.result != "fail"){
+                    tmp.push({sender:username, content:that.state.messageContent, time:result.time});
+                    if(index > -1){
+                        data[index].content = that.state.messageContent;
+                        data[index].time = result.time;
+                        data.sort(sortData);
+                    }
                     that.setState({
                         message:tmp,
-                        messageContent: ''
+                        messageContent: '',
+                        data: data
                     })
+                    var messageDOM = document.getElementById('message');
+                    messageDOM.scrollTop = messageDOM.scrollHeight;
                 }
             }).catch(function(e){
             console.log("Oops, error");
@@ -118,7 +144,7 @@ class Message extends Component{
                     renderItem={item => (
                         <List.Item  actions={[<p>{item.time}<a style={{marginLeft:'20px'}} onClick={() => this.showMessage(this, item)}> 查看对话 </a></p>]}>
                         <List.Item.Meta
-                        title={<a>{item.another}</a>}
+                        title={<a onClick = {() => this.showMessage(this,item)}>{item.another}</a>}
                         description={item.content}
                         />
                     </List.Item>
@@ -128,13 +154,16 @@ class Message extends Component{
                 <Modal
                     visible={this.state.modalShow}
                     onCancel={this.handleCancel}
-                    title={this.state.username}
+                    onOK={this.commitMessage}
+                    title={<p>和 <a href={"/viewpage?username=" + this.state.receiverName}>{this.state.receiverName}</a> 的对话</p>}
                     footer={[
                         <Button key="back" onClick={this.handleCancel}>关闭</Button>,
+                        <Button type="primary" onClick={this.commitMessage}>发送</Button>
                     ]}
                 >
-                    <div style={{paddingTop:'30px'}}>
+                    <div>
                         <List
+                            id = 'message'
                             style={{textAlign:'left', height:'300px', overflowY:'scroll'}}
                             className="messageContent"
                             itemLayout="horizontal"
@@ -144,7 +173,7 @@ class Message extends Component{
                                     actions={[<p>{item.time}</p>]}
                                 >
                                     <List.Item.Meta
-                                        title={item.sender}
+                                        title={<a href={'/viewpage?username=' + item.sender}>{item.sender}</a>}
                                         description={item.content}
                                     />
                                 </List.Item>
@@ -152,7 +181,6 @@ class Message extends Component{
                         />
                     </div>
                     <TextArea rows={2} value={this.state.messageContent} onChange={this.handleMessageChange} placeholder='发送私信' />
-                    <Button type="primary" onClick={this.commitMessage}>发送</Button>
                 </Modal>
             </div>
         )
