@@ -155,10 +155,11 @@ public class UserServiceImpl implements UserService {
             JSONObject message = new JSONObject();
             message.accumulate("sender", m.getSender().getUsername());
             message.accumulate("content",m.getContent());
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             message.accumulate("time",sdf.format(m.getTime()));
             messages.add(message);
         }
+        System.out.println("messages: "+messages);
         return messages;
     }
 
@@ -198,7 +199,7 @@ public class UserServiceImpl implements UserService {
                 message.accumulate("another", m.getSender().getUsername());
             }
             message.accumulate("content",m.getContent());
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             message.accumulate("time",sdf.format(m.getTime()));
             messageArray.add(message);
         }
@@ -228,7 +229,7 @@ public class UserServiceImpl implements UserService {
             }
             message.accumulate("sender",m.getSender().getUsername());
             message.accumulate("content",m.getContent());
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             message.accumulate("time",sdf.format(m.getTime()));
             conversation.add(message);
         }
@@ -246,7 +247,7 @@ public class UserServiceImpl implements UserService {
         User receiver = userRepo.findOne(receiverName);
         Message message = new Message(sender, receiver, content);
         messageRepo.save(message);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         result.accumulate("time", sdf.format(message.getTime()));
         return result;
     }

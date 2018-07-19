@@ -8,13 +8,13 @@ public interface UserNoteService {
     JSONObject addNote(JSONObject data);
 
     // UserNotePage.js
-    public JSONArray getUserNote(JSONObject data);
-    public JSONObject deleteUserNote(JSONObject data);
+    JSONArray getUserNote(JSONObject data);
+    JSONObject deleteUserNote(JSONObject data);
 
 
     // UserModifyNotePage.js
-    public JSONObject getNoteDetail(JSONObject data);
-    public JSONObject saveNote(JSONObject data);
+    JSONObject getNoteDetail(JSONObject data);
+    JSONObject saveNote(JSONObject data);
 
 
 
