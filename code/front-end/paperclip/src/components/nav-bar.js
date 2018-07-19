@@ -11,7 +11,9 @@ import {Link} from 'react-router-dom';
 
 var username = '';
 var information = {
-    unreadMessage:[]
+    unreadMessage:[],
+    followMessage:[],
+    inviteMessage:[]
 }
 
 const Search = Input.Search;
@@ -39,7 +41,6 @@ class NavBar extends Component{
         /* get data according to username */
         let jsonbody = {};
         jsonbody.username = username;
-        console.log(jsonbody);
         let url = IPaddress + 'service/user/unreadMessage';
         let options={};
         options.method='POST';
@@ -57,28 +58,122 @@ class NavBar extends Component{
             console.log("Oops, error");
         })
     }
+
+    followMessage = () =>{
+        let that = this;
+        /* get username */
+        username = sessionStorage.getItem('username');
+        /* get data according to username */
+        let jsonbody = {};
+        jsonbody.username = username;
+        let url = IPaddress + 'service/recentFans';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let data = eval(responseJson);
+                information.followMessage = data;
+                that.setState({
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
+    }
+
+    inviteMessage = () =>{
+        let that = this;
+        /* get username */
+        username = sessionStorage.getItem('username');
+        /* get data according to username */
+        let jsonbody = {};
+        jsonbody.username = username;
+        jsonbody.type = "small";
+        let url = IPaddress + 'service/getInvitations';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let data = eval(responseJson);
+                information.inviteMessage = data;
+                that.setState({
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
+    }
+    acceptInvitation = (record, item) =>{
+        let that = this;
+        /* get data according to username */
+        let jsonbody = {};
+        jsonbody.inviteID = item.inviteID;
+        jsonbody.reply = true;
+        let url = IPaddress + 'service/replyInvitation';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let data = eval('(' + responseJson + ')');
+                if(data.result == "fail"){
+                    alert('操作失败，请重试');
+                }
+                that.setState({
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
+    }
+
+    refuseInvitation = (record, item) =>{
+        let that = this;
+        /* get data according to username */
+        let jsonbody = {};
+        jsonbody.inviteID = item.inviteID;
+        jsonbody.reply = false;
+        let url = IPaddress + 'service/replyInvitation';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let data = eval('(' + responseJson + ')');
+                if(data.result == "fail"){
+                    alert('操作失败，请重试');
+                }
+                that.setState({
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
+    }
+
     renderInfo(){
         const data1=[
             "一个桃子",
             "两只羊"
         ]
-        const data2 = [
-            {username:"大哥",desc:"大嘎达个"},
-            {username:"大嫂",desc:"大大的"}
-        ]
         return(
         <Tabs defaultActiveKey="1">
-            <TabPane tab={<Icon type="smile-o" />} key="1">
+            <TabPane onClick={this.followMessage} tab={<Icon type="smile-o" />} key="1">
             <List
                 size="small"
                 header={<div>这些人最近关注了你</div>}
-                footer={<div>Footer</div>}
-                dataSource={data2}
+                footer={<Link to="/user/userfans"><Button type="primary">查看全部粉丝</Button></Link>}
+                dataSource={information.followMessage}
                 renderItem={item => (<List.Item>
                     <List.Item.Meta
-                    avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                    title={<a href="#">{item.username}</a>}
-                    description={item.desc}
+                    avatar={<Avatar src={item.userheader}/>}
+                    title={<a href={"/viewpage?username=" + item.username}>{item.username}</a>}
                     />
                   </List.Item>)}
             />
@@ -91,6 +186,23 @@ class NavBar extends Component{
                 dataSource={data1}
                 renderItem={item => (<List.Item>{item}</List.Item>)}
             />
+            </TabPane>
+            <TabPane onClick={this.inviteMessage} tab={<Icon type="usergroup-add" />} key="3">
+                <List
+                    size="small"
+                    header={<div>最近的邀请请求</div>}
+                    footer={<Link to="/user/invitations"><Button type="primary">查看全部邀请</Button></Link>}
+                    dataSource={information.invite}
+                    renderItem={item => (
+                        <List.Item actions={[<p><a onClick={() => this.acceptInvitation(this, item)}>接受</a><a onClick={() => this.refuseInvitation(this, item)}>拒绝</a></p>]}>
+                            <List.Item.Meta
+                                title={<Link to={"/viewpage?username=" + item.sender}>{item.sender}</Link>}
+                                description={<p>邀请您协作文档：{item.title} </p>}
+                            >
+                                </List.Item.Meta>
+                        </List.Item>
+                    )}
+                />
             </TabPane>
         </Tabs>
       );

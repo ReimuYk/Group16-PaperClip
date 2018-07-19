@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import '../css/LoginPage.css'
 import { Link, Redirect } from 'react-router-dom';
 import { IPaddress } from '../App'
-export var log = false;
-export var username = 'username';
-export var password = '0';
 
 class Login extends Component {
     constructor(props){
@@ -12,9 +9,8 @@ class Login extends Component {
         this.login = this.login.bind(this);
     }
     login(){
-        console.log('log in');
-        username = document.getElementById("username").value;
-        password = document.getElementById("password").value;
+        let username = document.getElementById("username").value;
+        let password = document.getElementById("password").value;
         let that  = this;
         let jsonbody = {};
         jsonbody.password = password;
@@ -35,7 +31,7 @@ class Login extends Component {
                 else{
                     username = result.username;
                     sessionStorage.setItem('username', username);
-                    //window.location.href='/user'
+                    window.location.href='/user';
                     that.setState({});
                 }
             }).catch(function(e){
@@ -52,7 +48,7 @@ class Login extends Component {
                     <div className="Card SignContainer-content">
                         <div className="SignContainer-inner">
                             <div className="Login-content">
-                                <form novalidate className="SignFlow">
+                                <div novalidate className="SignFlow">
                                     <div className="SignFlow-account">
                                         <div className="SignFlowInput SignFlow-accountInputContainer">
                                             <div className="SignFlow-accountInput Input-wrapper">
@@ -71,7 +67,7 @@ class Login extends Component {
                                         <button type="button" className="Button Login-cannotLogin Button--plain"><Link to="/findback">忘记密码？</Link></button>
                                     </div>
                                     <button type="submit" onClick={this.login} className="Button SignFlow-submitButton Button--primary Button--blue">登录</button>
-                                </form>
+                                </div>
                             </div>
                             <div class="SignContainer-switch">没有帐号？
                                 <span><Link to="/register">注册</Link></span></div>
