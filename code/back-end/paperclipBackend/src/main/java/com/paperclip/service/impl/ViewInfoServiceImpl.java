@@ -113,7 +113,7 @@ public class ViewInfoServiceImpl implements ViewInfoService {
         user.accumulate("username", clientname);
         user.accumulate("fensno", client.getFollower());
         user.accumulate("followno", client.getFollowing());
-        user.accumulate("userDescriptioin", client.getDescription());
+        user.accumulate("userDescription", client.getDescription());
         return user;
     }
 
