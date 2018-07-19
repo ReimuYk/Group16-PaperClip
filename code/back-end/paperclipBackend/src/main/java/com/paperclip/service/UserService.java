@@ -3,6 +3,8 @@ package com.paperclip.service;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+
 public interface UserService {
 
 
@@ -20,6 +22,6 @@ public interface UserService {
     JSONArray getUnreadMessage(JSONObject data);
     JSONArray getBriefMessageList(JSONObject data);
     JSONArray getConversation(JSONObject data);
-    JSONObject sendMessage(JSONObject data);
+    JSONObject sendMessage(JSONObject data) throws UnsupportedEncodingException;
 
 }
