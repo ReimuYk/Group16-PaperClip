@@ -103,13 +103,14 @@ public class ImgServiceImpl implements ImgService {
             data = new byte[in.available()];
             in.read(data);
             in.close();
+            //对字节数组Base64编码
+            BASE64Encoder encoder = new BASE64Encoder();
+            return "data:image/jpeg;base64,"+encoder.encode(data);
         }
         catch (IOException e)
         {
             e.printStackTrace();
+            return "";
         }
-        //对字节数组Base64编码
-        BASE64Encoder encoder = new BASE64Encoder();
-        return "data:image/jpeg;base64,"+encoder.encode(data);
     }
 }

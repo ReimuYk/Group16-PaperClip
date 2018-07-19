@@ -213,18 +213,17 @@ public class UserStarServiceImpl implements UserStarService {
         return users;
     }
 
-    public JSONArray getRecentlyFollow(JSONObject data){
+    public JSONArray getRecentFans(JSONObject data){
         JSONArray followArray = new JSONArray();
         String username = data.getString("username");
         User user = userRepo.findOne(username);
-        List<Follow> followList = followRepo.findByFolloweeOrderById(user);
+        List<Follow> followList = followRepo.findByFolloweeOrderByIdDesc(user);
         int count=0;
         for(Follow follow : followList){
             count++;
-            if(count==5)
+            if(count==4)
                 break;
             JSONObject followJson = new JSONObject();
-            followJson.accumulate("followee", follow.getFollowee().getUsername());
             followJson.accumulate("follower", follow.getFollower().getUsername());
             followArray.add(followJson);
         }
