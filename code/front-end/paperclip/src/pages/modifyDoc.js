@@ -110,8 +110,26 @@ class Header extends React.Component {
 
     showModal = () => {
         this.setState({
-            visible: true,
+            visible: true
         });
+        let jsonbody = {};
+        jsonbody.docID = information.docID;
+        var url = IPaddress + 'service/docContributors';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let data = eval(responseJson);
+                information.contributors = data;
+                this.setState({
+                    visible: true
+                });
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
     }
 
     handleOK = () => {
@@ -126,8 +144,31 @@ class Header extends React.Component {
         });
     }
 
-    addContributor(){
-        console.log()
+    addContributor = () =>{
+        var searchDOM = document.getElementById('search');
+        let clientname = searchDOM.value;
+        let jsonbody = {};
+        jsonbody.docID = information.docID;
+        jsonbody.clientname = clientname;
+        jsonbody.hostname = username;
+        var url = IPaddress + 'service/addDocContributer';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let data = eval('(' + responseJson + ')');
+                if(data.result == "fail"){
+                    alert('不存在此用户');
+                }
+                this.setState({
+                    visible: true
+                });
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
         alert("邀请成功！");
     }
 
@@ -172,6 +213,7 @@ class Header extends React.Component {
                 >
                     <Search
                         placeholder="请输入用户名"
+                        id = 'search'
                         onSearch={this.addContributor}
                         style={{ width: "100%" }}
                         enterButton={<Icon type="plus-circle-o" />}
