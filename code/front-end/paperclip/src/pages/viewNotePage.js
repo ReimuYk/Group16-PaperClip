@@ -359,8 +359,13 @@ class ViewNote extends Component{
 
     shareLink = () => {
         var content = window.location.href;
-        window.clipboardData.setData("Text",content);
-        alert(content + "已经成功复制到剪贴板");
+        var oInput = document.createElement('input');
+        oInput.value = content;
+        document.body.appendChild(oInput);
+        oInput.select(); // 选择对象
+        document.execCommand("Copy"); // 执行浏览器复制命令
+        document.body.removeChild (oInput);
+        alert('复制成功');
     }
 
     renderLikeButton(){
