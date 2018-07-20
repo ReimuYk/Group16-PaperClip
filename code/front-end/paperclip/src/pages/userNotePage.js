@@ -25,6 +25,7 @@ class UserNote extends Component{
     state = {
         data: [],
         columns: [{
+            align:'center',
             title: '笔记名称',
             dataIndex: 'title',
             key: 'title',
@@ -32,10 +33,12 @@ class UserNote extends Component{
                 <a href={'/viewnote?noteID=' + record.ID}>{text}</a>
             )
         },  {
+            align:'center',
             title: '最近修改日期',
             dataIndex:'date',
             key:'date'
         }, {
+            align:'center',
             title:'操作',
             key:'action',
             render: (text, record) => (
