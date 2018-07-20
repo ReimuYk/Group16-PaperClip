@@ -6,6 +6,8 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+
 /* get, modify user stars
  * include:
  *      get star info: paper, doc, note, user
@@ -52,7 +54,7 @@ public class UserStarController {
     @RequestMapping(value = "/service/starNote",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONArray getStarNote(@RequestBody JSONObject data){
+    JSONArray getStarNote(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return userStarService.getStarNote(data);
     }
 
@@ -71,7 +73,7 @@ public class UserStarController {
     @RequestMapping(value = "/service/starPaper",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONArray getStarPaper(@RequestBody JSONObject data){
+    JSONArray getStarPaper(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return userStarService.getStarPaper(data);
     }
 
@@ -91,7 +93,7 @@ public class UserStarController {
     @RequestMapping(value = "/service/starUser",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONArray getStarUser(@RequestBody JSONObject data){
+    JSONArray getStarUser(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return userStarService.getStarUser(data);
     }
 
@@ -100,14 +102,14 @@ public class UserStarController {
     @RequestMapping(value = "/service/quitStar/user",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject quitStarUser(@RequestBody JSONObject data){
+    JSONObject quitStarUser(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return userStarService.quitStarUser(data);
     }
 
     @RequestMapping(value="/service/follow", method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject addStarUser(@RequestBody JSONObject data){
+    JSONObject addStarUser(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return userStarService.starUser(data);
     }
 }

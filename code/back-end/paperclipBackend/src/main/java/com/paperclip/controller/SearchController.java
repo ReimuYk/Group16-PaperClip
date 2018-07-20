@@ -6,6 +6,8 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+
 /*
  * get info for view: paper, doc, note, user( host want to get client's info )
  * include:
@@ -26,7 +28,7 @@ public class SearchController {
     @RequestMapping(value = "/service/search",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONArray search(@RequestBody JSONObject data){
+    JSONArray search(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return searchService.searchPaper(data);
     }
 }
