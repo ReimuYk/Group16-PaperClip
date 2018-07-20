@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { List, Avatar, Anchor, Menu, Popconfirm, Table, Divider, message } from 'antd';
-import { Redirect } from 'react-router-dom';
+import { Redirect,Link } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import UserFloatMenu from '../components/userFloatMenu';
 import { IPaddress } from '../App'
@@ -10,6 +10,7 @@ class StarNote extends Component{
     state = {
         data: [],
         columns: [{
+            align:'center',
             title: '笔记名称',
             dataIndex: 'title',
             key: 'title',
@@ -17,6 +18,7 @@ class StarNote extends Component{
                 <a href={"/user/viewNote?noteID=" + record.ID}>{text}</a>
             )
         }, {
+            align:'center',
             title: '作者',
             dataIndex: 'author',
             key: 'author',
@@ -24,18 +26,25 @@ class StarNote extends Component{
                 <a href={"/viewpage?username=" + record.author}>{text}</a>
             )
         },  {
+            align:'center',
             title: '对应论文',
-            dataIndex:'paperTitle',
-            key: 'paperTitle'
+            dataIndex:'paperTitle1',
+            key: 'paperTitle1',
+            render: (text, record) => (
+                <a href={"/paper?paperID=" + record.paperID}>{text}</a>
+            )
         },  {
+            align:'center',
             title: '收藏量',
             dataIndex:'starno',
             key:'starno'
         }, {
+            align:'center',
             title: '最近修改日期',
             dataIndex:'date',
             key:'date'
         }, {
+            align:'center',
             title:'操作',
             key:'action',
             render: (text, record) => (
@@ -60,6 +69,14 @@ class StarNote extends Component{
             .then(response=>response.text())
             .then(responseJson=>{
                 let data = eval(responseJson);
+                for(var i=0;i<data.length;++i){
+                    if(data[i].paperTitle.length > 10){
+                        data[i].paperTitle1 = data[i].paperTitle.substring(0,7) + '...';
+                    }
+                    else{
+                        data[i].paperTitle1 = data[i].paperTitle;
+                    }
+                }
                 data.sort(that.sortArray);
                 that.setState({
                     data:data
@@ -123,7 +140,9 @@ class StarNote extends Component{
             <NavBar />
             <UserFloatMenu />
             <div style={{width:'60%',marginLeft:'200px', paddingTop:'60px', float:'left'}}>
-                <Table columns={this.state.columns} dataSource={this.state.data} />
+                <Table
+                    expandedRowRender={record => <p style={{ margin: 0 }}>论文名称：<Link to={'/paper?paperID=' + record.paperID}>{record.paperTitle}</Link></p>}
+                    columns={this.state.columns} dataSource={this.state.data} />
             </div>
             </div>
         )

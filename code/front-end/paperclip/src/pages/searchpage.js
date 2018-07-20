@@ -97,6 +97,7 @@ class Search extends Component{
         jsonbody.searchText = searchContent;
         let url = IPaddress + 'service/search';
         let options={};
+        console.log(jsonbody);
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
         options.body = JSON.stringify(jsonbody);

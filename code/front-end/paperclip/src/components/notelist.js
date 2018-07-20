@@ -87,11 +87,11 @@ class NoteList extends Component{
         return(
             <List
                 style={{textAlign:"left"}}
-                header={<div><Icon type="bars" />相关笔记</div>}
+                header={<div><Icon type="bars" />{this.state.type=="note"?"相关笔记":"版本列表"}</div>}
                 bordered={false}
                 dataSource={this.state.data}
                 renderItem={item => (
-                    <Link to={this.state.type="note"?'viewNote?noteID='+item.id:'paper?paperID='+item.id}><List.Item>                       
+                    <Link to={this.state.type=="note"?'viewNote?noteID='+item.id:'paper?paperID='+item.id}><List.Item>                       
                         <List.Item.Meta          
                         title={item.title}
                         description={<div dangerouslySetInnerHTML={{ __html: item.intro}}></div>}
