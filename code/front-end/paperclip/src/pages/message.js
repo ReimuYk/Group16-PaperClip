@@ -48,7 +48,7 @@ class Message extends Component{
             console.log("Oops, error");
         })
     }
-    showMessage = (record, item, e) => {
+    showMessage = (record, item) => {
         let that = this;
         /* get username */
         /* get data according to username */
@@ -112,14 +112,15 @@ class Message extends Component{
             .then(responseJson=>{
                 let result = eval('(' + responseJson + ')');
                 if(result.result != "fail"){
-                    tmp.push({sender:username, content:that.state.messageContent, time:result.time});
                     if(index > -1){
                         data[index].content = that.state.messageContent;
                         data[index].time = result.time;
                         data.sort(sortData);
                     }
+                    let obj = {};
+                    obj.another = jsonbody.receiverName;
+                    that.showMessage(null, obj);
                     that.setState({
-                        message:tmp,
                         messageContent: '',
                         data: data
                     })

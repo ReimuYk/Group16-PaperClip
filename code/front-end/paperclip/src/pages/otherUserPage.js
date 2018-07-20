@@ -85,6 +85,7 @@ class OtherUserPage extends Component{
                 information.avatar = data.userheader;
                 information.fansno = data.fensno;
                 information.userDescription = data.userDescription;
+                information.username = data.username;
                 this.setState({
                     ifFollow: data.isStar
                 })
