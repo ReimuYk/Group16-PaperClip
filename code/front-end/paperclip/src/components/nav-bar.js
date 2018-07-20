@@ -123,6 +123,7 @@ class NavBar extends Component{
             .then(response=>response.text())
             .then(responseJson=>{
                 let data = eval('(' + responseJson + ')');
+                console.log(data);
                 if(data.result == "fail"){
                     message.error('操作失败，请重试');
                 }

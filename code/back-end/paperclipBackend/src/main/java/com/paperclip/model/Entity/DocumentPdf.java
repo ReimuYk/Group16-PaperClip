@@ -24,6 +24,7 @@ public class DocumentPdf extends Paper{
         this.setStar(0);
         this.setPageNum(0);
         this.setKeyWords("");
+        this.setTag("");
     }
 
     public void setDate(Date date) {
@@ -104,4 +105,15 @@ public class DocumentPdf extends Paper{
     public void setStar(Integer star) {
         super.setStar(star);
     }
+
+    @Override
+    public String getTag() {
+        return super.getTag();
+    }
+
+    @Override
+    public void setTag(String tag) {
+        super.setTag(tag);
+    }
 }
+

@@ -216,9 +216,11 @@ public class UserServiceImpl implements UserService {
             JSONObject message = new JSONObject();
             if(m.getSender().getUsername().equals(username)){
                 message.accumulate("another",m.getReceiver().getUsername());
+                message.accumulate("avatar",service.getUserHeader(m.getReceiver()));
             }
             else {
                 message.accumulate("another", m.getSender().getUsername());
+                message.accumulate("avatar",service.getUserHeader(m.getSender()));
             }
             message.accumulate("content",URLDecoder.decode(m.getContent()));
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -250,6 +252,7 @@ public class UserServiceImpl implements UserService {
                 messageRepo.save(m);
             }
             message.accumulate("sender",m.getSender().getUsername());
+            message.accumulate("avatar",service.getUserHeader(m.getSender()));
             message.accumulate("content",URLDecoder.decode(m.getContent()));
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             message.accumulate("time",sdf.format(m.getTime()));
@@ -318,8 +321,9 @@ public class UserServiceImpl implements UserService {
         JSONObject result = new JSONObject();
 
         Long inviteID = data.getLong("inviteID");
-        int reply = data.getInt("reply");
+        Long reply = data.getLong("reply");
 
+        System.out.println("reply:"+reply);
         Invite i = inviteRepo.findOne(inviteID);
         if(i == null){
             result.accumulate("result","fail");

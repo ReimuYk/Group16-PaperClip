@@ -145,6 +145,7 @@ public class PaperServiceImpl implements PaperService {
                 bid.add(bp.getBlock().getId());
             }
             obj.accumulate("id",bid);
+            obj.accumulate("posID",up.getPostil().getId());
             obj.accumulate("content",up.getPostil().getContent());
             obj.accumulate("visible",false);
             marked.add(obj);

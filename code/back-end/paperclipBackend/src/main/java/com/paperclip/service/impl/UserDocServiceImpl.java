@@ -221,7 +221,7 @@ public class UserDocServiceImpl implements UserDocService {
         User host = userRepo.findOne(hostname);
         User client = userRepo.findOne(clientname);
         Document doc = docRepo.findOne(docID);
-        if(!doc.getUser().getUsername().equals(hostname) || client==null){
+        if(!doc.getUser().getUsername().equals(hostname) || (client == null)){
             result.accumulate("result", "fail");
         }else{
             /*Assist assist = new Assist(client, doc);
