@@ -142,7 +142,6 @@ class NavBar extends Component{
                 that.inviteMessage();
                 that.setState({
                 });
-                message.success('已接受邀请');
             }).catch(function(e){
             console.log("Oops, error");
         })
@@ -177,7 +176,6 @@ class NavBar extends Component{
                 that.inviteMessage();
                 that.setState({
                 });
-                message.success('已拒绝邀请');
             }).catch(function(e){
             console.log("Oops, error");
         })
