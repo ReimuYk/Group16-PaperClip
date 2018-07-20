@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.AccessType;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -48,9 +50,10 @@ public class UserNoteServiceImpl implements UserNoteService {
     private ImgServiceImpl service;
 
     // 传入：username，paperID 传出：noteID ---------------新建note
-    public JSONObject addNote(JSONObject data){
+    public JSONObject addNote(JSONObject data) throws UnsupportedEncodingException {
         JSONObject ret = new JSONObject();
         String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
         Long paperID = data.getLong("paperID");
 
         User user = userRepo.findOne(username);
@@ -66,9 +69,9 @@ public class UserNoteServiceImpl implements UserNoteService {
     }
 
     // get all the notes that this user has written
-    public JSONArray getUserNote(JSONObject data){
+    public JSONArray getUserNote(JSONObject data) throws UnsupportedEncodingException {
         String username = data.getString("username");
-
+        username = URLEncoder.encode(username, "UTF-8");
         User user = userRepo.findOne(username);
         List<Note> list = noteRepo.findByUser(user);
         Iterator<Note> it = list.iterator();
@@ -81,6 +84,8 @@ public class UserNoteServiceImpl implements UserNoteService {
             note.accumulate("keywords",n.getKeyWords());
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             note.accumulate("date",sdf.format(n.getDate()));
+            note.accumulate("paperID", n.getPaper().getId());
+            note.accumulate("paperTitle", n.getPaper().getTitle());
             notes.add(note);
         }
         return notes;
@@ -108,10 +113,10 @@ public class UserNoteServiceImpl implements UserNoteService {
     }
 
 
-    public JSONObject getNoteDetail(JSONObject data) {
+    public JSONObject getNoteDetail(JSONObject data) throws UnsupportedEncodingException {
         Long noteID = data.getLong("noteID");
         String username = data.getString("username");
-
+        username = URLEncoder.encode(username, "UTF-8");
         Note n = noteRepo.findOne(noteID);
         JSONObject note = new JSONObject();
         if((n == null) || (!n.getUser().getUsername().equals(username))){
@@ -124,11 +129,14 @@ public class UserNoteServiceImpl implements UserNoteService {
         return note;
     }
 
-    public JSONObject saveNote(JSONObject data) {
+    public JSONObject saveNote(JSONObject data) throws UnsupportedEncodingException {
         JSONObject result = new JSONObject();
         String title = data.getString("noteTitle");
         String content = data.getString("noteContent");
         String keywords = data.getString("keywords");
+        title = URLEncoder.encode(title, "UTF-8");
+        content = URLEncoder.encode(content, "UTF-8");
+        keywords = URLEncoder.encode(keywords, "UTF-8");
         Long noteID = data.getLong("noteID");
         System.out.println("data: "+data);
         Note note = noteRepo.findOne(noteID);
@@ -147,11 +155,11 @@ public class UserNoteServiceImpl implements UserNoteService {
     }
 
 
-    public JSONObject getViewNoteDetail(JSONObject data) {
+    public JSONObject getViewNoteDetail(JSONObject data) throws UnsupportedEncodingException {
         System.out.println("data: "+data);
         Long noteID = data.getLong("noteID");
         String username = data.getString("username");
-
+        username = URLEncoder.encode(username, "UTF-8");
         JSONObject note = new JSONObject();
         Note n = noteRepo.findOne(noteID);
         if(n == null){
@@ -222,11 +230,12 @@ public class UserNoteServiceImpl implements UserNoteService {
         return noteComment;
     }
 
-    public JSONObject addNoteComment(JSONObject data){
+    public JSONObject addNoteComment(JSONObject data) throws UnsupportedEncodingException {
         Long noteID = data.getLong("noteID");
         String username = data.getString("username");
         String content = data.getString("content");
-
+        username = URLEncoder.encode(username, "UTF-8");
+        content = URLEncoder.encode(content, "UTF-8");
         Note note = noteRepo.findOne(noteID);
         User user = userRepo.findOne(username);
         JSONObject result = new JSONObject();
@@ -268,13 +277,16 @@ public class UserNoteServiceImpl implements UserNoteService {
         JSONObject result = new JSONObject();
         result.accumulate("result","success");
         result.accumulate("likeNo",noteRepo.findOne(noteID).getAgreement());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        result.accumulate("date",sdf.format(noteRepo.findOne(noteID).getDate()));
         return result;
     }
 
     // 传入：username，noteID  ---------------收藏/取消收藏 note
-    public JSONObject starNote(JSONObject data){
+    public JSONObject starNote(JSONObject data) throws UnsupportedEncodingException {
         Long noteID = data.getLong("noteID");
         String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
         Note note = noteRepo.findOne(noteID);
         User user = userRepo.findOne(username);
         StarNote sn = starNoteRepo.findDistinctByUserAndNote(user,note);

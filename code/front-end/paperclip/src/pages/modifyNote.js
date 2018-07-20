@@ -251,7 +251,6 @@ class ModifyNote extends Component{
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
         options.body = JSON.stringify(jsonbody);
-        console.log('reach here');
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{

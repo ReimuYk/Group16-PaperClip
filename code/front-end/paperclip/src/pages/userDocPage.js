@@ -9,40 +9,34 @@ import { IPaddress } from '../App'
 var username = '';
 
 class UserDoc extends Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            data: [],
-            columns: [{
-                align:'center',
-                title: '文档名',
-                dataIndex: 'title',
-                key: 'title',
-                render: (text, record) => (
-                    <a href={"/user/docdetail?docID=" + record.ID}>{text}</a>
-                )
-            }, {
-                align:'center',
-                title: '上次修改日期',
-                dataIndex: 'date',
-                key: 'date',
-            },  {
-                align:'center',
-                title: <Button type="primary" onClick={this.newDoc}>新建文档</Button>,
-                key: 'action',
-                render: (text, record) => (
-                    <span>
+
+    state = {
+        data: [],
+        columns: [{
+            title: '文档名',
+            dataIndex: 'title',
+            key: 'title',
+            render: (text, record) => (
+                <a href={"/user/docdetail?docID=" + record.ID}>{text}</a>
+            )
+        }, {
+            title: '上次修改日期',
+            dataIndex: 'date',
+            key: 'date',
+        },  {
+            title: '操作',
+            key: 'action',
+            render: (text, record) => (
+                <span>
                     <a href={"/user/modifyDoc?docID=" + record.ID}>编辑文档</a>
                     <Divider type="vertical" />
                     <a onClick={() => this.deleteDoc(text, record)}>删除文档</a>
                     <Divider type="vertical" />
                     <a href={"/user/docdetail?docID=" + record.ID}>查看文档版本</a>
                 </span>
-                ),
-            }],
-        }
+            ),
+        }],
     }
-
     componentWillMount = () => {
         let that = this;
         /* get username */
@@ -155,13 +149,11 @@ class UserDoc extends Component{
             <div>
                 <NavBar />
             <UserFLoatMenu />
-            <div style={{width:'60%',marginLeft:'200px', float:'left', paddingTop:'60px'}}>
+            <div style={{width:'60%',marginLeft:'200px', float:'left'}}>
                 {/* <div className="button" style={{height:"50px"}}>
                     <Button style={{float:"right"}} type="primary" onClick={this.newDoc}>新建文档</Button>
                 </div> */}
-                <Table
-                    pagination={{defaultPageSize: 8}}
-                    style={{textAlign:'center'}} columns={this.state.columns} dataSource={this.state.data} />
+                <Table style={{textAlign:'center'}} columns={this.state.columns} dataSource={this.state.data} />
             </div>
         </div>
         )

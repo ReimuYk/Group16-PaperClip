@@ -14,10 +14,7 @@ class PDFView extends Component{
             isLoading:true,
             page:1,
             paperID:this.props.paperID,
-            username:sessionStorage.getItem('username'),
-            marked:[],
-            blocklist:[],
-            marked_note:[]
+            username:sessionStorage.getItem('username')
         }
         //console.log(this.props.paperID);
         this.getData(this.props.paperID,1)
@@ -51,10 +48,10 @@ class PDFView extends Component{
                 selectid:[1],
                 selectRender:null,
                 // marked:[
-                //     {id:[2],posID:1,content:'this is id 2 block',visible:false},
-                //     {id:[3],posID:1,content:'this is id 3 block',visible:false},
-                //     {id:[5],posID:1,content:'拥挤的两个批注',visible:false},
-                //     {id:[6],posID:1,content:'拥挤的第二个批注',visible:false}
+                //     {id:[2],content:'this is id 2 block',visible:false},
+                //     {id:[3],content:'this is id 3 block',visible:false},
+                //     {id:[5],content:'拥挤的两个批注',visible:false},
+                //     {id:[6],content:'拥挤的第二个批注',visible:false}
                 // ],
                 marked:data.marked,
                 marked_note:[
@@ -78,32 +75,6 @@ class PDFView extends Component{
         }).catch(function(e){
             console.log("Oops, error");
         })
-    }
-
-    componentDidMount() {
-        this.Event = emitter.addListener('addMark', (data) => {
-            let marked = this.state.marked;
-            marked.push(data);
-            this.setState({
-                marked:marked
-            },()=>{
-                this.allocComm();
-            })
-        });
-        this.Event1 = emitter.addListener('deleteMark', (posID) => {
-            let marked = this.state.marked;
-            for(var i=0;i<marked.length;i++){
-                if(marked[i].posID == posID){
-                    marked.splice(i,1);
-                }
-            }            
-            this.setState({
-                marked:marked
-            },()=>{
-                this.allocComm();
-            })
-        });
-        this.allocComm();
     }
     onDocumentComplete = (pages) => {
         this.setState({ page: 1, pages });
@@ -486,7 +457,6 @@ class PDFView extends Component{
         this.setState({noteRender:cr})
     }
     render(){
-        //this.allocComm()
         return(
             this.state.isLoading
             ? <div>is loading</div>

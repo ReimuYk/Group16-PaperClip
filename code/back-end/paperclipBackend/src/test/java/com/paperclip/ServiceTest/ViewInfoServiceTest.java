@@ -12,6 +12,8 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.UnsupportedEncodingException;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 @SpringBootTest
@@ -31,7 +33,7 @@ public class ViewInfoServiceTest {
     }
 
     @Test
-    public void testGetViewDocDetail(){
+    public void testGetViewDocDetail() throws UnsupportedEncodingException {
         JSONObject data = new JSONObject();
         data.accumulate("versionID",new Long(1));
         JSONObject rr = service.getViewDocDetail(data);
