@@ -52,6 +52,12 @@ class NavBar extends Component{
             .then(responseJson=>{
                 console.log(responseJson);
                 let data = eval(responseJson);
+                for(var i = 0; i<data.length; i++){
+                    if(data[i].content.length > 15){
+                        data[i].content = data[i].content.substring(0,15);
+                        data[i].content += '...';
+                    }
+                }
                 information.unreadMessage = data;
                 that.setState({
                 })
