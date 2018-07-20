@@ -19,7 +19,7 @@ class UserDocDetail extends Component{
             dataIndex: 'title',
             key: 'title',
             render: (text, record) => (
-                <a href={"/paper?paperID=" + record.docPdfId}>{text}</a>
+                <a href={"/paper?paperID=" + record.docPdfID}>{text}</a>
             )
         }, {
             align:'center',
@@ -36,7 +36,7 @@ class UserDocDetail extends Component{
             title:'操作',
             key:'action',
             render: (text, record) => (
-                <a href={"/paper?paperID=" + record.docPdfId}>查看内容</a>
+                <a href={"/paper?paperID=" + record.docPdfID}>查看内容</a>
             )
         }],
         columns2: [{
@@ -45,7 +45,7 @@ class UserDocDetail extends Component{
             dataIndex: 'title',
             key: 'title',
             render: (text, record) => (
-                <a href={"/paper?paperID=" + record.docPdfId}>{text}</a>
+                <a href={"/paper?paperID=" + record.docPdfID}>{text}</a>
             )
         }, {
             align:'center',
@@ -63,7 +63,7 @@ class UserDocDetail extends Component{
             key:'action',
             render: (text, record) => (
             <span>
-                <a href={"/paper?paperID=" + record.docPdfId}>查看内容</a>
+                <a href={"/paper?paperID=" + record.docPdfID}>查看内容</a>
                 <Divider type="vertical" />
                 <a onClick={() => this.deleteDoc(record)}>删除该版本</a>
             </span>
