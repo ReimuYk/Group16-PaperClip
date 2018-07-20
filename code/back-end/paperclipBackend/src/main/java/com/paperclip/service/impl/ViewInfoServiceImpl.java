@@ -10,6 +10,7 @@ import com.paperclip.service.ImgService;
 import com.paperclip.service.ViewInfoService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.assertj.core.error.ShouldBeAfterYear;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,8 @@ public class ViewInfoServiceImpl implements ViewInfoService {
 
     // get this user's fans
     public JSONArray getUserFans(JSONObject data) throws UnsupportedEncodingException {
+        System.out.println("\n\n==============\nget json:"+data);
+
         JSONArray fans = new JSONArray();
 
         String username = data.getString("username");
@@ -52,6 +55,7 @@ public class ViewInfoServiceImpl implements ViewInfoService {
             fan.accumulate("userheader", imgService.getUserHeader(follower));
             fans.add(fan);
         }
+        System.out.println("\n\n===================\nreturn: "+fans);
         return fans;
     }
 
@@ -103,24 +107,35 @@ public class ViewInfoServiceImpl implements ViewInfoService {
     }
 
     public JSONObject getClientInfo(JSONObject data) throws UnsupportedEncodingException {
+        System.out.println("==========================");
+        System.out.println("get json: "+data);
+
         JSONObject user = new JSONObject();
         String hostname = data.getString("hostname");
         String clientname = data.getString("clientname");
-        hostname = URLEncoder.encode(hostname, "UTF-8");
-        clientname = URLEncoder.encode(clientname, "UTF-8");
+
+//        hostname = URLEncoder.encode(hostname, "UTF-8");
+//        clientname = URLEncoder.encode(clientname, "UTF-8");
+
         User host = userRepo.findOne(hostname);
         User client = userRepo.findOne(clientname);
+
+        System.out.println("client: "+client);
+        System.out.println("client name, after decode:"+URLDecoder.decode(clientname, "UTF-8"));
+
         Follow follow = followRepo.findDistinctByFolloweeAndFollower(client, host);
+
         if(follow == null){
             user.accumulate("isStar", 0);
         }else{
             user.accumulate("isStar", 1);
         }
         user.accumulate("userheader", imgService.getUserHeader(client));
-        user.accumulate("username", URLDecoder.decode(clientname, "UTF-8"));
+        user.accumulate("username", clientname);
         user.accumulate("fensno", client.getFollower());
         user.accumulate("followno", client.getFollowing());
         user.accumulate("userDescription", URLDecoder.decode(client.getDescription(), "UTF-8"));
+        System.out.println("get client info: "+user.toString());
         return user;
     }
 
