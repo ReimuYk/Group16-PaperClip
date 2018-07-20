@@ -75,6 +75,26 @@ public class ViewInfoServiceImpl implements ViewInfoService {
         return docJson;
     }
 
+    public JSONArray getRecentFans(JSONObject data) throws UnsupportedEncodingException {
+        System.out.println("\n\n====getRecentFans==== \n get data: "+data);
+        String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
+        User user = userRepo.findOne(username);
+        List<Follow> followList = followRepo.findByFolloweeOrderByIdDesc(user);
+        JSONArray fansArray = new JSONArray();
+        int count=0;
+        for(Follow follow: followList){
+            count++;
+            if(count == 4)
+                break;
+            JSONObject followJson = new JSONObject();
+            followJson.accumulate("username", URLDecoder.decode(follow.getFollower().getUsername(), "UTF-8"));
+            fansArray.add(followJson);
+        }
+        System.out.println("return: "+fansArray);
+        return fansArray;
+    }
+
     public JSONArray getHomeInfo(JSONObject data) {
         JSONArray homeinfo = new JSONArray();
         JSONObject followMement = new JSONObject();
@@ -120,8 +140,10 @@ public class ViewInfoServiceImpl implements ViewInfoService {
         User host = userRepo.findOne(hostname);
         User client = userRepo.findOne(clientname);
 
+        clientname = URLDecoder.decode(clientname, "UTF-8");
+
         System.out.println("client: "+client);
-        System.out.println("client name, after decode:"+URLDecoder.decode(clientname, "UTF-8"));
+        System.out.println("client name, after decode:"+clientname);
 
         Follow follow = followRepo.findDistinctByFolloweeAndFollower(client, host);
 
@@ -136,6 +158,7 @@ public class ViewInfoServiceImpl implements ViewInfoService {
         user.accumulate("followno", client.getFollowing());
         user.accumulate("userDescription", URLDecoder.decode(client.getDescription(), "UTF-8"));
         System.out.println("get client info: "+user.toString());
+        System.out.println("return: "+user);
         return user;
     }
 

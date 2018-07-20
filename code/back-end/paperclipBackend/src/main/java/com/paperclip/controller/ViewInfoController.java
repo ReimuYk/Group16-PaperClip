@@ -66,6 +66,12 @@ public class ViewInfoController {
         return viewInfoService.getUserFans(data);
     }
 
+    @RequestMapping(value = "/service/recentFans",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONArray getRecentFans(@RequestBody JSONObject data) throws UnsupportedEncodingException {
+        return viewInfoService.getRecentFans(data);
+    }
     /*********************************************** doc *************************************************/
     /******************
      * viewDocPage

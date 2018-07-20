@@ -22,4 +22,6 @@ public interface ViewInfoService {
 
     // viewDocPage.js
     public JSONObject getViewDocDetail(JSONObject data) throws UnsupportedEncodingException;
+
+    JSONArray getRecentFans(JSONObject data) throws UnsupportedEncodingException;
 }
