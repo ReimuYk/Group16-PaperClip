@@ -75,6 +75,7 @@ class NavBar extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
+                console.log(responseJson);
                 let data = eval(responseJson);
                 information.followMessage = data;
                 that.setState({
@@ -282,7 +283,7 @@ class NavBar extends Component{
                         <Col span={8} offset={1}>{search}</Col>
                         <Col span={1} offset={4}>
                             <Popover placement="bottom" title="我的消息" content={info} trigger="click">
-                                <Icon type="bell" style={{ fontSize: 19, color: '#08c' }}/>
+                                <Icon type="bell" onClick={this.followMessage} style={{ fontSize: 19, color: '#08c' }}/>
                             </Popover>
                         </Col>
                         <Col span={1}>
