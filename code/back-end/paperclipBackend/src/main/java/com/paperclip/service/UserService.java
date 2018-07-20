@@ -24,4 +24,8 @@ public interface UserService {
     JSONArray getConversation(JSONObject data);
     JSONObject sendMessage(JSONObject data) throws UnsupportedEncodingException;
 
+    //invitation
+    JSONArray getInvitations(JSONObject data);
+    JSONObject replyInvitation(JSONObject data);
+
 }

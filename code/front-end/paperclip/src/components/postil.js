@@ -122,6 +122,16 @@ class Postil extends Component{
         data[idx].marked = 1 - data[idx].marked
         this.setState({data:data})
         this.refreshStat(data[idx],[0,0])
+
+        if(data[idx].marked == 1){
+            var mark={};
+                mark.id=this.state.selectid;
+                mark.content=data[idx].postils.content;
+                mark.visible=false;
+                emitter.emit('addMark',mark);
+        }else{
+            emitter.emit('deleteMark',this.state.selectid);
+        }
     }
     getPostil = (item,idx)=>{
         return(
@@ -195,6 +205,11 @@ class Postil extends Component{
             old.push(newPos);
             that.setState({data:old});
             console.log(data)
+            var mark={};
+            mark.id=this.state.selectid;
+            mark.content=content;
+            mark.visible=false;
+            emitter.emit('addMark',mark);
         }).catch(function(e){
             console.log("Oops, error");
         })
