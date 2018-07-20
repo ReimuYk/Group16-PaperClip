@@ -120,8 +120,10 @@ public class ViewInfoServiceImpl implements ViewInfoService {
         User host = userRepo.findOne(hostname);
         User client = userRepo.findOne(clientname);
 
+        clientname = URLDecoder.decode(clientname, "UTF-8");
+
         System.out.println("client: "+client);
-        System.out.println("client name, after decode:"+URLDecoder.decode(clientname, "UTF-8"));
+        System.out.println("client name, after decode:"+clientname);
 
         Follow follow = followRepo.findDistinctByFolloweeAndFollower(client, host);
 
@@ -136,6 +138,7 @@ public class ViewInfoServiceImpl implements ViewInfoService {
         user.accumulate("followno", client.getFollowing());
         user.accumulate("userDescription", URLDecoder.decode(client.getDescription(), "UTF-8"));
         System.out.println("get client info: "+user.toString());
+        System.out.println("return: "+user);
         return user;
     }
 
