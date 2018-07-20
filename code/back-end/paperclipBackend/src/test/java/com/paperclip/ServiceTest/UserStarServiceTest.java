@@ -14,6 +14,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class UserStarServiceTest {
     }
 
     @Test
-    public void testGetStarNote() {
+    public void testGetStarNote() throws UnsupportedEncodingException {
         JSONObject data = new JSONObject();
         data.accumulate("username", "xiaobai");
         JSONArray aa = service.getStarNote(data);
@@ -69,7 +70,7 @@ public class UserStarServiceTest {
     }
 
     @Test
-    public void testGetStarPaper() {
+    public void testGetStarPaper() throws UnsupportedEncodingException {
         JSONObject data = new JSONObject();
         data.accumulate("username", "pear");
         JSONArray aa = service.getStarPaper(data);
@@ -87,7 +88,7 @@ public class UserStarServiceTest {
     }
 
     @Test
-    public void testStarUser(){
+    public void testStarUser() throws UnsupportedEncodingException {
         JSONObject data = new JSONObject();
         data.accumulate("hostname", "xiaobai");
         data.accumulate("clientname", "pear");
@@ -96,7 +97,7 @@ public class UserStarServiceTest {
     }
 
     @Test
-    public void testQuitStarUser(){
+    public void testQuitStarUser() throws UnsupportedEncodingException {
         JSONObject data = new JSONObject();
         data.accumulate("hostname", "tomato");
         data.accumulate("clientname", "pear");
@@ -111,7 +112,7 @@ public class UserStarServiceTest {
     }
 
     @Test
-    public void testGetStarUser() {
+    public void testGetStarUser() throws UnsupportedEncodingException {
         JSONObject data = new JSONObject();
         data.accumulate("username", "xiaobai");
         JSONArray aa = service.getStarUser(data);

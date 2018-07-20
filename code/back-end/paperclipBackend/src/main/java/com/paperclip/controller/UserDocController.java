@@ -23,7 +23,7 @@ public class UserDocController {
     @RequestMapping(value = "/service/userDoc",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONArray getUserDoc(@RequestBody JSONObject data){
+    JSONArray getUserDoc(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return userDocService.getUserDoc(data);
     }
 
@@ -31,7 +31,7 @@ public class UserDocController {
     @RequestMapping(value = "/service/delete/doc",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject deleteDoc( @RequestBody JSONObject data){
+    JSONObject deleteDoc( @RequestBody JSONObject data) throws UnsupportedEncodingException {
         return userDocService.deleteUserDoc(data);
     }
 
@@ -42,14 +42,14 @@ public class UserDocController {
     @RequestMapping(value = "/service/userDocDetail",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject userDocDetail(@RequestBody JSONObject data){
+    JSONObject userDocDetail(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return userDocService.getUserDocDetail(data);
     }
     // user want to delete particular versions of this doc
     @RequestMapping(value = "/service/delete/docVersion",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject deleteDocVersion( @RequestBody JSONObject data){
+    JSONObject deleteDocVersion( @RequestBody JSONObject data) throws UnsupportedEncodingException {
         return userDocService.deleteUserDocVersion(data);
     }
 
@@ -60,7 +60,7 @@ public class UserDocController {
     @RequestMapping(value = "/service/modify/docDetail",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject getDocDetail(@RequestBody JSONObject data){
+    JSONObject getDocDetail(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return userDocService.getDocDetail(data);
     }
 
@@ -76,7 +76,7 @@ public class UserDocController {
     @RequestMapping(value = "/service/addDocContributer",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject addDocContributer(@RequestBody JSONObject data){
+    JSONObject addDocContributer(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return userDocService.addDocContributer(data);
     }
 
@@ -84,7 +84,7 @@ public class UserDocController {
     @RequestMapping(value = "/service/contributeDoc",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONArray getContributeDoc(@RequestBody JSONObject data){
+    JSONArray getContributeDoc(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return userDocService.getContributeDoc(data);
     }
 

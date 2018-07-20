@@ -6,6 +6,8 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+
 /*
  * get user own (create): userPaper, userNote, userDoc, userInfo, userFans
  * include
@@ -41,7 +43,7 @@ public class UserNoteController {
     @RequestMapping(value = "/service/userNote",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONArray getUserNote(@RequestBody JSONObject data){
+    JSONArray getUserNote(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return userNoteService.getUserNote(data);
     }
 
@@ -60,14 +62,14 @@ public class UserNoteController {
     @RequestMapping(value = "/service/modify/noteDetail",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject getNoteDetail(@RequestBody JSONObject data){
+    JSONObject getNoteDetail(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return userNoteService.getNoteDetail(data);
     }
 
     @RequestMapping(value = "/service/save/note",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject saveNote(@RequestBody JSONObject data){
+    JSONObject saveNote(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return userNoteService.saveNote(data);
     }
 
@@ -78,7 +80,7 @@ public class UserNoteController {
     @RequestMapping(value = "/service/noteDetail",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject viewNoteDetail(@RequestBody JSONObject data){
+    JSONObject viewNoteDetail(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return userNoteService.getViewNoteDetail(data);
     }
 
@@ -92,7 +94,7 @@ public class UserNoteController {
     @RequestMapping(value = "/service/addNoteComment",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject addNoteComment(@RequestBody JSONObject data){
+    JSONObject addNoteComment(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return userNoteService.addNoteComment(data);
     }
 
@@ -106,14 +108,14 @@ public class UserNoteController {
     @RequestMapping(value = "/service/starTheNote",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject starNote(@RequestBody JSONObject data){
+    JSONObject starNote(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return userNoteService.starNote(data);
     }
 
     @RequestMapping(value = "/service/addNote",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject addNote(@RequestBody JSONObject data){
+    JSONObject addNote(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return userNoteService.addNote(data);
     }
 

@@ -15,7 +15,7 @@ class StarNote extends Component{
             dataIndex: 'title',
             key: 'title',
             render: (text, record) => (
-                <a href={"/user/viewNote?noteID=" + record.ID}>{text}</a>
+                <a href={"/viewNote?noteID=" + record.ID}>{text}</a>
             )
         }, {
             align:'center',

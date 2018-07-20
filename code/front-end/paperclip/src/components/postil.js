@@ -41,6 +41,7 @@ class Postil extends Component{
             this.setState({
                 selectid:data
             })
+            console.log("selectid1:"+data);
         });
     }
     componentWillUnmount() {
@@ -222,7 +223,7 @@ class Postil extends Component{
             return;
         }
         var idx = this.state.postilIdx;
-        if(!idx){
+        if(this.state.selectid == null){
             message.error("还未选中内容");
             return;
         }

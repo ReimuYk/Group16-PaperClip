@@ -21,6 +21,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -182,7 +183,7 @@ public class CreateData {
     }
 
     @Test
-    public void createFollowData(){
+    public void createFollowData() throws UnsupportedEncodingException {
         Iterable<User> uu = userRepo.findAll();
         Iterator<User> users = uu.iterator();
         for(User user1: uu){

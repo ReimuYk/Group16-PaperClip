@@ -41,21 +41,21 @@ public class UserController {
     @RequestMapping(value = "/service/login",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject userLogin(@RequestBody JSONObject username){
+    JSONObject userLogin(@RequestBody JSONObject username) throws UnsupportedEncodingException {
         return userService.userLogin(username);
     }
 
     @RequestMapping(value = "/service/user/messageList",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONArray messageList(@RequestBody JSONObject username){
+    JSONArray messageList(@RequestBody JSONObject username) throws UnsupportedEncodingException {
         return userService.getBriefMessageList(username);
     }
 
     @RequestMapping(value = "/service/user/messageDetail",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONArray messageDetail(@RequestBody JSONObject username){
+    JSONArray messageDetail(@RequestBody JSONObject username) throws UnsupportedEncodingException {
         return userService.getConversation(username);
     }
 

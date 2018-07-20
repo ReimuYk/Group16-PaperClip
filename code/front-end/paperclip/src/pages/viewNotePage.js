@@ -15,7 +15,8 @@ var information = {
     authorAvatar:'',
     title:'',
     content:'',
-    data:''
+    data:'',
+    paperID:0
 }
 class ViewNote extends Component{
     state = {
@@ -58,6 +59,7 @@ class ViewNote extends Component{
                 information.date = data.date;
                 information.authorAvatar = data.avatar;
                 information.authorDescription = data.description;
+                information.paperID = data.paperID;
                 that.setState({
                     ifLike: data.ifLike,
                     ifStar: data.ifStar,
@@ -371,13 +373,13 @@ class ViewNote extends Component{
         if(!this.state.ifLike)
         {
             return(
-                <a style={{width:"25%"}} class="navbar-brand" href="#" onClick={this.like}><Icon type="like-o" /> 点赞 ( {this.state.likeNo} ) </a>
+                <a style={{width:"20%"}} class="navbar-brand" href="#" onClick={this.like}><Icon type="like-o" /> 点赞 ( {this.state.likeNo} ) </a>
             )
         }
         else
         {
             return(
-                <a style={{width:"25%"}} class="navbar-brand" href="#" onClick={this.cancelLike}><Icon type="like" /> 取消赞 ( {this.state.likeNo} ) </a>
+                <a style={{width:"20%"}} class="navbar-brand" href="#" onClick={this.cancelLike}><Icon type="like" /> 取消赞 ( {this.state.likeNo} ) </a>
             )
         }
     }
@@ -385,12 +387,12 @@ class ViewNote extends Component{
     renderStarButton(){
         if(!this.state.ifStar){
             return(
-                <a style={{width:"25%"}} class="navbar-brand" href="#" onClick={this.star}><Icon type="star-o" /> 收藏本文</a>
+                <a style={{width:"20%"}} class="navbar-brand" href="#" onClick={this.star}><Icon type="star-o" /> 收藏本文</a>
             )
         }
         else{
             return(
-                <a style={{width:"25%"}} class="navbar-brand" href="#" onClick={this.cancelStar}><Icon type="star" /> 取消收藏</a>
+                <a style={{width:"20%"}} class="navbar-brand" href="#" onClick={this.cancelStar}><Icon type="star" /> 取消收藏</a>
             )
         }
     }
@@ -404,8 +406,9 @@ class ViewNote extends Component{
                         <div class="navbar-header" style={{width: "100%", paddingLeft:"25%", paddingRight:"25%", textAlign:"center"}}>
                             {likeButton}
                             {starButton}
-                            <a style={{width:"25%"}} class="navbar-brand" href="#" onClick={this.showComment}><Icon type="message" /> 评论 ( {this.state.commentNo} )</a>
-                            <a style={{width:"25%"}} class="navbar-brand" href="#" onClick={this.shareLink}><Icon type="fork" /> 分享</a>
+                            <a style={{width:"20%"}} class="navbar-brand" href="#" onClick={this.showComment}><Icon type="message" /> 评论 ( {this.state.commentNo} )</a>
+                            <a style={{width:"20%"}} class="navbar-brand" href="#" onClick={this.shareLink}><Icon type="fork" /> 分享</a>
+                            <a style={{width:"20%"}} class="navbar-brand" href={"/paper?paperID=" + information.paperID}><Icon type="link" />跳转到论文</a>
                         </div>
                     </div>
                 </nav>

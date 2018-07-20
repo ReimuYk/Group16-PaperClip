@@ -13,7 +13,8 @@ var username = '';
 var information = {
     unreadMessage:[],
     followMessage:[],
-    inviteMessage:[]
+    inviteMessage:[],
+    invitations:[],
 }
 
 const Search = Input.Search;
@@ -51,6 +52,12 @@ class NavBar extends Component{
             .then(responseJson=>{
                 console.log(responseJson);
                 let data = eval(responseJson);
+                for(var i = 0; i<data.length; i++){
+                    if(data[i].content.length > 15){
+                        data[i].content = data[i].content.substring(0,15);
+                        data[i].content += '...';
+                    }
+                }
                 information.unreadMessage = data;
                 that.setState({
                 })
@@ -74,6 +81,7 @@ class NavBar extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
+                console.log(responseJson);
                 let data = eval(responseJson);
                 information.followMessage = data;
                 that.setState({
@@ -90,7 +98,7 @@ class NavBar extends Component{
         /* get data according to username */
         let jsonbody = {};
         jsonbody.username = username;
-        jsonbody.type = "small";
+        jsonbody.type = "big";
         let url = IPaddress + 'service/getInvitations';
         let options={};
         options.method='POST';
@@ -102,6 +110,7 @@ class NavBar extends Component{
                 let data = eval(responseJson);
                 console.log(data);
                 information.inviteMessage = data;
+                information.invitations = data.slice(0,3);
                 that.setState({
                 })
             }).catch(function(e){
@@ -128,10 +137,17 @@ class NavBar extends Component{
                     message.error('操作失败，请重试');
                     return;
                 }
+                for(var i=0; i<information.inviteMessage.length; ++i){
+                    if(information.inviteMessage[i].inviteID == item.inviteID){
+                        information.inviteMessage.splice(i,1);
+                        break;
+                    }
+                }
+                information.invitations = information.inviteMessage.slice(0,3);
                 message.success('已接受邀请');
                 that.inviteMessage();
                 that.setState({
-                })
+                });
             }).catch(function(e){
             console.log("Oops, error");
         })
@@ -155,10 +171,17 @@ class NavBar extends Component{
                 if(data.result == "fail"){
                     message.error('操作失败，请重试');
                 }
+                for(var i=0; i<information.inviteMessage.length; ++i){
+                    if(information.inviteMessage[i].inviteID == item.inviteID){
+                        information.inviteMessage.splice(i,1);
+                        break;
+                    }
+                }
+                information.invitations = information.inviteMessage.slice(0,3);
                 message.success('已拒绝邀请');
                 that.inviteMessage();
                 that.setState({
-                })
+                });
             }).catch(function(e){
             console.log("Oops, error");
         })
@@ -179,7 +202,7 @@ class NavBar extends Component{
                 dataSource={information.followMessage}
                 renderItem={item => (<List.Item>
                     <List.Item.Meta
-                    avatar={<Avatar src={item.userheader}/>}
+                    avatar={<Avatar src={item.avatar}/>}
                     title={<a href={"/viewpage?username=" + item.username}>{item.username}</a>}
                     />
                   </List.Item>)}
@@ -199,7 +222,7 @@ class NavBar extends Component{
                     size="small"
                     header={<div>最近的邀请请求</div>}
                     footer={<Link to="/user/invitations"><Button type="primary">查看全部邀请</Button></Link>}
-                    dataSource={information.inviteMessage}
+                    dataSource={information.invitations}
                     renderItem={item => (
                         <List.Item actions={[<a onClick={() => this.acceptInvitation(this, item)}>接受</a>,<a onClick={() => this.refuseInvitation(this, item)}>拒绝</a>]}>
                             <List.Item.Meta
@@ -270,7 +293,7 @@ class NavBar extends Component{
                         <Col span={8} offset={1}>{search}</Col>
                         <Col span={1} offset={4}>
                             <Popover placement="bottom" title="我的消息" content={info} trigger="click">
-                                <Icon type="bell" style={{ fontSize: 19, color: '#08c' }}/>
+                                <Icon type="bell" onClick={this.followMessage} style={{ fontSize: 19, color: '#08c' }}/>
                             </Popover>
                         </Col>
                         <Col span={1}>

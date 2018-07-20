@@ -10,6 +10,7 @@ import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
 import java.io.*;
+import java.net.URLEncoder;
 
 @Service
 public class ImgServiceImpl implements ImgService {
@@ -21,10 +22,12 @@ public class ImgServiceImpl implements ImgService {
     private UserRepository userRepo;
 
     //输入:username,imgStr-------------base64字符串转图片保存在服务器
-    public JSONObject uploadAvatar(JSONObject data) {
+    public JSONObject uploadAvatar(JSONObject data) throws UnsupportedEncodingException {
+        System.out.println("uploadAvatar");
         System.out.println("upload data:"+data);
         JSONObject result = new JSONObject();
         String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
         String imgStr = data.getString("imgStr");
         int pos = imgStr.indexOf(",");
         imgStr = imgStr.substring(pos+1);

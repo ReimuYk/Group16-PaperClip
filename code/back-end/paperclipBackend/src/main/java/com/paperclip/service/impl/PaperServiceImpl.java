@@ -19,10 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sun.misc.BASE64Encoder;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -99,10 +98,11 @@ public class PaperServiceImpl implements PaperService {
         return res;
     }
 
-    public JSONObject getPaperDetail(JSONObject data) {
+    public JSONObject getPaperDetail(JSONObject data) throws UnsupportedEncodingException {
         JSONObject paper = new JSONObject();
         Long paperID = data.getLong("paperID");
         String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
         int pagination = data.getInt("pagination");
 
         User user = userRepo.findOne(username);
@@ -145,8 +145,8 @@ public class PaperServiceImpl implements PaperService {
                 bid.add(bp.getBlock().getId());
             }
             obj.accumulate("id",bid);
+            obj.accumulate("content", URLDecoder.decode(up.getPostil().getContent(), "UTF-8"));
             obj.accumulate("posID",up.getPostil().getId());
-            obj.accumulate("content",up.getPostil().getContent());
             obj.accumulate("visible",false);
             marked.add(obj);
         }
@@ -159,9 +159,10 @@ public class PaperServiceImpl implements PaperService {
         return paper;
     }
 
-    public JSONArray getBlockPostils(JSONObject data){
+    public JSONArray getBlockPostils(JSONObject data) throws UnsupportedEncodingException {
         Long paperID = data.getLong("paperID");
         String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
         int pagination = data.getInt("pagination");
         JSONArray blist = data.getJSONArray("selectid");
         List<Block> blocklist = new ArrayList<Block>();
@@ -177,8 +178,8 @@ public class PaperServiceImpl implements PaperService {
             //postils:{user:xxx,content:xxx,agree:xxx,disagree:xxx}
             JSONObject postils = new JSONObject();
             postils.accumulate("posID",p.getId());
-            postils.accumulate("user",p.getUser().getUsername());
-            postils.accumulate("content",p.getContent());
+            postils.accumulate("user", URLDecoder.decode(p.getUser().getUsername(), "UTF-8"));
+            postils.accumulate("content",URLDecoder.decode(p.getContent(), "UTF-8"));
             postils.accumulate("agree",p.getAgreement());
             postils.accumulate("disagree",p.getDisagreement());
             obj.accumulate("postils",postils);
@@ -188,8 +189,8 @@ public class PaperServiceImpl implements PaperService {
             for (PostilComment pc:pclist){
                 JSONObject commitem = new JSONObject();
                 User u = pc.getUser();
-                commitem.accumulate("user",u.getUsername());
-                commitem.accumulate("content",pc.getContent());
+                commitem.accumulate("user", URLDecoder.decode(u.getUsername(), "UTF-8"));
+                commitem.accumulate("content", URLDecoder.decode(pc.getContent(), "UTF-8"));
                 comments.add(commitem);
             }
             obj.accumulate("comments",comments);
@@ -225,9 +226,10 @@ public class PaperServiceImpl implements PaperService {
         return res;
     }
 
-    public JSONObject statPostil(JSONObject data){
+    public JSONObject statPostil(JSONObject data) throws UnsupportedEncodingException {
         Long posID = data.getLong("posID");
         String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
         int marked = data.getInt("marked");
         JSONObject agreement = data.getJSONObject("agreement");
         JSONArray flag = data.getJSONArray("flag");
@@ -263,10 +265,12 @@ public class PaperServiceImpl implements PaperService {
     }
 
     // 传入：username，posID，content  ---------------对批注进行评论
-    public JSONObject addPostilComment(JSONObject data){
+    public JSONObject addPostilComment(JSONObject data) throws UnsupportedEncodingException {
         Long postilID = data.getLong("posID");
         String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
         String content = data.getString("content");
+        content = URLEncoder.encode(content, "UTF-8");
 
         Postil postil = postilRepo.findOne(postilID);
         User user = userRepo.findOne(username);
@@ -284,9 +288,11 @@ public class PaperServiceImpl implements PaperService {
 
     // 传入：blockList,username,content  ---------------对选中的block做批注
     @SuppressWarnings("unchecked")
-    public JSONObject addPostil(JSONObject data){
+    public JSONObject addPostil(JSONObject data) throws UnsupportedEncodingException {
         String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
         String content = data.getString("content");
+        content = URLEncoder.encode(content, "UTF-8");
         JSONArray blist = data.getJSONArray("blockList");
         List<Block> blocklist = new ArrayList<Block>();
         for (int i=0;i<blist.size();i++){
@@ -318,8 +324,9 @@ public class PaperServiceImpl implements PaperService {
     }
 
     // 传入：paperID,username  ---------------是否收藏过这篇论文
-    public JSONObject ifStar(JSONObject data){
+    public JSONObject ifStar(JSONObject data) throws UnsupportedEncodingException {
         String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
         Long paperID = data.getLong("paperID");
 
         Paper paper = paperRepo.findOne(paperID);
@@ -342,8 +349,9 @@ public class PaperServiceImpl implements PaperService {
     }
 
     // 传入：paperID,username  ---------------收藏/取消收藏论文
-    public JSONObject starPaper(JSONObject data){
+    public JSONObject starPaper(JSONObject data) throws UnsupportedEncodingException {
         String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
         Long paperID = data.getLong("paperID");
 
         Paper paper = paperRepo.findOne(paperID);
@@ -373,7 +381,7 @@ public class PaperServiceImpl implements PaperService {
     }
 
     //输入：paperID ---------------- 获取与某一篇论文有关的笔记列表
-    public JSONObject getNoteList(JSONObject data){
+    public JSONObject getNoteList(JSONObject data) throws UnsupportedEncodingException {
         JSONObject result = new JSONObject();
         JSONArray datas = new JSONArray();
         Long paperID = data.getLong("paperID");
@@ -385,7 +393,7 @@ public class PaperServiceImpl implements PaperService {
             for(DocumentPdf d: docPs){
                 JSONObject version = new JSONObject();
                 version.accumulate("id",d.getId());
-                version.accumulate("title",d.getTitle()+" - version: "+d.getVersion());
+                version.accumulate("title", URLDecoder.decode(d.getTitle(), "UTF-8")+" - version: "+d.getVersion());
                 SimpleDateFormat sdf = new SimpleDateFormat("EEEE-MMMM-dd-yyyy");
                 version.accumulate("intro","编辑于"+sdf.format(d.getDate()));
                 datas.add(version);
@@ -401,12 +409,12 @@ public class PaperServiceImpl implements PaperService {
             JSONObject note = new JSONObject();
             Note n = it.next();
             note.accumulate("id",n.getId());
-            note.accumulate("title",n.getTitle());
+            note.accumulate("title", URLDecoder.decode(n.getTitle(), "UTF-8"));
             int end = 20;
             if(n.getContent().length()<20){
                 end = n.getContent().length();
             }
-            note.accumulate("intro",n.getContent().substring(0,end));
+            note.accumulate("intro", URLDecoder.decode(n.getContent().substring(0,end), "UTF-8"));
             datas.add(note);
         }
         result.accumulate("type","note");
@@ -454,9 +462,10 @@ public class PaperServiceImpl implements PaperService {
     @Autowired
     private AssistRepository assistRepo;
     //输入paperID,username ------------ 判断是否是docPDF，如果是，访问者是否有权限访问
-    public JSONObject hasAccess(JSONObject data){
+    public JSONObject hasAccess(JSONObject data) throws UnsupportedEncodingException {
         Long paperID = data.getLong("paperID");
         String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
         JSONObject result = new JSONObject();
 
         DocumentPdf docP = docPdfRepo.findOne(paperID);

@@ -10,9 +10,13 @@ import com.paperclip.service.ImgService;
 import com.paperclip.service.ViewInfoService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.assertj.core.error.ShouldBeAfterYear;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.List;
 
@@ -32,10 +36,13 @@ public class ViewInfoServiceImpl implements ViewInfoService {
     ImgService imgService;
 
     // get this user's fans
-    public JSONArray getUserFans(JSONObject data) {
+    public JSONArray getUserFans(JSONObject data) throws UnsupportedEncodingException {
+        System.out.println("\n\n==============\nget json:"+data);
+
         JSONArray fans = new JSONArray();
 
         String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
         User user = userRepo.findOne(username);
         List<Follow> followList = followRepo.findByFollowee(user);
         Iterator<Follow> followIterable = followList.iterator();
@@ -43,15 +50,16 @@ public class ViewInfoServiceImpl implements ViewInfoService {
             Follow follow = followIterable.next();
             User follower = follow.getFollower();
             JSONObject fan = new JSONObject();
-            fan.accumulate("username", follower.getUsername());
-            fan.accumulate("description", follower.getDescription());
+            fan.accumulate("username", URLDecoder.decode(follower.getUsername(), "UTF-8"));
+            fan.accumulate("description", URLDecoder.decode(follower.getDescription(), "UTF-8"));
             fan.accumulate("userheader", imgService.getUserHeader(follower));
             fans.add(fan);
         }
+        System.out.println("\n\n===================\nreturn: "+fans);
         return fans;
     }
 
-    public JSONObject getViewDocDetail(JSONObject data) {
+    public JSONObject getViewDocDetail(JSONObject data) throws UnsupportedEncodingException {
         JSONObject docJson = new JSONObject();
         Long docID = data.getLong("docID");
         Document doc = docRepo.findOne(docID);
@@ -59,12 +67,33 @@ public class ViewInfoServiceImpl implements ViewInfoService {
         if(doc==null)
             return docJson;
         docJson.accumulate("docID", doc.getId());
-        docJson.accumulate("title", doc.getTitle());
-        docJson.accumulate("content", doc.getContent());
-        docJson.accumulate("author", doc.getUser().getUsername());
+        docJson.accumulate("title", URLDecoder.decode(doc.getTitle(), "UTF-8"));
+        docJson.accumulate("content", URLDecoder.decode(doc.getContent(), "UTF-8"));
+        docJson.accumulate("author", URLDecoder.decode(doc.getUser().getUsername(), "UTF-8"));
         docJson.accumulate("userheader", doc.getUser().getAvatar());
-        docJson.accumulate("userDescription", doc.getUser().getDescription());
+        docJson.accumulate("userDescription", URLDecoder.decode(doc.getUser().getDescription(), "UTF-8"));
         return docJson;
+    }
+
+    public JSONArray getRecentFans(JSONObject data) throws UnsupportedEncodingException {
+        System.out.println("\n\n====getRecentFans==== \n get data: "+data);
+        String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
+        User user = userRepo.findOne(username);
+        List<Follow> followList = followRepo.findByFolloweeOrderByIdDesc(user);
+        JSONArray fansArray = new JSONArray();
+        int count=0;
+        for(Follow follow: followList){
+            count++;
+            if(count == 4)
+                break;
+            JSONObject followJson = new JSONObject();
+            followJson.accumulate("username", URLDecoder.decode(follow.getFollower().getUsername(), "UTF-8"));
+            followJson.accumulate("avatar",imgService.getUserHeader(follow.getFollower()));
+            fansArray.add(followJson);
+        }
+        System.out.println("return: "+fansArray);
+        return fansArray;
     }
 
     public JSONArray getHomeInfo(JSONObject data) {
@@ -83,27 +112,42 @@ public class ViewInfoServiceImpl implements ViewInfoService {
     }
 
 
-    public JSONObject getHostInfo(JSONObject data) {
+    public JSONObject getHostInfo(JSONObject data) throws UnsupportedEncodingException {
         JSONObject user = new JSONObject();
         System.out.println("getHostInfo: get data:"+data);
         String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
         User host = userRepo.findOne(username);
         String avatar = imgService.getUserHeader(host);
         user.accumulate("userheader", avatar);
-        user.accumulate("username",host.getUsername());
+        user.accumulate("username",URLDecoder.decode(host.getUsername(), "UTF-8"));
         user.accumulate("fensno", host.getFollower());
         user.accumulate("followno", host.getFollowing());
-        user.accumulate("userDescription", host.getDescription());
+        user.accumulate("userDescription", URLDecoder.decode(host.getDescription(), "UTF-8"));
         return user;
     }
 
-    public JSONObject getClientInfo(JSONObject data) {
+    public JSONObject getClientInfo(JSONObject data) throws UnsupportedEncodingException {
+        System.out.println("==========================");
+        System.out.println("get json: "+data);
+
         JSONObject user = new JSONObject();
         String hostname = data.getString("hostname");
         String clientname = data.getString("clientname");
+
+//        hostname = URLEncoder.encode(hostname, "UTF-8");
+//        clientname = URLEncoder.encode(clientname, "UTF-8");
+
         User host = userRepo.findOne(hostname);
         User client = userRepo.findOne(clientname);
+
+        clientname = URLDecoder.decode(clientname, "UTF-8");
+
+        System.out.println("client: "+client);
+        System.out.println("client name, after decode:"+clientname);
+
         Follow follow = followRepo.findDistinctByFolloweeAndFollower(client, host);
+
         if(follow == null){
             user.accumulate("isStar", 0);
         }else{
@@ -113,17 +157,22 @@ public class ViewInfoServiceImpl implements ViewInfoService {
         user.accumulate("username", clientname);
         user.accumulate("fensno", client.getFollower());
         user.accumulate("followno", client.getFollowing());
-        user.accumulate("userDescription", client.getDescription());
+        user.accumulate("userDescription", URLDecoder.decode(client.getDescription(), "UTF-8"));
+        System.out.println("get client info: "+user.toString());
+        System.out.println("return: "+user);
         return user;
     }
 
 
-    public JSONObject modifyUserInfo(JSONObject data) {
+    public JSONObject modifyUserInfo(JSONObject data) throws UnsupportedEncodingException {
         JSONObject result = new JSONObject();
         String username = data.getString("username");
         String password = data.getString("password");
         String userHeader = data.getString("userheader");
         String description = data.getString("description");
+        username = URLEncoder.encode(username, "UTF-8");
+        password = URLEncoder.encode(password, "UTF-8");
+        description = URLEncoder.encode(description, "UTF-8");
         User user = userRepo.findOne(username);
         if(user == null){
             result.accumulate("result", "fail");

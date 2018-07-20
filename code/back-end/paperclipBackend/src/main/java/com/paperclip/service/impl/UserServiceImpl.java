@@ -117,21 +117,23 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
-    public JSONObject userLogin(JSONObject data) {
-        System.out.println("userLogin get json: "+data);
+    public JSONObject userLogin(JSONObject data) throws UnsupportedEncodingException {
+        System.out.println("\n\n====userLogin====\n get json: "+data);
         String username = data.getString("username");
         String password = data.getString("password");
+        username = URLEncoder.encode(username, "UTF-8");
+        password = URLEncoder.encode(password, "UTF-8");
         JSONObject userinfo = new JSONObject();
 
         User user = userRepo.findOne(username);
         if((user != null) && (password.equals(user.getPassword()))){
-            userinfo.accumulate("username", username);
+            userinfo.accumulate("username", URLDecoder.decode(user.getUsername(), "UTF-8"));
             userinfo.accumulate("result", "success");
         }
         else {
             user = userRepo.findDistinctByEmail(username);
             if ((user != null) && (password.equals(user.getPassword()))) {
-                userinfo.accumulate("username", URLDecoder.decode(user.getUsername()));
+                userinfo.accumulate("username", URLDecoder.decode(user.getUsername(), "UTF-8"));
                 userinfo.accumulate("result", "success");
             }else{
                 userinfo.accumulate("result", "fail");
@@ -154,6 +156,7 @@ public class UserServiceImpl implements UserService {
 
     //输入:username ----------------导航栏中展示的未读私信列表（类比QQ右下角消息提示）
     public JSONArray getUnreadMessage(JSONObject data) throws UnsupportedEncodingException {
+        System.out.println("\n\n======= getUnreadMessage=====\ngetdata: "+data);
         String username = data.getString("username");
         username = URLEncoder.encode(username, "UTF-8");
         User user = userRepo.findOne(username);
@@ -175,8 +178,8 @@ public class UserServiceImpl implements UserService {
         while(it2.hasNext()){
             Message m = it2.next();
             JSONObject message = new JSONObject();
-            message.accumulate("sender", URLDecoder.decode(m.getSender().getUsername()));
-            message.accumulate("content",URLDecoder.decode(m.getContent()));
+            message.accumulate("sender", URLDecoder.decode(m.getSender().getUsername(), "UTF-8"));
+            message.accumulate("content",URLDecoder.decode(m.getContent(), "UTF-8"));
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             message.accumulate("time",sdf.format(m.getTime()));
             messages.add(message);
@@ -186,10 +189,11 @@ public class UserServiceImpl implements UserService {
     }
 
     //输入：username -------------------简略的展示私信列表（类比QQ的只显示最新一个消息的对话框列表）
-    public JSONArray getBriefMessageList(JSONObject data){
+    public JSONArray getBriefMessageList(JSONObject data) throws UnsupportedEncodingException {
+        System.out.println("\n\n=====getBriefMessageList====\ngetjson: "+data);
         JSONArray messageArray = new JSONArray();
         String username = data.getString("username");
-
+        username = URLEncoder.encode(username, "UTF-8");
         User user = userRepo.findOne(username);
         List<Message> list = messageRepo.getAllMessage(user);
         Iterator<Message> it = list.iterator();
@@ -215,27 +219,30 @@ public class UserServiceImpl implements UserService {
             Message m = it2.next();
             JSONObject message = new JSONObject();
             if(m.getSender().getUsername().equals(username)){
-                message.accumulate("another",m.getReceiver().getUsername());
+                message.accumulate("another", URLDecoder.decode(m.getReceiver().getUsername(), "UTF-8"));
                 message.accumulate("avatar",service.getUserHeader(m.getReceiver()));
             }
             else {
-                message.accumulate("another", m.getSender().getUsername());
+                message.accumulate("another", URLDecoder.decode(m.getSender().getUsername(), "UTF-8"));
                 message.accumulate("avatar",service.getUserHeader(m.getSender()));
             }
-            message.accumulate("content",URLDecoder.decode(m.getContent()));
+            message.accumulate("content",URLDecoder.decode(m.getContent(), "UTF-8"));
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             message.accumulate("time",sdf.format(m.getTime()));
             messageArray.add(message);
         }
+        System.out.println("return : "+messageArray);
         return messageArray;
     }
 
     //输入：hostname，clientname---------------两个用户之间的对话展示
-    public JSONArray getConversation(JSONObject data){
+    public JSONArray getConversation(JSONObject data) throws UnsupportedEncodingException {
+        System.out.println("\n\n====getConversation====\nget json: "+data);
         JSONArray conversation = new JSONArray();
         String hostname = data.getString("hostname");
         String clientname = data.getString("clientname");
-
+        hostname = URLEncoder.encode(hostname, "UTF-8");
+        clientname = URLEncoder.encode(clientname, "UTF-8");
         User host = userRepo.findOne(hostname);
         User client = userRepo.findOne(clientname);
         List<User> user = new ArrayList<>();
@@ -251,29 +258,34 @@ public class UserServiceImpl implements UserService {
                 m.setHasRead(1);
                 messageRepo.save(m);
             }
-            message.accumulate("sender",m.getSender().getUsername());
+            message.accumulate("sender", URLDecoder.decode(m.getSender().getUsername(), "UTF-8"));
+            message.accumulate("content",URLDecoder.decode(m.getContent(), "UTF-8"));
             message.accumulate("avatar",service.getUserHeader(m.getSender()));
-            message.accumulate("content",URLDecoder.decode(m.getContent()));
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             message.accumulate("time",sdf.format(m.getTime()));
             conversation.add(message);
         }
+        System.out.println("return: "+conversation);
         return conversation;
     }
 
     //输入：senderName,receiverName -------------发私信
     public JSONObject sendMessage(JSONObject data) throws UnsupportedEncodingException {
+        System.out.println("\n\n=====sandMessage====\nget json: "+data);
         JSONObject result = new JSONObject();
         String senderName = data.getString("senderName");
         String receiverName = data.getString("receiverName");
         String content = data.getString("content");
 
-        System.out.println("message content:\n"+content);
+        senderName = URLEncoder.encode(senderName, "UTF-8");
+        receiverName = URLEncoder.encode(receiverName, "UTF-8");
         content = URLEncoder.encode(content, "UTF-8");
+
         User sender = userRepo.findOne(senderName);
         User receiver = userRepo.findOne(receiverName);
         Message message = new Message(sender, receiver, content);
         messageRepo.save(message);
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         result.accumulate("time", sdf.format(message.getTime()));
         return result;

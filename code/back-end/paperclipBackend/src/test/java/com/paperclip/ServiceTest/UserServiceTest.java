@@ -63,7 +63,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testLogin() {
+    public void testLogin() throws UnsupportedEncodingException {
         JSONObject data = new JSONObject();
         data.accumulate("username", "guoguo");
         data.accumulate("password", "gg123");
@@ -101,7 +101,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void getConversation(){
+    public void getConversation() throws UnsupportedEncodingException {
         JSONObject data = new JSONObject();
         data.accumulate("hostname", "user2");
         data.accumulate("clientname","user1");
@@ -110,7 +110,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void getBriefMessageList(){
+    public void getBriefMessageList() throws UnsupportedEncodingException {
         JSONObject data = new JSONObject();
         data.accumulate("username", "user2");
         JSONArray aa = service.getBriefMessageList(data);

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+
 @Controller
 @CrossOrigin
 public class ViewInfoController {
@@ -20,7 +22,7 @@ public class ViewInfoController {
     @RequestMapping(value = "/service/hostInfo",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject getHostInfo(@RequestBody JSONObject data){
+    JSONObject getHostInfo(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return viewInfoService.getHostInfo(data);
     }
 
@@ -28,7 +30,7 @@ public class ViewInfoController {
     @RequestMapping(value = "/service/clientInfo",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject getClientInfo(@RequestBody JSONObject data){
+    JSONObject getClientInfo(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return viewInfoService.getClientInfo(data);
     }
 
@@ -38,7 +40,7 @@ public class ViewInfoController {
     @RequestMapping(value = "/service/modify/userinfo",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject modifyUserInfo(@RequestBody JSONObject data){
+    JSONObject modifyUserInfo(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return viewInfoService.modifyUserInfo(data);
     }
 
@@ -60,10 +62,16 @@ public class ViewInfoController {
     @RequestMapping(value = "/service/userFans",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONArray getUserFans(@RequestBody JSONObject data) {
+    JSONArray getUserFans(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return viewInfoService.getUserFans(data);
     }
 
+    @RequestMapping(value = "/service/recentFans",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONArray getRecentFans(@RequestBody JSONObject data) throws UnsupportedEncodingException {
+        return viewInfoService.getRecentFans(data);
+    }
     /*********************************************** doc *************************************************/
     /******************
      * viewDocPage
@@ -71,7 +79,7 @@ public class ViewInfoController {
     @RequestMapping(value = "/service/docDetail",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject getViewDocDetail(@RequestBody JSONObject data) {
+    JSONObject getViewDocDetail(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return viewInfoService.getViewDocDetail(data);
     }
 }

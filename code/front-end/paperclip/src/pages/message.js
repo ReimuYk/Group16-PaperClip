@@ -41,6 +41,12 @@ class Message extends Component{
             .then(response=>response.text())
             .then(responseJson=>{
                 let data = eval(responseJson);
+                for(var i = 0; i<data.length; i++){
+                    if(data[i].content.length > 30){
+                        data[i].content = data[i].content.substring(0,30);
+                        data[i].content += '...';
+                    }
+                }
                 that.setState({
                     data: data
                 })
@@ -48,7 +54,7 @@ class Message extends Component{
             console.log("Oops, error");
         })
     }
-    showMessage = (record, item, e) => {
+    showMessage = (record, item) => {
         let that = this;
         /* get username */
         /* get data according to username */
@@ -112,14 +118,22 @@ class Message extends Component{
             .then(responseJson=>{
                 let result = eval('(' + responseJson + ')');
                 if(result.result != "fail"){
-                    tmp.push({sender:username, content:that.state.messageContent, time:result.time});
                     if(index > -1){
-                        data[index].content = that.state.messageContent;
+                        let content = that.state.messageContent;
+                        if(content.length > 30){
+                            data[index].content = content.substring(0,30);
+                            data[index].content += '...';
+                        }
+                        else{
+                            data[index].content = content;
+                        }
                         data[index].time = result.time;
                         data.sort(sortData);
                     }
+                    let obj = {};
+                    obj.another = jsonbody.receiverName;
+                    that.showMessage(null, obj);
                     that.setState({
-                        message:tmp,
                         messageContent: '',
                         data: data
                     })
