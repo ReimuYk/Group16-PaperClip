@@ -149,11 +149,11 @@ class UserDoc extends Component{
             <div>
                 <NavBar />
             <UserFLoatMenu />
-            <div style={{width:'60%',marginLeft:'200px', paddingTop:'60px', float:'left'}}>
-                <div className="button" style={{height:"50px"}}>
+            <div style={{width:'60%',marginLeft:'200px', float:'left'}}>
+                {/* <div className="button" style={{height:"50px"}}>
                     <Button style={{float:"right"}} type="primary" onClick={this.newDoc}>新建文档</Button>
-                </div>
-                <Table columns={this.state.columns} dataSource={this.state.data} />
+                </div> */}
+                <Table style={{textAlign:'center'}} columns={this.state.columns} dataSource={this.state.data} />
             </div>
         </div>
         )

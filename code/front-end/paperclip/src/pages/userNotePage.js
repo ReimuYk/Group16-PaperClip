@@ -7,6 +7,20 @@ import { IPaddress } from '../App'
 /* should get from server */
 var username = '';
 
+function autodivheight() {
+    //获取浏览器窗口高度
+    var winHeight=0;
+    if (window.innerHeight)
+        winHeight = window.innerHeight;
+    else if ((document.body) && (document.body.clientHeight))
+        winHeight = document.body.clientHeight;
+    //通过深入Document内部对body进行检测，获取浏览器窗口高度
+    else if (document.documentElement && document.documentElement.clientHeight)
+        winHeight = document.documentElement.clientHeight;
+    //DIV高度为浏览器窗口的高度
+    document.getElementById("userNotePage").style.height= winHeight +"px";
+}
+
 class UserNote extends Component{
     state = {
         data: [],
@@ -34,6 +48,7 @@ class UserNote extends Component{
         }]
     }
     componentWillMount = () => {
+        window.onresize=autodivheight; //浏览器窗口发生变化时同时变化DIV高度
         let that = this;
         /* get username */
         username = sessionStorage.getItem('username');
@@ -108,7 +123,7 @@ class UserNote extends Component{
             return <Redirect to="/login"/>;
         }
         return(
-            <div>
+            <div id="userNotePage">
             <NavBar />
             <UserFloatMenu />
             <div style={{width:'60%',marginLeft:'200px', paddingTop:'60px', float:'left'}}>
