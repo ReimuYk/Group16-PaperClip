@@ -107,11 +107,13 @@ public class UserServiceImpl implements UserService {
         System.out.println("userLogin get json: "+data);
         String username = data.getString("username");
         String password = data.getString("password");
+        username = URLEncoder.encode(username);
+        password = URLEncoder.encode(password);
         JSONObject userinfo = new JSONObject();
 
         User user = userRepo.findOne(username);
         if((user != null) && (password.equals(user.getPassword()))){
-            userinfo.accumulate("username", username);
+            userinfo.accumulate("username", URLDecoder.decode(user.getUsername()));
             userinfo.accumulate("result", "success");
         }
         else {

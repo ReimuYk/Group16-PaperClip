@@ -10,6 +10,7 @@ import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
 import java.io.*;
+import java.net.URLEncoder;
 
 @Service
 public class ImgServiceImpl implements ImgService {
@@ -25,6 +26,7 @@ public class ImgServiceImpl implements ImgService {
         System.out.println("upload data:"+data);
         JSONObject result = new JSONObject();
         String username = data.getString("username");
+        username = URLEncoder.encode(username);
         String imgStr = data.getString("imgStr");
         int pos = imgStr.indexOf(",");
         imgStr = imgStr.substring(pos+1);

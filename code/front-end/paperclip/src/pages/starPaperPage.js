@@ -101,7 +101,7 @@ class StarPaper extends Component{
                 
                 <UserFloatMenu />
                 <div style={{width:'60%',marginLeft:'200px', paddingTop:'60px', float:'left'}}>
-                    <Table columns={this.state.columns} dataSource={this.state.data} />
+                    <Table size="middle" columns={this.state.columns} dataSource={this.state.data} />
                 </div>
             </div>
         )

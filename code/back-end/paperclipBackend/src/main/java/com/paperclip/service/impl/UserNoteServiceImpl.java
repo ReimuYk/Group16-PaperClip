@@ -264,6 +264,8 @@ public class UserNoteServiceImpl implements UserNoteService {
         JSONObject result = new JSONObject();
         result.accumulate("result","success");
         result.accumulate("likeNo",noteRepo.findOne(noteID).getAgreement());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        result.accumulate("date",sdf.format(noteRepo.findOne(noteID).getDate()));
         return result;
     }
 
