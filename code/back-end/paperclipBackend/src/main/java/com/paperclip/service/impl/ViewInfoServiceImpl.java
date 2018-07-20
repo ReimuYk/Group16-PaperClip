@@ -75,6 +75,26 @@ public class ViewInfoServiceImpl implements ViewInfoService {
         return docJson;
     }
 
+    public JSONArray getRecentFans(JSONObject data) throws UnsupportedEncodingException {
+        System.out.println("\n\n====getRecentFans==== \n get data: "+data);
+        String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
+        User user = userRepo.findOne(username);
+        List<Follow> followList = followRepo.findByFolloweeOrderByIdDesc(user);
+        JSONArray fansArray = new JSONArray();
+        int count=0;
+        for(Follow follow: followList){
+            count++;
+            if(count == 4)
+                break;
+            JSONObject followJson = new JSONObject();
+            followJson.accumulate("username", URLDecoder.decode(follow.getFollower().getUsername(), "UTF-8"));
+            fansArray.add(followJson);
+        }
+        System.out.println("return: "+fansArray);
+        return fansArray;
+    }
+
     public JSONArray getHomeInfo(JSONObject data) {
         JSONArray homeinfo = new JSONArray();
         JSONObject followMement = new JSONObject();

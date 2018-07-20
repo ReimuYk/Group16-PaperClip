@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public JSONObject userLogin(JSONObject data) throws UnsupportedEncodingException {
-        System.out.println("userLogin get json: "+data);
+        System.out.println("\n\n====userLogin====\n get json: "+data);
         String username = data.getString("username");
         String password = data.getString("password");
         username = URLEncoder.encode(username, "UTF-8");
