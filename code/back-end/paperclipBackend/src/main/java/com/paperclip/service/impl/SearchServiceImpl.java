@@ -1,7 +1,9 @@
 package com.paperclip.service.impl;
 
+import com.paperclip.dao.entityDao.DocumentPdfRepository;
 import com.paperclip.dao.entityDao.PaperRepository;
 import com.paperclip.dao.entityDao.NoteRepository;
+import com.paperclip.model.Entity.DocumentPdf;
 import com.paperclip.model.Entity.Paper;
 import com.paperclip.service.SearchService;
 import net.sf.json.JSONArray;
@@ -20,14 +22,19 @@ public class SearchServiceImpl implements SearchService {
     @Autowired
     private NoteRepository noteRepo;
 
+    @Autowired
+    private DocumentPdfRepository docPdfRepo;
+
     public JSONArray searchPaper(JSONObject data1) {
         String searchText = data1.getString("searchText");
+
 
         JSONArray data = new JSONArray();
         JSONArray papers = new JSONArray();
         Iterable<Paper> allPaper = paperRepo.findAll();
         for(Paper p: allPaper){
-            if (match(searchText,p)) {
+
+            if (docPdfRepo.findOne(p.getId()) == null && match(searchText,p)) {
                 JSONObject paper = new JSONObject();
                 paper.accumulate("paperID", p.getId());
                 paper.accumulate("title", p.getTitle());
@@ -70,6 +77,7 @@ public class SearchServiceImpl implements SearchService {
         for(String s:list){
             //System.out.println("word: "+s);
 
+            System.out.println("title:"+title+"key:+"+keyword);
             Pattern pattern = Pattern.compile(".*"+s+".*");
             Matcher matcher = pattern.matcher(title);
             boolean result1 = matcher.find();

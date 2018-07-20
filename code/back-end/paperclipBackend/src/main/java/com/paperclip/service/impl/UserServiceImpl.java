@@ -20,6 +20,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.ArrayUtils;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.stereotype.Service;
@@ -91,10 +92,14 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
-    public JSONObject addUser(JSONObject data) {
+    public JSONObject addUser(JSONObject data) throws UnsupportedEncodingException {
         String username = data.getString("username");
         String password = data.getString("password");
         String email = data.getString("email");
+
+        username = URLEncoder.encode(username, "UTF-8");
+        password = URLEncoder.encode(password, "UTF-8");
+        email = URLEncoder.encode(email, "UTF-8");
 
         User check1 = userRepo.findOne(username);
         User check2 = userRepo.findDistinctByEmail(email);
@@ -126,7 +131,7 @@ public class UserServiceImpl implements UserService {
         else {
             user = userRepo.findDistinctByEmail(username);
             if ((user != null) && (password.equals(user.getPassword()))) {
-                userinfo.accumulate("username", user.getUsername());
+                userinfo.accumulate("username", URLDecoder.decode(user.getUsername()));
                 userinfo.accumulate("result", "success");
             }else{
                 userinfo.accumulate("result", "fail");
@@ -148,8 +153,9 @@ public class UserServiceImpl implements UserService {
     }
 
     //输入:username ----------------导航栏中展示的未读私信列表（类比QQ右下角消息提示）
-    public JSONArray getUnreadMessage(JSONObject data) {
+    public JSONArray getUnreadMessage(JSONObject data) throws UnsupportedEncodingException {
         String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
         User user = userRepo.findOne(username);
         List<Message> list = messageRepo.getUnreadMessage(user);
         Iterator<Message> it = list.iterator();
@@ -169,7 +175,7 @@ public class UserServiceImpl implements UserService {
         while(it2.hasNext()){
             Message m = it2.next();
             JSONObject message = new JSONObject();
-            message.accumulate("sender", m.getSender().getUsername());
+            message.accumulate("sender", URLDecoder.decode(m.getSender().getUsername()));
             message.accumulate("content",URLDecoder.decode(m.getContent()));
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             message.accumulate("time",sdf.format(m.getTime()));
@@ -279,6 +285,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepo.findOne(username);
         List<Invite> invites = inviteRepo.findByUser(user);
 
+        System.out.println("type:"+type);
         if(type.equals("small")){
             Iterator<Invite> it = invites.iterator();
             int n = 0;
@@ -289,6 +296,7 @@ public class UserServiceImpl implements UserService {
                 invitation.accumulate("title",i.getDocument().getTitle());
                 invitation.accumulate("inviteID",i.getId());
                 invitations.add(invitation);
+                n++;
             }
         }
         else{
@@ -301,7 +309,7 @@ public class UserServiceImpl implements UserService {
                 invitations.add(invitation);
             }
         }
-
+        System.out.println(invitations.toString());
         return invitations;
     }
 

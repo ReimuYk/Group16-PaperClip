@@ -195,6 +195,11 @@ class Postil extends Component{
             old.push(newPos);
             that.setState({data:old});
             console.log(data)
+            var mark={};
+            mark.id=this.state.selectid;
+            mark.content=content;
+            mark.visible=false;
+            emitter.emit('addMark',mark);
         }).catch(function(e){
             console.log("Oops, error");
         })

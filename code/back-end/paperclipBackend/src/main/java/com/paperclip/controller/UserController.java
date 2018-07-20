@@ -34,7 +34,7 @@ public class UserController {
     @RequestMapping(value = "/service/register",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject addUser(@RequestBody JSONObject username){
+    JSONObject addUser(@RequestBody JSONObject username) throws UnsupportedEncodingException {
         return userService.addUser(username);
     }
 
@@ -62,7 +62,7 @@ public class UserController {
     @RequestMapping(value = "/service/user/unreadMessage",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONArray unreadMessage(@RequestBody JSONObject username){
+    JSONArray unreadMessage(@RequestBody JSONObject username) throws UnsupportedEncodingException {
         return userService.getUnreadMessage(username);
     }
 

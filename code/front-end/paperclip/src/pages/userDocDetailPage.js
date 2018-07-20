@@ -113,14 +113,14 @@ class UserDocDetail extends Component{
                         renderItem={item => (
                             <List.Item
                                 actions={[<p>
-                                    <a style={{width:'75px'}} href={"/paper?ID="+item.docPdfID}>查看内容</a>
+                                    <a style={{width:'75px'}} href={"/paper?paperID="+item.docPdfID}>查看内容</a>
                                     <Popconfirm title="确定删除吗？" onConfirm={() => this.deleteDoc(this, item)}>
                                         <a style={{width:'75px',marginLeft:'20px'}}>删除该版本</a>
                                     </Popconfirm>
                                 </p>]}
                             >
                                 <List.Item.Meta
-                                    title={<a href={"/paper?ID="+item.docPdfID}>{item.title}</a>}
+                                    title={<a href={"/paper?paperID="+item.docPdfID}>{item.title}</a>}
                                     description={'版本 ' + item.version}
                                 />
                                 <p>{item.date}</p>

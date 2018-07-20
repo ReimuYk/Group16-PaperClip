@@ -118,7 +118,7 @@ class ViewNote extends Component{
             .then(responseJson=>{
                 console.log(responseJson);
                 let data = eval('(' + responseJson + ')');
-                if(data.result == "success"){
+                if(data.result != "fail"){
                     that.setState({
                         mailContent: '',
                         visible: false
@@ -439,13 +439,13 @@ class ViewNote extends Component{
             return (
                 <p>
                     <Button style={{width:"100px"}} size="large" type="primary" onClick={this.showModal}><Icon type='mail' />发私信</Button>
-                    <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary" onClick={this.quitFollow}><Icon type='plus-square-o' />取消关注</Button>
+                    <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary" onClick={this.quitFollow}>取消关注</Button>
                 </p>
             )
         }
         else{
             return(
-                <Link to={"/modifyNote?noteID=" + noteID}>
+                <Link to={"/user/modifyNote?noteID=" + noteID}>
                     <Button style={{width:"100px"}} size="large" type="primary">修改笔记</Button>
                 </Link>
             )

@@ -15,4 +15,5 @@ import java.util.List;
 public interface AssistRepository extends CrudRepository<Assist,Long>{
     List<Assist> findByDocument(Document document);
     List<Assist> findByUser(User user);
+    void deleteDistinctByDocumentAndUser(Document doc,User user);
 }

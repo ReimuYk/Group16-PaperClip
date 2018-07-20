@@ -23,6 +23,7 @@ public class DocumentPdf extends Paper{
         this.setAuthor(document.getUser().getUsername());
         this.setStar(0);
         this.setPageNum(0);
+        this.setKeyWords("");
     }
 
     public void setDate(Date date) {
@@ -41,6 +42,15 @@ public class DocumentPdf extends Paper{
         return version;
     }
 
+    @Override
+    public String getKeyWords() {
+        return super.getKeyWords();
+    }
+
+    @Override
+    public void setKeyWords(String keyWords) {
+        super.setKeyWords(keyWords);
+    }
 
     public Document getDocument() {
         return document;

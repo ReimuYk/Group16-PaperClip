@@ -65,7 +65,7 @@ class RegisterPage extends Component {
                     <div class="Card SignContainer-content">
                         <div class="SignContainer-inner">
                             <div class="Login-content">
-                                <form novalidate class="SignFlow">
+                                <div novalidate class="SignFlow">
                                     <div class="SignFlow-email">
                                         <div class="SignFlowInput">
                                             <div class="Input-wrapper">
@@ -88,7 +88,7 @@ class RegisterPage extends Component {
                                         </div>
                                     </div>
                                     <button type="submit" onClick={this.checkRegister} class="Button SignFlow-submitButton Button--primary Button--blue">注册</button>
-                                </form>
+                                </div>
                             </div>
                             <div class="SignContainer-switch">已有帐号？
                                 <span><Link to="/login">登录</Link></span></div>
