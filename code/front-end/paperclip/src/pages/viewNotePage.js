@@ -15,7 +15,8 @@ var information = {
     authorAvatar:'',
     title:'',
     content:'',
-    data:''
+    data:'',
+    paperID:0
 }
 class ViewNote extends Component{
     state = {
@@ -58,6 +59,7 @@ class ViewNote extends Component{
                 information.date = data.date;
                 information.authorAvatar = data.avatar;
                 information.authorDescription = data.description;
+                information.paperID = data.paperID;
                 that.setState({
                     ifLike: data.ifLike,
                     ifStar: data.ifStar,
@@ -89,7 +91,6 @@ class ViewNote extends Component{
             .then(response=>response.text())
             .then(responseJson=>{
                 let data = eval(responseJson);
-                console.log(data);
                 that.setState({
                     comment: data,
                     commentVisible: true
@@ -116,7 +117,6 @@ class ViewNote extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                console.log(responseJson);
                 let data = eval('(' + responseJson + ')');
                 if(data.result != "fail"){
                     that.setState({
@@ -182,12 +182,13 @@ class ViewNote extends Component{
                     message.error('评论发布失败，请重试！');
                     return;
                 }
-                tmp.push({username:username, content: that.state.commentContent});
+                console.log(result);
                 that.setState({
                     comment: tmp,
                     commentContent: '',
                     commentNo: result.commNo
                 });
+                this.showComment();
             }).catch(function(e) {
             console.log("Oops, error");
         })
@@ -372,13 +373,13 @@ class ViewNote extends Component{
         if(!this.state.ifLike)
         {
             return(
-                <a style={{width:"25%"}} class="navbar-brand" href="#" onClick={this.like}><Icon type="like-o" /> 点赞 ( {this.state.likeNo} ) </a>
+                <a style={{width:"20%"}} class="navbar-brand" href="#" onClick={this.like}><Icon type="like-o" /> 点赞 ( {this.state.likeNo} ) </a>
             )
         }
         else
         {
             return(
-                <a style={{width:"25%"}} class="navbar-brand" href="#" onClick={this.cancelLike}><Icon type="like" /> 取消赞 ( {this.state.likeNo} ) </a>
+                <a style={{width:"20%"}} class="navbar-brand" href="#" onClick={this.cancelLike}><Icon type="like" /> 取消赞 ( {this.state.likeNo} ) </a>
             )
         }
     }
@@ -386,12 +387,12 @@ class ViewNote extends Component{
     renderStarButton(){
         if(!this.state.ifStar){
             return(
-                <a style={{width:"25%"}} class="navbar-brand" href="#" onClick={this.star}><Icon type="star-o" /> 收藏本文</a>
+                <a style={{width:"20%"}} class="navbar-brand" href="#" onClick={this.star}><Icon type="star-o" /> 收藏本文</a>
             )
         }
         else{
             return(
-                <a style={{width:"25%"}} class="navbar-brand" href="#" onClick={this.cancelStar}><Icon type="star" /> 取消收藏</a>
+                <a style={{width:"20%"}} class="navbar-brand" href="#" onClick={this.cancelStar}><Icon type="star" /> 取消收藏</a>
             )
         }
     }
@@ -405,8 +406,9 @@ class ViewNote extends Component{
                         <div class="navbar-header" style={{width: "100%", paddingLeft:"25%", paddingRight:"25%", textAlign:"center"}}>
                             {likeButton}
                             {starButton}
-                            <a style={{width:"25%"}} class="navbar-brand" href="#" onClick={this.showComment}><Icon type="message" /> 评论 ( {this.state.commentNo} )</a>
-                            <a style={{width:"25%"}} class="navbar-brand" href="#" onClick={this.shareLink}><Icon type="fork" /> 分享</a>
+                            <a style={{width:"20%"}} class="navbar-brand" href="#" onClick={this.showComment}><Icon type="message" /> 评论 ( {this.state.commentNo} )</a>
+                            <a style={{width:"20%"}} class="navbar-brand" href="#" onClick={this.shareLink}><Icon type="fork" /> 分享</a>
+                            <a style={{width:"20%"}} class="navbar-brand" href={"/paper?paperID=" + information.paperID}><Icon type="link" />跳转到论文</a>
                         </div>
                     </div>
                 </nav>
@@ -416,6 +418,7 @@ class ViewNote extends Component{
     renderComment = () =>{
         return(
             <List
+                pagination={{pageSize: 3}}
                 itemLayout="horizontal"
                 dataSource={this.state.comment}
                 renderItem={item => (
@@ -486,13 +489,16 @@ class ViewNote extends Component{
                         width={700}
                         title='评论'
                         visible={this.state.commentVisible}
-                        onOk={this.handleCommentOk}
+                        onOk={this.commitComment}
                         onCancel={this.handleCommentCancel}
                         afterClose={this.clearCommentInput}
+                        footer={[
+                            <Button key="back" onClick={this.handleCommentCancel}>关闭</Button>,
+                            <Button type="primary" onClick={this.commitComment}>发送</Button>
+                        ]}
                     >
                         {comment}
                         <TextArea rows={2} value={this.state.commentContent} onChange={this.handleCommentChange} placeholder='添加评论' />
-                        <Button type="primary" onClick={this.commitComment}>添加评论</Button>
                     </Modal>
                     <div>
                         <h1 class="Post-Title" style={{ fontWeight: "600", fontSize: "36px", textAlign:"left"}}> {information.title} </h1>

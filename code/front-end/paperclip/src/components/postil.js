@@ -41,6 +41,7 @@ class Postil extends Component{
             this.setState({
                 selectid:data
             })
+            console.log("selectid1:"+data);
         });
     }
     componentWillUnmount() {
@@ -122,6 +123,17 @@ class Postil extends Component{
         data[idx].marked = 1 - data[idx].marked
         this.setState({data:data})
         this.refreshStat(data[idx],[0,0])
+
+        var mark={};
+        mark.id=this.state.selectid;
+        mark.posID = data[idx].postils.posID
+        mark.content=data[idx].postils.content;
+        mark.visible=false;
+        if(data[idx].marked == 1){            
+            emitter.emit('addMark',mark);
+        }else{
+            emitter.emit('deleteMark',mark.posID);
+        }
     }
     getPostil = (item,idx)=>{
         return(
@@ -195,6 +207,12 @@ class Postil extends Component{
             old.push(newPos);
             that.setState({data:old});
             console.log(data)
+            var mark={};
+            mark.id=this.state.selectid;
+            mark.posID = data.posID;
+            mark.content=content;
+            mark.visible=false;
+            emitter.emit('addMark',mark);
         }).catch(function(e){
             console.log("Oops, error");
         })
@@ -205,6 +223,10 @@ class Postil extends Component{
             return;
         }
         var idx = this.state.postilIdx;
+        if(this.state.selectid == null){
+            message.error("还未选中内容");
+            return;
+        }
         var name = this.state.username;
         var obj = new Object();
         obj.user = name;

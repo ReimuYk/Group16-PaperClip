@@ -26,7 +26,6 @@ class StarUser extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                console.log(responseJson);
                 let data = eval(responseJson);
                 that.setState({
                     data:data
