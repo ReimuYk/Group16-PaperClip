@@ -161,7 +161,7 @@ class Header extends React.Component {
             .then(responseJson=>{
                 let data = eval('(' + responseJson + ')');
                 if(data.result == "fail"){
-                    alert('不存在此用户');
+                    message.error('不存在此用户');
                 }
                 message.success('邀请请求已发送');
             }).catch(function(e){

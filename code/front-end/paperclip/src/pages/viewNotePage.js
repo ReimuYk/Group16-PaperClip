@@ -213,7 +213,7 @@ class ViewNote extends Component{
                     } );
                 }
                 else{
-                    alert("点赞错误，请重试");
+                    message.error("点赞错误，请重试");
                 }
             }).catch(function(e){
             console.log("Oops, error");

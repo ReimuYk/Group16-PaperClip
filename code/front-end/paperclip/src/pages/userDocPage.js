@@ -112,7 +112,7 @@ class UserDoc extends Component{
             .then(responseJson=>{
                 let result = eval('(' + responseJson + ')');
                 if(result.result != "success"){
-                    alert("新建失败，请重试");
+                    message.error("新建失败，请重试");
                 }
                 else{
                     let obj={
