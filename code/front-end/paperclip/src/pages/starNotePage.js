@@ -10,6 +10,7 @@ class StarNote extends Component{
     state = {
         data: [],
         columns: [{
+            align:'center',
             title: '笔记名称',
             dataIndex: 'title',
             key: 'title',
@@ -17,6 +18,7 @@ class StarNote extends Component{
                 <a href={"/user/viewNote?noteID=" + record.ID}>{text}</a>
             )
         }, {
+            align:'center',
             title: '作者',
             dataIndex: 'author',
             key: 'author',
@@ -24,18 +26,22 @@ class StarNote extends Component{
                 <a href={"/viewpage?username=" + record.author}>{text}</a>
             )
         },  {
+            align:'center',
             title: '对应论文',
             dataIndex:'paperTitle',
             key: 'paperTitle'
         },  {
+            align:'center',
             title: '收藏量',
             dataIndex:'starno',
             key:'starno'
         }, {
+            align:'center',
             title: '最近修改日期',
             dataIndex:'date',
             key:'date'
         }, {
+            align:'center',
             title:'操作',
             key:'action',
             render: (text, record) => (

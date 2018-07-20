@@ -14,6 +14,7 @@ class UserDocDetail extends Component{
         data: [],
         author: false,
         columns1: [{
+            align:'center',
             title: '标题',
             dataIndex: 'title',
             key: 'title',
@@ -21,14 +22,17 @@ class UserDocDetail extends Component{
                 <a href={"/paper?paperID=" + record.docPdfId}>{text}</a>
             )
         }, {
+            align:'center',
             title: '版本',
             dataIndex: 'version',
             key: 'version',
         },  {
+            align:'center',
             title: '发布日期',
             dataIndex:'date',
             key: 'date'
         }, {
+            align:'center',
             title:'操作',
             key:'action',
             render: (text, record) => (
@@ -36,6 +40,7 @@ class UserDocDetail extends Component{
             )
         }],
         columns2: [{
+            align:'center',
             title: '标题',
             dataIndex: 'title',
             key: 'title',
@@ -43,14 +48,17 @@ class UserDocDetail extends Component{
                 <a href={"/paper?paperID=" + record.docPdfId}>{text}</a>
             )
         }, {
+            align:'center',
             title: '版本',
             dataIndex: 'version',
             key: 'version',
         },  {
+            align:'center',
             title: '发布日期',
             dataIndex:'date',
             key: 'date'
         }, {
+            align:'center',
             title:'操作',
             key:'action',
             render: (text, record) => (

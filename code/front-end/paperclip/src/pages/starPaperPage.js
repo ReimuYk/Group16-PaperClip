@@ -12,6 +12,7 @@ class StarPaper extends Component{
     state = {
         data: [],
         columns: [{
+            align:'center',
             title: '论文名称',
             dataIndex: 'title',
             key: 'title',
@@ -19,14 +20,17 @@ class StarPaper extends Component{
                 <a href={"/paper?paperID=" + record.ID}>{text}</a>
             )
         }, {
+            align:'center',
             title: '批注量',
             dataIndex: 'postilno',
             key: 'postilno',
         },  {
+            align:'center',
             title: '笔记量',
             dataIndex:'noteno',
             key: 'noteno'
         }, {
+            align:'center',
             title:'操作',
             key:'action',
             render: (text, record) => (
