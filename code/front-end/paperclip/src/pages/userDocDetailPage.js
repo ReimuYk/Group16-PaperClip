@@ -86,7 +86,6 @@ class UserDocDetail extends Component{
             .then(response=>response.text())
             .then(responseJson=>{
                 let data = eval('(' + responseJson + ')');
-                console.log(data);
                 if(data.result == 'fail'){
                     window.location.href = '/user';
                     return;
@@ -110,7 +109,6 @@ class UserDocDetail extends Component{
         /* get docs according to username */
         let jsonbody = {};
         jsonbody.versionID = item.docPdfID;
-        console.log(item);
         jsonbody.username = username;
         console.log(jsonbody);
         let url = IPaddress + 'service/delete/docVersion';
