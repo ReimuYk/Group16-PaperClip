@@ -63,12 +63,13 @@ public class UserDocServiceImpl implements UserDocService {
         return false;
     }
     // get all the doc that this user has written
-    public JSONArray getUserDoc(JSONObject data) {
+    public JSONArray getUserDoc(JSONObject data) throws UnsupportedEncodingException {
         JSONArray docs = new JSONArray();
 
         System.out.println("data: "+data);
 
         String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
         System.out.println("username: "+username);
         User user = userRepo.findOne(username);
         List<Document> docList = docRepo.findByUser(user);
@@ -76,7 +77,7 @@ public class UserDocServiceImpl implements UserDocService {
         for (Document doc : docList) {
             JSONObject docJson = new JSONObject();
             docJson.accumulate("ID", doc.getId());
-            docJson.accumulate("title", URLDecoder.decode(doc.getTitle()));
+            docJson.accumulate("title", URLDecoder.decode(doc.getTitle(), "UTF-8"));
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             docJson.accumulate("date", sdf.format(doc.getDate()));
             docs.add(docJson);
@@ -85,9 +86,10 @@ public class UserDocServiceImpl implements UserDocService {
     }
 
     // delete this user's doc( which matches this docID and docVersion)
-    public JSONObject deleteUserDoc(JSONObject data) {
+    public JSONObject deleteUserDoc(JSONObject data) throws UnsupportedEncodingException {
         JSONObject result = new JSONObject();
         String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
         Long docID = data.getLong("docID");
         Document doc = docRepo.findOne(docID);
         List<DocumentPdf> docPdfList = docPdfRepo.findByDocument(doc);
@@ -101,11 +103,12 @@ public class UserDocServiceImpl implements UserDocService {
     }
 
     // delete one version( keep others )
-    public JSONObject deleteUserDocVersion(JSONObject data) {
+    public JSONObject deleteUserDocVersion(JSONObject data) throws UnsupportedEncodingException {
         System.out.println("data: " + data);
         JSONObject result = new JSONObject();
 
         String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
         Long versionID = data.getLong("versionID");
         System.out.println("username: "+username);
         User user = userRepo.findOne(username);
@@ -123,9 +126,10 @@ public class UserDocServiceImpl implements UserDocService {
     }
 
     // get all versions of this doc
-    public JSONObject getUserDocDetail(JSONObject data) {
+    public JSONObject getUserDocDetail(JSONObject data) throws UnsupportedEncodingException {
         JSONArray docDetails = new JSONArray();
         String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
         Long docId = data.getLong("docID");
         Document doc = docRepo.findOne(docId);
         System.out.println("username: "+username);
@@ -142,13 +146,13 @@ public class UserDocServiceImpl implements UserDocService {
                 System.out.println("docPdfId: " + docPdf.getId());
                 JSONObject docPdfJson = new JSONObject();
                 docPdfJson.accumulate("result", "success");
-                docPdfJson.accumulate("title", URLDecoder.decode(docPdf.getTitle()));
+                docPdfJson.accumulate("title", URLDecoder.decode(docPdf.getTitle(), "UTF-8"));
                 docPdfJson.accumulate("docPdfID", docPdf.getId());
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 docPdfJson.accumulate("date", sdf.format(docPdf.getDate()));
-                docPdfJson.accumulate("author", URLDecoder.decode(docPdf.getAuthor()));
+                docPdfJson.accumulate("author", URLDecoder.decode(docPdf.getAuthor(), "UTF-8"));
                 docPdfJson.accumulate("version", docPdf.getVersion());
-                docPdfJson.accumulate("keywords", URLDecoder.decode(docPdf.getKeyWords()));
+                docPdfJson.accumulate("keywords", URLDecoder.decode(docPdf.getKeyWords(), "UTF-8"));
                 docDetails.add(docPdfJson);
             }
         }
@@ -159,8 +163,9 @@ public class UserDocServiceImpl implements UserDocService {
 
 
     // get doc details
-    public JSONObject getDocDetail(JSONObject data){
+    public JSONObject getDocDetail(JSONObject data) throws UnsupportedEncodingException {
         String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
         Long docID = data.getLong("docID");
         User user = userRepo.findOne(username);
         JSONObject docJson = new JSONObject();
@@ -172,9 +177,9 @@ public class UserDocServiceImpl implements UserDocService {
         }else{
             docJson.accumulate("result", "success");
             docJson.accumulate("docID", docID);
-            docJson.accumulate("title", URLDecoder.decode(doc.getTitle()));
-            docJson.accumulate("author", URLDecoder.decode(doc.getUser().getUsername()));
-            docJson.accumulate("content", URLDecoder.decode(doc.getContent()));
+            docJson.accumulate("title", URLDecoder.decode(doc.getTitle(), "UTF-8"));
+            docJson.accumulate("author", URLDecoder.decode(doc.getUser().getUsername(), "UTF-8"));
+            docJson.accumulate("content", URLDecoder.decode(doc.getContent(), "UTF-8"));
         }
         return docJson;
     }
@@ -182,6 +187,7 @@ public class UserDocServiceImpl implements UserDocService {
     // save doc details (after user has modified it)
     public JSONObject saveDoc(JSONObject data) throws UnsupportedEncodingException {
         String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
         Long docID = data.getLong("docID");
         Document doc = docRepo.findOne(docID);
         User user = userRepo.findOne(username);
@@ -189,7 +195,6 @@ public class UserDocServiceImpl implements UserDocService {
         if(!doc.getUser().getUsername().equals(username)) {
             result.accumulate("result", "fail");
         }else{
-
             String content = data.getString("content");
             content = URLEncoder.encode(content, "UTF-8");
             String title = data.getString("title");
@@ -204,10 +209,12 @@ public class UserDocServiceImpl implements UserDocService {
     }
 
     // add a contributer to this doc
-    public JSONObject addDocContributer(JSONObject data){
+    public JSONObject addDocContributer(JSONObject data) throws UnsupportedEncodingException {
         JSONObject result = new JSONObject();
         String hostname = data.getString("hostname");
+        hostname = URLEncoder.encode(hostname, "UTF-8");
         String clientname = data.getString("clientname");
+        clientname = URLEncoder.encode(clientname, "UTF-8");
         Long docID = data.getLong("docID");
         User host = userRepo.findOne(hostname);
         User client = userRepo.findOne(clientname);
@@ -222,18 +229,19 @@ public class UserDocServiceImpl implements UserDocService {
         return result;
     }
 
-    public JSONArray getContributeDoc(JSONObject data) {
+    public JSONArray getContributeDoc(JSONObject data) throws UnsupportedEncodingException {
         JSONArray docs = new JSONArray();
 
         String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
         User user = userRepo.findOne(username);
         List<Assist> assistList = assistRepo.findByUser(user);
         for (Assist assist : assistList) {
             Document doc = assist.getDocument();
             JSONObject docJson = new JSONObject();
             docJson.accumulate("docID", doc.getId());
-            docJson.accumulate("title", URLDecoder.decode(doc.getTitle()));
-            docJson.accumulate("author", URLDecoder.decode(doc.getUser().getUsername()));
+            docJson.accumulate("title", URLDecoder.decode(doc.getTitle(), "UTF-8"));
+            docJson.accumulate("author", URLDecoder.decode(doc.getUser().getUsername(), "UTF-8"));
             docJson.accumulate("result", "success");
             System.out.println("doc: "+docJson.toString());
             docs.add(docJson);
@@ -245,6 +253,7 @@ public class UserDocServiceImpl implements UserDocService {
     public JSONObject addDoc(JSONObject data) throws UnsupportedEncodingException {
         JSONObject result = new JSONObject();
         String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
         String title = data.getString("title");
         title = URLEncoder.encode(title, "UTF-8");
         String content = data.getString("content");
@@ -261,6 +270,7 @@ public class UserDocServiceImpl implements UserDocService {
     public JSONObject publishDoc(JSONObject data) throws UnsupportedEncodingException {
         System.out.println("get json: "+data);
         String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
         String doc_content = data.getString("docContent");
         String title = data.getString("docTitle");
         doc_content = URLEncoder.encode(doc_content, "UTF-8");
@@ -291,7 +301,7 @@ public class UserDocServiceImpl implements UserDocService {
         //create json_body & POST req
         JSONObject json_body = new JSONObject();
         json_body.accumulate("paperID",pdf.getId());
-        json_body.accumulate("data",URLDecoder.decode(doc_content));
+        json_body.accumulate("data",URLDecoder.decode(doc_content, "UTF-8"));
         String body = json_body.toString();
         HttpEntity<String> entity = new HttpEntity<>(body,headers);
         ResponseEntity<JSONObject> resp = restTemplate.exchange(url, HttpMethod.POST, entity, JSONObject.class);

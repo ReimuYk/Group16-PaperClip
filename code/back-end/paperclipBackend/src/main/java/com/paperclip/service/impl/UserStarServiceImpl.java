@@ -22,6 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -66,9 +69,9 @@ public class UserStarServiceImpl implements UserStarService {
 
 
     // get all the notes that the user has stared
-    public JSONArray getStarNote(JSONObject data) {
+    public JSONArray getStarNote(JSONObject data) throws UnsupportedEncodingException {
         String username = data.getString("username");
-
+        username = URLEncoder.encode(username, "UTF-8");
         User user = userRepo.findOne(username);
         List<StarNote> l1 = starNoteRepo.findByUser(user);
         Iterator<StarNote> it1 = l1.iterator();
@@ -104,7 +107,7 @@ public class UserStarServiceImpl implements UserStarService {
         try {
             String username = data.getString("username");
             Long noteID = data.getLong("noteID");
-
+            username = URLEncoder.encode(username, "UTF-8");
             User user = userRepo.findOne(username);
             Note note = noteRepo.findOne(noteID);
             starNoteRepo.deleteDistinctByNoteAndUser(note,user);
@@ -114,15 +117,17 @@ public class UserStarServiceImpl implements UserStarService {
             result.accumulate("result", "success");
         }catch (JSONException e){
             result.accumulate("result", "fail");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
 
         return result;
     }
 
     // get all papers that this user has stared
-    public JSONArray getStarPaper(JSONObject data) {
+    public JSONArray getStarPaper(JSONObject data) throws UnsupportedEncodingException {
         String username = data.getString("username");
-
+        username = URLEncoder.encode(username, "UTF-8");
         User user = userRepo.findOne(username);
         List<StarPaper> l1 = starPaperRepo.findByUser(user);
         Iterator<StarPaper> it1 = l1.iterator();
@@ -170,7 +175,7 @@ public class UserStarServiceImpl implements UserStarService {
         try {
             String username = data.getString("username");
             Long paperID = data.getLong("paperID");
-
+            username = URLEncoder.encode(username, "UTF-8");
             User user = userRepo.findOne(username);
             Paper paper = paperRepo.findOne(paperID);
             starPaperRepo.deleteDistinctByPaperAndUser(paper,user);
@@ -184,15 +189,17 @@ public class UserStarServiceImpl implements UserStarService {
             result.accumulate("result", "success");
         }catch (JSONException e){
             result.accumulate("result", "fail");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
 
         return result;
     }
 
     //
-    public JSONArray getStarUser(JSONObject data) {
+    public JSONArray getStarUser(JSONObject data) throws UnsupportedEncodingException {
         String username = data.getString("username");
-
+        username = URLEncoder.encode(username, "UTF-8");
         User u = userRepo.findOne(username);
         List<Follow> l1 = followRepo.findByFollower(u);
         Iterator<Follow> it1 = l1.iterator();
@@ -206,16 +213,17 @@ public class UserStarServiceImpl implements UserStarService {
         while(it2.hasNext()) {
             User uu = it2.next();
             JSONObject user = new JSONObject();
-            user.accumulate("username",uu.getUsername());
+            user.accumulate("username", URLDecoder.decode(uu.getUsername(), "UTF-8"));
             user.accumulate("avatar",imgService.getUserHeader(uu));
             users.add(user);
         }
         return users;
     }
 
-    public JSONArray getRecentFans(JSONObject data){
+    public JSONArray getRecentFans(JSONObject data) throws UnsupportedEncodingException {
         JSONArray followArray = new JSONArray();
         String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
         User user = userRepo.findOne(username);
         List<Follow> followList = followRepo.findByFolloweeOrderByIdDesc(user);
         int count=0;
@@ -232,11 +240,12 @@ public class UserStarServiceImpl implements UserStarService {
 
     // hostname want to stop star clientname
     //(hostname used to star clientname
-    public JSONObject quitStarUser(JSONObject data){
+    public JSONObject quitStarUser(JSONObject data) throws UnsupportedEncodingException {
         JSONObject result = new JSONObject();
         String hostname = data.getString("hostname");
         String clientname = data.getString("clientname");
-
+        hostname = URLEncoder.encode(hostname, "UTF-8");
+        clientname = URLEncoder.encode(clientname, "UTF-8");
         User followee = userRepo.findOne(clientname);
         User follower = userRepo.findOne(hostname);
         Follow ff = followRepo.findDistinctByFolloweeAndFollower(followee,follower);
@@ -259,11 +268,12 @@ public class UserStarServiceImpl implements UserStarService {
     }
 
     // hostname want to star clientname
-    public JSONObject starUser(JSONObject data) {
+    public JSONObject starUser(JSONObject data) throws UnsupportedEncodingException {
         System.out.println("data " +data);
         String hostname = data.getString("hostname");
         String clientname = data.getString("clientname");
-
+        hostname = URLEncoder.encode(hostname, "UTF-8");
+        clientname = URLEncoder.encode(clientname, "UTF-8");
         System.out.println("before find user");
         User followee = userRepo.findOne(clientname);
         User follower = userRepo.findOne(hostname);

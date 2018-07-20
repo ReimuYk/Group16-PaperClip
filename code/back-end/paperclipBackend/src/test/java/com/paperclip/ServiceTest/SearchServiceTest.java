@@ -18,6 +18,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class SearchServiceTest {
     }
 
     @Test
-    public void testSearchPaper(){
+    public void testSearchPaper() throws UnsupportedEncodingException {
         JSONObject data = new JSONObject();
         data.accumulate("searchText","u");
         JSONArray a = service.searchPaper(data);

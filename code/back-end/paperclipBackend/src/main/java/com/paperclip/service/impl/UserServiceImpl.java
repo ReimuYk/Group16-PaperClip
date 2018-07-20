@@ -103,23 +103,23 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
-    public JSONObject userLogin(JSONObject data) {
+    public JSONObject userLogin(JSONObject data) throws UnsupportedEncodingException {
         System.out.println("userLogin get json: "+data);
         String username = data.getString("username");
         String password = data.getString("password");
-        username = URLEncoder.encode(username);
-        password = URLEncoder.encode(password);
+        username = URLEncoder.encode(username, "UTF-8");
+        password = URLEncoder.encode(password, "UTF-8");
         JSONObject userinfo = new JSONObject();
 
         User user = userRepo.findOne(username);
         if((user != null) && (password.equals(user.getPassword()))){
-            userinfo.accumulate("username", URLDecoder.decode(user.getUsername()));
+            userinfo.accumulate("username", URLDecoder.decode(user.getUsername(), "UTF-8"));
             userinfo.accumulate("result", "success");
         }
         else {
             user = userRepo.findDistinctByEmail(username);
             if ((user != null) && (password.equals(user.getPassword()))) {
-                userinfo.accumulate("username", URLDecoder.decode(user.getUsername()));
+                userinfo.accumulate("username", URLDecoder.decode(user.getUsername(), "UTF-8"));
                 userinfo.accumulate("result", "success");
             }else{
                 userinfo.accumulate("result", "fail");
@@ -163,8 +163,8 @@ public class UserServiceImpl implements UserService {
         while(it2.hasNext()){
             Message m = it2.next();
             JSONObject message = new JSONObject();
-            message.accumulate("sender", URLDecoder.decode(m.getSender().getUsername()));
-            message.accumulate("content",URLDecoder.decode(m.getContent()));
+            message.accumulate("sender", URLDecoder.decode(m.getSender().getUsername(), "UTF-8"));
+            message.accumulate("content",URLDecoder.decode(m.getContent(), "UTF-8"));
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             message.accumulate("time",sdf.format(m.getTime()));
             messages.add(message);
@@ -174,10 +174,10 @@ public class UserServiceImpl implements UserService {
     }
 
     //输入：username -------------------简略的展示私信列表（类比QQ的只显示最新一个消息的对话框列表）
-    public JSONArray getBriefMessageList(JSONObject data){
+    public JSONArray getBriefMessageList(JSONObject data) throws UnsupportedEncodingException {
         JSONArray messageArray = new JSONArray();
         String username = data.getString("username");
-
+        username = URLEncoder.encode(username, "UTF-8");
         User user = userRepo.findOne(username);
         List<Message> list = messageRepo.getAllMessage(user);
         Iterator<Message> it = list.iterator();
@@ -208,7 +208,7 @@ public class UserServiceImpl implements UserService {
             else {
                 message.accumulate("another", m.getSender().getUsername());
             }
-            message.accumulate("content",URLDecoder.decode(m.getContent()));
+            message.accumulate("content",URLDecoder.decode(m.getContent(), "UTF-8"));
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             message.accumulate("time",sdf.format(m.getTime()));
             messageArray.add(message);
@@ -217,11 +217,12 @@ public class UserServiceImpl implements UserService {
     }
 
     //输入：hostname，clientname---------------两个用户之间的对话展示
-    public JSONArray getConversation(JSONObject data){
+    public JSONArray getConversation(JSONObject data) throws UnsupportedEncodingException {
         JSONArray conversation = new JSONArray();
         String hostname = data.getString("hostname");
         String clientname = data.getString("clientname");
-
+        hostname = URLEncoder.encode(hostname, "UTF-8");
+        clientname = URLEncoder.encode(clientname, "UTF-8");
         User host = userRepo.findOne(hostname);
         User client = userRepo.findOne(clientname);
         List<User> user = new ArrayList<>();
@@ -238,7 +239,7 @@ public class UserServiceImpl implements UserService {
                 messageRepo.save(m);
             }
             message.accumulate("sender",m.getSender().getUsername());
-            message.accumulate("content",URLDecoder.decode(m.getContent()));
+            message.accumulate("content",URLDecoder.decode(m.getContent(), "UTF-8"));
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             message.accumulate("time",sdf.format(m.getTime()));
             conversation.add(message);

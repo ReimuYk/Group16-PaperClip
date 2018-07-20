@@ -9,6 +9,9 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,9 +23,9 @@ public class SearchServiceImpl implements SearchService {
     @Autowired
     private NoteRepository noteRepo;
 
-    public JSONArray searchPaper(JSONObject data1) {
+    public JSONArray searchPaper(JSONObject data1) throws UnsupportedEncodingException {
         String searchText = data1.getString("searchText");
-
+        searchText = URLEncoder.encode(searchText, "UTF-8");
         JSONArray data = new JSONArray();
         JSONArray papers = new JSONArray();
         Iterable<Paper> allPaper = paperRepo.findAll();
@@ -30,9 +33,9 @@ public class SearchServiceImpl implements SearchService {
             if (match(searchText,p)) {
                 JSONObject paper = new JSONObject();
                 paper.accumulate("paperID", p.getId());
-                paper.accumulate("title", p.getTitle());
-                paper.accumulate("author", p.getAuthor());
-                paper.accumulate("keyword", p.getKeyWords());
+                paper.accumulate("title", URLDecoder.decode(p.getTitle(), "UTF-8"));
+                paper.accumulate("author", URLDecoder.decode(p.getAuthor(), "UTF-8"));
+                paper.accumulate("keyword", URLDecoder.decode(p.getKeyWords(), "UTF-8"));
                 paper.accumulate("noteno", noteRepo.findByPaper(p).size());
                 papers.add(paper);
             }
