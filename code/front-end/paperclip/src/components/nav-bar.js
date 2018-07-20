@@ -198,7 +198,7 @@ class NavBar extends Component{
                 dataSource={information.followMessage}
                 renderItem={item => (<List.Item>
                     <List.Item.Meta
-                    avatar={<Avatar src={item.userheader}/>}
+                    avatar={<Avatar src={item.avatar}/>}
                     title={<a href={"/viewpage?username=" + item.username}>{item.username}</a>}
                     />
                   </List.Item>)}
