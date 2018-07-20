@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Popconfirm, Popover,Icon,Button,Tag, Input, Tooltip,List,Avatar, Menu, Modal} from 'antd';
+import {Popconfirm, Popover,Icon,Button,Tag, Input, Tooltip,List,Avatar, Menu, Modal, message} from 'antd';
 import { IPaddress } from '../App'
 import  { Redirect, Link } from 'react-router-dom'
 import ReactQuill from 'react-quill';
@@ -191,7 +191,7 @@ class Header extends React.Component {
             .then(responseJson=>{
                 let data = eval('('+responseJson+')');
                 if(data.result == "fail"){
-                    alert("保存失败，请重试")
+                    message.error("保存失败，请重试")
                     return;
                 }
                 window.location.href="/viewnote?noteID="+information.noteID;

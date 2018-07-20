@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, Avatar, Popconfirm, Menu, Anchor, Button, Icon, Divider,Table } from 'antd';
+import { List, Avatar, Popconfirm, Menu, Anchor, Button, Icon, Divider,Table, message } from 'antd';
 import { Link, Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import UserFLoatMenu from '../components/userFloatMenu';
@@ -90,7 +90,7 @@ class UserDoc extends Component{
                     })
                 }
                 else{
-                    alert("删除错误，请重试");
+                    message.error('删除失败，请重试');
                 }
             }).catch(function(e){
             console.log("Oops, error");

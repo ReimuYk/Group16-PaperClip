@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Divider ,Modal,Avatar,Checkbox,Icon,Button,Popover,Card} from 'antd';
+import { Divider ,Modal,Avatar,Checkbox,Icon,Button,Popover,Card, message} from 'antd';
 import {Link } from 'react-router-dom';
 import Postil from '.././components/postil';
 import NavBar from '.././components/nav-bar';
@@ -35,7 +35,7 @@ class Paper extends Component{
             console.log(responseJson);
             let data = eval('('+responseJson+')');
             if(data.result == "fail"){
-                alert("无浏览权限");
+                message.error("无浏览权限");
                 window.location.href='/';
             }
             console.log(data)

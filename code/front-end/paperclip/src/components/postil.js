@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Collapse ,List,Input,Icon,Button,Avatar,Divider,Anchor} from 'antd';
+import { Collapse ,List,Input,Icon,Button,Avatar,Divider,Anchor, message} from 'antd';
 import Comment from "./comment";
 import emitter from '.././util/events';
 import { IPaddress } from '../App';
@@ -201,7 +201,7 @@ class Postil extends Component{
     }
     handleInput(value){
         if(!value){
-            alert("输入不能为空");
+            message.error("输入不能为空");
             return;
         }
         var idx = this.state.postilIdx;

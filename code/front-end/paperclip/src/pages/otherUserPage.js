@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout, Icon, Divider, Menu, List, Avatar, Modal, Input, Anchor, Button } from 'antd';
+import { Layout, Icon, Divider, Menu, List, Avatar, Modal, Input, Anchor, Button, message } from 'antd';
 import { Link } from 'react-router-dom';
 import '../css/style.css';
 import NavBar from '.././components/nav-bar';
@@ -30,7 +30,7 @@ class OtherUserPage extends Component{
     }
     handleOk = (e) => {
         if(this.state.mailContent == ''){
-            alert("内容不能为空！");
+            message.error("内容不能为空！");
             return;
         }
         let that  = this;
@@ -108,7 +108,7 @@ class OtherUserPage extends Component{
             .then(responseJson=>{
                 let result = eval('('+responseJson+')');
                 if(result.result == "fail"){
-                    alert("关注失败，请重试");
+                    message.error("关注失败，请重试");
                 }
                 information.fansno = result.fansno;
                 that.setState({
@@ -140,7 +140,7 @@ class OtherUserPage extends Component{
                     })
                 }
                 else{
-                    alert("取消错误，请重试");
+                    message.error("取消错误，请重试");
                 }
             }).catch(function(e){
             console.log("Oops, error");

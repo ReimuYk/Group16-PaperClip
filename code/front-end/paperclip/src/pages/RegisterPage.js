@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../css/LoginPage.css'
+import {message} from 'antd'
 import { Link,Redirect } from 'react-router-dom';
 import { IPaddress } from '../App'
 class RegisterPage extends Component {
@@ -22,7 +23,7 @@ class RegisterPage extends Component {
         var password = document.getElementById("password").value;
         var email = document.getElementById("email").value;
         if(!this.isEmailAvailable(email)){
-            alert("邮箱错误！");
+            message.error("邮箱错误！");
             return false;
         }
         let that  = this;
@@ -40,15 +41,15 @@ class RegisterPage extends Component {
             .then(responseJson=>{
                 let result = eval('(' + responseJson + ')');
                 if(result.result == 'duplicate username'){
-                    alert('重复的用户名，请重试');
+                    message.error('重复的用户名，请重试');
                     return false;
                 }
                 if(result.result == 'duplicate email'){
-                    alert('该邮箱已被注册过，可直接使用邮箱登录');
+                    message.error('该邮箱已被注册过，可直接使用邮箱登录');
                     return false;
                 }
                 else{
-                    alert('注册成功，请检查您的邮箱');
+                    message.success('注册成功，请检查您的邮箱');
                 }
             }).catch(function(e){
             console.log("Oops, error");

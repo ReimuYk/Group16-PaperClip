@@ -124,7 +124,7 @@ class UserSetting extends Component{
                     console.log(responseJson);
                     let data = eval('(' + responseJson + ')');
                     if(data.result == "fail"){
-                        alert('请上传正确的图片');
+                        message.error('请上传正确的图片');
                         return;
                     }                
                     that.setState({
