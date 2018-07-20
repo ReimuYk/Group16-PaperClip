@@ -318,12 +318,17 @@ public class UserDocServiceImpl implements UserDocService {
 
         Document doc = docRepo.findOne(docID);
 
+        System.out.println("doc:"+doc.getId());
         RestTemplate restTemplate = new RestTemplate();
         String url = "http://localhost:8000/html2pdf/";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
         //create pdf data
         Integer version = docPdfRepo.getMaxVersion(doc);
+        System.out.println("version"+version);
+        if(version == null){
+            version = 0;
+        }
         DocumentPdf pdf = new DocumentPdf(doc,version+1);
         //pdf.setAuthor(username);
         //pdf.setTitle(title);

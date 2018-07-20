@@ -15,6 +15,6 @@ import java.util.List;
 public interface DocumentPdfRepository extends CrudRepository<DocumentPdf,Long>{
     List<DocumentPdf> findByDocument(Document doc);
 
-    @Query("select max(o.version) from DocumentPdf o where o.document=:doc")
+    @Query("select max(o.version) from DocumentPdf o where o.document = :doc")
     Integer getMaxVersion(@Param("doc")Document doc);
 }
