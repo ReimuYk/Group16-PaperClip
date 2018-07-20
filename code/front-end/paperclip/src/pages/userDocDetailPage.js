@@ -14,48 +14,56 @@ class UserDocDetail extends Component{
         data: [],
         author: false,
         columns1: [{
+            align:'center',
             title: '标题',
             dataIndex: 'title',
             key: 'title',
             render: (text, record) => (
-                <a href={"/paper?paperID=" + record.docPdfId}>{text}</a>
+                <a href={"/paper?paperID=" + record.docPdfID}>{text}</a>
             )
         }, {
+            align:'center',
             title: '版本',
             dataIndex: 'version',
             key: 'version',
         },  {
+            align:'center',
             title: '发布日期',
             dataIndex:'date',
             key: 'date'
         }, {
+            align:'center',
             title:'操作',
             key:'action',
             render: (text, record) => (
-                <a href={"/paper?paperID=" + record.docPdfId}>查看内容</a>
+                <a href={"/paper?paperID=" + record.docPdfID}>查看内容</a>
             )
         }],
         columns2: [{
+            align:'center',
             title: '标题',
             dataIndex: 'title',
             key: 'title',
             render: (text, record) => (
-                <a href={"/paper?paperID=" + record.docPdfId}>{text}</a>
+                <a href={"/paper?paperID=" + record.docPdfID}>{text}</a>
             )
         }, {
+            align:'center',
             title: '版本',
             dataIndex: 'version',
             key: 'version',
         },  {
+            align:'center',
             title: '发布日期',
             dataIndex:'date',
             key: 'date'
         }, {
+            align:'center',
             title:'操作',
             key:'action',
             render: (text, record) => (
             <span>
-                <a href={"/paper?paperID=" + record.docPdfId}>查看内容</a>
+                <a href={"/paper?paperID=" + record.docPdfID}>查看内容</a>
                 <Divider type="vertical" />
                 <a onClick={() => this.deleteDoc(record)}>删除该版本</a>
             </span>
@@ -159,14 +167,14 @@ class UserDocDetail extends Component{
                         renderItem={item => (
                             <List.Item
                                 actions={[<p>
-                                    <a style={{width:'75px'}} href={"/paper?ID="+item.docPdfID}>查看内容</a>
+                                    <a style={{width:'75px'}} href={"/paper?paperID="+item.docPdfID}>查看内容</a>
                                     <Popconfirm title="确定删除吗？" onConfirm={() => this.deleteDoc(this, item)}>
                                         <a style={{width:'75px',marginLeft:'20px'}}>删除该版本</a>
                                     </Popconfirm>
                                 </p>]}
                             >
                                 <List.Item.Meta
-                                    title={<a href={"/paper?ID="+item.docPdfID}>{item.title}</a>}
+                                    title={<a href={"/paper?paperID="+item.docPdfID}>{item.title}</a>}
                                     description={'版本 ' + item.version}
                                 />
                                 <p>{item.date}</p>

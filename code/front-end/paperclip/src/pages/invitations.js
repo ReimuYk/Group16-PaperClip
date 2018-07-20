@@ -40,8 +40,9 @@ class Invitations extends Component{
         let that = this;
         /* get data according to username */
         let jsonbody = {};
+        let invitations = that.state.data;
         jsonbody.inviteID = item.inviteID;
-        jsonbody.reply = true;
+        jsonbody.reply = 1;
         let url = IPaddress + 'service/replyInvitation';
         let options={};
         options.method='POST';
@@ -53,9 +54,18 @@ class Invitations extends Component{
                 let data = eval('(' + responseJson + ')');
                 if(data.result == "fail"){
                     message.error('操作失败，请重试');
+                    return;
+                }
+                for(var i=0; i<invitations.length; i++){
+                    if(invitations[i].inviteID == item.inviteID){
+                        invitations.splice(i,1);
+                        break;
+                    }
                 }
                 that.setState({
+                    data: invitations
                 })
+                message.success('已接受请求');
             }).catch(function(e){
             console.log("Oops, error");
         })
@@ -64,9 +74,10 @@ class Invitations extends Component{
     refuseInvitation = (record, item) =>{
         let that = this;
         /* get data according to username */
+        let invitations = that.state.data;
         let jsonbody = {};
         jsonbody.inviteID = item.inviteID;
-        jsonbody.reply = false;
+        jsonbody.reply = 0;
         let url = IPaddress + 'service/replyInvitation';
         let options={};
         options.method='POST';
@@ -78,7 +89,18 @@ class Invitations extends Component{
                 let data = eval('(' + responseJson + ')');
                 if(data.result == "fail"){
                     message.error('操作失败，请重试');
+                    return;
                 }
+                for(var i=0; i<invitations.length; i++){
+                    if(invitations[i].inviteID == item.inviteID){
+                        invitations.splice(i,1);
+                        break;
+                    }
+                }
+                that.setState({
+                    data: invitations
+                })
+                message.success('已拒绝请求');
                 that.setState({
                 })
             }).catch(function(e){
