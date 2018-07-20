@@ -126,7 +126,10 @@ class NavBar extends Component{
                 console.log(data);
                 if(data.result == "fail"){
                     message.error('操作失败，请重试');
+                    return;
                 }
+                message.success('已接受邀请');
+                that.inviteMessage();
                 that.setState({
                 })
             }).catch(function(e){
@@ -152,6 +155,8 @@ class NavBar extends Component{
                 if(data.result == "fail"){
                     message.error('操作失败，请重试');
                 }
+                message.success('已拒绝邀请');
+                that.inviteMessage();
                 that.setState({
                 })
             }).catch(function(e){
