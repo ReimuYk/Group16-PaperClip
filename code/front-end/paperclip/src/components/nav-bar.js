@@ -52,6 +52,12 @@ class NavBar extends Component{
             .then(responseJson=>{
                 console.log(responseJson);
                 let data = eval(responseJson);
+                for(var i = 0; i<data.length; i++){
+                    if(data[i].content.length > 15){
+                        data[i].content = data[i].content.substring(0,15);
+                        data[i].content += '...';
+                    }
+                }
                 information.unreadMessage = data;
                 that.setState({
                 })
@@ -142,7 +148,6 @@ class NavBar extends Component{
                 that.inviteMessage();
                 that.setState({
                 });
-                message.success('已接受邀请');
             }).catch(function(e){
             console.log("Oops, error");
         })
@@ -177,7 +182,6 @@ class NavBar extends Component{
                 that.inviteMessage();
                 that.setState({
                 });
-                message.success('已拒绝邀请');
             }).catch(function(e){
             console.log("Oops, error");
         })

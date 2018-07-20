@@ -41,6 +41,12 @@ class Message extends Component{
             .then(response=>response.text())
             .then(responseJson=>{
                 let data = eval(responseJson);
+                for(var i = 0; i<data.length; i++){
+                    if(data[i].content.length > 30){
+                        data[i].content = data[i].content.substring(0,30);
+                        data[i].content += '...';
+                    }
+                }
                 that.setState({
                     data: data
                 })
@@ -113,7 +119,14 @@ class Message extends Component{
                 let result = eval('(' + responseJson + ')');
                 if(result.result != "fail"){
                     if(index > -1){
-                        data[index].content = that.state.messageContent;
+                        let content = that.state.messageContent;
+                        if(content.length > 30){
+                            data[index].content = content.substring(0,30);
+                            data[index].content += '...';
+                        }
+                        else{
+                            data[index].content = content;
+                        }
                         data[index].time = result.time;
                         data.sort(sortData);
                     }
