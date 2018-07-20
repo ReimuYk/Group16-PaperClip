@@ -46,6 +46,9 @@ public class UserNoteServiceImpl implements UserNoteService {
     @Autowired
     private FollowRepository followRepo;
 
+    @Autowired
+    private ImgServiceImpl service;
+
     // 传入：username，paperID 传出：noteID ---------------新建note
     public JSONObject addNote(JSONObject data) throws UnsupportedEncodingException {
         JSONObject ret = new JSONObject();
@@ -190,7 +193,7 @@ public class UserNoteServiceImpl implements UserNoteService {
 
         note.accumulate("noteID", n.getId());
         note.accumulate("author", author.getUsername());
-        note.accumulate("avatar", author.getAvatar());
+        note.accumulate("avatar", service.getUserHeader(author));
         note.accumulate("description",author.getDescription());
         note.accumulate("title", n.getTitle());
         note.accumulate("content", n.getContent());

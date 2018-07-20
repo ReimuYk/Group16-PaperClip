@@ -106,4 +106,18 @@ public class UserDocController {
     JSONObject testpublish(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return userDocService.publishDoc(data);
     }
+
+    @RequestMapping(value = "/service/docContributors",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONArray getContributors(@RequestBody JSONObject data) throws UnsupportedEncodingException {
+        return userDocService.getContributor(data);
+    }
+
+    @RequestMapping(value = "/service/deleteContributor",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONObject deleteContributor(@RequestBody JSONObject data) throws UnsupportedEncodingException {
+        return userDocService.deleteContributer(data);
+    }
 }

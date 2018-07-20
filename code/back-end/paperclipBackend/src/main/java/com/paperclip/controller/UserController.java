@@ -72,4 +72,18 @@ public class UserController {
     JSONObject sendMessage(@RequestBody JSONObject message) throws UnsupportedEncodingException {
         return userService.sendMessage(message);
     }
+
+    @RequestMapping(value = "/service/getInvitations",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONArray getInvitations(@RequestBody JSONObject data) throws UnsupportedEncodingException {
+        return userService.getInvitations(data);
+    }
+
+    @RequestMapping(value = "/service/replyInvitation",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONObject replyInvitation(@RequestBody JSONObject data) throws UnsupportedEncodingException {
+        return userService.replyInvitation(data);
+    }
 }

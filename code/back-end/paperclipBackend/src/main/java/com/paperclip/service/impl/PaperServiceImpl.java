@@ -146,6 +146,7 @@ public class PaperServiceImpl implements PaperService {
             }
             obj.accumulate("id",bid);
             obj.accumulate("content", URLDecoder.decode(up.getPostil().getContent(), "UTF-8"));
+            obj.accumulate("posID",up.getPostil().getId());
             obj.accumulate("visible",false);
             marked.add(obj);
         }
@@ -469,6 +470,7 @@ public class PaperServiceImpl implements PaperService {
 
         DocumentPdf docP = docPdfRepo.findOne(paperID);
         if(docP != null){//是docPdf
+            System.out.println("user:"+username+" author:"+docP.getAuthor());
             if(!docP.getAuthor().equals(username)){
                 List<Assist> ass = assistRepo.findByDocument(docP.getDocument());
                 for(Assist a:ass){
