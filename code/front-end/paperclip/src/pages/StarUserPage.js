@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, Avatar, Menu, Anchor } from 'antd';
+import { List, Avatar, Menu, Anchor, message } from 'antd';
 import { Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import UserFloatMenu from '../components/userFloatMenu';
@@ -66,7 +66,7 @@ class StarUser extends Component{
                     })
                 }
                 else{
-                    alert("取消错误，请重试");
+                    message.error("取消错误，请重试");
                 }
             }).catch(function(e){
             console.log("Oops, error");

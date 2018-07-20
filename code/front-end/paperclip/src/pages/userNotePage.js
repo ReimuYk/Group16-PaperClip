@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, Avatar, Popconfirm, Menu, Anchor, Table, Divider } from 'antd';
+import { List, Avatar, Popconfirm, Menu, Anchor, Table, Divider, message } from 'antd';
 import { Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import UserFloatMenu from '../components/userFloatMenu';
@@ -101,7 +101,7 @@ class UserNote extends Component{
                     })
                 }
                 else{
-                    alert("删除错误，请重试");
+                    message.error("删除错误，请重试");
                 }
             }).catch(function(e){
             console.log("Oops, error");

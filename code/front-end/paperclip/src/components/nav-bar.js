@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import logo from '.././logo.svg';
-import { Input,Icon, Avatar, Select,Menu, Dropdown, Popover,List, Button } from 'antd';
+import { Input,Icon, Avatar, Select,Menu, Dropdown, Popover,List, Button, message } from 'antd';
 import { Row, Col } from 'antd';
 import { Anchor } from 'antd';
 import { Tabs } from 'antd';
@@ -124,7 +124,7 @@ class NavBar extends Component{
             .then(responseJson=>{
                 let data = eval('(' + responseJson + ')');
                 if(data.result == "fail"){
-                    alert('操作失败，请重试');
+                    message.error('操作失败，请重试');
                 }
                 that.setState({
                 })
@@ -149,7 +149,7 @@ class NavBar extends Component{
             .then(responseJson=>{
                 let data = eval('(' + responseJson + ')');
                 if(data.result == "fail"){
-                    alert('操作失败，请重试');
+                    message.error('操作失败，请重试');
                 }
                 that.setState({
                 })

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, Avatar, Anchor, Menu, Popconfirm, Table, Divider } from 'antd';
+import { List, Avatar, Anchor, Menu, Popconfirm, Table, Divider, message } from 'antd';
 import { Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import UserFloatMenu from '../components/userFloatMenu';
@@ -96,7 +96,7 @@ class StarNote extends Component{
                     })
                 }
                 else{
-                    alert("取消错误，请重试");
+                    message.error("取消错误，请重试");
                 }
             }).catch(function(e){
             console.log("Oops, error");

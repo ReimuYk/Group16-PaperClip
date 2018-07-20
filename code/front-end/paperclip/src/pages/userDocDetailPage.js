@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, Avatar, Popconfirm, Menu, Anchor, Button, Divider, Table } from 'antd';
+import { List, Avatar, Popconfirm, Menu, Anchor, Button, Divider, Table, message } from 'antd';
 import { Link, Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import UserFloatMenu from '../components/userFloatMenu';
@@ -115,7 +115,7 @@ class UserDocDetail extends Component{
             .then(responseJson=>{
                 let result = eval('(' + responseJson + ')');
                 if(result.result == 'fail'){
-                    alert('删除失败，请重试');
+                    message.error('删除失败，请重试');
                     return;
                 }
                 var tmpdata = that.state.data;

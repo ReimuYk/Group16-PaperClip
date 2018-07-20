@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, Avatar, Menu, Anchor } from 'antd';
+import { List, Avatar, Menu, Anchor, message } from 'antd';
 import { Redirect, Link } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import UserFloatMenu from '../components/userFloatMenu';
@@ -52,7 +52,7 @@ class Invitations extends Component{
             .then(responseJson=>{
                 let data = eval('(' + responseJson + ')');
                 if(data.result == "fail"){
-                    alert('操作失败，请重试');
+                    message.error('操作失败，请重试');
                 }
                 that.setState({
                 })
@@ -77,7 +77,7 @@ class Invitations extends Component{
             .then(responseJson=>{
                 let data = eval('(' + responseJson + ')');
                 if(data.result == "fail"){
-                    alert('操作失败，请重试');
+                    message.error('操作失败，请重试');
                 }
                 that.setState({
                 })

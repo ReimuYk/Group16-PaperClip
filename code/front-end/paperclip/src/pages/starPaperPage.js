@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { List, Avatar, Anchor, Menu, Popconfirm, Table } from 'antd';
+import { List, Avatar, Anchor, Menu, Popconfirm, Table, message } from 'antd';
 import { Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import UserFloatMenu from '../components/userFloatMenu';
@@ -85,7 +85,7 @@ class StarPaper extends Component{
                     })
                 }
                 else{
-                    alert("删除错误，请重试");
+                    message.error("删除错误，请重试");
                 }
             }).catch(function(e){
             console.log("Oops, error");

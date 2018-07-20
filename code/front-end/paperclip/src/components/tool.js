@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Divider ,Modal,Avatar,Checkbox,Icon,Button,Popover,Card} from 'antd';
+import { Divider ,Modal,Avatar,Checkbox,Icon,Button,Popover,Card, message} from 'antd';
 import {Link } from 'react-router-dom';
 import emitter from '.././util/events'
 import { IPaddress } from '../App';
@@ -46,7 +46,7 @@ class Tool extends Component{
             console.log(responseJson);
             let data = eval('('+responseJson+')');
             if(data.result == "fail"){
-                alert("error");
+                message.error("error");
             }
             else{
                 that.setState({

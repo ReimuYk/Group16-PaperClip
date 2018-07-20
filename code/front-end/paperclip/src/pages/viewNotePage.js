@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Divider, Input, Modal, Icon, Button, List } from 'antd';
+import { Divider, Input, Modal, Icon, Button, List, message } from 'antd';
 import { Link} from 'react-router-dom'
 import '../css/style.css'
 import NavBar from '../components/nav-bar';
@@ -100,7 +100,7 @@ class ViewNote extends Component{
     }
     handleOk = (e) => {
         if(this.state.mailContent == ''){
-            alert("内容不能为空！");
+            message.error('内容不能为空！');
             return;
         }
         let that  = this;
@@ -160,7 +160,7 @@ class ViewNote extends Component{
     commitComment = () => {
         if(this.state.commentContent == '')
         {
-            alert('内容不能为空！')
+            message.error('内容不能为空！');
             return;
         }
         let that = this;
@@ -179,7 +179,7 @@ class ViewNote extends Component{
             .then(responseJson=>{
                 let result = eval('(' + responseJson + ')');
                 if(result.result == "fail"){
-                    alert("发布评论失败，请重试");
+                    message.error('评论发布失败，请重试！');
                     return;
                 }
                 tmp.push({username:username, content: that.state.commentContent});
@@ -213,7 +213,7 @@ class ViewNote extends Component{
                     } );
                 }
                 else{
-                    alert("点赞错误，请重试");
+                    message.error("点赞错误，请重试");
                 }
             }).catch(function(e){
             console.log("Oops, error");
@@ -240,7 +240,7 @@ class ViewNote extends Component{
                     } );
                 }
                 else{
-                    alert("取消错误，请重试");
+                    message.error('取消失败，请重试');
                 }
             }).catch(function(e){
             console.log("Oops, error");
@@ -266,7 +266,7 @@ class ViewNote extends Component{
                     })
                 }
                 else{
-                    alert("收藏错误，请重试");
+                    message.error('收藏失败，请重试');
                 }
             }).catch(function(e){
             console.log("Oops, error");
@@ -295,7 +295,7 @@ class ViewNote extends Component{
                     })
                 }
                 else{
-                    alert("取消错误，请重试");
+                    message.error('取消失败，请重试');
                 }
             }).catch(function(e){
             console.log("Oops, error");
@@ -318,7 +318,7 @@ class ViewNote extends Component{
             .then(responseJson=>{
                 let result = eval('('+responseJson+')');
                 if(result.result == "fail"){
-                    alert("关注失败，请重试");
+                    message.error('关注失败，请重试');
                     return;
                 }
                 that.setState({
@@ -350,7 +350,7 @@ class ViewNote extends Component{
                     })
                 }
                 else{
-                    alert("取消错误，请重试");
+                    message.error('取消失败，请重试');
                 }
             }).catch(function(e){
             console.log("Oops, error");
@@ -359,8 +359,13 @@ class ViewNote extends Component{
 
     shareLink = () => {
         var content = window.location.href;
-        window.clipboardData.setData("Text",content);
-        alert(content + "已经成功复制到剪贴板");
+        var oInput = document.createElement('input');
+        oInput.value = content;
+        document.body.appendChild(oInput);
+        oInput.select(); // 选择对象
+        document.execCommand("Copy"); // 执行浏览器复制命令
+        document.body.removeChild (oInput);
+        message.success('复制链接成功');
     }
 
     renderLikeButton(){

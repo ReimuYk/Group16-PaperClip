@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Popconfirm, Popover,Icon,Button, Input, Tooltip,List,Avatar, Menu, Modal} from 'antd';
+import {Popconfirm, Popover,Icon,Button, Input, Tooltip,List,Avatar, Menu, Modal, message} from 'antd';
 import { IPaddress } from '../App'
 import  { Redirect, Link } from 'react-router-dom'
 import ReactQuill from 'react-quill';
@@ -100,7 +100,7 @@ class Header extends React.Component {
             .then(responseJson=>{
                 let data = eval('('+responseJson+')');
                 if(data.result == "fail"){
-                    alert("保存失败，请重试")
+                    message.error('保存失败，请重试');
                     return;
                 }
             }).catch(function(e){
@@ -161,15 +161,12 @@ class Header extends React.Component {
             .then(responseJson=>{
                 let data = eval('(' + responseJson + ')');
                 if(data.result == "fail"){
-                    alert('不存在此用户');
+                    message.error('不存在此用户');
                 }
-                this.setState({
-                    visible: true
-                });
+                message.success('邀请请求已发送');
             }).catch(function(e){
             console.log("Oops, error");
         })
-        alert("邀请成功！");
     }
 
     saveDoc = () => {
@@ -188,11 +185,11 @@ class Header extends React.Component {
             .then(responseJson=>{
                 let data = eval('('+responseJson+')');
                 if(data.result == "fail"){
-                    alert("保存失败，请重试")
+                    message.error('保存失败，请重试');
                     return;
                 }
                 else{
-                    alert("保存成功");
+                    message.success('保存成功');
                 }
             }).catch(function(e){
             console.log("Oops, error");
