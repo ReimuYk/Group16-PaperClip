@@ -88,9 +88,9 @@ class UserNote extends Component{
                 that.setState({
                     data: data
                 })
-            }).catch(function(e){
-            console.log("Oops, error");
-        })
+            })//.catch(function(e){
+            //console.log("Oops, error");
+        //})
     }
     deleteNote = (record, item) => {
         /* send to server, refresh this page in get/post request */

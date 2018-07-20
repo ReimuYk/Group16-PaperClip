@@ -184,6 +184,7 @@ public class UserNoteServiceImpl implements UserNoteService {
         }
 
         note.accumulate("noteID", n.getId());
+        note.accumulate("paperID",n.getPaper().getId());
         note.accumulate("author", author.getUsername());
         note.accumulate("avatar", service.getUserHeader(author));
         note.accumulate("description",author.getDescription());
