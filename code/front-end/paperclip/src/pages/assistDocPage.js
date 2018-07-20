@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { IPaddress } from '../App'
-import { List, Avatar, Anchor, Menu, Popconfirm } from 'antd';
+import { List, Avatar, Anchor, Menu, Popconfirm, Divider, Table } from 'antd';
 import { Redirect, Link } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import UserFloatMenu from '../components/userFloatMenu';
@@ -9,7 +9,30 @@ var username = '';
 
 class AssistDoc extends Component{
     state = {
-        data: []
+        data: [],
+        columns: [{
+            title: '文档名',
+            dataIndex: 'title',
+            key: 'title',
+            render: (text, record) => (
+                <a href={"/user/docdetail?docID=" + record.docID}>{text}</a>
+            )
+        }, {
+            title: '作者',
+            dataIndex: 'author',
+            key: 'author',
+            render: (text, record) => (
+                <Link to={'/viewpage?username=' + record.author}>{record.author}</Link>
+            )
+        },  {
+            title: '操作',
+            key: 'action',
+            render: (text, record) => (
+                <span>
+                    <a href={"/user/docdetail?docID=" + record.docID}>查看文档版本</a>
+                </span>
+            ),
+        }],
     }
     componentWillMount = () => {
         username = sessionStorage.getItem('username');
@@ -43,25 +66,8 @@ class AssistDoc extends Component{
                 <NavBar />
                 
                 <UserFloatMenu />
-                <div style={{width:'60%',marginLeft:'200px', paddingTop:'40px'}}>
-                <div style={{width:'915px'}}>
-                <p style={{textAlign:'left'}}>
-                    <a style={{width:'100px'}}>文档名称</a>
-                </p>
-                </div>
-                <List
-                    style={{textAlign:'left'}}
-                    itemLayout="horizontal"
-                    dataSource={this.state.data}
-                    renderItem={item => (
-                    <List.Item>
-                        <List.Item.Meta
-                        title={<a href={"/user/docdetail?docID="+item.docID}>{item.title}</a>}
-                        description = {<p>作者：<Link to={'/viewpage?username=' + item.author}>{item.author}</Link></p>}
-                        />
-                    </List.Item>
-                    )}
-                />
+                <div style={{width:'60%',marginLeft:'200px', paddingTop:'60px', float:'left'}}>
+                    <Table columns={this.state.columns} dataSource={this.state.data} />
                 </div>
             </div>
         )

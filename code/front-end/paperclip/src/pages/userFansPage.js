@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, Avatar, Menu, Anchor } from 'antd';
+import { List, Avatar } from 'antd';
 import { Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 /* should get from server */

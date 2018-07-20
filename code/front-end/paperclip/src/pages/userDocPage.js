@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, Avatar, Popconfirm, Menu, Anchor, Button } from 'antd';
+import { List, Avatar, Popconfirm, Menu, Anchor, Button, Icon, Divider,Table, message } from 'antd';
 import { Link, Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 import UserFLoatMenu from '../components/userFloatMenu';
@@ -7,9 +7,35 @@ import UserFLoatMenu from '../components/userFloatMenu';
 import { IPaddress } from '../App'
 
 var username = '';
+
 class UserDoc extends Component{
+
     state = {
         data: [],
+        columns: [{
+            title: '文档名',
+            dataIndex: 'title',
+            key: 'title',
+            render: (text, record) => (
+                <a href={"/user/docdetail?docID=" + record.ID}>{text}</a>
+            )
+        }, {
+            title: '上次修改日期',
+            dataIndex: 'date',
+            key: 'date',
+        },  {
+            title: '操作',
+            key: 'action',
+            render: (text, record) => (
+                <span>
+                    <a href={"/user/modifyDoc?docID=" + record.ID}>编辑文档</a>
+                    <Divider type="vertical" />
+                    <a onClick={() => this.deleteDoc(text, record)}>删除文档</a>
+                    <Divider type="vertical" />
+                    <a href={"/user/docdetail?docID=" + record.ID}>查看文档版本</a>
+                </span>
+            ),
+        }],
     }
     componentWillMount = () => {
         let that = this;
@@ -64,7 +90,7 @@ class UserDoc extends Component{
                     })
                 }
                 else{
-                    alert("删除错误，请重试");
+                    message.error('删除失败，请重试');
                 }
             }).catch(function(e){
             console.log("Oops, error");
@@ -86,7 +112,7 @@ class UserDoc extends Component{
             .then(responseJson=>{
                 let result = eval('(' + responseJson + ')');
                 if(result.result != "success"){
-                    alert("新建失败，请重试");
+                    message.error("新建失败，请重试");
                 }
                 else{
                     let obj={
@@ -122,36 +148,12 @@ class UserDoc extends Component{
         return(
             <div>
                 <NavBar />
-            
             <UserFLoatMenu />
-            <div style={{width:'60%',marginLeft:'200px', paddingTop:'40px'}}>
-                <div className="button" style={{width:"100%", height:"50px"}}>
+            <div style={{width:'60%',marginLeft:'200px', float:'left'}}>
+                {/* <div className="button" style={{height:"50px"}}>
                     <Button style={{float:"right"}} type="primary" onClick={this.newDoc}>新建文档</Button>
-                </div>
-                <div className="content">
-                    <a style={{marginLeft:'220px'}}>上次修改日期</a>
-                    <List
-                        style={{textAlign:'left'}}
-                        itemLayout="horizontal"
-                        dataSource={this.state.data}
-                        renderItem={item => (
-                            <List.Item
-                                actions={[<p>
-                                    <Link style={{width:'75px'}} to={"/user/modifyDoc?docID="+item.ID}>编辑文档</Link>
-                                    <Link style={{width:'75px', marginLeft:'20px'}} to={"/user/docdetail?docID="+item.ID}>查看文档版本</Link>
-                                    <Popconfirm title="确定删除吗？" onConfirm={() => this.deleteDoc(this, item)}>
-                                        <a style={{width:'75px',marginLeft:'20px'}}>删除文档</a>
-                                    </Popconfirm>
-                                </p>]}
-                            >
-                                <List.Item.Meta
-                                    title={<a href={"/user/docdetail?docID="+item.ID}>{item.title}</a>}
-                                />
-                                <p>{item.date}</p>
-                            </List.Item>
-                        )}
-                    />
-                </div>
+                </div> */}
+                <Table style={{textAlign:'center'}} columns={this.state.columns} dataSource={this.state.data} />
             </div>
         </div>
         )

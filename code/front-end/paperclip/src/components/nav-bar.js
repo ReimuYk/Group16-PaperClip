@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import logo from '.././logo.svg';
-import { Input,Icon, Avatar, Select,Menu, Dropdown, Popover,List, Button } from 'antd';
+import { Input,Icon, Avatar, Select,Menu, Dropdown, Popover,List, Button, message } from 'antd';
 import { Row, Col } from 'antd';
 import { Anchor } from 'antd';
 import { Tabs } from 'antd';
@@ -100,6 +100,7 @@ class NavBar extends Component{
             .then(response=>response.text())
             .then(responseJson=>{
                 let data = eval(responseJson);
+                console.log(data);
                 information.inviteMessage = data;
                 that.setState({
                 })
@@ -112,7 +113,7 @@ class NavBar extends Component{
         /* get data according to username */
         let jsonbody = {};
         jsonbody.inviteID = item.inviteID;
-        jsonbody.reply = true;
+        jsonbody.reply = 1;
         let url = IPaddress + 'service/replyInvitation';
         let options={};
         options.method='POST';
@@ -123,7 +124,7 @@ class NavBar extends Component{
             .then(responseJson=>{
                 let data = eval('(' + responseJson + ')');
                 if(data.result == "fail"){
-                    alert('操作失败，请重试');
+                    message.error('操作失败，请重试');
                 }
                 that.setState({
                 })
@@ -137,7 +138,7 @@ class NavBar extends Component{
         /* get data according to username */
         let jsonbody = {};
         jsonbody.inviteID = item.inviteID;
-        jsonbody.reply = false;
+        jsonbody.reply = 0;
         let url = IPaddress + 'service/replyInvitation';
         let options={};
         options.method='POST';
@@ -148,7 +149,7 @@ class NavBar extends Component{
             .then(responseJson=>{
                 let data = eval('(' + responseJson + ')');
                 if(data.result == "fail"){
-                    alert('操作失败，请重试');
+                    message.error('操作失败，请重试');
                 }
                 that.setState({
                 })
@@ -164,7 +165,7 @@ class NavBar extends Component{
         ]
         return(
         <Tabs defaultActiveKey="1">
-            <TabPane onClick={this.followMessage} tab={<Icon type="smile-o" />} key="1">
+            <TabPane tab={<Icon onClick={this.followMessage} type="smile-o" />} key="1">
             <List
                 size="small"
                 header={<div>这些人最近关注了你</div>}
@@ -187,14 +188,14 @@ class NavBar extends Component{
                 renderItem={item => (<List.Item>{item}</List.Item>)}
             />
             </TabPane>
-            <TabPane onClick={this.inviteMessage} tab={<Icon type="usergroup-add" />} key="3">
+            <TabPane tab={<Icon onClick={this.inviteMessage} type="usergroup-add" />} key="3">
                 <List
                     size="small"
                     header={<div>最近的邀请请求</div>}
                     footer={<Link to="/user/invitations"><Button type="primary">查看全部邀请</Button></Link>}
-                    dataSource={information.invite}
+                    dataSource={information.inviteMessage}
                     renderItem={item => (
-                        <List.Item actions={[<p><a onClick={() => this.acceptInvitation(this, item)}>接受</a><a onClick={() => this.refuseInvitation(this, item)}>拒绝</a></p>]}>
+                        <List.Item actions={[<a onClick={() => this.acceptInvitation(this, item)}>接受</a>,<a onClick={() => this.refuseInvitation(this, item)}>拒绝</a>]}>
                             <List.Item.Meta
                                 title={<Link to={"/viewpage?username=" + item.sender}>{item.sender}</Link>}
                                 description={<p>邀请您协作文档：{item.title} </p>}

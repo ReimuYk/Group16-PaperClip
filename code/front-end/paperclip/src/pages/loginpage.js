@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import '../css/LoginPage.css'
 import { Link, Redirect } from 'react-router-dom';
 import { IPaddress } from '../App'
+import {message} from 'antd'
 
 class Login extends Component {
     constructor(props){
@@ -25,7 +26,7 @@ class Login extends Component {
             .then(responseJson=>{
                 let result = eval('(' + responseJson + ')');
                 if(result.result == "fail"){
-                    alert('登录错误，请验证您的用户名和密码！');
+                    message.error('登录错误，请验证您的用户名和密码！');
                     return;
                 }
                 else{

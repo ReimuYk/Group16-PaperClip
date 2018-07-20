@@ -85,6 +85,13 @@ class PDFView extends Component{
                 marked:marked
             })
         });
+        this.Event1 = emitter.addListener('deleteMark', (id) => {
+            let marked = this.state.marked;
+            marked.push(data);
+            this.setState({
+                marked:marked
+            })
+        });
     }
     onDocumentComplete = (pages) => {
         this.setState({ page: 1, pages });

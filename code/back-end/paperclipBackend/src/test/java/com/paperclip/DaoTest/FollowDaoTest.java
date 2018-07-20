@@ -79,14 +79,14 @@ public class FollowDaoTest {
     @Test
     public void testGetRecent(){
         User user = userRepo.findOne("7");
-        List<Follow> followList = followRepo.findByFolloweeOrderById(user);
+        List<Follow> followList = followRepo.findByFolloweeOrderByIdDesc(user);
         int count=0;
         for(Follow follow : followList){
             count++;
-            if(count==5)
+            if(count==4)
                 break;
-            System.out.println("followee" + follow.getFollowee().getUsername());
-            System.out.println("follower" + follow.getFollower().getUsername());
+            System.out.println("被follow：" + follow.getFollowee().getUsername());
+            System.out.println("follower：" + follow.getFollower().getUsername());
         }
     }
 }

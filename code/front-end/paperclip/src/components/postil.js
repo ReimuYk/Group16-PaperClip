@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Collapse ,List,Input,Icon,Button,Avatar,Divider,Anchor} from 'antd';
+import { Collapse ,List,Input,Icon,Button,Avatar,Divider,Anchor, message} from 'antd';
 import Comment from "./comment";
 import emitter from '.././util/events';
 import { IPaddress } from '../App';
@@ -122,6 +122,16 @@ class Postil extends Component{
         data[idx].marked = 1 - data[idx].marked
         this.setState({data:data})
         this.refreshStat(data[idx],[0,0])
+
+        if(data[idx].marked == 1){
+            var mark={};
+                mark.id=this.state.selectid;
+                mark.content=data[idx].postils.content;
+                mark.visible=false;
+                emitter.emit('addMark',mark);
+        }else{
+            emitter.emit('deleteMark',this.state.selectid);
+        }
     }
     getPostil = (item,idx)=>{
         return(
@@ -206,7 +216,7 @@ class Postil extends Component{
     }
     handleInput(value){
         if(!value){
-            alert("输入不能为空");
+            message.error("输入不能为空");
             return;
         }
         var idx = this.state.postilIdx;
