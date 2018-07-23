@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import logo from '.././logo.svg';
+import logo from '../statics/paperclip.jpg';
 import { Input,Icon, Avatar, Select,Menu, Dropdown, Popover,List, Button, message } from 'antd';
 import { Row, Col } from 'antd';
 import { Anchor } from 'antd';
@@ -286,7 +286,7 @@ class NavBar extends Component{
                 <Anchor>
                     <Row type="flex" align="middle" justify="center">
                         <Col span={3}>
-                            <Link to="/home"><img src={logo} width="60px" height="60px" alt="logo"/>Paperclip</Link>
+                            <Link to="/home"><img src={logo} width="50px" height="50px" alt="logo"/>Paperclip</Link>
                         </Col>
                         <Col span={1}><Link to='/home'>首页</Link></Col>
                         <Col span={1}><Link to='/discover'>发现</Link></Col>
@@ -315,7 +315,7 @@ class NavBar extends Component{
             return(
                 <Anchor>
                     <Row type="flex" align="middle" justify="center">
-                        <Col span={3}><Link to="/home"><img src={logo} width="60px" height="60px" alt="logo"/>Paperclip</Link></Col>
+                        <Col span={3}><Link to="/home"><img src={logo} width="50px" height="50px" alt="logo"/>Paperclip</Link></Col>
                         <Col span={1}><Link to='/home'>首页</Link></Col>
                         <Col span={1}><Link to='/discover'>发现</Link></Col>
                         <Col span={8} offset={1}>{search}</Col>                        
