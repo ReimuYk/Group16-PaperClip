@@ -58,7 +58,7 @@ Editor.modules = {
         ['bold', 'italic', 'underline', 'strike', 'blockquote'],
         [{'list': 'ordered'}, {'list': 'bullet'},
             {'indent': '-1'}, {'indent': '+1'}],
-        ['link', 'image', 'video'],
+        ['link', 'image'],
         ['clean']
     ],
     clipboard: {
@@ -100,7 +100,7 @@ class Header extends React.Component {
             .then(responseJson=>{
                 let data = eval('('+responseJson+')');
                 if(data.result == "fail"){
-                    message.error('保存失败，请重试');
+                    message.error('保存失败，请重试', 3);
                     return;
                 }
             }).catch(function(e){
@@ -161,10 +161,10 @@ class Header extends React.Component {
             .then(responseJson=>{
                 let data = eval('(' + responseJson + ')');
                 if(data.result == "fail"){
-                    message.error('不存在此用户');
+                    message.error('不存在此用户', 3);
                     return;
                 }
-                message.success('邀请请求已发送');
+                message.success('邀请请求已发送', 3);
             }).catch(function(e){
             console.log("Oops, error");
         })
@@ -184,7 +184,7 @@ class Header extends React.Component {
             .then(responseJson=>{
                 let data = eval('('+responseJson+')');
                 if(data.result == "sucess"){
-                    message.success('删除成功！');
+                    message.success('删除成功！', 3);
                 }
             }).catch(function(e){
             console.log("Oops, error");
@@ -206,11 +206,11 @@ class Header extends React.Component {
             .then(responseJson=>{
                 let data = eval('('+responseJson+')');
                 if(data.result == "fail"){
-                    message.error('保存失败，请重试');
+                    message.error('保存失败，请重试', 3);
                     return;
                 }
                 else{
-                    message.success('保存成功');
+                    message.success('保存成功', 3);
                 }
             }).catch(function(e){
             console.log("Oops, error");

@@ -134,21 +134,22 @@ public class ViewInfoServiceImpl implements ViewInfoService {
         userEmailJson.accumulate("idx", 1);
         userEmailJson.accumulate("title", "邮箱");
         userEmailJson.accumulate("info", URLDecoder.decode(host.getEmail(), "UTF-8"));
-        userDescriptionJson.accumulate("idx", 0);
+        userDescriptionJson.accumulate("idx", 2);
         userDescriptionJson.accumulate("title", "个性签名");
         userDescriptionJson.accumulate("info", URLDecoder.decode(host.getDescription(), "UTF-8"));
-        userPasswordJson.accumulate("idx", 1);
+        userPasswordJson.accumulate("idx", 3);
         userPasswordJson.accumulate("title", "密码");
         userPasswordJson.accumulate("info", URLDecoder.decode(host.getPassword(), "UTF-8"));
+
+        userInfo.add(usernameJson);
+        userInfo.add(userEmailJson);
         userInfo.add(userDescriptionJson);
         userInfo.add(userPasswordJson);
-        data1.add(usernameJson);
-        data1.add(userEmailJson);
+
         user.accumulate("userheader", avatar);
         user.accumulate("fansno", host.getFollower());
         user.accumulate("followno", host.getFollowing());
         user.accumulate("userInfo", userInfo);
-        user.accumulate("data1", data1);
         user.accumulate("userDescription", URLDecoder.decode(host.getDescription(), "UTF-8"));
         System.out.println("return: "+user);
         return user;
@@ -182,7 +183,7 @@ public class ViewInfoServiceImpl implements ViewInfoService {
         }
         user.accumulate("userheader", imgService.getUserHeader(client));
         user.accumulate("username", clientname);
-        user.accumulate("fensno", client.getFollower());
+        user.accumulate("fansno", client.getFollower());
         user.accumulate("followno", client.getFollowing());
         user.accumulate("userDescription", URLDecoder.decode(client.getDescription(), "UTF-8"));
         System.out.println("get client info: "+user.toString());

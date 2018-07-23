@@ -10,7 +10,7 @@ import { IPaddress } from '../App'
 var username = '';
 var information = {
     userheader:'',
-    fensno:0,
+    fansno:0,
     followno:0,
     userDescription:''
 }
@@ -48,7 +48,7 @@ class User extends Component{
             .then(responseJson=>{
                 let data = eval('(' + responseJson + ')');
                 information.userheader = data.userheader;
-                information.fensno = data.fansno;
+                information.fansno = data.fansno;
                 information.followno = data.followno;
                 information.userDescription = data.userDescription;
                 that.setState({
@@ -83,10 +83,10 @@ class User extends Component{
                     </div>
                     <div id='u1-3' style={{marginTop:"40px"}}>
                         <Link to='/user/staruser'>
-                            <Button style={{width:"100px"}} size="large" type="primary">关注（ { information.followno } )</Button>
+                            <Button style={{width:"100px"}} size="large" type="primary">关注（ { information.followno } ）</Button>
                         </Link>
                         <Link to='/user/userfans'>
-                            <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary">粉丝 （ { information.fensno} ）</Button>
+                            <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary">粉丝 （ { information.fansno} ）</Button>
                         </Link>
                     </div>
                 </div>
