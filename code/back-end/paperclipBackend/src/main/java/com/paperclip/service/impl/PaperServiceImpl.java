@@ -26,7 +26,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @Service
@@ -63,6 +64,9 @@ public class PaperServiceImpl implements PaperService {
 
     @Autowired
     private DocumentPdfRepository docPdfRepo;
+
+    @Autowired
+    private ReplyRepository  replyRepo;
 
     public String GetImageStrFromPath(String imgPath) {
         InputStream in = null;
@@ -282,8 +286,33 @@ public class PaperServiceImpl implements PaperService {
             PostilComment pc = new PostilComment(postil,user,content);
             postilCommRepo.save(pc);
             result.accumulate("result","success");
+            ifReply(content,pc);
         }
+
+
         return result;
+    }
+
+
+
+    //判断是否@了某个用户，添加相应Reply数据
+    public boolean ifReply(String content,PostilComment comment){
+        System.out.println("content:"+content);
+        String rgx = "%40(.+)%3A";
+        Pattern pattern = Pattern.compile(rgx);
+        Matcher matcher = pattern.matcher(content);
+        if(matcher.find()){
+            String name = matcher.group(0);
+            name = name.substring(3,name.length()-3);
+            System.out.println("name: "+name);
+            User receiver = userRepo.findOne(name);
+            if(receiver != null){
+                Reply reply = new Reply(receiver,comment);
+                replyRepo.save(reply);
+                return true;
+            }
+        }
+        return false;
     }
 
     // 传入：blockList,username,content  ---------------对选中的block做批注

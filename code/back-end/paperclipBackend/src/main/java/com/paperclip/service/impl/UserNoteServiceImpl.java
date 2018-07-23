@@ -49,6 +49,9 @@ public class UserNoteServiceImpl implements UserNoteService {
     @Autowired
     private ImgServiceImpl service;
 
+    @Autowired
+    private ReplyRepository replyRepo;
+
     // 传入：username，paperID 传出：noteID ---------------新建note
     public JSONObject addNote(JSONObject data) throws UnsupportedEncodingException {
         JSONObject ret = new JSONObject();

@@ -86,4 +86,25 @@ public class UserController {
     JSONObject replyInvitation(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return userService.replyInvitation(data);
     }
+
+    @RequestMapping(value = "/service/getReplyInfo",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONArray getReplyInfo(@RequestBody JSONObject data) throws UnsupportedEncodingException {
+        return userService.getCommentReply(data);
+    }
+
+    @RequestMapping(value = "/service/getPostilCommInfo",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONArray getPostilCommInfo(@RequestBody JSONObject data) throws UnsupportedEncodingException {
+        return userService.getPostilCommentInfo(data);
+    }
+
+    @RequestMapping(value = "/service/getNoteCommInfo",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONArray getNoteCommInfo(@RequestBody JSONObject data) throws UnsupportedEncodingException {
+        return userService.getNoteCommInfo(data);
+    }
 }

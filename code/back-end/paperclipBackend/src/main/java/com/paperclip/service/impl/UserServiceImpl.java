@@ -1,16 +1,12 @@
 package com.paperclip.service.impl;
 
-import com.paperclip.dao.entityDao.DocumentPdfRepository;
-import com.paperclip.dao.entityDao.DocumentRepository;
-import com.paperclip.dao.entityDao.MessageRepository;
-import com.paperclip.dao.entityDao.UserRepository;
+import com.paperclip.dao.entityDao.*;
 import com.paperclip.dao.relationshipDao.AssistRepository;
+import com.paperclip.dao.relationshipDao.BlockPostilRepository;
 import com.paperclip.dao.relationshipDao.InviteRepository;
-import com.paperclip.model.Entity.Document;
-import com.paperclip.model.Entity.DocumentPdf;
-import com.paperclip.model.Entity.Message;
-import com.paperclip.model.Entity.User;
+import com.paperclip.model.Entity.*;
 import com.paperclip.model.Relationship.Assist;
+import com.paperclip.model.Relationship.BlockPostil;
 import com.paperclip.model.Relationship.Invite;
 import com.paperclip.service.ImgService;
 import com.paperclip.service.MailService;
@@ -55,6 +51,24 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ImgService service;
+
+    @Autowired
+    private ReplyRepository replyRepo;
+
+    @Autowired
+    private BlockPostilRepository blockPRepo;
+
+    @Autowired
+    private PostilRepository postilRepo;
+
+    @Autowired
+    private PostilCommentRepository postilCommRepo;
+
+    @Autowired
+    private NoteRepository noteRepo;
+
+    @Autowired
+    private NoteCommentRepository noteCommRepo;
 
     private static final String dafaultAvatar = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEBAAEAAAD//gAmUGFpbnQgVG9vbCAtU0FJLSBKUEVHIEVuY29kZXIgdjEuMDAA/9sAhAAjGhoaGholJSUlMzMzMzNERERERERVVVVVVVVVampqampqamqCgoKCgoKCmpqampqatra2trbV1dXV9PT0////ATwsLCwsLD8/Pz9WVlZWVnFxcXFxcY+Pj4+Pj4+ysrKysrKystjY2NjY2Nj/////////////////////////////wAARCADYANgDAREAAhEBAxEB/8QBogAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoLEAACAQMDAgQDBQUEBAAAAX0BAgMABBEFEiExQQYTUW" +
             "EHInEUMoGRoQgjQrHBFVLR8CQzYnKCCQoWFxgZGiUmJygpKjQ1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4eLj5OXm5+jp6vHy8/T19vf4+foBAAMBAQEBAQEBAQEAAAAAAAABAgMEBQYHCAkKCxEAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmq" +
@@ -292,11 +306,13 @@ public class UserServiceImpl implements UserService {
     }
 
     //输入：username,type---------------显示邀请信息
-    public JSONArray getInvitations(JSONObject data){
+    public JSONArray getInvitations(JSONObject data) throws UnsupportedEncodingException {
         JSONArray invitations = new JSONArray();
 
         String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
         String type = data.getString("type");
+
         User user = userRepo.findOne(username);
         List<Invite> invites = inviteRepo.findByUser(user);
 
@@ -349,5 +365,87 @@ public class UserServiceImpl implements UserService {
         result.accumulate("result","success");
         return result;
     }
+
+    //输入：username ------------------------- 返回有人@你的通知
+    public JSONArray getCommentReply(JSONObject data) throws UnsupportedEncodingException {
+        String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
+
+        User user = userRepo.findOne(username);
+        List<Reply> replies = replyRepo.findByReceiver(user);
+        JSONArray result = new JSONArray();
+        for(Reply reply:replies){
+            JSONObject r = new JSONObject();
+            PostilComment comm = reply.getComment();
+            r.accumulate("sender",comm.getUser().getUsername());
+            r.accumulate("content",comm.getContent());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            r.accumulate("time",sdf.format(comm.getDate()));
+
+            List<BlockPostil> b = blockPRepo.findByPostil(comm.getPostil());
+            Block block = b.iterator().next().getBlock();
+            Paper paper = block.getPaperPage().getPaper();
+            r.accumulate("paperTitle",paper.getTitle());
+            r.accumulate("paperID",paper.getId());
+            result.add(r);
+        }
+        return result;
+    }
+
+    //输入：username ----------------- 有人对你的批注进行了评论
+    public JSONArray getPostilCommentInfo(JSONObject data) throws UnsupportedEncodingException {
+        JSONArray infos = new JSONArray();
+        String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
+
+        User user = userRepo.findOne(username);
+        List<Postil> postils = postilRepo.findByUser(user);
+        for(Postil postil:postils){
+            List<PostilComment> comments = postilCommRepo.findByPostilOrderByDateDesc(postil);
+            for(PostilComment comment:comments){
+                JSONObject info = new JSONObject();
+                info.accumulate("sender",comment.getUser().getUsername());
+                info.accumulate("content",comment.getContent());
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                info.accumulate("time",sdf.format(comment.getDate()));
+
+                List<BlockPostil> b = blockPRepo.findByPostil(comment.getPostil());
+                Block block = b.iterator().next().getBlock();
+                Paper paper = block.getPaperPage().getPaper();
+                info.accumulate("paperTitle",paper.getTitle());
+                info.accumulate("paperID",paper.getId());
+
+                infos.add(info);
+            }
+        }
+        return infos;
+    }
+
+    //输入：username ----------- 有人对你的笔记进行了评论
+    public JSONArray getNoteCommInfo(JSONObject data) throws UnsupportedEncodingException {
+        JSONArray infos = new JSONArray();
+        String username = data.getString("username");
+        username = URLEncoder.encode(username, "UTF-8");
+
+        User user = userRepo.findOne(username);
+        List<Note> notes = noteRepo.findByUser(user);
+        for(Note note:notes) {
+            List<NoteComment> comments = noteCommRepo.findByNoteOrderByDateDesc(note);
+            for (NoteComment comment : comments) {
+                JSONObject info = new JSONObject();
+                info.accumulate("sender", comment.getUser().getUsername());
+                info.accumulate("content", comment.getContent());
+                info.accumulate("noteID", comment.getNote().getId());
+                info.accumulate("noteTitle", comment.getNote().getTitle());
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                info.accumulate("time", sdf.format(comment.getDate()));
+
+                infos.add(info);
+            }
+        }
+        return infos;
+    }
+
+
 
 }
