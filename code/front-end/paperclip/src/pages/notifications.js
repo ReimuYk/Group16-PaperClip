@@ -45,8 +45,8 @@ class Notifications extends Component{
                         data[i].content += '...';
                     }
                 }
+                information.commentsNote = data;
                 that.setState({
-                    data: data
                 })
             }).catch(function(e){
             console.log("Oops, error");
@@ -56,7 +56,94 @@ class Notifications extends Component{
 
     callback(key) {
         if(key == "1"){
-
+            /* get info from server */
+            let that = this;
+            /* get username */
+            username = sessionStorage.getItem('username');
+            /* get data according to username */
+            let jsonbody = {};
+            jsonbody.username = username;
+            let url = IPaddress + 'service/getNoteCommInfo';
+            let options={};
+            options.method='POST';
+            options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+            options.body = JSON.stringify(jsonbody);
+            fetch(url, options)
+                .then(response=>response.text())
+                .then(responseJson=>{
+                    let data = eval(responseJson);
+                    for(var i = 0; i<data.length; i++){
+                        if(data[i].content.length > 30){
+                            data[i].content = data[i].content.substring(0,30);
+                            data[i].content += '...';
+                        }
+                    }
+                    information.commentsNote = data;
+                    that.setState({
+                    })
+                }).catch(function(e){
+                console.log("Oops, error");
+            })
+        }
+        else if(key == "2"){
+            /* get info from server */
+            let that = this;
+            /* get username */
+            username = sessionStorage.getItem('username');
+            /* get data according to username */
+            let jsonbody = {};
+            jsonbody.username = username;
+            let url = IPaddress + 'service/user/getPostilCommInfo';
+            let options={};
+            options.method='POST';
+            options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+            options.body = JSON.stringify(jsonbody);
+            fetch(url, options)
+                .then(response=>response.text())
+                .then(responseJson=>{
+                    let data = eval(responseJson);
+                    for(var i = 0; i<data.length; i++){
+                        if(data[i].content.length > 30){
+                            data[i].content = data[i].content.substring(0,30);
+                            data[i].content += '...';
+                        }
+                    }
+                    information.comments = data;
+                    that.setState({
+                    })
+                }).catch(function(e){
+                console.log("Oops, error");
+            })
+        }
+        else if(key =="3"){
+            /* get info from server */
+            let that = this;
+            /* get username */
+            username = sessionStorage.getItem('username');
+            /* get data according to username */
+            let jsonbody = {};
+            jsonbody.username = username;
+            let url = IPaddress + 'service/getReplyInfo';
+            let options={};
+            options.method='POST';
+            options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+            options.body = JSON.stringify(jsonbody);
+            fetch(url, options)
+                .then(response=>response.text())
+                .then(responseJson=>{
+                    let data = eval(responseJson);
+                    for(var i = 0; i<data.length; i++){
+                        if(data[i].content.length > 30){
+                            data[i].content = data[i].content.substring(0,30);
+                            data[i].content += '...';
+                        }
+                    }
+                    information.reply = data;
+                    that.setState({
+                    })
+                }).catch(function(e){
+                console.log("Oops, error");
+            })
         }
 
     }
