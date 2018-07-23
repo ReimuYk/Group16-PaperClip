@@ -165,8 +165,8 @@ class Postil extends Component{
     getPostil = (item,idx)=>{        
         return(
             <div style={{textAlign:"left"}} 
-            onMouseOver = {()=>this.getBlocksOfPostil(item.postils.posID)} 
-            onMouseOut = {()=>this.clearBlocks(item.postils.posID)}>
+            onMouseEnter = {()=>this.getBlocksOfPostil(item.postils.posID)} 
+            onMouseLeave = {()=>this.clearBlocks(item.postils.posID)}>
                 <p style={{marginLeft:"1%"}}>
                     <Avatar shape="square" src={item.postils.avatar}/>
                     <Link to={"/viewpage?username="+item.postils.user}>{item.postils.user}</Link>
