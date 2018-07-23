@@ -33,6 +33,7 @@ import UserDocDetail from './pages/userDocDetailPage';
 import Message from './pages/message';
 import OtherUserPage from './pages/otherUserPage'
 import Invitations from './pages/invitations'
+import Notifications from './pages/notifications'
 
 export var IPaddress = 'http://192.168.1.128:8080/';
 
@@ -63,6 +64,7 @@ class App extends Component {
               <Route path='/user/docdetail' component={UserDocDetail} />
               <Route path='/user/message' component={Message} />
               <Route path='/user/invitations' component={Invitations} />
+              <Route path='/user/notifications' component={Notifications} />
               <Route path='/viewNote' component={ViewNote} />
               <Route path='/user' component={User} /> 
               <Route path='/discover' component={Discover} />
