@@ -10,7 +10,7 @@ import { IPaddress } from '../App'
 var username = '';
 var information = {
     userheader:'',
-    fensno:0,
+    fansno:0,
     followno:0,
     userDescription:''
 }
@@ -48,7 +48,7 @@ class User extends Component{
             .then(responseJson=>{
                 let data = eval('(' + responseJson + ')');
                 information.userheader = data.userheader;
-                information.fensno = data.fensno;
+                information.fansno = data.fansno;
                 information.followno = data.followno;
                 information.userDescription = data.userDescription;
                 that.setState({

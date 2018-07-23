@@ -140,10 +140,12 @@ public class ViewInfoServiceImpl implements ViewInfoService {
         userPasswordJson.accumulate("idx", 3);
         userPasswordJson.accumulate("title", "密码");
         userPasswordJson.accumulate("info", URLDecoder.decode(host.getPassword(), "UTF-8"));
-        userInfo.add(userDescriptionJson);
-        userInfo.add(userPasswordJson);
+
         userInfo.add(usernameJson);
         userInfo.add(userEmailJson);
+        userInfo.add(userDescriptionJson);
+        userInfo.add(userPasswordJson);
+
         user.accumulate("userheader", avatar);
         user.accumulate("fansno", host.getFollower());
         user.accumulate("followno", host.getFollowing());
@@ -181,7 +183,7 @@ public class ViewInfoServiceImpl implements ViewInfoService {
         }
         user.accumulate("userheader", imgService.getUserHeader(client));
         user.accumulate("username", clientname);
-        user.accumulate("fensno", client.getFollower());
+        user.accumulate("fansno", client.getFollower());
         user.accumulate("followno", client.getFollowing());
         user.accumulate("userDescription", URLDecoder.decode(client.getDescription(), "UTF-8"));
         System.out.println("get client info: "+user.toString());
