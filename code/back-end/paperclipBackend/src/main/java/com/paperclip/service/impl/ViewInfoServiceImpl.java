@@ -113,17 +113,45 @@ public class ViewInfoServiceImpl implements ViewInfoService {
 
 
     public JSONObject getHostInfo(JSONObject data) throws UnsupportedEncodingException {
-        JSONObject user = new JSONObject();
-        System.out.println("getHostInfo: get data:"+data);
+        System.out.println("\n\n====getHostInfo==== \n get data: "+data);
+
         String username = data.getString("username");
         username = URLEncoder.encode(username, "UTF-8");
         User host = userRepo.findOne(username);
         String avatar = imgService.getUserHeader(host);
+
+        JSONObject user = new JSONObject();
+        JSONArray userInfo = new JSONArray();
+        JSONArray data1 = new JSONArray();
+        JSONObject usernameJson = new JSONObject();
+        JSONObject userDescriptionJson = new JSONObject();
+        JSONObject userPasswordJson = new JSONObject();
+        JSONObject userEmailJson = new JSONObject();
+
+        usernameJson.accumulate("idx", 0);
+        usernameJson.accumulate("title", "用户名");
+        usernameJson.accumulate("info", URLDecoder.decode(host.getUsername(), "UTF-8"));
+        userEmailJson.accumulate("idx", 1);
+        userEmailJson.accumulate("title", "邮箱");
+        userEmailJson.accumulate("info", URLDecoder.decode(host.getEmail(), "UTF-8"));
+        userDescriptionJson.accumulate("idx", 2);
+        userDescriptionJson.accumulate("title", "个性签名");
+        userDescriptionJson.accumulate("info", URLDecoder.decode(host.getDescription(), "UTF-8"));
+        userPasswordJson.accumulate("idx", 3);
+        userPasswordJson.accumulate("title", "密码");
+        userPasswordJson.accumulate("info", URLDecoder.decode(host.getPassword(), "UTF-8"));
+
+        userInfo.add(usernameJson);
+        userInfo.add(userEmailJson);
+        userInfo.add(userDescriptionJson);
+        userInfo.add(userPasswordJson);
+
         user.accumulate("userheader", avatar);
-        user.accumulate("username",URLDecoder.decode(host.getUsername(), "UTF-8"));
-        user.accumulate("fensno", host.getFollower());
+        user.accumulate("fansno", host.getFollower());
         user.accumulate("followno", host.getFollowing());
+        user.accumulate("userInfo", userInfo);
         user.accumulate("userDescription", URLDecoder.decode(host.getDescription(), "UTF-8"));
+        System.out.println("return: "+user);
         return user;
     }
 
@@ -155,7 +183,7 @@ public class ViewInfoServiceImpl implements ViewInfoService {
         }
         user.accumulate("userheader", imgService.getUserHeader(client));
         user.accumulate("username", clientname);
-        user.accumulate("fensno", client.getFollower());
+        user.accumulate("fansno", client.getFollower());
         user.accumulate("followno", client.getFollowing());
         user.accumulate("userDescription", URLDecoder.decode(client.getDescription(), "UTF-8"));
         System.out.println("get client info: "+user.toString());
@@ -165,10 +193,10 @@ public class ViewInfoServiceImpl implements ViewInfoService {
 
 
     public JSONObject modifyUserInfo(JSONObject data) throws UnsupportedEncodingException {
+        System.out.println("\n\n ====modifyUserIngo====\n get data: "+data);
         JSONObject result = new JSONObject();
         String username = data.getString("username");
         String password = data.getString("password");
-        String userHeader = data.getString("userheader");
         String description = data.getString("description");
         username = URLEncoder.encode(username, "UTF-8");
         password = URLEncoder.encode(password, "UTF-8");
@@ -177,10 +205,11 @@ public class ViewInfoServiceImpl implements ViewInfoService {
         if(user == null){
             result.accumulate("result", "fail");
         }else{
-            user.setAvatar(userHeader);
             user.setPassword(password);
             user.setDescription(description);
             userRepo.save(user);
+            System.out.println("user description: "+user.getDescription());
+            System.out.println("user password" + user.getPassword());
             result.accumulate("result", "success");
         }
         return result;

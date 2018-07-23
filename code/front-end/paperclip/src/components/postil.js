@@ -219,12 +219,12 @@ class Postil extends Component{
     }
     handleInput(value){
         if(!value){
-            message.error("输入不能为空");
+            message.error("输入不能为空", 3);
             return;
         }
         var idx = this.state.postilIdx;
         if(this.state.selectid == null){
-            message.error("还未选中内容");
+            message.error("还未选中内容", 3);
             return;
         }
         var name = this.state.username;

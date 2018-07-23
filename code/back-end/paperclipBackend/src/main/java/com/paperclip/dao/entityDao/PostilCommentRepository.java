@@ -11,4 +11,5 @@ import java.util.List;
 @Repository("postilCommRepo")
 public interface PostilCommentRepository extends CrudRepository<PostilComment,Long>{
     List<PostilComment> findByPostil(Postil postil);
+    List<PostilComment> findByPostilOrderByDateDesc(Postil postil);
 }

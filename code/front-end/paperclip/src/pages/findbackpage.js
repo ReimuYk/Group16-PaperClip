@@ -22,7 +22,7 @@ class Findback extends Component {
     checkFindback(){
         var email = document.getElementById("email").value;
         if(!this.isEmailAvailable(email)){
-            message.error("邮箱错误！");
+            message.error("邮箱错误！", 3);
             return false;
         }
         let that  = this;
@@ -38,10 +38,10 @@ class Findback extends Component {
             .then(responseJson=>{
                 let data = eval('('+responseJson+')');
                 if(data.result=="fail"){
-                    message.error("请求失败，请重试或检查您的注册邮箱是否正确");
+                    message.error("请求失败，请重试或检查您的注册邮箱是否正确", 3);
                 }
                 else{
-                    message.success("请检查您的注册邮箱");
+                    message.success("请检查您的注册邮箱", 3);
                 }
             }
             ).catch(function(e){

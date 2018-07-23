@@ -29,15 +29,13 @@ class UserSetting extends Component{
             imageUrl:'',
             data:[
                 {
-                idx:0, title: '性别',info:"男"
+                idx:0, title: '用户名',info:""
                 },
                 {
-                idx:1, title: '一句话描述',info:"蛇精病吃葫芦娃"
-                },
-                {
-                idx:2, title: '居住地',info:"思源湖底"
+                idx:1, title: '个性签名',info:""
                 }
             ],
+            data1:[],
             inputContent:''
         }
     }
@@ -56,9 +54,13 @@ class UserSetting extends Component{
             .then(response=>response.text())
             .then(responseJson=>{
                 let data = eval('(' + responseJson + ')');
+                console.log('data', data);
                 that.setState({
-                    imageUrl: data.userheader
+                    imageUrl: data.userheader,
+                    data: data.userInfo,
+                    data1: data.data1,
                 })
+                console.log('this.stat.data', that.state.data)
             }).catch(function(e){
             console.log("Oops, error");
         })
@@ -68,11 +70,11 @@ class UserSetting extends Component{
     beforeUpload(file) {
         const isJPG = file.type === 'image/jpeg';
         if (!isJPG) {
-          message.error('You can only upload JPG file!');
+          message.error('只能上传jpg文件！', 3);
         }
-        const isLt2M = file.size / 1024 / 1024 < 2;
+        const isLt2M = file.size / 1024 / 1024 < 6;
         if (!isLt2M) {
-          message.error('Image must smaller than 2MB!');
+          message.error('头像必须小于6M！', 3);
         }        
         this.uploadAvatar(file);
         return isJPG && isLt2M;
@@ -101,6 +103,30 @@ class UserSetting extends Component{
             openEdit:false,
             inputContent:''
         })
+
+    }
+    submitCommit = () =>{
+        let that = this;
+        let jsonbody = {};
+        jsonbody.username = username;
+        jsonbody.password = this.state.data[3].info;
+        jsonbody.description = this.state.data[2].info;
+        var url = IPaddress + 'service/modify/userinfo';
+        let options = {};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                console.log(responseJson);
+                let data = eval('(' + responseJson + ')');
+                if(data.resule != 'fail'){
+                    message.success('修改成功！');
+                }
+            }).catch(function(e){
+            console.log("Oops, error: ", e);
+        })
     }
     uploadAvatar(file){
         let that  = this;
@@ -123,7 +149,7 @@ class UserSetting extends Component{
                     console.log(responseJson);
                     let data = eval('(' + responseJson + ')');
                     if(data.result == "fail"){
-                        message.error('请上传正确的图片');
+                        message.error('请上传正确的图片', 3);
                         return;
                     }                
                     that.setState({
@@ -186,29 +212,36 @@ class UserSetting extends Component{
                     <a id={item.idx} onClick={() => this.commitEdit(item)}>确定</a>
                 )
             }
-            else{
+            else if(item.idx == 3 || item.idx == 2){
                 return(
                     <a id={item.idx} onClick={this.edit}>修改</a>
+                )
+            }
+            else{
+                return(
+                    <a style={{color: 'grey'}}>不可修改</a>
                 )
             }
         }
         const avatar = this.renderAvatar();
         return(   
-            <div>
-                {avatar}         
+            <div style={{textAlign:'center'}}>
+                {avatar}    
             <List
               itemLayout="horizontal"
               dataSource={this.state.data}
               renderItem={item => (
-                <List.Item actions={
-                    [ modifyButton(item) ]}>
+                <List.Item  actions={[ modifyButton(item) ]}>
                   <List.Item.Meta
+                    style={{textAlign:'center'}}
                     title={item.title}
                   />
                 {getContent(item)}
+                <a style={{width:"25%"}}></a>
                 </List.Item>
               )}
             />
+                <Button type="primary" onClick={this.submitCommit}>确认修改</Button>
             </div>
             );
 

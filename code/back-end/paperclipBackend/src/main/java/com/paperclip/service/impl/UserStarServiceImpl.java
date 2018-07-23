@@ -86,14 +86,14 @@ public class UserStarServiceImpl implements UserStarService {
             JSONObject note = new JSONObject();
             Note n = it2.next();
             note.accumulate("ID", n.getId());
-            note.accumulate("title", n.getTitle());
-            note.accumulate("author", n.getUser().getUsername());
+            note.accumulate("title", URLDecoder.decode(n.getTitle(), "UTF-8"));
+            note.accumulate("author", URLDecoder.decode(n.getUser().getUsername(), "UTF-8"));
             note.accumulate("starno", starNoteRepo.findByNote(n).size());
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             note.accumulate("date", sdf.format(n.getDate()));
-            note.accumulate("keywords", n.getKeyWords());
+            note.accumulate("keywords", URLDecoder.decode(n.getKeyWords(), "UTF-8"));
             note.accumulate("paperID", n.getPaper().getId());
-            note.accumulate("paperTitle", n.getPaper().getTitle());
+            note.accumulate("paperTitle", URLDecoder.decode(n.getPaper().getTitle(), "UTF-8"));
             notes.add(note);
         }
         return notes;
@@ -126,6 +126,7 @@ public class UserStarServiceImpl implements UserStarService {
 
     // get all papers that this user has stared
     public JSONArray getStarPaper(JSONObject data) throws UnsupportedEncodingException {
+        System.out.println("\n\n ====getStarPaper==== \n get json:"+data);
         String username = data.getString("username");
         username = URLEncoder.encode(username, "UTF-8");
         User user = userRepo.findOne(username);
@@ -142,14 +143,14 @@ public class UserStarServiceImpl implements UserStarService {
             JSONObject paper = new JSONObject();
             Paper p = it2.next();
             paper.accumulate("ID",p.getId());
-            paper.accumulate("title", p.getTitle());
+            paper.accumulate("title", URLDecoder.decode(p.getTitle(), "UTF-8"));
             paper.accumulate("noteno",noteRepo.findByPaper(p).size());
             paper.accumulate("postilno",getPostilNo(p));
-            paper.accumulate("keywords",p.getKeyWords());
-            paper.accumulate("tags",p.getTag());
-            System.out.println("paper: "+p.getTitle());
+            paper.accumulate("keywords", URLDecoder.decode(p.getKeyWords(), "UTF-8"));
+            paper.accumulate("tags", URLDecoder.decode(p.getTag(), "UTF-8"));
             papers.add(paper);
         }
+        System.out.println("return: "+papers);
         return papers;
     }
 
@@ -232,7 +233,7 @@ public class UserStarServiceImpl implements UserStarService {
             if(count==4)
                 break;
             JSONObject followJson = new JSONObject();
-            followJson.accumulate("follower", follow.getFollower().getUsername());
+            followJson.accumulate("follower", URLDecoder.decode(follow.getFollower().getUsername(), "UTF-8"));
             followArray.add(followJson);
         }
         return followArray;

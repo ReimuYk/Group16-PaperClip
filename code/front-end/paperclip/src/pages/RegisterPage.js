@@ -23,7 +23,7 @@ class RegisterPage extends Component {
         var password = document.getElementById("password").value;
         var email = document.getElementById("email").value;
         if(!this.isEmailAvailable(email)){
-            message.error("邮箱错误！");
+            message.error("邮箱错误！", 3);
             return false;
         }
         let that  = this;
@@ -41,15 +41,15 @@ class RegisterPage extends Component {
             .then(responseJson=>{
                 let result = eval('(' + responseJson + ')');
                 if(result.result == 'duplicate username'){
-                    message.error('重复的用户名，请重试');
+                    message.error('用户名已被使用，请重试', 3);
                     return false;
                 }
                 if(result.result == 'duplicate email'){
-                    message.error('该邮箱已被注册过，可直接使用邮箱登录');
+                    message.error('该邮箱已被注册过，可直接使用邮箱登录', 3);
                     return false;
                 }
                 else{
-                    message.success('注册成功，请检查您的邮箱');
+                    message.success('注册成功，请检查您的邮箱', 3);
                 }
             }).catch(function(e){
             console.log("Oops, error");

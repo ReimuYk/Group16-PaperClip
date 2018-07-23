@@ -25,7 +25,11 @@ public interface UserService {
     JSONObject sendMessage(JSONObject data) throws UnsupportedEncodingException;
 
     //invitation
-    JSONArray getInvitations(JSONObject data);
+    JSONArray getInvitations(JSONObject data) throws UnsupportedEncodingException;
     JSONObject replyInvitation(JSONObject data);
 
+    //评论、回复 通知
+    JSONArray getNoteCommInfo(JSONObject data) throws UnsupportedEncodingException;
+    JSONArray getPostilCommentInfo(JSONObject data) throws UnsupportedEncodingException;
+    JSONArray getCommentReply(JSONObject data) throws UnsupportedEncodingException;
 }

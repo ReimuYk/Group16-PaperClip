@@ -113,7 +113,7 @@ class StarNote extends Component{
                     })
                 }
                 else{
-                    message.error("取消错误，请重试");
+                    message.error("取消错误，请重试", 3);
                 }
             }).catch(function(e){
             console.log("Oops, error");

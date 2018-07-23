@@ -58,7 +58,7 @@ Editor.modules = {
         ['bold', 'italic', 'underline', 'strike', 'blockquote'],
         [{'list': 'ordered'}, {'list': 'bullet'},
             {'indent': '-1'}, {'indent': '+1'}],
-        ['link', 'image', 'video'],
+        ['link', 'image'],
         ['clean']
     ],
     clipboard: {
@@ -100,7 +100,7 @@ class Header extends React.Component {
             .then(responseJson=>{
                 let data = eval('('+responseJson+')');
                 if(data.result == "fail"){
-                    message.error('保存失败，请重试');
+                    message.error('保存失败，请重试', 3);
                     return;
                 }
             }).catch(function(e){
@@ -161,15 +161,35 @@ class Header extends React.Component {
             .then(responseJson=>{
                 let data = eval('(' + responseJson + ')');
                 if(data.result == "fail"){
-                    message.error('不存在此用户');
+                    message.error('不存在此用户', 3);
                     return;
                 }
-                message.success('邀请请求已发送');
+                message.success('邀请请求已发送', 3);
             }).catch(function(e){
             console.log("Oops, error");
         })
     }
 
+    deleteContributor = (item) =>{
+        let jsonbody = {};
+        jsonbody.docID = information.docID;
+        jsonbody.username = item.username;
+        var url = IPaddress + 'service/deleteContributor';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let data = eval('('+responseJson+')');
+                if(data.result == "sucess"){
+                    message.success('删除成功！', 3);
+                }
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
+    }
     saveDoc = () => {
         let jsonbody = {};
         jsonbody.docID = information.docID;
@@ -186,11 +206,11 @@ class Header extends React.Component {
             .then(responseJson=>{
                 let data = eval('('+responseJson+')');
                 if(data.result == "fail"){
-                    message.error('保存失败，请重试');
+                    message.error('保存失败，请重试', 3);
                     return;
                 }
                 else{
-                    message.success('保存成功');
+                    message.success('保存成功', 3);
                 }
             }).catch(function(e){
             console.log("Oops, error");
@@ -222,7 +242,7 @@ class Header extends React.Component {
                             itemLayout="horizontal"
                             dataSource={information.contributors}
                             renderItem={item => (
-                                <List.Item actions={[<a>删除</a>]}>
+                                <List.Item actions={[<a onClick={() => this.deleteContributor(item)}>删除</a>]}>
                                     <List.Item.Meta
                                         avatar={<Avatar src={item.avatar} />}
                                         title={<Link to={"/viewpage?username=" + item.username}>{item.username}</Link>}

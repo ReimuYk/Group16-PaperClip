@@ -22,7 +22,7 @@ public interface UserNoteService {
 
     // viewNotePage.js
     JSONObject getViewNoteDetail(JSONObject data) throws UnsupportedEncodingException;
-    JSONArray getNoteComment(JSONObject data);
+    JSONArray getNoteComment(JSONObject data) throws UnsupportedEncodingException;
     JSONObject addNoteComment(JSONObject data) throws UnsupportedEncodingException;
     JSONObject agreeNote(JSONObject data);
     JSONObject starNote(JSONObject data) throws UnsupportedEncodingException;
