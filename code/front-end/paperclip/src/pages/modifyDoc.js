@@ -170,6 +170,26 @@ class Header extends React.Component {
         })
     }
 
+    deleteContributor = (item) =>{
+        let jsonbody = {};
+        jsonbody.docID = information.docID;
+        jsonbody.username = item.username;
+        var url = IPaddress + 'service/deleteContributor';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let data = eval('('+responseJson+')');
+                if(data.result == "sucess"){
+                    message.success('删除成功！');
+                }
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
+    }
     saveDoc = () => {
         let jsonbody = {};
         jsonbody.docID = information.docID;
@@ -222,7 +242,7 @@ class Header extends React.Component {
                             itemLayout="horizontal"
                             dataSource={information.contributors}
                             renderItem={item => (
-                                <List.Item actions={[<a>删除</a>]}>
+                                <List.Item actions={[<a onClick={() => this.deleteContributor(item)}>删除</a>]}>
                                     <List.Item.Meta
                                         avatar={<Avatar src={item.avatar} />}
                                         title={<Link to={"/viewpage?username=" + item.username}>{item.username}</Link>}

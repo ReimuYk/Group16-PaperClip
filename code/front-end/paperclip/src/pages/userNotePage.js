@@ -76,6 +76,7 @@ class UserNote extends Component{
             .then(response=>response.text())
             .then(responseJson=>{
                 let data = eval(responseJson);
+                console.log(data);
                 for(var i=0;i<data.length;++i){
                     if(data[i].paperTitle.length > 10){
                         data[i].paperTitle1 = data[i].paperTitle.substring(0,7) + '...';

@@ -32,7 +32,6 @@ class User extends Component{
         let that = this;
         /* get username */
         username = sessionStorage.getItem('username');
-        console.log(username);
         this.setState({
             username: username
         })
@@ -47,7 +46,6 @@ class User extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                console.log(responseJson);
                 let data = eval('(' + responseJson + ')');
                 information.userheader = data.userheader;
                 information.fensno = data.fensno;
