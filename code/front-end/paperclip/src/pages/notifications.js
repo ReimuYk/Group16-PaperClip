@@ -81,8 +81,8 @@ class Notifications extends Component{
                                         actions = {[<p>{item.time}</p>]}
                                     >
                                         <List.Item.Meta
-                                            title={<a href={'/viewnote?noteID=' + item.noteID}>{item.title}</a>}
-                                            description={<p><a href={'/viewpage?username=' + item.username}>{item.username}</a>评论了你的笔记：{item.content}</p>}
+                                            title={<a href={'/viewnote?noteID=' + item.noteID}>{item.noteTitle}</a>}
+                                            description={<p><a href={'/viewpage?username=' + item.sender}>{item.sender}</a>评论了：{item.content}</p>}
                                         />
                                     </List.Item>
                                 )}
@@ -98,8 +98,8 @@ class Notifications extends Component{
                                         actions = {[<p>{item.time}</p>]}
                                     >
                                         <List.Item.Meta
-                                            title={<a href={'/papaer?paperID=' + item.paperID}>{item.title}</a>}
-                                            description={<p><a href={'/viewpage?username=' + item.username}>{item.username}</a>评论了你的批注：{item.content}</p>}
+                                            title={<a href={'/papaer?paperID=' + item.paperID}>{item.paperTitle}</a>}
+                                            description={<p><a href={'/viewpage?username=' + item.sender}>{item.sender}</a>评论了：{item.content}</p>}
                                         />
                                     </List.Item>
                                 )}
@@ -115,8 +115,8 @@ class Notifications extends Component{
                                         actions = {[<p>{item.time}</p>]}
                                     >
                                         <List.Item.Meta
-                                            title={<a href={'/papaer?paperID=' + item.paperID}>{item.title}</a>}
-                                            description={<p><a href={'/viewpage?username=' + item.username}>{item.username}</a>回复了你的评论：{item.content}</p>}
+                                            title={<a href={'/papaer?paperID=' + item.paperID}>{item.paperTitle}</a>}
+                                            description={<p><a href={'/viewpage?username=' + item.username}>{item.sender}</a>回复了：{item.content}</p>}
                                         />
                                     </List.Item>
                                 )}
