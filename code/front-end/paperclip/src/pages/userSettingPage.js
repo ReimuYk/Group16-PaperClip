@@ -103,13 +103,14 @@ class UserSetting extends Component{
             openEdit:false,
             inputContent:''
         })
-        console.log('修改后：',this.state.data);
 
+    }
+    submitCommit = () =>{
         let that = this;
         let jsonbody = {};
         jsonbody.username = username;
-        jsonbody.password = this.state.data[2].info;
-        jsonbody.description = this.state.data[1].info;
+        jsonbody.password = this.state.data[3].info;
+        jsonbody.description = this.state.data[2].info;
         var url = IPaddress + 'service/modify/userinfo';
         let options = {};
         options.method='POST';
@@ -120,9 +121,12 @@ class UserSetting extends Component{
             .then(responseJson=>{
                 console.log(responseJson);
                 let data = eval('(' + responseJson + ')');
+                if(data.resule != 'fail'){
+                    message.success('修改成功！');
+                }
             }).catch(function(e){
-                console.log("Oops, error: ", e);
-            })
+            console.log("Oops, error: ", e);
+        })
     }
     uploadAvatar(file){
         let that  = this;
@@ -208,9 +212,14 @@ class UserSetting extends Component{
                     <a id={item.idx} onClick={() => this.commitEdit(item)}>确定</a>
                 )
             }
-            else{
+            else if(item.idx == 3 || item.idx == 2){
                 return(
                     <a id={item.idx} onClick={this.edit}>修改</a>
+                )
+            }
+            else{
+                return(
+                    <a style={{color: 'grey'}}>不可修改</a>
                 )
             }
         }
@@ -220,9 +229,9 @@ class UserSetting extends Component{
                 {avatar}    
             <List
               itemLayout="horizontal"
-              dataSource={this.state.data1}
+              dataSource={this.state.data}
               renderItem={item => (
-                <List.Item  >
+                <List.Item  actions={[ modifyButton(item) ]}>
                   <List.Item.Meta
                     style={{textAlign:'center'}}
                     title={item.title}
@@ -231,21 +240,8 @@ class UserSetting extends Component{
                 <a style={{width:"25%"}}></a>
                 </List.Item>
               )}
-            />     
-            <List
-              itemLayout="horizontal"
-              dataSource={this.state.data}
-              renderItem={item => (
-                <List.Item actions={
-                    [ modifyButton(item) ]}>
-                  <List.Item.Meta
-                    style={{textAlign:"center"}}
-                    title={item.title}
-                  />
-                {getContent(item)}
-                </List.Item>
-              )}
             />
+                <Button type="primary" onClick={this.submitCommit}>确认修改</Button>
             </div>
             );
 

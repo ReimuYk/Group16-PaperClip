@@ -48,7 +48,7 @@ class User extends Component{
             .then(responseJson=>{
                 let data = eval('(' + responseJson + ')');
                 information.userheader = data.userheader;
-                information.fensno = data.fensno;
+                information.fensno = data.fansno;
                 information.followno = data.followno;
                 information.userDescription = data.userDescription;
                 that.setState({
@@ -86,7 +86,7 @@ class User extends Component{
                             <Button style={{width:"100px"}} size="large" type="primary">关注（ { information.followno } )</Button>
                         </Link>
                         <Link to='/user/userfans'>
-                            <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary">粉丝 （ { information.fensno} )</Button>
+                            <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary">粉丝 （ { information.fensno} ）</Button>
                         </Link>
                     </div>
                 </div>
