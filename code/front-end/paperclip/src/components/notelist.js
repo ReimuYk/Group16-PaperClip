@@ -13,7 +13,6 @@ class NoteList extends Component{
     constructor(props){
         super(props);
 
-        this.handleSearch = this.handleSearch.bind(this);
         this.changeInputValue = this.changeInputValue.bind(this);
 
         this.state = {
@@ -66,13 +65,10 @@ class NoteList extends Component{
     changeInputValue(e){
         this.setState({inputValue:e.target.value});
     }
-    handleSearch(value){
-
-    }
 
     renderKey(){
         return(
-            <div style={{textAlign:"left",marginTop:"20%"}}>
+            <div style={{textAlign:"left",marginTop:"5%"}}>
                 key word:
                 {this.state.keyWords.map((key,idx)=>{
                     return(
@@ -107,19 +103,9 @@ class NoteList extends Component{
         const notes = this.renderNotes();
         return(
             <div id="notelist" 
-            style={{position:"fixed",width:"18%",height:"500px",overflowY:"scroll",
+            style={{position:"fixed",width:"18%",height:"80%",overflowY:"scroll",
             left:"2%"}}>
-                <div style={{zIndex:"1",backgroundColor:"#FFFFFF"}}>
-                    <Search
-                    type="textarea"
-                    placeholder="search"
-                    enterButton={<Icon type="search" />}
-                    size="default"
-                    value={this.state.inputValue}
-                    onChange={this.changeInputValue}
-                    onSearch={this.handleSearch}
-                    />   
-                </div>
+                
                 <div>
                     {keys}
                     <Divider />

@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import PDF from 'react-pdf-js';
 import { Button, Popover, Affix, Row, Col, Card} from 'antd';
+import { Spin,Divider } from 'antd';
+
 import emitter from '.././util/events';
 import 'antd/dist/antd.css';
 import { IPaddress } from '../App'
@@ -10,6 +12,7 @@ let rightplace = []
 class PDFView extends Component{
     constructor(props){
         super(props);
+        this.changeMarkVisible = this.changeMarkVisible.bind(this);
         this.state = {
             isLoading:true,
             page:1,
@@ -17,7 +20,8 @@ class PDFView extends Component{
             username:sessionStorage.getItem('username'),
             marked:[],
             blocklist:[],
-            marked_note:[]
+            marked_note:[],
+            markVisible:false
         }
         //console.log(this.props.paperID);
         this.getData(this.props.paperID,1)
@@ -40,7 +44,6 @@ class PDFView extends Component{
             let data = eval('('+responseJson+')');
             console.log(data);
             that.setState({
-                isLoading: false,
                 //page state
                 paperID:paperID,
                 pages:data.pagenum,
@@ -73,7 +76,8 @@ class PDFView extends Component{
                 ],
                 noteRender:[
                     // {nid:1,tag:'1',render:[]}
-                ]
+                ],
+                isLoading: false,
             })
         }).catch(function(e){
             console.log("Oops, error");
@@ -113,13 +117,19 @@ class PDFView extends Component{
     handlePrevious = () => {
         if (this.state.page==1) return
         let old = this.state.page
-        this.setState({ page: old - 1 });
+        this.setState({ 
+            page: old - 1,
+            isLoading:true
+         });
         this.getData(this.state.paperID,old-1)
     }
     handleNext = () => {
         if (this.state.page==this.state.pages) return
         let old = this.state.page
-        this.setState({ page: old + 1 });
+        this.setState({
+            page: old + 1,
+            isLoading:true
+        });
         this.getData(this.state.paperID,old+1)
     }
     refreshPostil = (selectid) => {
@@ -325,6 +335,10 @@ class PDFView extends Component{
         }
     }
     allocComm = () => {
+        if(!this.state.markVisible){
+            this.setState({commRender:[]});
+            return;
+        }
         leftplace = []
         rightplace = []
         let cr=[]
@@ -485,16 +499,36 @@ class PDFView extends Component{
         }
         this.setState({noteRender:cr})
     }
+
+    changeMarkVisible(){
+        var visible = this.state.markVisible;
+        this.setState({
+            markVisible:!visible
+        },()=>{
+            console.log(this.state.marked);
+            this.allocComm();
+        })
+    }
+    changePage(){
+        return(
+            <div style={{zIndex:"100", position:"fixed",bottom:"5%",right:"23%"}}>
+                <Button onClick={this.handlePrevious} icon="up" />
+                <br/>
+                <div>第{this.state.page}页</div>
+                <Button onClick={this.handleNext}  icon="down" />
+                <br/>
+                <Button onClick={this.changeMarkVisible} shape="circle" icon={this.state.markVisible?"eye-o":"eye"} style={{marginTop:"15%"}}/>
+            </div>
+        );
+    }
     render(){
-        //this.allocComm()
+        const changePage = this.changePage();
         return(
             this.state.isLoading
-            ? <div>is loading</div>
+            ? <Spin size="large"/>
             : <div style={{backgroundColor:'white',width:"60%",
             position:"absolute",left:"22%"}}>
-                    <Button onClick={this.handlePrevious}>prev page</Button>
-                    <Button onClick={this.handleNext}>next page</Button>
-                    <Button onClick={this.allocComm}>展示批注&笔记</Button>
+            {changePage}
                     <div>
                     <div
                     onMouseDown={this.mouseDown} 

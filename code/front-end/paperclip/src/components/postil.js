@@ -3,6 +3,8 @@ import { Collapse ,List,Input,Icon,Button,Avatar,Divider,Anchor, message} from '
 import Comment from "./comment";
 import emitter from '.././util/events';
 import { IPaddress } from '../App';
+import {Link} from 'react-router-dom';
+
 const Panel = Collapse.Panel;
 const Search = Input.Search;
 const ButtonGroup = Button.Group;
@@ -24,7 +26,7 @@ class Postil extends Component{
             data:[],
             postilIdx:null,
             inputValue:"",
-            selectid:null
+            selectid:null,
         }
     }
     componentWillMount(){
@@ -135,12 +137,12 @@ class Postil extends Component{
             emitter.emit('deleteMark',mark.posID);
         }
     }
-    getPostil = (item,idx)=>{
+    getPostil = (item,idx)=>{        
         return(
             <div style={{textAlign:"left"}}>
                 <p style={{marginLeft:"1%"}}>
-                    <Avatar shape="square" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                    {item.postils.user}
+                    <Avatar shape="square" src={item.postils.avatar}/>
+                    <Link to={"/viewpage?username="+item.postils.user}>{item.postils.user}</Link>
                 </p>
                 <p style={{marginTop:"7%"}}>{item.postils.content}</p>  
                 <Divider />  
@@ -230,6 +232,7 @@ class Postil extends Component{
         var name = this.state.username;
         var obj = new Object();
         obj.user = name;
+        obj.avatar = this.props.avatar;
         obj.content = value;
 
         var data = this.state.data;
@@ -266,9 +269,9 @@ class Postil extends Component{
         const data = this.state.data;
         return(
             <div id="postil" 
-            style={{width:"20%",height:"530px",overflowY:"scroll",
+            style={{width:"20%",height:"90%",overflowY:"scroll",
              position:"fixed",right:"0px",marginLeft:"5px"}}>
-                <Anchor offsetTop={60} style={{position:"fixed",zIndex:"1",backgroundColor:"#FFFFFF"}}>
+                <Anchor offsetTop={"15%"} style={{position:"fixed",zIndex:"1",backgroundColor:"#FFFFFF"}}>
                     <Search
                     type="textarea"
                     placeholder="input text"
