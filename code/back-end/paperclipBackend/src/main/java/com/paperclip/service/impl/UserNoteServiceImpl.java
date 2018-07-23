@@ -71,7 +71,7 @@ public class UserNoteServiceImpl implements UserNoteService {
         }
         Note note = new Note(paper,user);
         noteRepo.save(note);
-        ret.accumulate("noteID",note.getId());
+        ret.accumulate("noteID", note.getId());
         return ret;
     }
 
@@ -87,11 +87,11 @@ public class UserNoteServiceImpl implements UserNoteService {
         while(it.hasNext()) {
             JSONObject note = new JSONObject();
             Note n = it.next();
-            note.accumulate("ID",n.getId());
+            note.accumulate("ID", n.getId());
             note.accumulate("title", URLDecoder.decode(n.getTitle(), "UTF-8"));
             note.accumulate("keywords", URLDecoder.decode(n.getKeyWords(), "UTF-8"));
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            note.accumulate("date",sdf.format(n.getDate()));
+            note.accumulate("date", sdf.format(n.getDate()));
             note.accumulate("paperID", n.getPaper().getId());
             note.accumulate("paperTitle", URLDecoder.decode(n.getPaper().getTitle(), "UTF-8"));
             notes.add(note);

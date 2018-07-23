@@ -86,14 +86,14 @@ public class UserStarServiceImpl implements UserStarService {
             JSONObject note = new JSONObject();
             Note n = it2.next();
             note.accumulate("ID", n.getId());
-            note.accumulate("title", n.getTitle());
-            note.accumulate("author", n.getUser().getUsername());
+            note.accumulate("title", URLDecoder.decode(n.getTitle(), "UTF-8"));
+            note.accumulate("author", URLDecoder.decode(n.getUser().getUsername(), "UTF-8"));
             note.accumulate("starno", starNoteRepo.findByNote(n).size());
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             note.accumulate("date", sdf.format(n.getDate()));
-            note.accumulate("keywords", n.getKeyWords());
+            note.accumulate("keywords", URLDecoder.decode(n.getKeyWords(), "UTF-8"));
             note.accumulate("paperID", n.getPaper().getId());
-            note.accumulate("paperTitle", n.getPaper().getTitle());
+            note.accumulate("paperTitle", URLDecoder.decode(n.getPaper().getTitle(), "UTF-8"));
             notes.add(note);
         }
         return notes;
@@ -233,7 +233,7 @@ public class UserStarServiceImpl implements UserStarService {
             if(count==4)
                 break;
             JSONObject followJson = new JSONObject();
-            followJson.accumulate("follower", follow.getFollower().getUsername());
+            followJson.accumulate("follower", URLDecoder.decode(follow.getFollower().getUsername(), "UTF-8"));
             followArray.add(followJson);
         }
         return followArray;
