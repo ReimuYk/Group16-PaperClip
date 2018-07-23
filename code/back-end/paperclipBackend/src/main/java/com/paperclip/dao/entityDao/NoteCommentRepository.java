@@ -11,4 +11,5 @@ import java.util.List;
 @Repository("noteCommRepo")
 public interface NoteCommentRepository extends CrudRepository<NoteComment,Long>{
     List<NoteComment> findByNote(Note note);
+    List<NoteComment> findByNoteOrderByDateDesc(Note note);
 }
