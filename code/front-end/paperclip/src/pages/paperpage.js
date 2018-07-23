@@ -35,7 +35,7 @@ class Paper extends Component{
             console.log(responseJson);
             let data = eval('('+responseJson+')');
             if(data.result == "fail"){
-                message.error("无浏览权限");
+                message.error("无浏览权限", 3);
                 window.location.href='/';
             }
             console.log(data)

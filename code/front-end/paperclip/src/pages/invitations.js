@@ -53,7 +53,7 @@ class Invitations extends Component{
             .then(responseJson=>{
                 let data = eval('(' + responseJson + ')');
                 if(data.result == "fail"){
-                    message.error('操作失败，请重试');
+                    message.error('操作失败，请重试', 3);
                     return;
                 }
                 for(var i=0; i<invitations.length; i++){
@@ -65,7 +65,7 @@ class Invitations extends Component{
                 that.setState({
                     data: invitations
                 })
-                message.success('已接受请求');
+                message.success('已接受请求', 3);
             }).catch(function(e){
             console.log("Oops, error");
         })
@@ -88,7 +88,7 @@ class Invitations extends Component{
             .then(responseJson=>{
                 let data = eval('(' + responseJson + ')');
                 if(data.result == "fail"){
-                    message.error('操作失败，请重试');
+                    message.error('操作失败，请重试', 3);
                     return;
                 }
                 for(var i=0; i<invitations.length; i++){
@@ -100,7 +100,7 @@ class Invitations extends Component{
                 that.setState({
                     data: invitations
                 })
-                message.success('已拒绝请求');
+                message.success('已拒绝请求', 3);
                 that.setState({
                 })
             }).catch(function(e){

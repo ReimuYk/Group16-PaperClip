@@ -46,7 +46,7 @@ class Tool extends Component{
             console.log(responseJson);
             let data = eval('('+responseJson+')');
             if(data.result == "fail"){
-                message.error("error");
+                message.error("您没有收藏该论文", 3);
             }
             else{
                 that.setState({

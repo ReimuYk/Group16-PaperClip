@@ -70,11 +70,11 @@ class UserSetting extends Component{
     beforeUpload(file) {
         const isJPG = file.type === 'image/jpeg';
         if (!isJPG) {
-          message.error('You can only upload JPG file!');
+          message.error('只能上传jpg文件！', 3);
         }
-        const isLt2M = file.size / 1024 / 1024 < 2;
+        const isLt2M = file.size / 1024 / 1024 < 6;
         if (!isLt2M) {
-          message.error('Image must smaller than 2MB!');
+          message.error('头像必须小于6M！', 3);
         }        
         this.uploadAvatar(file);
         return isJPG && isLt2M;
@@ -145,7 +145,7 @@ class UserSetting extends Component{
                     console.log(responseJson);
                     let data = eval('(' + responseJson + ')');
                     if(data.result == "fail"){
-                        message.error('请上传正确的图片');
+                        message.error('请上传正确的图片', 3);
                         return;
                     }                
                     that.setState({
