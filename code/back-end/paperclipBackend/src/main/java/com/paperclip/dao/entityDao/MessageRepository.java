@@ -13,7 +13,7 @@ import java.util.List;
 @Repository("messageRepo")
 public interface MessageRepository extends CrudRepository<Message,Long> {
 
-    @Query("select o from Message o where o.sender in (:users) and o.receiver in (:users)")
+    @Query("select o from Message o where o.sender in (:users) and o.receiver in (:users) order by o.time")
     List<Message> getConversation(@Param("users")List<User> users);
 
     @Query("select o from Message o where  o.receiver=:user and o.hasRead=0 order by o.time DESC ")

@@ -1,5 +1,8 @@
 package com.paperclip.service;
 
+import com.paperclip.model.Entity.Postil;
+import com.paperclip.model.Entity.PostilComment;
+import com.paperclip.model.Entity.User;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -19,5 +22,6 @@ public interface PaperService {
     JSONObject getNoteList(JSONObject data) throws UnsupportedEncodingException;
     JSONArray getKeywords(JSONObject data);
     JSONObject hasAccess(JSONObject data) throws UnsupportedEncodingException;
+    boolean ifReply(String content, PostilComment comment);
 }
 
