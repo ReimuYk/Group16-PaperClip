@@ -126,6 +126,7 @@ public class UserStarServiceImpl implements UserStarService {
 
     // get all papers that this user has stared
     public JSONArray getStarPaper(JSONObject data) throws UnsupportedEncodingException {
+        System.out.println("\n\n ====getStarPaper==== \n get json:"+data);
         String username = data.getString("username");
         username = URLEncoder.encode(username, "UTF-8");
         User user = userRepo.findOne(username);
@@ -142,14 +143,14 @@ public class UserStarServiceImpl implements UserStarService {
             JSONObject paper = new JSONObject();
             Paper p = it2.next();
             paper.accumulate("ID",p.getId());
-            paper.accumulate("title", p.getTitle());
+            paper.accumulate("title", URLDecoder.decode(p.getTitle(), "UTF-8"));
             paper.accumulate("noteno",noteRepo.findByPaper(p).size());
             paper.accumulate("postilno",getPostilNo(p));
-            paper.accumulate("keywords",p.getKeyWords());
-            paper.accumulate("tags",p.getTag());
-            System.out.println("paper: "+p.getTitle());
+            paper.accumulate("keywords", URLDecoder.decode(p.getKeyWords(), "UTF-8"));
+            paper.accumulate("tags", URLDecoder.decode(p.getTag(), "UTF-8"));
             papers.add(paper);
         }
+        System.out.println("return: "+papers);
         return papers;
     }
 
