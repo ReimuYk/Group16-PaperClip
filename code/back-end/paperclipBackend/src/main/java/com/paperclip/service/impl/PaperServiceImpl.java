@@ -524,4 +524,17 @@ public class PaperServiceImpl implements PaperService {
         result.accumulate("avatar",imgService.getUserHeader(user));
         return result;
     }
+
+    //输入：posID 返回一个postil对应的Blocks
+    public JSONArray getBlocksOfPostil(JSONObject data){
+        JSONArray result = new JSONArray();
+        Long posID = data.getLong("posID");
+
+        Postil postil = postilRepo.findOne(posID);
+        List<BlockPostil> bps = blockPRepo.findByPostil(postil);
+        for(BlockPostil bp:bps){
+            result.add(bp.getBlock().getId());
+        }
+        return result;
+    }
 }
