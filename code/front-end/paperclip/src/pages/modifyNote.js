@@ -58,7 +58,7 @@ Editor.modules = {
         ['bold', 'italic', 'underline', 'strike', 'blockquote'],
         [{'list': 'ordered'}, {'list': 'bullet'},
             {'indent': '-1'}, {'indent': '+1'}],
-        ['link', 'image', 'video'],
+        ['link', 'image'],
         ['clean']
     ],
     clipboard: {
@@ -74,7 +74,7 @@ Editor.formats = [
     'header', 'font', 'size',
     'bold', 'italic', 'underline', 'strike', 'blockquote',
     'list', 'bullet', 'indent',
-    'link', 'image', 'video'
+    'link', 'image'
 ]
 
 class Header extends React.Component {
@@ -191,7 +191,7 @@ class Header extends React.Component {
             .then(responseJson=>{
                 let data = eval('('+responseJson+')');
                 if(data.result == "fail"){
-                    message.error("保存失败，请重试")
+                    message.error("保存失败，请重试", 3)
                     return;
                 }
                 window.location.href="/viewnote?noteID="+information.noteID;
