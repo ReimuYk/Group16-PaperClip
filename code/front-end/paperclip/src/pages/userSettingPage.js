@@ -29,15 +29,13 @@ class UserSetting extends Component{
             imageUrl:'',
             data:[
                 {
-                idx:0, title: '性别',info:"男"
+                idx:0, title: '用户名',info:""
                 },
                 {
-                idx:1, title: '一句话描述',info:"蛇精病吃葫芦娃"
-                },
-                {
-                idx:2, title: '居住地',info:"思源湖底"
+                idx:1, title: '个性签名',info:""
                 }
             ],
+            data1:[],
             inputContent:''
         }
     }
@@ -56,9 +54,13 @@ class UserSetting extends Component{
             .then(response=>response.text())
             .then(responseJson=>{
                 let data = eval('(' + responseJson + ')');
+                console.log('data', data);
                 that.setState({
-                    imageUrl: data.userheader
+                    imageUrl: data.userheader,
+                    data: data.userInfo,
+                    data1: data.data1,
                 })
+                console.log('this.stat.data', that.state.data)
             }).catch(function(e){
             console.log("Oops, error");
         })
@@ -101,6 +103,26 @@ class UserSetting extends Component{
             openEdit:false,
             inputContent:''
         })
+        console.log('修改后：',this.state.data);
+
+        let that = this;
+        let jsonbody = {};
+        jsonbody.username = username;
+        jsonbody.password = this.state.data[2].info;
+        jsonbody.description = this.state.data[1].info;
+        var url = IPaddress + 'service/modify/userinfo';
+        let options = {};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                console.log(responseJson);
+                let data = eval('(' + responseJson + ')');
+            }).catch(function(e){
+                console.log("Oops, error: ", e);
+            })
     }
     uploadAvatar(file){
         let that  = this;
@@ -194,8 +216,22 @@ class UserSetting extends Component{
         }
         const avatar = this.renderAvatar();
         return(   
-            <div>
-                {avatar}         
+            <div style={{textAlign:'center'}}>
+                {avatar}    
+            <List
+              itemLayout="horizontal"
+              dataSource={this.state.data1}
+              renderItem={item => (
+                <List.Item  >
+                  <List.Item.Meta
+                    style={{textAlign:'center'}}
+                    title={item.title}
+                  />
+                {getContent(item)}
+                <a style={{width:"25%"}}></a>
+                </List.Item>
+              )}
+            />     
             <List
               itemLayout="horizontal"
               dataSource={this.state.data}
@@ -203,6 +239,7 @@ class UserSetting extends Component{
                 <List.Item actions={
                     [ modifyButton(item) ]}>
                   <List.Item.Meta
+                    style={{textAlign:"center"}}
                     title={item.title}
                   />
                 {getContent(item)}
