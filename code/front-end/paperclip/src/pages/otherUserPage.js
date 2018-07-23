@@ -30,7 +30,7 @@ class OtherUserPage extends Component{
     }
     handleOk = (e) => {
         if(this.state.mailContent == ''){
-            message.error("内容不能为空！");
+            message.error("内容不能为空！", 3);
             return;
         }
         let that  = this;
@@ -109,7 +109,7 @@ class OtherUserPage extends Component{
             .then(responseJson=>{
                 let result = eval('('+responseJson+')');
                 if(result.result == "fail"){
-                    message.error("关注失败，请重试");
+                    message.error("关注失败，请重试", 3);
                 }
                 information.fansno = result.fansno;
                 that.setState({
@@ -141,7 +141,7 @@ class OtherUserPage extends Component{
                     })
                 }
                 else{
-                    message.error("取消错误，请重试");
+                    message.error("取消错误，请重试", 3);
                 }
             }).catch(function(e){
             console.log("Oops, error");

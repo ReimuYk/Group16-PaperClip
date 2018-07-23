@@ -121,7 +121,7 @@ class UserDocDetail extends Component{
             .then(responseJson=>{
                 let result = eval('(' + responseJson + ')');
                 if(result.result == 'fail'){
-                    message.error('删除失败，请重试');
+                    message.error('删除失败，请重试', 3);
                     return;
                 }
                 var tmpdata = that.state.data;

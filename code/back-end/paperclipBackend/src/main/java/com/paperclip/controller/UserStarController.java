@@ -77,7 +77,7 @@ public class UserStarController {
         return userStarService.getStarPaper(data);
     }
 
-    // user want to quit star this paper
+    // user want to quit star this paperd
     @RequestMapping(value = "/service/quitStar/paper",method = RequestMethod.POST)
     public
     @ResponseBody

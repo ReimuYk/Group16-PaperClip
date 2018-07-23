@@ -26,7 +26,7 @@ class Login extends Component {
             .then(responseJson=>{
                 let result = eval('(' + responseJson + ')');
                 if(result.result == "fail"){
-                    message.error('登录错误，请验证您的用户名和密码！');
+                    message.error('登录错误，请验证您的用户名和密码！', 3);
                     return;
                 }
                 else{

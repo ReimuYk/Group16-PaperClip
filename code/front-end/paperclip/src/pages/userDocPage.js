@@ -96,7 +96,7 @@ class UserDoc extends Component{
                     })
                 }
                 else{
-                    message.error('删除失败，请重试');
+                    message.error('删除失败，请重试', 3);
                 }
             }).catch(function(e){
             console.log("Oops, error");
@@ -118,7 +118,7 @@ class UserDoc extends Component{
             .then(responseJson=>{
                 let result = eval('(' + responseJson + ')');
                 if(result.result != "success"){
-                    message.error("新建失败，请重试");
+                    message.error("新建失败，请重试", 3);
                 }
                 else{
                     let obj={

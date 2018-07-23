@@ -212,7 +212,7 @@ class NavBar extends Component{
             <List
                 size="small"
                 header={<div>评论/回复</div>}
-                footer={<div>Footer</div>}
+                footer={<Link to="/user/notifications"><Button type="primary">查看全部通知</Button></Link>}
                 dataSource={data1}
                 renderItem={item => (<List.Item>{item}</List.Item>)}
             />

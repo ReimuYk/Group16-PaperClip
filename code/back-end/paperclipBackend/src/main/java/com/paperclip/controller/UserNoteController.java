@@ -87,7 +87,7 @@ public class UserNoteController {
     @RequestMapping(value = "/service/getNoteComment",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONArray getNoteComment(@RequestBody JSONObject data){
+    JSONArray getNoteComment(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return userNoteService.getNoteComment(data);
     }
 
