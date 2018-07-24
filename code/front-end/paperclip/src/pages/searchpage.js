@@ -10,31 +10,70 @@ const { CheckableTag } = Tag;
  * should get 'tags' from server
  */
 var searchContent = '';
-const tagsFromServer1 = ['tag1-1', 'tag1-2', 'tag1-3', 'tag1-4'];
-const tagsFromServer2 = ['tag2-1', 'tag2-2', 'tag2-3', 'tag2-4'];
-
+var tagsFromServer1 = ['tag1-1', 'tag1-2', 'tag1-3', 'tag1-4'];
+const tagsFromServer2 = ['2015年及以后', '2010-2014', '2005-2009', '2004年及以前'];
+var paperData = [];
+var showPaperData = [];
 class MyTag extends React.Component {
     state = {
         selectedTags1: [],
         selectedTags2: [],
     };
   
-    handleChange(tag, checked) {
-        const { selectedTags1, selectedTags2 } = this.state;
+    handleChange1(tag, checked) {
+        const { selectedTags1 } = this.state;
         const nextSelectedTags1 = checked
           ? [...selectedTags1, tag]
           : selectedTags1.filter(t => t !== tag);
-        const nextSelectedTags2 = checked
-          ? [...selectedTags2, tag]
-          : selectedTags2.filter(t => t !== tag);
-        
+
         this.setState({ 
             selectedTags1: nextSelectedTags1,
-            selectedTags2: nextSelectedTags2,
         });
         console.log('You are interested in tag 1-: ', nextSelectedTags1);
-        console.log('You are interested in tag 2-: ', nextSelectedTags2);
         /* get data from server that matches checked tags */
+    }
+
+    handleChange2(tag, checked){
+        const { selectedTags2 } = this.state;
+        const nextSelectedTags2 = checked
+            ? [...selectedTags2, tag]
+            : selectedTags2.filter(t => t !== tag);
+        this.setState({
+            selectedTags2: nextSelectedTags2,
+        });
+        showPaperData = [];
+        console.log('You are interested in tag 2-: ', nextSelectedTags2);
+        const selectedTags1 = this.state.selectedTags1;
+
+        if(nextSelectedTags2.length == 0 && selectedTags1.length == 0){
+            showPaperData = paperData;
+            this.setState({});
+            return;
+        }
+        for(var i=0;i<selectedTags1.length;++i){
+            let tmp = paperData;
+            showPaperData = showPaperData.concat(tmp.filter(t => t.source == selectedTags1[i]));
+        }
+        for(var i=0;i<nextSelectedTags2.length; ++i){
+            let tag = nextSelectedTags2[i];
+            let tmp = paperData;
+            if(tag == '2015年及以后'){
+                showPaperData = showPaperData.concat(tmp.filter(t => t.year >= '2015'));
+            }
+            if(tag == '2010-2014'){
+                showPaperData = showPaperData.concat(tmp.filter(t => t.year >= '2014' && t.year <= '2010'));
+            }
+            if(tag == '2005-2009'){
+                showPaperData = showPaperData.concat(tmp.filter(t => t.year >= '2005' && t.year <= '2009'));
+            }
+            if(tag == '2004年及以前'){
+                showPaperData = showPaperData.concat(tmp.filter(t => t.year <= '2004'));
+            }
+        }
+        this.setState({});
+        console.log(nextSelectedTags2);
+        console.log(selectedTags1);
+        console.log(showPaperData);
     }
   
     render() {
@@ -46,7 +85,7 @@ class MyTag extends React.Component {
               <CheckableTag
                 key={tag}
                 checked={selectedTags1.indexOf(tag) > -1}
-                onChange={checked => this.handleChange(tag, checked)}
+                onChange={checked => this.handleChange1(tag, checked)}
               >
                 {tag}
               </CheckableTag>
@@ -57,7 +96,7 @@ class MyTag extends React.Component {
               <CheckableTag
                 key={tag}
                 checked={selectedTags2.indexOf(tag) > -1}
-                onChange={checked => this.handleChange(tag, checked)}
+                onChange={checked => this.handleChange2(tag, checked)}
               >
                 {tag}
               </CheckableTag>
@@ -77,13 +116,14 @@ const { Meta } = Card;
 
 class Search extends Component{
     state = {
-        paperData: [],
-        recommendData: []
+        recommendData: [],
+        selectedTags1: [],
+        selectedTags2: [],
     }
     constructor(props) {
         super(props);
-        this.readnoDESC = this.readnoDESC.bind(this);
-        this.readnoASC = this.readnoASC.bind(this);
+        this.starnoDESC = this.starnoDESC.bind(this);
+        this.starnoASC = this.starnoASC.bind(this);
         this.notenoDESC = this.notenoDESC.bind(this);
         this.notenoASC = this.notenoASC.bind(this);
     }
@@ -105,18 +145,21 @@ class Search extends Component{
             .then(response=>response.text())
             .then(responseJson=>{
                 let data = eval(responseJson);
+                console.log(data);
                 let papers = data[0].papers;
                 for(var i = 0; i<papers.length; i++){
-                    if(papers[i].keyword.length > 15){
-                        papers[i].keyword = papers[i].keyword.substring(0,15);
+                    if(papers[i].keyword.length > 50){
+                        papers[i].keyword = papers[i].keyword.substring(0,50);
                         papers[i].keyword += '...';
                     }
                     if(papers[i].keyword.length == 0){
                         papers[i].keyword = 'null';
                     }
                 }
+                paperData = papers;
+                showPaperData = paperData;
+                tagsFromServer1 = data[2].sourceTags;
                 that.setState({
-                    paperData: papers,
                     recommendData: data[1].recommand
                 })
             }).catch(function(e){
@@ -124,34 +167,29 @@ class Search extends Component{
         })
 
     }
-    readnoDESC(){
-        let paper = this.state.paperData;
+    starnoDESC(){
         var compare = function(obj1, obj2) {
-            var val1 = obj1.readno;
-            var val2 = obj2.readno;
+            var val1 = obj1.starno;
+            var val2 = obj2.starno;
             if(val1 < val2){ return 1;}
             else if( val1 > val2) {return -1;}
             else return 0;
         }
-        this.setState({
-            paperData: paper.sort(compare)
-        })
+        showPaperData = paperData.sort(compare);
+        this.setState({});
     }
-    readnoASC(){
-        let paper = this.state.paperData;
+    starnoASC(){
         var compare = function(obj1, obj2) {
-            var val1 = obj1.readno;
-            var val2 = obj2.readno;
+            var val1 = obj1.starno;
+            var val2 = obj2.starno;
             if(val1 < val2){ return -1;}
             else if( val1 > val2) {return 1;}
             else return 0;
         }
-        this.setState({
-            paperData: paper.sort(compare)
-        })
+        showPaperData = paperData.sort(compare);
+        this.setState({});
     }
     notenoDESC(){
-        let paper = this.state.paperData;
         var compare = function(obj1, obj2) {
             var val1 = obj1.noteno;
             var val2 = obj2.noteno;
@@ -159,12 +197,10 @@ class Search extends Component{
             else if( val1 > val2) {return -1;}
             else return 0;
         }
-        this.setState({
-            paperData: paper.sort(compare)
-        })
+        showPaperData = paperData.sort(compare);
+        this.setState({});
     }
     notenoASC(){
-        let paper = this.state.paperData;
         var compare = function(obj1, obj2) {
             var val1 = obj1.noteno;
             var val2 = obj2.noteno;
@@ -172,9 +208,8 @@ class Search extends Component{
             else if( val1 > val2) {return 1;}
             else return 0;
         }
-        this.setState({
-            paperData: paper.sort(compare)
-        })
+        showPaperData = paperData.sort(compare);
+        this.setState({});
     }
     renderSideBar(){
         return(
@@ -203,24 +238,17 @@ class Search extends Component{
     renderList(){
         return(
             <List
-                pagination={{pageSize: 16}}
-                grid={{ gutter: 16, column: 3 }}
-                dataSource={this.state.paperData}
+                pagination={{pageSize: 12}}
+                dataSource={showPaperData}
                 renderItem={item => (
-                <List.Item>
-                    <Card
-                        style={{ width: 200 }}
-                        actions={[<span>阅读量：{item.readno}</span>, <span>笔记数：{item.noteno}</span>]}
+                    <List.Item
+                        actions={[<span>收藏量：{item.starno}</span>, <span>笔记量：{item.noteno}</span>]}
                     >
-                        <Meta
-                            title={
-                                <Link to={"/paper?paperID=" + item.paperID}>
-                                    {item.title}
-                                </Link>}
+                        <List.Item.Meta
+                            title={<a href={"/paper?paperID=" + item.paperID}>{item.title}</a>}
                             description={item.keyword}
                         />
-                    </Card>
-                </List.Item>
+                    </List.Item>
                 )}
             />
         )
@@ -229,10 +257,10 @@ class Search extends Component{
         const menu = (
             <Menu>
                 <Menu.Item>
-                    <a onClick={this.readnoDESC}>按阅读量降序</a>
+                    <a onClick={this.starnoDESC}>按收藏量降序</a>
                 </Menu.Item>
                 <Menu.Item>
-                    <a onClick={this.readnoASC}>按阅读量升序</a>
+                    <a onClick={this.starnoASC}>按收藏量升序</a>
                 </Menu.Item>
                 <Menu.Item>
                     <a onClick={this.notenoDESC}>按笔记量降序</a>
@@ -250,18 +278,157 @@ class Search extends Component{
             </Dropdown>
         )
     }
-    render() {
+    handleChange1(tag, checked) {
+        const { selectedTags1 } = this.state;
+        const nextSelectedTags1 = checked
+            ? [...selectedTags1, tag]
+            : selectedTags1.filter(t => t !== tag);
 
+        this.setState({
+            selectedTags1: nextSelectedTags1,
+        });
+
+        showPaperData = [];
+        const selectedTags2 = this.state.selectedTags2;
+        if(nextSelectedTags1.length == 0){
+            showPaperData = paperData;
+        }
+        else{
+            for(var i=0;i<nextSelectedTags1.length;++i){
+                let tmp = paperData;
+                showPaperData = showPaperData.concat(tmp.filter(t => t.source == nextSelectedTags1[i]));
+            }
+        }
+        let showPaperData1 = showPaperData;
+        for(var i=0;i<selectedTags2.length; ++i){
+            let tag = selectedTags2[i];
+            let tmp = showPaperData1;
+            if(i == 0){
+                if(tag == '2015年及以后'){
+                    showPaperData = tmp.filter(t => t.year >= '2015');
+                }
+                if(tag == '2010-2014'){
+                    showPaperData = tmp.filter(t => t.year >= '2014' && t.year <= '2010');
+                }
+                if(tag == '2005-2009'){
+                    showPaperData = tmp.filter(t => t.year >= '2005' && t.year <= '2009');
+                }
+                if(tag == '2004年及以前'){
+                    showPaperData = tmp.filter(t => t.year <= '2004');
+                }
+                continue;
+            }
+            if(tag == '2015年及以后'){
+                showPaperData = showPaperData.concat(tmp.filter(t => t.year >= '2015'));
+            }
+            if(tag == '2010-2014'){
+                showPaperData = showPaperData.concat(tmp.filter(t => (t.year <= '2014' && t.year >= '2010')));
+            }
+            if(tag == '2005-2009'){
+                showPaperData = showPaperData.concat(tmp.filter(t => (t.year >= '2005' && t.year <= '2009')));
+            }
+            if(tag == '2004年及以前'){
+                showPaperData = showPaperData.concat(tmp.filter(t => t.year <= '2004'));
+            }
+        }
+        this.setState({});
+    }
+
+    handleChange2(tag, checked){
+        const { selectedTags2 } = this.state;
+        const nextSelectedTags2 = checked
+            ? [...selectedTags2, tag]
+            : selectedTags2.filter(t => t !== tag);
+        this.setState({
+            selectedTags2: nextSelectedTags2,
+        });
+        console.log('You are interested in tag 2-: ', nextSelectedTags2);
+        const selectedTags1 = this.state.selectedTags1;
+
+        showPaperData = [];
+        if(selectedTags1.length == 0){
+            showPaperData = paperData;
+        }
+        else{
+            for(var i=0;i<selectedTags1.length;++i){
+                let tmp = paperData;
+                showPaperData = showPaperData.concat(tmp.filter(t => t.source == selectedTags1[i]));
+            }
+        }
+        let showPaperData1 = showPaperData;
+        for(var i=0;i<nextSelectedTags2.length; ++i){
+            let tag = nextSelectedTags2[i];
+            let tmp = showPaperData1;
+            if(i == 0){
+                if(tag == '2015年及以后'){
+                    showPaperData = tmp.filter(t => t.year >= '2015');
+                }
+                if(tag == '2010-2014'){
+                    showPaperData = tmp.filter(t => (t.year <= '2014' && t.year >= '2010'));
+                }
+                if(tag == '2005-2009'){
+                    showPaperData = tmp.filter(t => (t.year >= '2005' && t.year <= '2009'));
+                }
+                if(tag == '2004年及以前'){
+                    showPaperData = tmp.filter(t => t.year <= '2004');
+                }
+                continue;
+            }
+            if(tag == '2015年及以后'){
+                showPaperData = showPaperData.concat(tmp.filter(t => t.year >= '2015'));
+            }
+            if(tag == '2010-2014'){
+                showPaperData = showPaperData.concat(tmp.filter(t => t.year >= '2014' && t.year <= '2010'));
+            }
+            if(tag == '2005-2009'){
+                showPaperData = showPaperData.concat(tmp.filter(t => t.year >= '2005' && t.year <= '2009'));
+            }
+            if(tag == '2004年及以前'){
+                showPaperData = showPaperData.concat(tmp.filter(t => t.year <= '2004'));
+            }
+        }
+        this.setState({});
+    }
+    renderTags = () =>{
+        const { selectedTags1, selectedTags2 } = this.state;
+        return (
+            <div>
+                <h6 style={{ marginRight: 8, display: 'inline' }}>标签1:</h6>
+                {tagsFromServer1.map(tag => (
+                    <CheckableTag
+                        key={tag}
+                        checked={selectedTags1.indexOf(tag) > -1}
+                        onChange={checked => this.handleChange1(tag, checked)}
+                    >
+                        {tag}
+                    </CheckableTag>
+                ))}
+                <div></div>
+                <h6 style={{ marginRight: 8, display: 'inline' }}>标签2:</h6>
+                {tagsFromServer2.map(tag => (
+                    <CheckableTag
+                        key={tag}
+                        checked={selectedTags2.indexOf(tag) > -1}
+                        onChange={checked => this.handleChange2(tag, checked)}
+                    >
+                        {tag}
+                    </CheckableTag>
+                ))}
+            </div>
+        );
+    }
+    render() {
+        const renderTags = this.renderTags();
         const renderList = this.renderList();
         const renderMenu = this.renderMenu();
         const renderSideBar = this.renderSideBar();
         return(
             <div>
                 <NavBar />
-                <div className="content" style={{display:"inline"}}>
+                <div className="content" style={{display:"inline", textAlign: 'left'}}>
                     <div className="search" style={{float:"left", width:"60%", marginLeft: "50px", marginTop:"30px"}}>
-                        <div className="tag" style={{marginLeft:"0px", width:"300px"}}>
-                            <MyTag />
+                        <div className="tag" style={{marginLeft:"0px"}}>
+                            {renderTags}
                         </div>
                         <div className="menu" style={{marginLeft: "0px", width:"150px", marginTop: "10px", marginBottom:"50px"}}>
                             {renderMenu}
