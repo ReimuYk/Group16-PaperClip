@@ -240,6 +240,10 @@ class ModifyNote extends Component{
         initContent:''
     }
     componentWillMount = () => {
+        if(sessionStorage.getItem('username') == null){
+            window.location.href='/login';
+            return;
+        }
         information.noteID = window.location.search.substring(8);//noteID=
         let username = sessionStorage.getItem('username');
         let that  = this;

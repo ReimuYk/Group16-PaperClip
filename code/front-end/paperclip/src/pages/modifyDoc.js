@@ -293,6 +293,10 @@ class ModifyDoc extends Component{
         initContent:''
     }
     componentWillMount = () => {
+        if(sessionStorage.getItem('username') == null){
+            window.location.href='/login';
+            return;
+        }
         let that = this;
         information.docID = window.location.search.substring(7);
         username = sessionStorage.getItem('username');

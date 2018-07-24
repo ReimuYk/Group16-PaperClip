@@ -25,6 +25,10 @@ class Message extends Component{
         receiverName:'',
     }
     componentWillMount = () => {
+        if(sessionStorage.getItem('username') == null){
+            window.location.href='/login';
+            return;
+        }
         /* get info from server */
         let that = this;
         /* get username */

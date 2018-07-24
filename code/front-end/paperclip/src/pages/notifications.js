@@ -23,6 +23,10 @@ var information = {
 }
 class Notifications extends Component{
     componentWillMount = () => {
+        if(sessionStorage.getItem('username') == null){
+            window.location.href='/login';
+            return;
+        }
         /* get info from server */
         let that = this;
         /* get username */
@@ -154,7 +158,7 @@ class Notifications extends Component{
         return(
             <div>
             <NavBar />
-                <div style={{width: '70%', margin: 'auto', marginLeft:'15%', marginTop:'5%'}}>
+                <div style={{width: '70%', margin: 'auto', marginLeft:'15%', marginTop:'5%', textAlign: 'left'}}>
                     <Tabs
                         tabPosition={"left"}
                         defaultActiveKey="1" onChange={this.callback}>

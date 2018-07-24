@@ -40,6 +40,10 @@ class UserSetting extends Component{
         }
     }
     componentWillMount(){
+        if(sessionStorage.getItem('username') == null){
+            window.location.href='/login';
+            return;
+        }
         username = sessionStorage.getItem('username');
         let that = this;
         /* get data according to username */

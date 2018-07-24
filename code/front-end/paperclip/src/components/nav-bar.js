@@ -15,6 +15,7 @@ var information = {
     followMessage:[],
     inviteMessage:[],
     invitations:[],
+    commentMessage:[]
 }
 
 const Search = Input.Search;
@@ -183,11 +184,38 @@ class NavBar extends Component{
         })
     }
 
+    commentMessage = () =>{
+        /* get info from server */
+        let that = this;
+        /* get username */
+        username = sessionStorage.getItem('username');
+        /* get data according to username */
+        let jsonbody = {};
+        jsonbody.username = username;
+        let url = IPaddress + 'service/getNoteCommInfo';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let data = eval(responseJson);
+                data = data.slice(0,3);
+                for(var i = 0; i<data.length; i++){
+                    if(data[i].content.length > 30){
+                        data[i].content = data[i].content.substring(0,30);
+                        data[i].content += '...';
+                    }
+                }
+                information.commentMessage = data;
+                that.setState({
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
+    }
     renderInfo(){
-        const data1=[
-            "一个桃子",
-            "两只羊"
-        ]
         return(
         <Tabs defaultActiveKey="1">
             <TabPane tab={<Icon onClick={this.followMessage} type="smile-o" />} key="1">
@@ -204,13 +232,29 @@ class NavBar extends Component{
                   </List.Item>)}
             />
             </TabPane>
-            <TabPane tab={<Icon type="bulb" />} key="2">
+            <TabPane tab={<Icon onClick={this.commentMessage} type="bulb" />} key="2">
             <List
                 size="small"
                 header={<div>评论/回复</div>}
                 footer={<Link to="/user/notifications"><Button type="primary">查看全部通知</Button></Link>}
-                dataSource={data1}
-                renderItem={item => (<List.Item>{item}</List.Item>)}
+                dataSource={information.commentMessage}
+                renderItem={item => (
+                    <List
+                        itemLayout="horizontal"
+                        width={500}
+                        dataSource={information.commentMessage}
+                        renderItem={item => (
+                            <List.Item
+                                actions = {[<p>{item.time}</p>]}
+                            >
+                                <List.Item.Meta
+                                    title={<a href={'/viewnote?noteID=' + item.noteID}>{item.noteTitle}</a>}
+                                    description={<p><a href={'/viewpage?username=' + item.sender}>{item.sender}</a>评论了：{item.content}</p>}
+                                />
+                            </List.Item>
+                        )}
+                    />
+                )}
             />
             </TabPane>
             <TabPane tab={<Icon onClick={this.inviteMessage} type="usergroup-add" />} key="3">

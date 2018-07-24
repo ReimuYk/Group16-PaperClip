@@ -59,6 +59,10 @@ class UserNote extends Component{
     document.getElementById("userNotePage").style.height= winHeight +"px";
 }*/
     componentWillMount = () => {
+        if(sessionStorage.getItem('username') == null){
+            window.location.href='/login';
+            return;
+        }
         //window.onresize=this.autodivheight; //浏览器窗口发生变化时同时变化DIV高度
         let that = this;
         /* get username */
