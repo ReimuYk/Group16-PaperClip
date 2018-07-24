@@ -82,6 +82,12 @@ class NavBar extends Component{
             .then(response=>response.text())
             .then(responseJson=>{
                 let data = eval(responseJson);
+                for(var i = 0; i<data.length; i++){
+                    if(data[i].description.length > 30){
+                        data[i].description = data[i].description.substring(0,30);
+                        data[i].description += '...';
+                    }
+                }
                 information.followMessage = data;
                 that.setState({
                 })
@@ -217,17 +223,20 @@ class NavBar extends Component{
     }
     renderInfo(){
         return(
-        <Tabs defaultActiveKey="1">
+        <Tabs defaultActiveKey="1" size="small" style={{width:"300px"}}>
             <TabPane tab={<Icon onClick={this.followMessage} type="smile-o" />} key="1">
             <List
                 size="small"
                 header={<div>这些人最近关注了你</div>}
                 footer={<Link to="/user/userfans"><Button type="primary">查看全部粉丝</Button></Link>}
                 dataSource={information.followMessage}
-                renderItem={item => (<List.Item>
+                renderItem={item => (<List.Item
+                    actions = {[<a href={'/viewpage?username=' + item.username}>查看首页</a>]}
+                >
                     <List.Item.Meta
                     avatar={<Avatar src={item.avatar}/>}
                     title={<a href={"/viewpage?username=" + item.username}>{item.username}</a>}
+                    description={item.description}
                     />
                   </List.Item>)}
             />
@@ -279,7 +288,7 @@ class NavBar extends Component{
     }
     renderMessage(){
         return(
-        <div className="message">
+        <div className="message" style={{width:"250px"}}>
             <List
                 itemLayout="horizontal"
                 dataSource={information.unreadMessage}

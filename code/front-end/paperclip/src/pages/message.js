@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { List, Avatar, Menu, Anchor, Modal, Button, Input} from 'antd';
+import { List, Avatar, Menu, Anchor, Modal, Button, Input, message} from 'antd';
 import { Link, Redirect } from 'react-router-dom';
 import NavBar from '../components/nav-bar';
 /* should get from server */
 import { IPaddress } from '../App'
 var username = '';
+var avatar = '';
 const { TextArea } = Input;
 
 var sortData = function(x,y){
@@ -44,7 +45,9 @@ class Message extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                let data = eval(responseJson);
+                let result = eval('(' + responseJson + ')');
+                let data = result.message;
+                avatar = result.avatar;
                 for(var i = 0; i<data.length; i++){
                     if(data[i].content.length > 30){
                         data[i].content = data[i].content.substring(0,30);
@@ -104,6 +107,10 @@ class Message extends Component{
         return -1;
     }
     commitMessage = () => {
+        if(this.state.messageContent == ''){
+            message.error('输入内容不能为空！');
+            return;
+        }
         let that  = this;
         var tmp = this.state.message;
         let data = this.state.data;
@@ -134,10 +141,10 @@ class Message extends Component{
                         data[index].time = result.time;
                         data.sort(sortData);
                     }
-                    let obj = {};
-                    obj.another = jsonbody.receiverName;
-                    that.showMessage(null, obj);
+                    let message = that.state.message;
+                    message.push({avatar:avatar, sender:username, content: that.state.messageContent, time:result.time})
                     that.setState({
+                        message:message,
                         messageContent: '',
                         data: data
                     })
