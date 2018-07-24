@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import PDF from 'react-pdf-js';
 import { Button, Popover, Affix, Row, Col, Card} from 'antd';
+import { Spin,Tooltip } from 'antd';
+
 import emitter from '.././util/events';
 import 'antd/dist/antd.css';
 import { IPaddress } from '../App'
@@ -10,6 +12,8 @@ let rightplace = []
 class PDFView extends Component{
     constructor(props){
         super(props);
+        this.changeMarkVisible = this.changeMarkVisible.bind(this);
+        this.getPgLoc = this.getPgLoc.bind(this);
         this.state = {
             isLoading:true,
             page:1,
@@ -17,7 +21,8 @@ class PDFView extends Component{
             username:sessionStorage.getItem('username'),
             marked:[],
             blocklist:[],
-            marked_note:[]
+            marked_note:[],
+            markVisible:true
         }
         //console.log(this.props.paperID);
         this.getData(this.props.paperID,1)
@@ -40,7 +45,6 @@ class PDFView extends Component{
             let data = eval('('+responseJson+')');
             console.log(data);
             that.setState({
-                isLoading: false,
                 //page state
                 paperID:paperID,
                 pages:data.pagenum,
@@ -73,13 +77,26 @@ class PDFView extends Component{
                 ],
                 noteRender:[
                     // {nid:1,tag:'1',render:[]}
-                ]
+                ],
+                isLoading: false,
+            },()=>{
+                this.getPgLoc();
             })
         }).catch(function(e){
             console.log("Oops, error");
         })
     }
 
+    getPgLoc(){
+        var div = document.getElementById("paperDiv");
+        var pgloc = [div.offsetLeft-document.documentElement.scrollLeft,div.offsetTop-document.documentElement.scrollTop];
+        //console.log("newPgLoc:"+pgloc);
+        this.setState({
+            pageloc:pgloc
+        },()=>{
+            this.allocComm();
+        });
+    }
     componentDidMount() {
         this.Event = emitter.addListener('addMark', (data) => {
             let marked = this.state.marked;
@@ -103,7 +120,12 @@ class PDFView extends Component{
                 this.allocComm();
             })
         });
-        this.allocComm();
+
+        //this.allocComm();
+
+        this.Event2 = emitter.addListener('blocksForPostil', (data) => {
+            this.colorBlocks(data);
+        });
     }
     onDocumentComplete = (pages) => {
         this.setState({ page: 1, pages });
@@ -113,13 +135,19 @@ class PDFView extends Component{
     handlePrevious = () => {
         if (this.state.page==1) return
         let old = this.state.page
-        this.setState({ page: old - 1 });
+        this.setState({ 
+            page: old - 1,
+            isLoading:true
+         });
         this.getData(this.state.paperID,old-1)
     }
     handleNext = () => {
         if (this.state.page==this.state.pages) return
         let old = this.state.page
-        this.setState({ page: old + 1 });
+        this.setState({
+            page: old + 1,
+            isLoading:true
+        });
         this.getData(this.state.paperID,old+1)
     }
     refreshPostil = (selectid) => {
@@ -181,12 +209,13 @@ class PDFView extends Component{
     }
     mouseMove = (e) => {
         var pgloc = [e.target.offsetLeft-document.documentElement.scrollLeft,e.target.offsetTop-document.documentElement.scrollTop]
-        if (pgloc!=this.state.pageloc && this.state.pageloc!=null){
+        //console.log("oldPgLoc:"+pgloc);
+        /*if (pgloc!=this.state.pageloc && this.state.pageloc!=null){
             this.allocComm()
-        }
+        }*/
         this.setState({
             pageloc:pgloc
-        })
+        });
         let loc = [e.clientX-e.target.getBoundingClientRect().left,e.clientY-e.target.getBoundingClientRect().top]        
         let tid = this.findItemId(loc)
         if (!this.state.mousePressing) return
@@ -221,6 +250,38 @@ class PDFView extends Component{
         }
         return null
     }
+    colorBlocks = (idlist) => {//显示一条批注对应的blocks
+        this.getPgLoc();
+        var res=[]
+        for (var i=0;i<idlist.length;i++){
+            var item = null
+            for (var j=0;j<this.state.blocklist.length;j++){
+                if (idlist[i]==this.state.blocklist[j].id){
+                    item = this.state.blocklist[j]
+                    break;
+                }
+            }
+            var w = item.end[0]-item.start[0]
+            var h = item.end[1]-item.start[1]
+            var stl = {
+                backgroundColor:'blue',
+                position: 'absolute',
+                left:item.start[0]+this.state.pageloc[0]+document.documentElement.scrollLeft,
+                top:item.start[1]+this.state.pageloc[1]+document.documentElement.scrollTop,
+                minHeight:h,
+                minWidth:w,
+                opacity:0.2,
+                pointerEvents:'none'
+            }
+            res.push(
+            <div key={i} width={w} height={h} style={stl}/>
+            )
+        }
+        this.setState({
+            blocksRender:res,
+            selectRender:[]
+        })
+    }
     putSelect = (idlist) => {
         this.setState({selectid:idlist})
         var res=[]
@@ -241,14 +302,17 @@ class PDFView extends Component{
                 top:item.start[1]+this.state.pageloc[1]+document.documentElement.scrollTop,
                 minHeight:h,
                 minWidth:w,
-                opacity:0.6,
+                opacity:0.3,
                 pointerEvents:'none'
             }
             res.push(
             <div key={i} width={w} height={h} style={stl}/>
             )
         }
-        this.setState({selectRender:res})
+        this.setState({
+            blocksRender:[],
+            selectRender:res
+        })
     }
     getTop = (lr,h) => {
         if (lr=='l'){
@@ -325,6 +389,10 @@ class PDFView extends Component{
         }
     }
     allocComm = () => {
+        if(!this.state.markVisible){
+            this.setState({commRender:[]});
+            return;
+        }
         leftplace = []
         rightplace = []
         let cr=[]
@@ -349,7 +417,7 @@ class PDFView extends Component{
                     top:bitem.start[1]+this.state.pageloc[1]+document.documentElement.scrollTop,
                     minHeight:h,
                     minWidth:w,
-                    opacity:0.6,
+                    opacity:0.3,
                     pointerEvents: 'none'
                 }
                 rend.push(
@@ -485,18 +553,48 @@ class PDFView extends Component{
         }
         this.setState({noteRender:cr})
     }
+
+    changeMarkVisible(){
+        var visible = this.state.markVisible;
+        this.getPgLoc();
+        this.setState({
+            markVisible:!visible
+        },()=>{
+            console.log(this.state.marked);            
+            this.allocComm();
+        })
+    }
+    changePage(){
+        return(
+            <div style={{zIndex:"100", position:"fixed",bottom:"5%",right:"23%"}}>
+                <Tooltip placement="right" title="上一页">
+                    <Button onClick={this.handlePrevious} icon="up" />
+                </Tooltip>
+                <br/>
+                <div>第{this.state.page}页</div>
+                <Tooltip placement="right" title="下一页">
+                <Button onClick={this.handleNext}  icon="down" />
+                </Tooltip>
+                <br/>
+                <Tooltip placement="right" title={this.state.markVisible?"隐藏标记":"显示标记"} >
+                <Button onClick={this.changeMarkVisible} shape="circle" 
+                icon={this.state.markVisible?"eye":"eye-o"} 
+                type={this.state.markVisible?"primary":"default"}
+                style={{marginTop:"15%"}}/>
+                </Tooltip>
+            </div>
+        );
+    }
     render(){
-        //this.allocComm()
+        const changePage = this.changePage();
         return(
             this.state.isLoading
-            ? <div>is loading</div>
+            ? <Spin size="large"/>
             : <div style={{backgroundColor:'white',width:"60%",
             position:"absolute",left:"22%"}}>
-                    <Button onClick={this.handlePrevious}>prev page</Button>
-                    <Button onClick={this.handleNext}>next page</Button>
-                    <Button onClick={this.allocComm}>展示批注&笔记</Button>
+                    {changePage}
                     <div>
-                    <div
+                    <div id="paperDiv"
                     onMouseDown={this.mouseDown} 
                     onMouseUp={this.mouseUp} 
                     onMouseMove={this.mouseMove}
@@ -506,6 +604,7 @@ class PDFView extends Component{
                     </div>
                     </div>
                     {this.state.selectRender}
+                    {this.state.blocksRender}
                     {this.state.commRender.map((cr)=>(
                         <div>{cr.render}</div>
                     ))}

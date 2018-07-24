@@ -21,7 +21,7 @@ public interface UserDocService {
       JSONObject addDocContributer(JSONObject data) throws UnsupportedEncodingException;
       JSONArray getContributeDoc(JSONObject data) throws UnsupportedEncodingException;
       JSONObject deleteContributer(JSONObject data);
-      JSONArray getContributor(JSONObject data);
+      JSONArray getContributor(JSONObject data) throws UnsupportedEncodingException;
 
     // writeDocPage.js
       JSONObject addDoc(JSONObject data) throws UnsupportedEncodingException;

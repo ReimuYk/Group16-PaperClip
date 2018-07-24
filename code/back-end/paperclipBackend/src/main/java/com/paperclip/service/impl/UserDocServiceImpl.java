@@ -8,6 +8,7 @@ import com.paperclip.model.Relationship.Assist;
 import com.paperclip.model.Relationship.Invite;
 import com.paperclip.service.ImgService;
 import com.paperclip.service.UserDocService;
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.DefaultValueLoaderDecorator;
 import com.sun.xml.internal.ws.api.server.HttpEndpoint;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -255,7 +256,7 @@ public class UserDocServiceImpl implements UserDocService {
     }
 
     //输入:docID -------------------- 返回所有协作者
-    public JSONArray getContributor(JSONObject data){
+    public JSONArray getContributor(JSONObject data) throws UnsupportedEncodingException {
         JSONArray contributors = new JSONArray();
         Long docID = data.getLong("docID");
 
@@ -266,7 +267,7 @@ public class UserDocServiceImpl implements UserDocService {
         List<Assist> ass = assistRepo.findByDocument(doc);
         for(Assist a:ass){
             JSONObject contributor = new JSONObject();
-            contributor.accumulate("username",a.getUser().getUsername());
+            contributor.accumulate("username", URLDecoder.decode(a.getUser().getUsername(), "UTF-8"));
             contributor.accumulate("avatar",service.getUserHeader(a.getUser()));
             contributors.add(contributor);
         }

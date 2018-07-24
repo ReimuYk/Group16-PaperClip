@@ -3,6 +3,8 @@ import { Collapse ,List,Input,Icon,Button,Avatar,Divider,Anchor, message} from '
 import Comment from "./comment";
 import emitter from '.././util/events';
 import { IPaddress } from '../App';
+import {Link} from 'react-router-dom';
+
 const Panel = Collapse.Panel;
 const Search = Input.Search;
 const ButtonGroup = Button.Group;
@@ -24,7 +26,7 @@ class Postil extends Component{
             data:[],
             postilIdx:null,
             inputValue:"",
-            selectid:null
+            selectid:null,
         }
     }
     componentWillMount(){
@@ -63,9 +65,9 @@ class Postil extends Component{
         fetch(url, options)
         .then(response=>response.text())
         .then(responseJson=>{
-            console.log(responseJson);
+            //console.log(responseJson);
             let data = eval('('+responseJson+')');
-            console.log(data)
+            //console.log(data)
         }).catch(function(e){
             console.log("Oops, error");
         })
@@ -135,18 +137,49 @@ class Postil extends Component{
             emitter.emit('deleteMark',mark.posID);
         }
     }
-    getPostil = (item,idx)=>{
+    getBlocksOfPostil(posID){
+        console.log("mouse in postil "+posID);
+        let that  = this;
+        let jsonbody = {};
+        jsonbody.posID = posID;        
+        var url = IPaddress+'service/getBlocksOfPostil';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+        .then(response=>response.text())
+        .then(responseJson=>{
+            //console.log(responseJson);
+            let data = eval('('+responseJson+')');
+            emitter.emit('blocksForPostil',data);
+           // console.log(data)
+        }).catch(function(e){
+            console.log("Oops, error");
+        })
+    }
+    clearBlocks(posID){
+        console.log("mouse leave "+posID);
+        emitter.emit('blocksForPostil',[]);
+    }
+    getPostil = (item,idx)=>{        
         return(
-            <div style={{textAlign:"left"}}>
+            <div style={{textAlign:"left"}} 
+            onMouseEnter = {()=>this.getBlocksOfPostil(item.postils.posID)} 
+            onMouseLeave = {()=>this.clearBlocks(item.postils.posID)}>
                 <p style={{marginLeft:"1%"}}>
-                    <Avatar shape="square" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                    {item.postils.user}
+                    <Avatar shape="square" src={item.postils.avatar}/>
+                    <Link to={"/viewpage?username="+item.postils.user}>{item.postils.user}</Link>
                 </p>
                 <p style={{marginTop:"7%"}}>{item.postils.content}</p>  
                 <Divider />  
                 <ButtonGroup>
-                    <Button type={this.state.data[idx].agreement.agreed?"primary":"default"} icon="like" value={idx} onClick={this.agree}>{this.state.data[idx].postils.agree}</Button>
-                    <Button type={this.state.data[idx].agreement.disagreed?"primary":"default"} icon="dislike-o" value={idx} onClick={this.disagree}>{this.state.data[idx].postils.disagree}</Button>
+                    <Button type={this.state.data[idx].agreement.agreed?"primary":"default"} 
+                    icon="like" value={idx} 
+                    onClick={this.agree}>{this.state.data[idx].postils.agree}</Button>
+                    <Button type={this.state.data[idx].agreement.disagreed?"primary":"default"} 
+                    icon="dislike-o" value={idx} 
+                    onClick={this.disagree}>{this.state.data[idx].postils.disagree}</Button>
                 </ButtonGroup>
                 <Divider type="vertical"/>
                 <Button type={this.state.data[idx].marked?"primary":"default"} shape="circle" icon="flag" value={idx} onClick={this.mark}/>
@@ -179,9 +212,9 @@ class Postil extends Component{
         fetch(url, options)
         .then(response=>response.text())
         .then(responseJson=>{
-            console.log(responseJson);
+            //console.log(responseJson);
             let data = eval('('+responseJson+')');
-            console.log(data)
+            //console.log(data)
         }).catch(function(e){
             console.log("Oops, error");
         })
@@ -200,13 +233,13 @@ class Postil extends Component{
         fetch(url, options)
         .then(response=>response.text())
         .then(responseJson=>{
-            console.log(responseJson);
+            //console.log(responseJson);
             let data = eval('('+responseJson+')');
             var old = that.state.data;
             newPos.postils.posID = data.posID;
             old.push(newPos);
             that.setState({data:old});
-            console.log(data)
+            //console.log(data)
             var mark={};
             mark.id=this.state.selectid;
             mark.posID = data.posID;
@@ -230,6 +263,7 @@ class Postil extends Component{
         var name = this.state.username;
         var obj = new Object();
         obj.user = name;
+        obj.avatar = this.props.avatar;
         obj.content = value;
 
         var data = this.state.data;
@@ -266,9 +300,9 @@ class Postil extends Component{
         const data = this.state.data;
         return(
             <div id="postil" 
-            style={{width:"20%",height:"530px",overflowY:"scroll",
+            style={{width:"20%",height:"90%",overflowY:"scroll",
              position:"fixed",right:"0px",marginLeft:"5px"}}>
-                <Anchor offsetTop={60} style={{position:"fixed",zIndex:"1",backgroundColor:"#FFFFFF"}}>
+                <Anchor offsetTop={"15%"} style={{position:"fixed",zIndex:"1",backgroundColor:"#FFFFFF"}}>
                     <Search
                     type="textarea"
                     placeholder="input text"
@@ -282,10 +316,10 @@ class Postil extends Component{
                 <Collapse accordion bordered={false} onChange={this.setPostilIdx}
                  style={{marginTop:"14%"}}>
                 {
-                    data.map((postil,idx)=>{
-                        var postil = this.getPostil(postil,idx);
+                    data.map((item,idx)=>{
+                        var postil = this.getPostil(item,idx);
                         return(
-                            <Panel header={postil} key={idx}>
+                            <Panel header={postil} key={idx} >
                                     <Comment data={data[idx].comments} handleReply={this.handleReply.bind(this)}/>
                             </Panel>
                         );
