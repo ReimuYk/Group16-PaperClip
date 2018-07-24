@@ -65,7 +65,7 @@ class UserDocDetail extends Component{
             <span>
                 <a href={"/paper?paperID=" + record.docPdfID}>查看内容</a>
                 <Divider type="vertical" />
-                <a onClick={() => this.deleteDoc(record)}>删除该版本</a>
+                <a onClick={() => this.deleteDoc(null,record)}>删除该版本</a>
             </span>
             )
         }],
@@ -131,7 +131,7 @@ class UserDocDetail extends Component{
                 var tmpdata = that.state.data;
                 var dataLen = tmpdata.length;
                 for(let i=0; i<dataLen; i++){
-                    if(tmpdata[i].ID == item.ID){
+                    if(tmpdata[i].docPdfID == item.docPdfID){
                         tmpdata.splice(i, 1);
                         break;
                     }
