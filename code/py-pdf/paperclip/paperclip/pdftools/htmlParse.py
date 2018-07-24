@@ -6,7 +6,7 @@ options = {
     'margin-right': '0.75in',
     'margin-bottom': '0.75in',
     'margin-left': '0.75in',
-    'encoding': "gbk",
+    'encoding': "UTF-8",
     'custom-header' : [
         ('Accept-Encoding', 'gzip')
     ],

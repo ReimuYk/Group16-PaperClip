@@ -5,15 +5,25 @@ import  { Redirect, Link } from 'react-router-dom'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 const Search = Input.Search;
+
 var username ='';
 var information = {
     docID: 0,
     title:'',
     contentHTML:'',
     contentText:'',
-    contributors:[]
+    contributors:[],
+    docDetail:[]
 };
-
+var sortData = function(x,y){
+    if(x.date < y.date){
+        return 1;
+    }
+    else if(x.date > y.date){
+        return -1;
+    }
+    else return 0;
+}
 class Editor extends React.Component {
     constructor (props) {
         super(props)
@@ -262,11 +272,61 @@ class Header extends React.Component {
     }
     cancelLeave(){
     }
+    getDetail = () =>{
+        let that = this;
+        let jsonbody = {};
+        jsonbody.username = username;
+        jsonbody.docID = information.docID;
+        let url = IPaddress + 'service/userDocDetail';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let data = eval('(' + responseJson + ')');
+                if(data.result == 'fail'){
+                    window.location.href = '/user';
+                    return;
+                }
+                if(data.version.length > 0){
+                    data.version.sort(sortData);
+                    information.docDetail = data.version;
+                    that.setState({
+                    })
+                }
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
+    }
+    renderDocDetail = () =>{
+        return(
+            <div className="content">
+                <List
+                    style={{textAlign:'left'}}
+                    itemLayout="horizontal"
+                    dataSource={information.docDetail}
+                    renderItem={item => (
+                        <List.Item
+                            actions={[<p>{item.date}</p>]}
+                        >
+                            <List.Item.Meta
+                                title={<a href={"/paper?paperID="+item.docPdfID}>{item.title}</a>}
+                                description={'版本 ' + item.version }
+                            />
+                        </List.Item>
+                    )}
+                />
+            </div>
+        )
+    }
     render(){
         if(sessionStorage.getItem('username') == null){
             return <Redirect to="/login"/>;
         }
         const renderModal = this.renderModal();
+        const renderDocDetail = this.renderDocDetail();
         return (
             <div className="menuHeader">
                 <Menu
@@ -280,6 +340,9 @@ class Header extends React.Component {
                     <Menu.Item key="invite" onClick={this.showModal}>
                         <Icon type="user-add" />协作者
                     </Menu.Item>
+                    <Popover placement="bottomLeft" content={renderDocDetail} title="该文档的所有版本" trigger="click">
+                        <Button type="primary" style={{float:"right", right:"60px", top:"8px"}} onClick={this.getDetail}>查看版本</Button>
+                    </Popover>
                     <Button type="primary" style={{float:"right", right:"80px", top:"8px"}} onClick={this.saveDoc}>保存</Button>
                     <Button type="primary" style={{ float:"right", right:"100px", top:"8px"}} onClick={this.publish}>发布</Button>
                 </Menu>

@@ -37,6 +37,10 @@ def html2pdf(req):
     htmlParse.run(json_data['data'],pdf_uri)
     os.mkdir('../../back-end/paperclipBackend/data/pic/%d'%pid)
     pdf2pic.pdf2jpeg(pdf_uri,'../../back-end/paperclipBackend/data/pic/%d/%d'%(pid,pid))
+    try:
+        os.rename('../../back-end/paperclipBackend/data/pic/%d/%d.jpeg'%(pid,pid),'../../back-end/paperclipBackend/data/pic/%d/%d-0.jpeg'%(pid,pid))
+    except:
+        pass
     # create response body
     resp = {}
     paper = miner.parse(pdf_uri)
