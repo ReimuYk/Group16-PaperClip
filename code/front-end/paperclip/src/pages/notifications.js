@@ -22,6 +22,10 @@ var information = {
     comments: []
 }
 class Notifications extends Component{
+    constructor(props){
+        super(props);
+        this.callback = this.callback.bind(this);
+    }
     componentWillMount = () => {
         if(sessionStorage.getItem('username') == null){
             window.location.href='/login';
@@ -149,9 +153,9 @@ class Notifications extends Component{
                     information.reply = data;
                     that.setState({
                     })
-                }).catch(function(e){
-                console.log("Oops, error");
-            })
+                })//.catch(function(e){
+                //console.log("Oops, error");
+            //})
         }
 
     }

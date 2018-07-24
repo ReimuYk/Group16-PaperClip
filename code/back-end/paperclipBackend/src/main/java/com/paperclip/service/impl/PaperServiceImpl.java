@@ -540,7 +540,10 @@ public class PaperServiceImpl implements PaperService {
             if (n.getContent().length() < 20) {
                 end = n.getContent().length();
             }
-            note.accumulate("intro", URLDecoder.decode(n.getContent().substring(0, end), "UTF-8"));
+
+            String intro = URLDecoder.decode(n.getContent().substring(0,end).replaceAll("%(?![0-9a-fA-F]{2})", "%25"),"UTF-8");
+            note.accumulate("intro",intro);
+
             datas.add(note);
         }
         result.accumulate("type","note");
@@ -555,7 +558,7 @@ public class PaperServiceImpl implements PaperService {
         return ArrayUtils.contains(arr,targetValue);
     }
     //输入：paperID
-    public JSONArray getKeywords(JSONObject data){
+    public JSONArray getKeywords(JSONObject data) throws UnsupportedEncodingException {
         JSONArray keywords = new JSONArray();
         Long paperID = data.getLong("paperID");
         Paper paper = paperRepo.findOne(paperID);
@@ -565,7 +568,7 @@ public class PaperServiceImpl implements PaperService {
         List<String> keys = new ArrayList<>();
         while(it.hasNext()){
             Note n = it.next();
-            String str = n.getKeyWords();
+            String str = URLDecoder.decode(n.getKeyWords(),"UTF-8");
             String[] ll = str.split(";");
             for(String word:ll){
                 if(!inList(keys,word)){
@@ -574,7 +577,7 @@ public class PaperServiceImpl implements PaperService {
                 }
             }
         }
-        String str = paper.getKeyWords();
+        String str = URLDecoder.decode(paper.getKeyWords(),"UTF-8");
         String[] ll = str.split(";");
         for(String word:ll){
             if(!inList(keys,word)){
