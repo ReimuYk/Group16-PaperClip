@@ -244,7 +244,7 @@ class NavBar extends Component{
             <TabPane tab={<Icon onClick={this.commentMessage} type="bulb" />} key="2">
             <List
                 size="small"
-                header={<div>评论/回复</div>}
+                header={<div>评论笔记通知</div>}
                 footer={<Link to="/user/notifications"><Button type="primary">查看全部通知</Button></Link>}
                 dataSource={information.commentMessage}
                 renderItem={item => (
