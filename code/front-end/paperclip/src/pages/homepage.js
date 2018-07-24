@@ -56,22 +56,22 @@ class Sider extends React.Component {
 
                         <Menu.Item key="1">
                             <Link to={'/user/starpaper?userID='+this.state.userID}>
-                                <Icon type="book" />我收藏的论文<span class="GlobalSideBar-navNumber">2,576</span>
+                                <Icon type="book" />我收藏的论文
                             </Link>
                         </Menu.Item>
                         <Menu.Item key="2">
                             <Link to={'/user?userID='+this.state.userID}>
-                                <Icon type="team" />我关注的用户<span class="GlobalSideBar-navNumber">2,576</span>
+                                <Icon type="team" />我关注的用户
                             </Link>
                         </Menu.Item>
                         <Menu.Item key="3">
                             <Link to='/user/invitations'>
-                                <Icon type="user-add" />我的邀请<span class="GlobalSideBar-navNumber">2,576</span>
+                                <Icon type="user-add" />我的邀请
                             </Link>
                         </Menu.Item>
                         <Menu.Item key="4">
                             <Link to='/user/message'>
-                                <Icon type="message" />我的私信<span class="GlobalSideBar-navNumber">2,576</span>
+                                <Icon type="message" />我的私信
                             </Link>
                         </Menu.Item>
                         <Menu.Item key="5"><Icon type="customer-service" />社区服务中心</Menu.Item>
