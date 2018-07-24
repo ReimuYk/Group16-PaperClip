@@ -72,11 +72,19 @@ class ViewNote extends Component{
 
     }
     showModal = () => {
+        if(username == null || username == ''){
+            message.error('请先登录', 3);
+            return;
+        }
         this.setState({
             visible: true,
         });
     }
     showComment = () => {
+        if(username == null || username == ''){
+            message.error('请先登录', 3);
+            return;
+        }
         let that = this;
         /* get data according to username */
         let jsonbody = {};
@@ -99,6 +107,10 @@ class ViewNote extends Component{
         })
     }
     handleOk = (e) => {
+        if(username == null || username == ''){
+            message.error('请先登录', 3);
+            return;
+        }
         if(this.state.mailContent == ''){
             message.error('内容不能为空！', 3);
             return;
@@ -157,6 +169,10 @@ class ViewNote extends Component{
         this.setState({ commentContent: '' });
     }
     commitComment = () => {
+        if(username == null || username == ''){
+            message.error('请先登录', 3);
+            return;
+        }
         if(this.state.commentContent == '')
         {
             message.error('内容不能为空！', 3);
@@ -193,6 +209,10 @@ class ViewNote extends Component{
         })
     }
     like = () => {
+        if(username == null || username == ''){
+            message.error('请先登录', 3);
+            return;
+        }
         let that = this;
         let jsonbody = {};
         jsonbody.username = username;
@@ -220,6 +240,10 @@ class ViewNote extends Component{
         })
     }
     cancelLike = () => {
+        if(username == null || username == ''){
+            message.error('请先登录', 3);
+            return;
+        }
         let that = this;
         let jsonbody = {};
         jsonbody.username = username;
@@ -247,6 +271,10 @@ class ViewNote extends Component{
         })
     }
     star = () => {
+        if(username == null || username == ''){
+            message.error('请先登录', 3);
+            return;
+        }
         let that = this;
         let jsonbody = {};
         jsonbody.username = username;
@@ -276,6 +304,10 @@ class ViewNote extends Component{
         })
     }
     cancelStar = () => {
+        if(username == null || username == ''){
+            message.error('请先登录', 3);
+            return;
+        }
         let that = this;
         let jsonbody = {};
         jsonbody.username = username;
@@ -303,6 +335,10 @@ class ViewNote extends Component{
     }
 
     followUser = () => {
+        if(username == null || username == ''){
+            message.error('请先登录', 3);
+            return;
+        }
         let that = this;
         /* get data according to username */
         let jsonbody = {};
@@ -330,6 +366,10 @@ class ViewNote extends Component{
     }
 
     quitFollow = () => {
+        if(username == null || username == ''){
+            message.error('请先登录', 3);
+            return;
+        }
         let that = this;
         /* tell the server to do something */
         let jsonbody = {};
@@ -434,7 +474,7 @@ class ViewNote extends Component{
         )
     }
     renderButton(){
-        if(information.author != username){
+        if(information.author != username || username == null){
             if(!this.state.ifFollow){
                 return(
                     <p>
@@ -504,15 +544,19 @@ class ViewNote extends Component{
                         <Divider />
                         <div style={{textAlign:'left'}}>
                             <div id='u1-1'>
+                            <Link to={'/viewpage?username='+information.author}>
                                 <img alt='' src={information.authorAvatar}
                                      style={{width:'80px',height:'80px',borderRadius:'50%',margin:'0 auto',display:'block'}}
                                 />
+                            </Link>
                             </div>
 
                             <div id='u1-2'>
                                 <br />
+                                <Link to={'/viewpage?username='+information.author}>
                                 <h3>{ information.author }</h3>
                                 <p>{ information.authorDescription }</p>
+                                </Link>
                                 <br />
                                 <br />
                             </div>

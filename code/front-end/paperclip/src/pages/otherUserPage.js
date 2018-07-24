@@ -24,11 +24,19 @@ class OtherUserPage extends Component{
         ifFollow: false
     }
     showModal = () => {
+        if(username == null || username == ''){
+            message.error("请先登录", 3);
+            return;
+        }
         this.setState({
             visible: true,
         });
     }
     handleOk = (e) => {
+        if(username == null || username == ''){
+            message.error("请先登录", 3);
+            return;
+        }
         if(this.state.mailContent == ''){
             message.error("内容不能为空！", 3);
             return;
@@ -64,7 +72,7 @@ class OtherUserPage extends Component{
     componentWillMount = () => {
         information.username = this.props.location.search.substring(10);//username=
         username = sessionStorage.getItem('username');
-        if(username == information.username){
+        if(username == information.username && username != ''){
             window.location.href = "/user";
         }
 
@@ -92,6 +100,10 @@ class OtherUserPage extends Component{
         })
     }
     followUser = () => {
+        if(username == null || username == ''){
+            message.error("请先登录", 3);
+            return;
+        }
         let that = this;
         /* get data according to username */
         let jsonbody = {};
@@ -118,6 +130,10 @@ class OtherUserPage extends Component{
         })
     }
     quitFollow = () => {
+        if(username == null || username == ''){
+            message.error("请先登录", 3);
+            return;
+        }
         let that = this;
         /* tell the server to do something */
         let jsonbody = {};
@@ -146,6 +162,10 @@ class OtherUserPage extends Component{
         })
     }
     handleMailChange = (event) => {
+        if(username == null || username == ''){
+            message.error("请先登录", 3);
+            return;
+        }
         console.log('send mail', event.target.value);
         this.setState({ mailContent: event.target.value });
         /* send to server, server => that user */

@@ -156,23 +156,33 @@ public class ViewInfoServiceImpl implements ViewInfoService {
     }
 
     public JSONObject getClientInfo(JSONObject data) throws UnsupportedEncodingException {
-        System.out.println("==========================");
+        System.out.println("\n\n==== getClientInfo ====");
         System.out.println("get json: "+data);
 
         JSONObject user = new JSONObject();
-        String hostname = data.getString("hostname");
         String clientname = data.getString("clientname");
-
-//        hostname = URLEncoder.encode(hostname, "UTF-8");
-//        clientname = URLEncoder.encode(clientname, "UTF-8");
+            User client = userRepo.findOne(clientname);
+            if(client == null){
+                clientname = URLEncoder.encode(clientname, "UTF-8");
+                client = userRepo.findOne(clientname);
+            }
+        String hostname = "";
+        try{
+            hostname = data.getString("hostname");
+            hostname = URLEncoder.encode(hostname, "UTF-8");
+        }catch (Exception e){
+            String avatar = imgService.getUserHeader(client);
+            user.accumulate("userheader", avatar);
+            user.accumulate("username", URLDecoder.decode(clientname, "UTF-8"));
+            user.accumulate("fansno", client.getFollower());
+            user.accumulate("followno", client.getFollowing());
+            user.accumulate("userDescription", URLDecoder.decode(client.getDescription(), "UTF-8"));
+            user.accumulate("isStar", 0);
+            System.out.println("return: "+user);
+            return user;
+        }
 
         User host = userRepo.findOne(hostname);
-        User client = userRepo.findOne(clientname);
-
-        clientname = URLDecoder.decode(clientname, "UTF-8");
-
-        System.out.println("client: "+client);
-        System.out.println("client name, after decode:"+clientname);
 
         Follow follow = followRepo.findDistinctByFolloweeAndFollower(client, host);
 
@@ -182,7 +192,7 @@ public class ViewInfoServiceImpl implements ViewInfoService {
             user.accumulate("isStar", 1);
         }
         user.accumulate("userheader", imgService.getUserHeader(client));
-        user.accumulate("username", clientname);
+        user.accumulate("username", URLDecoder.decode(clientname, "UTF-8"));
         user.accumulate("fansno", client.getFollower());
         user.accumulate("followno", client.getFollowing());
         user.accumulate("userDescription", URLDecoder.decode(client.getDescription(), "UTF-8"));
