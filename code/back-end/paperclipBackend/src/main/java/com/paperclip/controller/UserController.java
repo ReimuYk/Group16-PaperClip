@@ -48,7 +48,7 @@ public class UserController {
     @RequestMapping(value = "/service/user/messageList",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONArray messageList(@RequestBody JSONObject username) throws UnsupportedEncodingException {
+    JSONObject messageList(@RequestBody JSONObject username) throws UnsupportedEncodingException {
         return userService.getBriefMessageList(username);
     }
 

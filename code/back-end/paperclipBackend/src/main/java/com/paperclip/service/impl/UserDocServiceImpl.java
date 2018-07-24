@@ -2,10 +2,11 @@ package com.paperclip.service.impl;
 
 import com.paperclip.dao.entityDao.*;
 import com.paperclip.dao.relationshipDao.AssistRepository;
+import com.paperclip.dao.relationshipDao.BlockPostilRepository;
 import com.paperclip.dao.relationshipDao.InviteRepository;
+import com.paperclip.dao.relationshipDao.UserPostilRepository;
 import com.paperclip.model.Entity.*;
-import com.paperclip.model.Relationship.Assist;
-import com.paperclip.model.Relationship.Invite;
+import com.paperclip.model.Relationship.*;
 import com.paperclip.service.ImgService;
 import com.paperclip.service.UserDocService;
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.DefaultValueLoaderDecorator;
@@ -23,6 +24,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -53,6 +55,18 @@ public class UserDocServiceImpl implements UserDocService {
 
     @Autowired
     PaperPageRepository paperPageRepo;
+
+    @Autowired
+    private BlockPostilRepository blockPRepo;
+
+    @Autowired
+    private PostilCommentRepository postilCommRepo;
+
+    @Autowired
+    private UserPostilRepository userPRepo;
+
+    @Autowired
+    private PostilRepository postilRepo;
 
     @Autowired
     ImgService service;
@@ -102,15 +116,21 @@ public class UserDocServiceImpl implements UserDocService {
         username = URLEncoder.encode(username, "UTF-8");
         Long docID = data.getLong("docID");
         Document doc = docRepo.findOne(docID);
+
         List<DocumentPdf> docPdfList = docPdfRepo.findByDocument(doc);
         for (DocumentPdf docPdf : docPdfList) {
-
-             docPdfRepo.delete(docPdf.getId());
+            deletePdf(docPdf);
         }
+        List<Assist> assists = assistRepo.findByDocument(doc);
+        assistRepo.delete(assists);
+        List<Invite> invites = inviteRepo.findByDocument(doc);
+        inviteRepo.delete(invites);
+
         docRepo.delete(doc.getId());
         result.accumulate("result", "success");
         return result;
     }
+
 
     // delete one version( keep others )
     public JSONObject deleteUserDocVersion(JSONObject data) throws UnsupportedEncodingException {
@@ -126,7 +146,9 @@ public class UserDocServiceImpl implements UserDocService {
         if(docPdf!=null){
             System.out.println("docPdfID" + docPdf.getId());
             System.out.println("pdf title"+docPdf.getTitle());
-            docPdfRepo.delete(docPdf);
+
+            deletePdf(docPdf);
+
             result.accumulate("result", "success");
         }
         else{
@@ -135,6 +157,30 @@ public class UserDocServiceImpl implements UserDocService {
         return result;
     }
 
+    private void deletePdf(DocumentPdf docPdf){
+        List<PaperPage> pages = paperPageRepo.findByPaper(docPdf);
+        for(PaperPage page: pages){
+            List<Block> blocks = blockRepo.findByPaperPage(page);
+            List<Postil> postils = new ArrayList<>();
+            for(Block block:blocks){
+                List<BlockPostil> blockPostils = blockPRepo.findByBlock(block);
+                for(BlockPostil blockPostil:blockPostils){
+                    Postil postil = blockPostil.getPostil();
+                    postils.add(postil);
+                    List<PostilComment> l1 = postilCommRepo.findByPostil(postil);
+                    postilCommRepo.delete(l1);
+                    List<UserPostil> l2 = userPRepo.findByPostil(postil);
+                    userPRepo.delete(l2);
+                }
+                blockPRepo.delete(blockPostils);
+            }
+            blockRepo.delete(blocks);
+            postilRepo.delete(postils);
+        }
+        paperPageRepo.delete(pages);
+        docPdfRepo.delete(docPdf);
+    }
+    
     // get all versions of this doc
     public JSONObject getUserDocDetail(JSONObject data) throws UnsupportedEncodingException {
         JSONArray docDetails = new JSONArray();

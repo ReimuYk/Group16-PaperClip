@@ -22,6 +22,10 @@ var information = {
     comments: []
 }
 class Notifications extends Component{
+    constructor(props){
+        super(props);
+        this.callback = this.callback.bind(this);
+    }
     componentWillMount = () => {
         /* get info from server */
         let that = this;
@@ -93,7 +97,7 @@ class Notifications extends Component{
             /* get data according to username */
             let jsonbody = {};
             jsonbody.username = username;
-            let url = IPaddress + 'service/user/getPostilCommInfo';
+            let url = IPaddress + 'service/getPostilCommInfo';
             let options={};
             options.method='POST';
             options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -141,9 +145,9 @@ class Notifications extends Component{
                     information.reply = data;
                     that.setState({
                     })
-                }).catch(function(e){
-                console.log("Oops, error");
-            })
+                })//.catch(function(e){
+                //console.log("Oops, error");
+            //})
         }
 
     }
@@ -185,7 +189,7 @@ class Notifications extends Component{
                                         actions = {[<p>{item.time}</p>]}
                                     >
                                         <List.Item.Meta
-                                            title={<a href={'/papaer?paperID=' + item.paperID}>{item.paperTitle}</a>}
+                                            title={<a href={'/paper?paperID=' + item.paperID}>{item.paperTitle}</a>}
                                             description={<p><a href={'/viewpage?username=' + item.sender}>{item.sender}</a>评论了：{item.content}</p>}
                                         />
                                     </List.Item>
@@ -202,7 +206,7 @@ class Notifications extends Component{
                                         actions = {[<p>{item.time}</p>]}
                                     >
                                         <List.Item.Meta
-                                            title={<a href={'/papaer?paperID=' + item.paperID}>{item.paperTitle}</a>}
+                                            title={<a href={'/paper?paperID=' + item.paperID}>{item.paperTitle}</a>}
                                             description={<p><a href={'/viewpage?username=' + item.username}>{item.sender}</a>回复了：{item.content}</p>}
                                         />
                                     </List.Item>

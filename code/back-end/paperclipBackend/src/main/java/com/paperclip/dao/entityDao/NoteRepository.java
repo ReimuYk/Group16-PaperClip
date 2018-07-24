@@ -13,5 +13,6 @@ import java.util.List;
 public interface NoteRepository extends CrudRepository<Note,Long>{
     List<Note> findByPaper(Paper paper);
     List<Note> findByUser(User user);
+    Note findDistinctByUserAndPaper(User user,Paper paper);
 
 }

@@ -27,6 +27,7 @@ class Tool extends Component{
             toolIdx:null,
             isStar:false,
             clickTool:false,
+            type:"note"
         }
     }
     componentWillMount(){
@@ -57,6 +58,13 @@ class Tool extends Component{
         }).catch(function(e){
             console.log("Oops, error");
         })
+    }
+    componentDidMount() {
+        this.Event = emitter.addListener('hide', (type) => {
+            this.setState({
+                type:type
+            });
+        });
     }
     starPaper(){
         let that  = this;
@@ -227,6 +235,9 @@ class Tool extends Component{
     }
     render(){
         const content = this.rederToolContent();
+        if(this.state.type != "note"){
+            return(<div/>);
+        }
         return(
             <div id="tool" style={{zIndex:"100", position:"fixed",bottom:"5%",left:"2%"}}>
             <Popover 

@@ -80,11 +80,12 @@ class PDFView extends Component{
                 ],
                 isLoading: false,
             },()=>{
-                this.getPgLoc();
+                console.log("marked:"+that.state.marked)
+                that.getPgLoc();
             })
-        }).catch(function(e){
+        })/*catch(function(e){
             console.log("Oops, error");
-        })
+        })*/
     }
 
     getPgLoc(){
