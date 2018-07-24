@@ -20,7 +20,7 @@ public interface UserService {
 
     // message.js
     JSONArray getUnreadMessage(JSONObject data) throws UnsupportedEncodingException;
-    JSONArray getBriefMessageList(JSONObject data) throws UnsupportedEncodingException;
+    JSONObject getBriefMessageList(JSONObject data) throws UnsupportedEncodingException;
     JSONArray getConversation(JSONObject data) throws UnsupportedEncodingException;
     JSONObject sendMessage(JSONObject data) throws UnsupportedEncodingException;
 

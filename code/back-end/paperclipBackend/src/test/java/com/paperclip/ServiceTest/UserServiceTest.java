@@ -113,7 +113,7 @@ public class UserServiceTest {
     public void getBriefMessageList() throws UnsupportedEncodingException {
         JSONObject data = new JSONObject();
         data.accumulate("username", "user2");
-        JSONArray aa = service.getBriefMessageList(data);
+        JSONObject aa = service.getBriefMessageList(data);
         System.out.println(aa.toString());
     }
 }

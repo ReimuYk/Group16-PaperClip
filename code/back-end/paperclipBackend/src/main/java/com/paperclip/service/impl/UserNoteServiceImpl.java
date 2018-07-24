@@ -69,8 +69,11 @@ public class UserNoteServiceImpl implements UserNoteService {
         if(user == null || paper == null){
             return ret;
         }
-        Note note = new Note(paper,user);
-        noteRepo.save(note);
+        Note note = noteRepo.findDistinctByUserAndPaper(user,paper);
+        if(note == null) {
+            note = new Note(paper, user);
+            noteRepo.save(note);
+        }
         ret.accumulate("noteID", note.getId());
         return ret;
     }
@@ -111,6 +114,8 @@ public class UserNoteServiceImpl implements UserNoteService {
             noteCommRepo.delete(l1);
             List<StarNote> l2 = starNoteRepo.findByNote(note);
             starNoteRepo.delete(l2);
+            List<UserNote> l3 = userNRepo.findByNote(note);
+            userNRepo.delete(l3);
             noteRepo.delete(note);
             result.accumulate("result", "success");
         }
@@ -124,10 +129,15 @@ public class UserNoteServiceImpl implements UserNoteService {
     public JSONObject getNoteDetail(JSONObject data) throws UnsupportedEncodingException {
         System.out.println("\n\n ====getNoteDetail==== \n get json: "+data);
         Long noteID = data.getLong("noteID");
-        String username = data.getString("username");
-        username = URLEncoder.encode(username, "UTF-8");
         Note n = noteRepo.findOne(noteID);
         JSONObject note = new JSONObject();
+        String username = "";
+        try{
+            username = data.getString("username");
+            username = URLEncoder.encode(username, "UTF-8");
+        }catch (Exception e){
+            return note;
+        }
         if((n == null) || (!n.getUser().getUsername().equals(username))){
             return note;
         }
@@ -173,10 +183,41 @@ public class UserNoteServiceImpl implements UserNoteService {
     public JSONObject getViewNoteDetail(JSONObject data) throws UnsupportedEncodingException {
         System.out.println("\n\n ====getViewNoteDetail====\n get json: "+data);
         Long noteID = data.getLong("noteID");
-        String username = data.getString("username");
-        username = URLEncoder.encode(username, "UTF-8");
         JSONObject note = new JSONObject();
         Note n = noteRepo.findOne(noteID);
+        String username = "";
+        try{
+            username = data.getString("username");
+            username = URLEncoder.encode(username, "UTF-8");
+        }catch (Exception e){
+            int likeNo = 0;
+            List<UserNote> l1 = userNRepo.findByNote(n);
+            Iterator<UserNote> it = l1.iterator();
+            while (it.hasNext()){
+                if(it.next().getAgreement() == 1)
+                    likeNo += 1;
+            }
+            User author = n.getUser();
+            note.accumulate("noteID", n.getId());
+            note.accumulate("paperID",n.getPaper().getId());
+            note.accumulate("author", URLDecoder.decode(author.getUsername(), "UTF-8"));
+            note.accumulate("avatar", service.getUserHeader(author));
+            note.accumulate("description", URLDecoder.decode(author.getDescription(), "UTF-8"));
+            note.accumulate("title", URLDecoder.decode(n.getTitle(), "UTF-8"));
+            note.accumulate("content", URLDecoder.decode(n.getContent(), "UTF-8"));
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            note.accumulate("date", sdf.format(n.getDate()));
+            note.accumulate("commentNo",noteCommRepo.findByNote(n).size());
+            note.accumulate("ifLike", false);
+            note.accumulate("ifStar", false);
+            note.accumulate("likeNo", likeNo);
+            note.accumulate("ifFollow", false);
+
+            System.out.println("return :"+note);
+            return note;
+        }
+
         if(n == null){
             return note;
         }
@@ -270,8 +311,16 @@ public class UserNoteServiceImpl implements UserNoteService {
 
     // 传入：username，noteID  ---------------赞/取消赞 note
     public JSONObject agreeNote(JSONObject data){
+        JSONObject result = new JSONObject();
         Long noteID = data.getLong("noteID");
-        String username = data.getString("username");
+        String username = "";
+        try{
+            username = data.getString("username");
+            username = URLEncoder.encode(username, "UTF-8");
+        }catch (Exception e){
+            result.accumulate("result", "fail");
+            return result;
+        }
         Note note = noteRepo.findOne(noteID);
         User user = userRepo.findOne(username);
         UserNote un = userNRepo.findDistinctByUserAndNote(user,note);
@@ -291,7 +340,7 @@ public class UserNoteServiceImpl implements UserNoteService {
         }
         userNRepo.save(un);
         noteRepo.save(note);
-        JSONObject result = new JSONObject();
+
         result.accumulate("result","success");
         result.accumulate("likeNo",noteRepo.findOne(noteID).getAgreement());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -302,12 +351,19 @@ public class UserNoteServiceImpl implements UserNoteService {
     // 传入：username，noteID  ---------------收藏/取消收藏 note
     public JSONObject starNote(JSONObject data) throws UnsupportedEncodingException {
         Long noteID = data.getLong("noteID");
-        String username = data.getString("username");
-        username = URLEncoder.encode(username, "UTF-8");
+        String username = "";
+        JSONObject result = new JSONObject();
+        try{
+            username = data.getString("username");
+            username = URLEncoder.encode(username, "UTF-8");
+        }catch (Exception e){
+            result.accumulate("result", "fail");
+            return result;
+        }
         Note note = noteRepo.findOne(noteID);
         User user = userRepo.findOne(username);
         StarNote sn = starNoteRepo.findDistinctByUserAndNote(user,note);
-        JSONObject result = new JSONObject();
+
         if(sn == null){
             sn = new StarNote(user,note);
             note.setStar(note.getStar()+1);

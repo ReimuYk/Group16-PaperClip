@@ -3,7 +3,7 @@ import { Collapse ,List,Input,Icon,Button,Avatar,Divider,Anchor,Tag} from 'antd'
 import emitter from '.././util/events';
 import {Link } from 'react-router-dom';
 import { IPaddress } from '../App';
-
+const CheckableTag = Tag.CheckableTag;
 const Panel = Collapse.Panel;
 const Search = Input.Search;
 const ButtonGroup = Button.Group;
@@ -37,6 +37,7 @@ class NoteList extends Component{
         .then(responseJson=>{
             console.log(responseJson);
             let result = eval('('+responseJson+')');
+            emitter.emit('hide',result.type);
             that.setState({
                 type:result.type,
                 data:result.data
@@ -69,11 +70,14 @@ class NoteList extends Component{
     renderKey(){
         return(
             <div style={{textAlign:"left",marginTop:"5%"}}>
-                key word:
+                <p><Icon type="key" />关键词</p>
+                <Divider />
                 {this.state.keyWords.map((key,idx)=>{
-                    return(
-                        <Tag key={idx} style={{marginLeft:10}}>{key}</Tag>
-                    )
+                    if(key != ""){
+                        return(
+                            <Tag key={idx} style={{marginLeft:2,marginBottom:5}} color="#1E90FF">{key}</Tag>
+                        );
+                    }
                 },this)}
             </div>
         );

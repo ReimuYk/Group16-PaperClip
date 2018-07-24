@@ -67,7 +67,7 @@ public class PaperController {
     @RequestMapping(value = "/service/getKeywords",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONArray getKeywords(@RequestBody JSONObject data){
+    JSONArray getKeywords(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return paperService.getKeywords(data);
     }
 

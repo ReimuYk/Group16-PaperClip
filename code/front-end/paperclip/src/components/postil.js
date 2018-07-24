@@ -199,7 +199,7 @@ class Postil extends Component{
                     onClick={this.disagree}>{this.state.data[idx].postils.disagree}</Button>
                 </ButtonGroup>
                 <Divider type="vertical"/>
-                <Button type={this.state.username || !this.state.data[idx].marked?"default":"primary"} shape="circle" icon="flag" value={idx} onClick={this.mark}/>
+                <Button type={this.state.username==null || !this.state.data[idx].marked?"default":"primary"} shape="circle" icon="flag" value={idx} onClick={this.mark}/>
             </div>
         );
     }
