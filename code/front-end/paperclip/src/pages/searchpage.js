@@ -9,6 +9,7 @@ const { CheckableTag } = Tag;
  * 
  * should get 'tags' from server
  */
+var username ='';
 var searchContent = '';
 var tagsFromServer1 = ['tag1-1', 'tag1-2', 'tag1-3', 'tag1-4'];
 const tagsFromServer2 = ['2015年及以后', '2010-2014', '2005-2009', '2004年及以前'];
@@ -127,6 +128,12 @@ class Search extends Component{
         this.notenoDESC = this.notenoDESC.bind(this);
         this.notenoASC = this.notenoASC.bind(this);
     }
+    inList(list, string){
+        for(var i=0;i<list.length; ++i){
+            if(string == list[i]) return true;
+        }
+        return false;
+    }
     componentWillMount = () => {
         /* get searchContent from url */
         searchContent = this.props.location.search.substring(9);//8 == 'content='.length+1
@@ -159,6 +166,41 @@ class Search extends Component{
                 paperData = papers;
                 showPaperData = paperData;
                 tagsFromServer1 = data[2].sourceTags;
+
+
+
+                if((username = sessionStorage.getItem('username')) != null){
+                    let localStorage = '';
+                    localStorage = window.localStorage.getItem(username);
+                    let tags = localStorage.split(';');
+                    tags.pop();
+                    let tagLength1 = tags.length;
+                    let tagLength2 = tagsFromServer1.length;
+                    let local = [];
+                    if(tagLength2 >= 5){
+                        local = tagsFromServer1;
+                    }
+                    else{
+                        local = tagsFromServer1;
+                        var i = 0;
+                        while(local.length <= 5 && i<tagLength1){
+                            let string = tags[i];
+                            if(this.inList(local, string)){
+                                ++i;
+                            }
+                            else{
+                                local = [...local, string];
+                                ++i;
+                            }
+                        }
+                    }
+                    localStorage = '';
+                    for(var i=0; i<local.length; ++i){
+                        localStorage += local[i] + ';';
+                    }
+                    window.localStorage.setItem(username, localStorage);
+                }
+
                 that.setState({
                     recommendData: data[1].recommand
                 })

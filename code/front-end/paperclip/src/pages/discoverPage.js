@@ -7,7 +7,9 @@ import { IPaddress } from '../App'
 
 const Search = Input.Search;
 const Option = Select.Option;
-
+var username = '';
+var localStorage = '';
+var tags = [];
 class Discover extends Component{
     constructor(props){
         super(props);
@@ -19,7 +21,15 @@ class Discover extends Component{
             searchIdx: "empty"
         }
     }
-
+    componentWillMount = () =>{
+        if((username = sessionStorage.getItem('username'))!=null){
+            if((localStorage = window.localStorage.getItem(username))!=null){
+                tags = localStorage.split(';');
+                tags.pop();
+                this.setState({});
+            }
+        }
+    }
     changeSearchIdx(e){
         var idx = e.target.value;
         if(idx == ""){
@@ -143,34 +153,19 @@ class Discover extends Component{
     }
 
     renderSideBar(){
-        const data = [
-            {
-                title: 'Ant Design Title 1',
-            },
-            {
-                title: 'Ant Design Title 2',
-            },
-            {
-                title: 'Ant Design Title 3',
-            },
-            {
-                title: 'Ant Design Title 4',
-            },
-        ];
         return(
-            <div class="sidebar" style={{width: "20%", float: "right", marginRight: "10%"}}>
+            <div class="sidebar" style={{width: "20%", float: "right", marginRight: "10%", textAlign:'left'}}>
                 <div class="icon" style={{width: "130px", marginBottom: "30px"}}>
                     <Icon type="bars" />
-                    <span style={{marginLeft: "20px"}}>我关注的话题</span>
+                    <span style={{marginLeft: "20px"}}>你可能想搜索</span>
                 </div>
                 <List
                     itemLayout="horizontal"
-                    dataSource={data}
+                    dataSource={tags}
                     renderItem={item => (
-                        <List.Item actions={[<a>删除</a>]}>
+                        <List.Item>
                             <List.Item.Meta
-                                title={<a>{item.title}</a>}
-                                description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                                title={<a href={'/search?content=' + item}>{item}</a>}
                             />
                         </List.Item>
                     )}
