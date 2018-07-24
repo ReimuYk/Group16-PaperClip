@@ -20,7 +20,7 @@ public interface PaperService {
     JSONObject starPaper(JSONObject data) throws UnsupportedEncodingException;
     JSONObject ifStar(JSONObject data) throws UnsupportedEncodingException;
     JSONObject getNoteList(JSONObject data) throws UnsupportedEncodingException;
-    JSONArray getKeywords(JSONObject data);
+    JSONArray getKeywords(JSONObject data) throws UnsupportedEncodingException;
     JSONObject hasAccess(JSONObject data) throws UnsupportedEncodingException;
     boolean ifReply(String content, PostilComment comment);
     JSONArray getBlocksOfPostil(JSONObject data);

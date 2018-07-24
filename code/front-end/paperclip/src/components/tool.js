@@ -27,6 +27,7 @@ class Tool extends Component{
             toolIdx:null,
             isStar:false,
             clickTool:false,
+            type:"note"
         }
     }
     componentWillMount(){
@@ -56,6 +57,13 @@ class Tool extends Component{
         }).catch(function(e){
             console.log("Oops, error");
         })
+    }
+    componentDidMount() {
+        this.Event = emitter.addListener('hide', (type) => {
+            this.setState({
+                type:type
+            });
+        });
     }
     starPaper(){
         let that  = this;
@@ -149,30 +157,14 @@ class Tool extends Component{
             return;
         }
         this.setState({clickTool:true})
-        
-        const content = (
-            <div>
-                <Button shape="circle" style={{border:"none", backgroundColor:"#f50", verticalAlign: 'middle' }} size="large">
-                <Icon type="weibo" style={{color:"white"}}/>
-                </Button>
-                <Divider type="vertical" />
-                <Button shape="circle" style={{border:"none", backgroundColor:"#2db7f5", verticalAlign: 'middle' }} size="large">
-                <Icon type="qq" style={{color:"white"}}/>
-                </Button>
-                <Divider type="vertical" />
-                <Button shape="circle" style={{border:"none", backgroundColor:"#87d068", verticalAlign: 'middle' }} size="large">
-                <Icon type="wechat" style={{color:"white"}} />
-                </Button>
-                
-            </div>
-          )
-        confirm({
-            title: '分享到',
-            content: content,
-            iconType:"fork",
-            onOk:this.confirmShare,
-            onCancel:this.cancelShare
-        }); 
+        var content = window.location.href;
+        var oInput = document.createElement('input');
+        oInput.value = content;
+        document.body.appendChild(oInput);
+        oInput.select(); // 选择对象
+        document.execCommand("Copy"); // 执行浏览器复制命令
+        document.body.removeChild (oInput);
+        message.success('复制链接成功', 3);
     }
     newNote(e){
         e.preventDefault();
@@ -224,6 +216,9 @@ class Tool extends Component{
     }
     render(){
         const content = this.rederToolContent();
+        if(this.state.type != "note"){
+            return(<div/>);
+        }
         return(
             <div id="tool" style={{zIndex:"100", position:"fixed",bottom:"5%",left:"2%"}}>
             <Popover 

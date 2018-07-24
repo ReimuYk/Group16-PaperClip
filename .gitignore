@@ -5,3 +5,4 @@ __pycache__/
 *.properties
 target/
 data/
+temp/

@@ -2,7 +2,7 @@
 from django.http import HttpResponse,JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from paperclip.pdftools import miner,htmlParse,pdf2pic
+from paperclip.pdftools import miner,htmlParse,pdf2pic,buildPDF
 import base64
 import json
 import os
@@ -62,4 +62,40 @@ def html2pdf(req):
                     blocks[-1].append(b)
     resp["pagenum"] = pagenum
     resp["blocks"] = blocks
+    return HttpResponse(json.dumps(resp), content_type="application/json")
+
+def outputPDF(req):
+    postBody = req.read().decode()
+    json_data = json.loads(postBody)
+    print(json_data)
+    #parse req
+    paperID=json_data["paperID"]
+    pagelist=json_data["pagelist"]
+    username=json_data["username"]
+    #create temp files
+    try:
+        os.mkdir("temp")
+    except:
+        print("temp dir is existed")
+    try:
+        os.mkdir("temp/%d-%s"%(paperID,username))
+    except:
+        pass
+    workspace = "temp/%d-%s" % (paperID,username)
+    pagenum=len(pagelist)
+    allpostils=[]
+    allpdf=[]
+    for i in range(pagenum):
+        filedir='../../back-end/paperclipBackend/data/pic/%d/%s'%(paperID,pagelist[i]["filename"])
+        targetdir='%s/%d'%(workspace,i)
+        buildPDF.setMark(filedir,targetdir+'.jpg',pagelist[i]["postils"])
+        allpostils+=pagelist[i]["postils"]
+        buildPDF.conpdf(targetdir)
+        allpdf.append('%s/%d.pdf'%(workspace,i))
+    buildPDF.setPostil('%s/pos-page.pdf'%workspace,allpostils)
+    allpdf.append('%s/pos-page.pdf'%workspace)
+    buildPDF.mergepdf("%s/%d-%s.pdf"%(workspace,paperID,username),allpdf)
+    
+    resp={}
+    resp["stat"] = "success"
     return HttpResponse(json.dumps(resp), content_type="application/json")

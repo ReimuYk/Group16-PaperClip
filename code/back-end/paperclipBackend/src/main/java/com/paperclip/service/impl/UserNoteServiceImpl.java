@@ -69,8 +69,11 @@ public class UserNoteServiceImpl implements UserNoteService {
         if(user == null || paper == null){
             return ret;
         }
-        Note note = new Note(paper,user);
-        noteRepo.save(note);
+        Note note = noteRepo.findDistinctByUserAndPaper(user,paper);
+        if(note == null) {
+            note = new Note(paper, user);
+            noteRepo.save(note);
+        }
         ret.accumulate("noteID", note.getId());
         return ret;
     }
@@ -111,6 +114,8 @@ public class UserNoteServiceImpl implements UserNoteService {
             noteCommRepo.delete(l1);
             List<StarNote> l2 = starNoteRepo.findByNote(note);
             starNoteRepo.delete(l2);
+            List<UserNote> l3 = userNRepo.findByNote(note);
+            userNRepo.delete(l3);
             noteRepo.delete(note);
             result.accumulate("result", "success");
         }
