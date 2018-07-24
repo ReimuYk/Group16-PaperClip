@@ -131,7 +131,7 @@ class UserDocDetail extends Component{
                 var tmpdata = that.state.data;
                 var dataLen = tmpdata.length;
                 for(let i=0; i<dataLen; i++){
-                    if(tmpdata[i].ID == item.ID){
+                    if(tmpdata[i].docPdfID == item.docPdfID){
                         tmpdata.splice(i, 1);
                         break;
                     }
