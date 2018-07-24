@@ -43,7 +43,6 @@ class Tool extends Component{
         fetch(url, options)
         .then(response=>response.text())
         .then(responseJson=>{
-            console.log(responseJson);
             let data = eval('('+responseJson+')');
             if(data.result == "fail"){
                 message.error("您没有收藏该论文", 3);
@@ -71,7 +70,6 @@ class Tool extends Component{
         fetch(url, options)
         .then(response=>response.text())
         .then(responseJson=>{
-            console.log(responseJson);
             let data = eval('('+responseJson+')');
             console.log(data)
         }).catch(function(e){
@@ -91,7 +89,6 @@ class Tool extends Component{
         fetch(url, options)
         .then(response=>response.text())
         .then(responseJson=>{
-            console.log(responseJson);
             let data = eval('('+responseJson+')');
             console.log(data)
         }).catch(function(e){

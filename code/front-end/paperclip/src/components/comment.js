@@ -28,8 +28,8 @@ class Comment extends Component{
                         shape="circle" icon="message"
                         /> ]}> 
                         <List.Item.Meta
-                        avatar={<Avatar shape="square" size="small" icon="user" />}
-                        title={<a href="#">{item.user}</a>}
+                        avatar={<Avatar shape="square" size="small" src={item.avatar} />}
+                        title={<a href={"/viewpage?username="+item.user}>{item.user}</a>}
                         description={<p style={{width:"130%"}}>{item.content}</p>}
                         /> 
                         </List.Item>

@@ -13,6 +13,10 @@ class StarUser extends Component{
         data: [],
     }
     componentWillMount = () => {
+        if(sessionStorage.getItem('username') == null){
+            window.location.href='/login';
+            return;
+        }
         username = sessionStorage.getItem('username');
         let that = this;
         /* get specific info of users */

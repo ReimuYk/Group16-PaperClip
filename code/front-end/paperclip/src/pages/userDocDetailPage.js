@@ -71,6 +71,10 @@ class UserDocDetail extends Component{
         }],
     }
     componentWillMount = () => {
+        if(sessionStorage.getItem('username') == null){
+            window.location.href='/login';
+            return;
+        }
         docID = this.props.location.search.substring(7);//7 == 'docID='.length+1
         username = sessionStorage.getItem('username');
         let that = this;

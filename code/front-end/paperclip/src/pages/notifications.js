@@ -23,6 +23,10 @@ var information = {
 }
 class Notifications extends Component{
     componentWillMount = () => {
+        if(sessionStorage.getItem('username') == null){
+            window.location.href='/login';
+            return;
+        }
         /* get info from server */
         let that = this;
         /* get username */
@@ -30,7 +34,7 @@ class Notifications extends Component{
         /* get data according to username */
         let jsonbody = {};
         jsonbody.username = username;
-        let url = IPaddress + 'service/user/messageList';
+        let url = IPaddress + 'service/getNoteCommInfo';
         let options={};
         options.method='POST';
         options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -45,6 +49,7 @@ class Notifications extends Component{
                         data[i].content += '...';
                     }
                 }
+                data.sort(sortData);
                 information.commentsNote = data;
                 that.setState({
                 })
@@ -54,7 +59,7 @@ class Notifications extends Component{
     }
 
 
-    callback(key) {
+    callback  = (key) => {
         if(key == "1"){
             /* get info from server */
             let that = this;
@@ -78,6 +83,7 @@ class Notifications extends Component{
                             data[i].content += '...';
                         }
                     }
+                    data.sort(sortData);
                     information.commentsNote = data;
                     that.setState({
                     })
@@ -93,7 +99,7 @@ class Notifications extends Component{
             /* get data according to username */
             let jsonbody = {};
             jsonbody.username = username;
-            let url = IPaddress + 'service/user/getPostilCommInfo';
+            let url = IPaddress + 'service/getPostilCommInfo';
             let options={};
             options.method='POST';
             options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
@@ -108,6 +114,7 @@ class Notifications extends Component{
                             data[i].content += '...';
                         }
                     }
+                    data.sort(sortData);
                     information.comments = data;
                     that.setState({
                     })
@@ -138,6 +145,7 @@ class Notifications extends Component{
                             data[i].content += '...';
                         }
                     }
+                    data.sort(sortData);
                     information.reply = data;
                     that.setState({
                     })
@@ -154,7 +162,7 @@ class Notifications extends Component{
         return(
             <div>
             <NavBar />
-                <div style={{width: '70%', margin: 'auto', marginLeft:'15%', marginTop:'5%'}}>
+                <div style={{width: '70%', margin: 'auto', marginLeft:'15%', marginTop:'5%', textAlign: 'left'}}>
                     <Tabs
                         tabPosition={"left"}
                         defaultActiveKey="1" onChange={this.callback}>
@@ -169,7 +177,7 @@ class Notifications extends Component{
                                     >
                                         <List.Item.Meta
                                             title={<a href={'/viewnote?noteID=' + item.noteID}>{item.noteTitle}</a>}
-                                            description={<p><a href={'/viewpage?username=' + item.sender}>{item.sender}</a>评论了：{item.content}</p>}
+                                            description={<p><a href={'/viewpage?username=' + item.sender}>{item.sender}</a> 评论了：{item.content}</p>}
                                         />
                                     </List.Item>
                                 )}
@@ -186,7 +194,7 @@ class Notifications extends Component{
                                     >
                                         <List.Item.Meta
                                             title={<a href={'/papaer?paperID=' + item.paperID}>{item.paperTitle}</a>}
-                                            description={<p><a href={'/viewpage?username=' + item.sender}>{item.sender}</a>评论了：{item.content}</p>}
+                                            description={<p><a href={'/viewpage?username=' + item.sender}>{item.sender}</a> 评论了：{item.content}</p>}
                                         />
                                     </List.Item>
                                 )}
@@ -202,8 +210,8 @@ class Notifications extends Component{
                                         actions = {[<p>{item.time}</p>]}
                                     >
                                         <List.Item.Meta
-                                            title={<a href={'/papaer?paperID=' + item.paperID}>{item.paperTitle}</a>}
-                                            description={<p><a href={'/viewpage?username=' + item.username}>{item.sender}</a>回复了：{item.content}</p>}
+                                            title={<a href={'/paper?paperID=' + item.paperID}>{item.paperTitle}</a>}
+                                            description={<p><a href={'/viewpage?username=' + item.sender}>{item.sender}</a>   回复了：{item.content}</p>}
                                         />
                                     </List.Item>
                                 )}

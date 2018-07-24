@@ -10,6 +10,7 @@ import com.paperclip.model.Relationship.Assist;
 import com.paperclip.model.Relationship.BlockPostil;
 import com.paperclip.model.Relationship.StarPaper;
 import com.paperclip.model.Relationship.UserPostil;
+import com.paperclip.service.ImgService;
 import com.paperclip.service.PaperService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -68,6 +69,9 @@ public class PaperServiceImpl implements PaperService {
     @Autowired
     private ReplyRepository  replyRepo;
 
+    @Autowired
+    private ImgService imgService;
+
     public String GetImageStrFromPath(String imgPath) {
         InputStream in = null;
         byte[] data = null;
@@ -105,9 +109,15 @@ public class PaperServiceImpl implements PaperService {
     public JSONObject getPaperDetail(JSONObject data) throws UnsupportedEncodingException {
         JSONObject paper = new JSONObject();
         Long paperID = data.getLong("paperID");
-        String username = data.getString("username");
-        username = URLEncoder.encode(username, "UTF-8");
         int pagination = data.getInt("pagination");
+        String username = "";
+        try{
+            username = data.getString("username");
+            username = URLEncoder.encode(username, "UTF-8");
+        }catch (Exception e){
+            return getPaperDetailAnonymous(paperID, pagination);
+        }
+
 
         User user = userRepo.findOne(username);
 
@@ -163,12 +173,53 @@ public class PaperServiceImpl implements PaperService {
         return paper;
     }
 
+    public JSONObject getPaperDetailAnonymous(Long paperID, int pagination){
+        Paper p = paperRepo.findOne(paperID);
+        List<PaperPage> pagelist = paperPageRepo.findByPaper(p);
+        PaperPage page = null;
+        for (PaperPage pp:pagelist){
+            if (pp.getPagination()==pagination){
+                page = pp;
+                break;
+            }
+        }
+        List<Block> blist = blockRepo.findByPaperPage(page);
+        String pageurl = page.getContentUrl();
+        pageurl = String.format("./data/pic/%d/%s",paperID,pageurl);
+        String b64str = this.GetImageStrFromPath(pageurl);
+        b64str = "data:image/jpg;base64,"+b64str;
+
+        JSONArray blocklist = new JSONArray();
+        for (Block b:blist){
+            JSONObject blk = new JSONObject();
+            blk.accumulate("id",b.getId());
+            String st = b.getStartPoint();
+            blk.accumulate("start",parsePoint(st));
+            String ed = b.getEndPoint();
+            blk.accumulate("end",parsePoint(ed));
+            blocklist.add(blk);
+        }
+        JSONObject paper = new JSONObject();
+        int pagenum = p.getPageNum();
+
+        paper.accumulate("b64str",b64str);
+        paper.accumulate("blocklist", blocklist);
+        paper.accumulate("pagenum",pagenum);
+        return paper;
+    }
+
     public JSONArray getBlockPostils(JSONObject data) throws UnsupportedEncodingException {
         Long paperID = data.getLong("paperID");
-        String username = data.getString("username");
-        username = URLEncoder.encode(username, "UTF-8");
         int pagination = data.getInt("pagination");
         JSONArray blist = data.getJSONArray("selectid");
+        String username = "";
+        try{
+            username = data.getString("username");
+            username = URLEncoder.encode(username, "UTF-8");
+        }catch (Exception e){
+            return getBlockPostilsAnonymous(paperID, pagination, blist);
+        }
+
         List<Block> blocklist = new ArrayList<Block>();
         for (int i=0;i<blist.size();i++){
             Long bid = blist.getLong(i);
@@ -183,6 +234,7 @@ public class PaperServiceImpl implements PaperService {
             JSONObject postils = new JSONObject();
             postils.accumulate("posID",p.getId());
             postils.accumulate("user", URLDecoder.decode(p.getUser().getUsername(), "UTF-8"));
+            postils.accumulate("avatar",imgService.getUserHeader(p.getUser()));
             postils.accumulate("content",URLDecoder.decode(p.getContent(), "UTF-8"));
             postils.accumulate("agree",p.getAgreement());
             postils.accumulate("disagree",p.getDisagreement());
@@ -194,6 +246,7 @@ public class PaperServiceImpl implements PaperService {
                 JSONObject commitem = new JSONObject();
                 User u = pc.getUser();
                 commitem.accumulate("user", URLDecoder.decode(u.getUsername(), "UTF-8"));
+                commitem.accumulate("avatar",imgService.getUserHeader(u));
                 commitem.accumulate("content", URLDecoder.decode(pc.getContent(), "UTF-8"));
                 comments.add(commitem);
             }
@@ -225,6 +278,41 @@ public class PaperServiceImpl implements PaperService {
                 }
             }
             obj.accumulate("agreement",agreement);
+            res.add(obj);
+        }
+        return res;
+    }
+
+    public JSONArray getBlockPostilsAnonymous(Long paperID, int pagination, JSONArray blist) throws UnsupportedEncodingException {
+        List<Block> blocklist = new ArrayList<Block>();
+        for (int i=0;i<blist.size();i++){
+            Long bid = blist.getLong(i);
+            Block b = blockRepo.findOne(bid);
+            blocklist.add(b);
+        }
+        List<Postil> poslist = blockPRepo.findDistinctPostilByBlock(blocklist);
+        JSONArray res = new JSONArray();
+        for (Postil p:poslist){
+            JSONObject obj = new JSONObject();
+            //postils:{user:xxx,content:xxx,agree:xxx,disagree:xxx}
+            JSONObject postils = new JSONObject();
+            postils.accumulate("posID",p.getId());
+            postils.accumulate("user", URLDecoder.decode(p.getUser().getUsername(), "UTF-8"));
+            postils.accumulate("content",URLDecoder.decode(p.getContent(), "UTF-8"));
+            postils.accumulate("agree",p.getAgreement());
+            postils.accumulate("disagree",p.getDisagreement());
+            obj.accumulate("postils",postils);
+            //comments:[{user:xxx,content:xx},{...}]
+            List<PostilComment> pclist = postilCommRepo.findByPostil(p);
+            JSONArray comments = new JSONArray();
+            for (PostilComment pc:pclist){
+                JSONObject commitem = new JSONObject();
+                User u = pc.getUser();
+                commitem.accumulate("user", URLDecoder.decode(u.getUsername(), "UTF-8"));
+                commitem.accumulate("content", URLDecoder.decode(pc.getContent(), "UTF-8"));
+                comments.add(commitem);
+            }
+            obj.accumulate("comments",comments);
             res.add(obj);
         }
         return res;
@@ -354,14 +442,21 @@ public class PaperServiceImpl implements PaperService {
 
     // 传入：paperID,username  ---------------是否收藏过这篇论文
     public JSONObject ifStar(JSONObject data) throws UnsupportedEncodingException {
-        String username = data.getString("username");
-        username = URLEncoder.encode(username, "UTF-8");
+        System.out.println("\n\n ==== ifStar ==== \n get json: "+data);
+        String username = "";
+        JSONObject result = new JSONObject();
+        try{
+            username = data.getString("username");
+            username = URLEncoder.encode(username, "UTF-8");
+        }catch (Exception e){
+            result.accumulate("result", "fail");
+        }
         Long paperID = data.getLong("paperID");
 
         Paper paper = paperRepo.findOne(paperID);
         User user = userRepo.findOne(username);
 
-        JSONObject result = new JSONObject();
+
         if(paper == null || user == null){
             result.accumulate("result","fail");
         }
@@ -411,6 +506,7 @@ public class PaperServiceImpl implements PaperService {
 
     //输入：paperID ---------------- 获取与某一篇论文有关的笔记列表
     public JSONObject getNoteList(JSONObject data) throws UnsupportedEncodingException {
+        System.out.println("\n\n ==== getNoteList ====\n get json: "+data);
         JSONObject result = new JSONObject();
         JSONArray datas = new JSONArray();
         Long paperID = data.getLong("paperID");
@@ -429,25 +525,27 @@ public class PaperServiceImpl implements PaperService {
             }
             result.accumulate("type","version");
             result.accumulate("data",datas);
+            System.out.println("return: "+result);
             return result;
         }
 
         List<Note> l = noteRepo.findByPaper(paper);
-        Iterator<Note> it = l.iterator();
-        while(it.hasNext()){
+        System.out.println("get note list for paper");
+        for (Note aL : l) {
             JSONObject note = new JSONObject();
-            Note n = it.next();
-            note.accumulate("id",n.getId());
+            Note n = aL;
+            note.accumulate("id", n.getId());
             note.accumulate("title", URLDecoder.decode(n.getTitle(), "UTF-8"));
             int end = 20;
-            if(n.getContent().length()<20){
+            if (n.getContent().length() < 20) {
                 end = n.getContent().length();
             }
-            note.accumulate("intro", URLDecoder.decode(n.getContent().substring(0,end), "UTF-8"));
+            note.accumulate("intro", URLDecoder.decode(n.getContent().substring(0, end), "UTF-8"));
             datas.add(note);
         }
         result.accumulate("type","note");
         result.accumulate("data",datas);
+        System.out.println("return: "+datas);
         return result;
     }
 
@@ -497,6 +595,7 @@ public class PaperServiceImpl implements PaperService {
         username = URLEncoder.encode(username, "UTF-8");
         JSONObject result = new JSONObject();
 
+        User user = userRepo.findOne(username);
         DocumentPdf docP = docPdfRepo.findOne(paperID);
         if(docP != null){//是docPdf
             System.out.println("user:"+username+" author:"+docP.getAuthor());
@@ -505,6 +604,7 @@ public class PaperServiceImpl implements PaperService {
                 for(Assist a:ass){
                     if(a.getUser().getUsername().equals(username)){
                         result.accumulate("result","success");
+                        result.accumulate("avatar",imgService.getUserHeader(user));
                         return result;
                     }
                 }
@@ -513,6 +613,20 @@ public class PaperServiceImpl implements PaperService {
             }
         }
         result.accumulate("result","success");
+        result.accumulate("avatar",imgService.getUserHeader(user));
+        return result;
+    }
+
+    //输入：posID 返回一个postil对应的Blocks
+    public JSONArray getBlocksOfPostil(JSONObject data){
+        JSONArray result = new JSONArray();
+        Long posID = data.getLong("posID");
+
+        Postil postil = postilRepo.findOne(posID);
+        List<BlockPostil> bps = blockPRepo.findByPostil(postil);
+        for(BlockPostil bp:bps){
+            result.add(bp.getBlock().getId());
+        }
         return result;
     }
 }

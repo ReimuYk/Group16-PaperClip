@@ -84,4 +84,11 @@ public class PaperController {
     JSONObject hasAccess(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return paperService.hasAccess(data);
     }
+
+    @RequestMapping(value = "/service/getBlocksOfPostil",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONArray getBlocksOfPostil(@RequestBody JSONObject data){
+        return paperService.getBlocksOfPostil(data);
+    }
 }

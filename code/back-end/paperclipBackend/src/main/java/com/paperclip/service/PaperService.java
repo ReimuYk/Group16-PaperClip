@@ -23,5 +23,6 @@ public interface PaperService {
     JSONArray getKeywords(JSONObject data);
     JSONObject hasAccess(JSONObject data) throws UnsupportedEncodingException;
     boolean ifReply(String content, PostilComment comment);
+    JSONArray getBlocksOfPostil(JSONObject data);
 }
 

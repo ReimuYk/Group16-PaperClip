@@ -14,7 +14,8 @@ class Paper extends Component{
         super(props);
         this.state={
             paperID:this.props.location.search.substring(9),//9 == 'paperID='.length+1,
-            username:sessionStorage.getItem('username')
+            username:sessionStorage.getItem('username'),
+            avatar:null
         }
         console.log("paperID:"+this.props.location.search.substring(9));
     }
@@ -32,13 +33,13 @@ class Paper extends Component{
         fetch(url, options)
         .then(response=>response.text())
         .then(responseJson=>{
-            console.log(responseJson);
             let data = eval('('+responseJson+')');
             if(data.result == "fail"){
                 message.error("无浏览权限", 3);
                 window.location.href='/';
             }
             console.log(data)
+            that.setState({avatar:data.avatar});
         }).catch(function(e){
             console.log("Oops, error");
         })
@@ -49,7 +50,7 @@ class Paper extends Component{
                 <NavBar />
                 <NoteList paperID={this.state.paperID}/>                
                 <PDFView paperID={this.state.paperID}/>        
-                <Postil />
+                <Postil avatar={this.state.avatar}/>
                 <br/>
                 <Tool paperID={this.state.paperID}/>
             </div>

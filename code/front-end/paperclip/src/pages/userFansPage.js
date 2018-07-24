@@ -12,6 +12,10 @@ class UserFans extends Component{
         data: []
     }
     componentWillMount = () => {
+        if(sessionStorage.getItem('username') == null){
+            window.location.href='/login';
+            return;
+        }
         let that = this;
         /* get username */
         username = sessionStorage.getItem('username');
