@@ -213,6 +213,8 @@ class PDFView extends Component{
         // console.log(loc)
     }
     findItemId = (loc) => {
+        if(this.state.blocklist == null)
+            return null;
         for (var i=0;i<this.state.blocklist.length;i++){
             let obj = this.state.blocklist[i]
             if (obj.start[0]<=loc[0] && loc[0]<=obj.end[0] && obj.start[1]<=loc[1] && loc[1]<=obj.end[1]){
@@ -328,6 +330,8 @@ class PDFView extends Component{
         leftplace = []
         rightplace = []
         let cr=[]
+        if(this.state.marked == null)
+            return null;
         for (var i=0;i<this.state.marked.length;i++){
             let mitem = this.state.marked[i]
             let rend = []

@@ -72,6 +72,10 @@ class Postil extends Component{
     }
     agree(e){
         e.stopPropagation();
+        if(this.state.username == null){
+            message.error("请先登录", 3);
+            return;
+        }
         var idx = e.target.value;
         var data = this.state.data;
         var flag = [0,0]//stands number changed from agreed and disagreed
@@ -95,6 +99,10 @@ class Postil extends Component{
     }
     disagree(e){
         e.stopPropagation();
+        if(this.state.username == null){
+            message.error("请先登录", 3);
+            return;
+        }
         var idx = e.target.value;
         var data = this.state.data;
         var flag = [0,0]
@@ -118,6 +126,10 @@ class Postil extends Component{
     }
     mark(e){
         e.stopPropagation();
+        if(this.state.username == null){
+            message.error("请先登录", 3);
+            return;
+        }
         var idx = e.target.value;
         var data = this.state.data;
         data[idx].marked = 1 - data[idx].marked
@@ -136,6 +148,9 @@ class Postil extends Component{
         }
     }
     getPostil = (item,idx)=>{
+        console.log('postil line 139, this.state.data: ', this.state.data);
+        console.log('idx', idx);
+        console.log('item', item);
         return(
             <div style={{textAlign:"left"}}>
                 <p style={{marginLeft:"1%"}}>
@@ -145,11 +160,11 @@ class Postil extends Component{
                 <p style={{marginTop:"7%"}}>{item.postils.content}</p>  
                 <Divider />  
                 <ButtonGroup>
-                    <Button type={this.state.data[idx].agreement.agreed?"primary":"default"} icon="like" value={idx} onClick={this.agree}>{this.state.data[idx].postils.agree}</Button>
-                    <Button type={this.state.data[idx].agreement.disagreed?"primary":"default"} icon="dislike-o" value={idx} onClick={this.disagree}>{this.state.data[idx].postils.disagree}</Button>
+                    <Button type={this.state.username==null || !this.state.data[idx].agreement.agreed?"default":"primary"} icon="like" value={idx} onClick={this.agree}>{this.state.data[idx].postils.agree}</Button>
+                    <Button type={this.state.username==null || !this.state.data[idx].agreement.disagreed?"default":"primary"} icon="dislike-o" value={idx} onClick={this.disagree}>{this.state.data[idx].postils.disagree}</Button>
                 </ButtonGroup>
                 <Divider type="vertical"/>
-                <Button type={this.state.data[idx].marked?"primary":"default"} shape="circle" icon="flag" value={idx} onClick={this.mark}/>
+                <Button type={this.state.username || !this.state.data[idx].marked?"default":"primary"} shape="circle" icon="flag" value={idx} onClick={this.mark}/>
             </div>
         );
     }
@@ -218,6 +233,10 @@ class Postil extends Component{
         })
     }
     handleInput(value){
+        if(this.state.username == null){
+            message.error("请先登录", 3);
+            return;
+        }
         if(!value){
             message.error("输入不能为空", 3);
             return;
@@ -264,6 +283,7 @@ class Postil extends Component{
     
     render() {
         const data = this.state.data;
+        console.log('postil.js data: ', data);
         return(
             <div id="postil" 
             style={{width:"20%",height:"530px",overflowY:"scroll",
@@ -271,7 +291,7 @@ class Postil extends Component{
                 <Anchor offsetTop={60} style={{position:"fixed",zIndex:"1",backgroundColor:"#FFFFFF"}}>
                     <Search
                     type="textarea"
-                    placeholder="input text"
+                    placeholder="请输入批注内容"
                     enterButton={<Icon type="enter" />}
                     size="default"
                     value={this.state.inputValue}
