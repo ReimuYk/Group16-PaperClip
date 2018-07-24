@@ -203,6 +203,7 @@ class Search extends Component{
     renderList(){
         return(
             <List
+                pagination={{pageSize: 16}}
                 grid={{ gutter: 16, column: 3 }}
                 dataSource={this.state.paperData}
                 renderItem={item => (
