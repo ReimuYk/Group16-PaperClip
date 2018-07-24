@@ -255,7 +255,6 @@ class ModifyNote extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                console.log(responseJson);
                 let data = eval('('+responseJson+')');
                 information.title = data.title;
                 information.contentHTML = data.content;

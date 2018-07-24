@@ -50,7 +50,6 @@ class NavBar extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                console.log(responseJson);
                 let data = eval(responseJson);
                 for(var i = 0; i<data.length; i++){
                     if(data[i].content.length > 15){
@@ -81,7 +80,6 @@ class NavBar extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                console.log(responseJson);
                 let data = eval(responseJson);
                 information.followMessage = data;
                 that.setState({
@@ -108,7 +106,6 @@ class NavBar extends Component{
             .then(response=>response.text())
             .then(responseJson=>{
                 let data = eval(responseJson);
-                console.log(data);
                 information.inviteMessage = data;
                 information.invitations = data.slice(0,3);
                 that.setState({
@@ -132,7 +129,6 @@ class NavBar extends Component{
             .then(response=>response.text())
             .then(responseJson=>{
                 let data = eval('(' + responseJson + ')');
-                console.log(data);
                 if(data.result == "fail"){
                     message.error('操作失败，请重试');
                     return;
