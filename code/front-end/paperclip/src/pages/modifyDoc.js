@@ -15,7 +15,15 @@ var information = {
     contributors:[],
     docDetail:[]
 };
-
+var sortData = function(x,y){
+    if(x.date < y.date){
+        return 1;
+    }
+    else if(x.date > y.date){
+        return -1;
+    }
+    else return 0;
+}
 class Editor extends React.Component {
     constructor (props) {
         super(props)
@@ -283,7 +291,7 @@ class Header extends React.Component {
                     return;
                 }
                 if(data.version.length > 0){
-                    data.version.sort(that.sortArray);
+                    data.version.sort(sortData);
                     information.docDetail = data.version;
                     that.setState({
                     })
