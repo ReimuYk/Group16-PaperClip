@@ -177,7 +177,7 @@ class Postil extends Component{
     }
     clearBlocks(posID){
         console.log("mouse leave "+posID);
-        emitter.emit('blocksForPostil',[]);
+        emitter.emit('blocksForPostil',"clear");
     }
     getPostil = (item,idx)=>{        
         return(
