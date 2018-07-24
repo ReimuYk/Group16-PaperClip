@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Collapse ,List,Input,Icon,Button,Avatar,Divider,Anchor,Tag} from 'antd';
+import { Collapse ,List,Input,Icon,Button,Card,Divider,Anchor,Tag} from 'antd';
 import emitter from '.././util/events';
 import {Link } from 'react-router-dom';
 import { IPaddress } from '../App';
@@ -20,6 +20,7 @@ class NoteList extends Component{
             keyWords:["宇宙和平","世界"],
             data:[],
             type:"",
+            info:null
         }
     }
     componentWillMount(){
@@ -40,7 +41,8 @@ class NoteList extends Component{
             emitter.emit('hide',result.type);
             that.setState({
                 type:result.type,
-                data:result.data
+                data:result.data,
+                info:result.info
             });
             console.log(result);
         }).catch(function(e){
@@ -69,7 +71,7 @@ class NoteList extends Component{
 
     renderKey(){
         return(
-            <div style={{textAlign:"left",marginTop:"5%"}}>
+            <div style={{textAlign:"left"}}>
                 <p><Icon type="key" />关键词</p>
                 <Divider />
                 {this.state.keyWords.map((key,idx)=>{
@@ -102,20 +104,34 @@ class NoteList extends Component{
                 />
         );
     }
+    renderInfo(){
+        var info = this.state.info;
+        return(
+            <div style={{textAlign:"left",marginTop:"5%"}}>
+                <span><Icon type="profile" />论文信息</span>
+                <br/>
+                <Divider />
+                <p><a href='#' style={{fontWeight:"bold"}}>{"Title: "}</a>{info.title}</p>
+                    <p><a href='#'  style={{fontWeight:"bold"}}>{"Author: "}</a>{info.author}</p>
+                <p><a href='#'  style={{fontWeight:"bold"}}>{"Publish year: "}</a>{info.year}</p>
+                <p><a href='#'  style={{fontWeight:"bold"}}>{"Source: "}</a>{info.source}</p>
+            </div>
+        )
+    }
     render() {
         const keys = this.state.type == "note"?this.renderKey():<div></div>;
+        const info = this.state.type == "note"?this.renderInfo():<div></div>;
         const notes = this.renderNotes();
         return(
             <div id="notelist" 
             style={{position:"fixed",width:"18%",height:"80%",overflowY:"scroll",
-            left:"2%"}}>
-                
-                <div>
+            left:"2%"}}>              
+                    {info}
+                    <Divider />
                     {keys}
                     <Divider />
                     {notes}
-                    <Divider />
-                </div>          
+                    <Divider />        
           </div>
         );
     }

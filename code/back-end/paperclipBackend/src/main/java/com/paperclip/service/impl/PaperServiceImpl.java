@@ -529,6 +529,15 @@ public class PaperServiceImpl implements PaperService {
             return result;
         }
 
+        //paper的基本信息
+        JSONObject info = new JSONObject();
+        String tags = URLDecoder.decode(paper.getTag(), "UTF-8");
+        String[] taglist = tags.split(";");
+        info.accumulate("title",URLDecoder.decode(paper.getTitle(), "UTF-8"));
+        info.accumulate("author",URLDecoder.decode(paper.getAuthor(), "UTF-8"));
+        info.accumulate("year",taglist[0]);
+        info.accumulate("source",taglist[1]);
+
         List<Note> l = noteRepo.findByPaper(paper);
         System.out.println("get note list for paper");
         for (Note aL : l) {
@@ -548,6 +557,7 @@ public class PaperServiceImpl implements PaperService {
         }
         result.accumulate("type","note");
         result.accumulate("data",datas);
+        result.accumulate("info",info);
         System.out.println("return: "+datas);
         return result;
     }

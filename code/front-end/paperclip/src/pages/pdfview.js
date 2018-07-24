@@ -22,7 +22,8 @@ class PDFView extends Component{
             marked:[],
             blocklist:[],
             marked_note:[],
-            markVisible:true
+            markVisible:true,
+            selectid:null
         }
         //console.log(this.props.paperID);
         this.getData(this.props.paperID,1)
@@ -125,6 +126,10 @@ class PDFView extends Component{
         //this.allocComm();
 
         this.Event2 = emitter.addListener('blocksForPostil', (data) => {
+            if(data == "clear" && (this.state.selectid != null)){                
+                this.putSelect(this.state.selectid);
+                return;                
+            }
             this.colorBlocks(data);
         });
     }

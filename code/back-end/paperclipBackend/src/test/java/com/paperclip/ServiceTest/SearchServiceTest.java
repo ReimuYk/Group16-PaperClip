@@ -46,7 +46,7 @@ public class SearchServiceTest {
     @Test
     public void testSearchPaper() throws UnsupportedEncodingException {
         JSONObject data = new JSONObject();
-        data.accumulate("searchText","u");
+        data.accumulate("searchText","2");
         JSONArray a = service.searchPaper(data);
         System.out.println(a.toString());
     }
