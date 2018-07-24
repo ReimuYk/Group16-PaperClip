@@ -35,6 +35,10 @@ class AssistDoc extends Component{
         }],
     }
     componentWillMount = () => {
+        if(sessionStorage.getItem('username') == null){
+            window.location.href='/login';
+            return;
+        }
         username = sessionStorage.getItem('username');
         let that  = this;
         let jsonbody = {};
@@ -47,7 +51,6 @@ class AssistDoc extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                console.log(responseJson);
                 let data = eval(responseJson);
                 that.setState({
                     data:data

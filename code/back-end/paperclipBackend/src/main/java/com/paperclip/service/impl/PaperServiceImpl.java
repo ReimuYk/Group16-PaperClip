@@ -10,6 +10,7 @@ import com.paperclip.model.Relationship.Assist;
 import com.paperclip.model.Relationship.BlockPostil;
 import com.paperclip.model.Relationship.StarPaper;
 import com.paperclip.model.Relationship.UserPostil;
+import com.paperclip.service.ImgService;
 import com.paperclip.service.PaperService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -67,6 +68,9 @@ public class PaperServiceImpl implements PaperService {
 
     @Autowired
     private ReplyRepository  replyRepo;
+
+    @Autowired
+    private ImgService imgService;
 
     public String GetImageStrFromPath(String imgPath) {
         InputStream in = null;
@@ -230,6 +234,7 @@ public class PaperServiceImpl implements PaperService {
             JSONObject postils = new JSONObject();
             postils.accumulate("posID",p.getId());
             postils.accumulate("user", URLDecoder.decode(p.getUser().getUsername(), "UTF-8"));
+            postils.accumulate("avatar",imgService.getUserHeader(p.getUser()));
             postils.accumulate("content",URLDecoder.decode(p.getContent(), "UTF-8"));
             postils.accumulate("agree",p.getAgreement());
             postils.accumulate("disagree",p.getDisagreement());
@@ -241,6 +246,7 @@ public class PaperServiceImpl implements PaperService {
                 JSONObject commitem = new JSONObject();
                 User u = pc.getUser();
                 commitem.accumulate("user", URLDecoder.decode(u.getUsername(), "UTF-8"));
+                commitem.accumulate("avatar",imgService.getUserHeader(u));
                 commitem.accumulate("content", URLDecoder.decode(pc.getContent(), "UTF-8"));
                 comments.add(commitem);
             }
@@ -589,6 +595,7 @@ public class PaperServiceImpl implements PaperService {
         username = URLEncoder.encode(username, "UTF-8");
         JSONObject result = new JSONObject();
 
+        User user = userRepo.findOne(username);
         DocumentPdf docP = docPdfRepo.findOne(paperID);
         if(docP != null){//是docPdf
             System.out.println("user:"+username+" author:"+docP.getAuthor());
@@ -597,6 +604,7 @@ public class PaperServiceImpl implements PaperService {
                 for(Assist a:ass){
                     if(a.getUser().getUsername().equals(username)){
                         result.accumulate("result","success");
+                        result.accumulate("avatar",imgService.getUserHeader(user));
                         return result;
                     }
                 }
@@ -605,6 +613,20 @@ public class PaperServiceImpl implements PaperService {
             }
         }
         result.accumulate("result","success");
+        result.accumulate("avatar",imgService.getUserHeader(user));
+        return result;
+    }
+
+    //输入：posID 返回一个postil对应的Blocks
+    public JSONArray getBlocksOfPostil(JSONObject data){
+        JSONArray result = new JSONArray();
+        Long posID = data.getLong("posID");
+
+        Postil postil = postilRepo.findOne(posID);
+        List<BlockPostil> bps = blockPRepo.findByPostil(postil);
+        for(BlockPostil bp:bps){
+            result.add(bp.getBlock().getId());
+        }
         return result;
     }
 }
