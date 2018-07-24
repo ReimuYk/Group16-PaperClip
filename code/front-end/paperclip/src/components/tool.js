@@ -44,7 +44,6 @@ class Tool extends Component{
         fetch(url, options)
         .then(response=>response.text())
         .then(responseJson=>{
-            console.log(responseJson);
             let data = eval('('+responseJson+')');
             if(data.result == "fail"){
                 message.error("您没有收藏该论文", 3);
@@ -79,7 +78,6 @@ class Tool extends Component{
         fetch(url, options)
         .then(response=>response.text())
         .then(responseJson=>{
-            console.log(responseJson);
             let data = eval('('+responseJson+')');
             console.log(data)
         }).catch(function(e){
@@ -99,7 +97,6 @@ class Tool extends Component{
         fetch(url, options)
         .then(response=>response.text())
         .then(responseJson=>{
-            console.log(responseJson);
             let data = eval('('+responseJson+')');
             console.log(data)
         }).catch(function(e){
@@ -160,30 +157,14 @@ class Tool extends Component{
             return;
         }
         this.setState({clickTool:true})
-        
-        const content = (
-            <div>
-                <Button shape="circle" style={{border:"none", backgroundColor:"#f50", verticalAlign: 'middle' }} size="large">
-                <Icon type="weibo" style={{color:"white"}}/>
-                </Button>
-                <Divider type="vertical" />
-                <Button shape="circle" style={{border:"none", backgroundColor:"#2db7f5", verticalAlign: 'middle' }} size="large">
-                <Icon type="qq" style={{color:"white"}}/>
-                </Button>
-                <Divider type="vertical" />
-                <Button shape="circle" style={{border:"none", backgroundColor:"#87d068", verticalAlign: 'middle' }} size="large">
-                <Icon type="wechat" style={{color:"white"}} />
-                </Button>
-                
-            </div>
-          )
-        confirm({
-            title: '分享到',
-            content: content,
-            iconType:"fork",
-            onOk:this.confirmShare,
-            onCancel:this.cancelShare
-        }); 
+        var content = window.location.href;
+        var oInput = document.createElement('input');
+        oInput.value = content;
+        document.body.appendChild(oInput);
+        oInput.select(); // 选择对象
+        document.execCommand("Copy"); // 执行浏览器复制命令
+        document.body.removeChild (oInput);
+        message.success('复制链接成功', 3);
     }
     newNote(e){
         e.preventDefault();

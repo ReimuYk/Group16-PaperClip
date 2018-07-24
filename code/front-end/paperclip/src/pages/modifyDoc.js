@@ -100,9 +100,10 @@ class Header extends React.Component {
             .then(responseJson=>{
                 let data = eval('('+responseJson+')');
                 if(data.result == "fail"){
-                    message.error('保存失败，请重试', 3);
+                    message.error('发布失败，请重试', 3);
                     return;
                 }
+                message.success('发布成功', 3);
             }).catch(function(e){
             console.log("Oops, error");
         })
@@ -293,6 +294,10 @@ class ModifyDoc extends Component{
         initContent:''
     }
     componentWillMount = () => {
+        if(sessionStorage.getItem('username') == null){
+            window.location.href='/login';
+            return;
+        }
         let that = this;
         information.docID = window.location.search.substring(7);
         username = sessionStorage.getItem('username');

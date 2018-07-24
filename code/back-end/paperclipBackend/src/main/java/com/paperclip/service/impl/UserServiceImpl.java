@@ -307,9 +307,9 @@ public class UserServiceImpl implements UserService {
             while(it.hasNext() && n<3){
                 Invite i = it.next();
                 JSONObject invitation = new JSONObject();
-                invitation.accumulate("sender",i.getDocument().getUser().getUsername());
-                invitation.accumulate("title",i.getDocument().getTitle());
-                invitation.accumulate("inviteID",i.getId());
+                invitation.accumulate("sender", URLDecoder.decode(i.getDocument().getUser().getUsername(), "UTF-8"));
+                invitation.accumulate("title", URLDecoder.decode(i.getDocument().getTitle(), "UTF-8"));
+                invitation.accumulate("inviteID", i.getId());
                 invitations.add(invitation);
                 n++;
             }
@@ -317,9 +317,9 @@ public class UserServiceImpl implements UserService {
         else{
             for(Invite i:invites){
                 JSONObject invitation = new JSONObject();
-                invitation.accumulate("sender",i.getDocument().getUser().getUsername());
+                invitation.accumulate("sender", URLDecoder.decode(i.getDocument().getUser().getUsername(), "UTF-8"));
                 invitation.accumulate("avatar",service.getUserHeader(i.getDocument().getUser()));
-                invitation.accumulate("title",i.getDocument().getTitle());
+                invitation.accumulate("title", URLDecoder.decode(i.getDocument().getTitle(), "UTF-8"));
                 invitation.accumulate("inviteID",i.getId());
                 invitations.add(invitation);
             }
@@ -361,15 +361,17 @@ public class UserServiceImpl implements UserService {
         for(Reply reply:replies){
             JSONObject r = new JSONObject();
             PostilComment comm = reply.getComment();
-            r.accumulate("sender",comm.getUser().getUsername());
-            r.accumulate("content",URLDecoder.decode(comm.getContent(), "UTF-8"));
+
+            r.accumulate("sender", URLDecoder.decode(comm.getUser().getUsername(), "UTF-8"));
+            r.accumulate("content", URLDecoder.decode(comm.getContent(), "UTF-8"));
+
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             r.accumulate("time",sdf.format(comm.getDate()));
 
             List<BlockPostil> b = blockPRepo.findByPostil(comm.getPostil());
             Block block = b.iterator().next().getBlock();
             Paper paper = block.getPaperPage().getPaper();
-            r.accumulate("paperTitle",paper.getTitle());
+            r.accumulate("paperTitle", URLDecoder.decode(paper.getTitle(), "UTF-8"));
             r.accumulate("paperID",paper.getId());
             result.add(r);
         }
@@ -388,16 +390,18 @@ public class UserServiceImpl implements UserService {
             List<PostilComment> comments = postilCommRepo.findByPostilOrderByDateDesc(postil);
             for(PostilComment comment:comments){
                 JSONObject info = new JSONObject();
-                info.accumulate("sender",comment.getUser().getUsername());
-                info.accumulate("content",URLDecoder.decode(comment.getContent(), "UTF-8"));
+
+                info.accumulate("sender", URLDecoder.decode(comment.getUser().getUsername(), "UTF-8"));
+                info.accumulate("content", URLDecoder.decode(comment.getContent(), "UTF-8"));
+
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                info.accumulate("time",sdf.format(comment.getDate()));
+                info.accumulate("time", sdf.format(comment.getDate()));
 
                 List<BlockPostil> b = blockPRepo.findByPostil(comment.getPostil());
                 Block block = b.iterator().next().getBlock();
                 Paper paper = block.getPaperPage().getPaper();
-                info.accumulate("paperTitle",paper.getTitle());
-                info.accumulate("paperID",paper.getId());
+                info.accumulate("paperTitle", URLDecoder.decode( paper.getTitle(), "UTF-8"));
+                info.accumulate("paperID", paper.getId());
 
                 infos.add(info);
             }
@@ -417,10 +421,12 @@ public class UserServiceImpl implements UserService {
             List<NoteComment> comments = noteCommRepo.findByNoteOrderByDateDesc(note);
             for (NoteComment comment : comments) {
                 JSONObject info = new JSONObject();
-                info.accumulate("sender", comment.getUser().getUsername());
-                info.accumulate("content", URLDecoder.decode(comment.getContent(), "UTF-8"));
+
+                info.accumulate("sender", URLDecoder.decode(comment.getUser().getUsername(), "UTF-8"));
+                info.accumulate("content", URLDecoder.decode( comment.getContent(), "UTF-8"));
+
                 info.accumulate("noteID", comment.getNote().getId());
-                info.accumulate("noteTitle", comment.getNote().getTitle());
+                info.accumulate("noteTitle", URLDecoder.decode(comment.getNote().getTitle(), "UTF-8"));
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 info.accumulate("time", sdf.format(comment.getDate()));
 

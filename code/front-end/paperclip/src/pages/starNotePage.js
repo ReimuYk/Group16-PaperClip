@@ -53,6 +53,10 @@ class StarNote extends Component{
         }],
     }
     componentWillMount = () => {
+        if(sessionStorage.getItem('username') == null){
+            window.location.href='/login';
+            return;
+        }
         /* notes should get from server */
         username = sessionStorage.getItem('username');
 

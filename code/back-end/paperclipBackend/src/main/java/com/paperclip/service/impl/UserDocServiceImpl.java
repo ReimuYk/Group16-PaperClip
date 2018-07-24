@@ -180,7 +180,7 @@ public class UserDocServiceImpl implements UserDocService {
         paperPageRepo.delete(pages);
         docPdfRepo.delete(docPdf);
     }
-    
+
     // get all versions of this doc
     public JSONObject getUserDocDetail(JSONObject data) throws UnsupportedEncodingException {
         JSONArray docDetails = new JSONArray();

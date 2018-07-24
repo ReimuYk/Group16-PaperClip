@@ -29,6 +29,10 @@ class User extends Component{
         console.log('show interact');
     }
     componentWillMount = () => {
+        if(sessionStorage.getItem('username') == null){
+            window.location.href='/login';
+            return;
+        }
         let that = this;
         /* get username */
         username = sessionStorage.getItem('username');

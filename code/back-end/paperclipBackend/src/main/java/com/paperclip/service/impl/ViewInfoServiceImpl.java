@@ -90,7 +90,7 @@ public class ViewInfoServiceImpl implements ViewInfoService {
             JSONObject followJson = new JSONObject();
             followJson.accumulate("username", URLDecoder.decode(follow.getFollower().getUsername(), "UTF-8"));
             followJson.accumulate("avatar",imgService.getUserHeader(follow.getFollower()));
-            followJson.accumulate("description",URLDecoder.decode(follow.getFollower().getDescription()));
+            followJson.accumulate("description",URLDecoder.decode(follow.getFollower().getDescription(),"UTF-8"));
             fansArray.add(followJson);
         }
         System.out.println("return: "+fansArray);

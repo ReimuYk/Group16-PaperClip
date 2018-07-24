@@ -240,6 +240,10 @@ class ModifyNote extends Component{
         initContent:''
     }
     componentWillMount = () => {
+        if(sessionStorage.getItem('username') == null){
+            window.location.href='/login';
+            return;
+        }
         information.noteID = window.location.search.substring(8);//noteID=
         let username = sessionStorage.getItem('username');
         let that  = this;
@@ -255,7 +259,6 @@ class ModifyNote extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                console.log(responseJson);
                 let data = eval('('+responseJson+')');
                 information.title = data.title;
                 information.contentHTML = data.content;

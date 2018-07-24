@@ -33,7 +33,6 @@ class Paper extends Component{
         fetch(url, options)
         .then(response=>response.text())
         .then(responseJson=>{
-            console.log(responseJson);
             let data = eval('('+responseJson+')');
             if(data.result == "fail"){
                 message.error("无浏览权限", 3);

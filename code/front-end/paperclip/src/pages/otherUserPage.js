@@ -46,7 +46,6 @@ class OtherUserPage extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                console.log(responseJson);
                 let data = eval('(' + responseJson + ')');
                 that.setState({
                     mailContent: '',
@@ -80,7 +79,6 @@ class OtherUserPage extends Component{
         fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
-                console.log(responseJson);
                 let data = eval('('+responseJson+')');
                 information.avatar = data.userheader;
                 information.fansno = data.fensno;

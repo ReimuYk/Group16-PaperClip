@@ -35,7 +35,7 @@ import OtherUserPage from './pages/otherUserPage'
 import Invitations from './pages/invitations'
 import Notifications from './pages/notifications'
 
-export var IPaddress = 'http://localhost:8080/';
+export var IPaddress = 'http://192.168.1.172:8080/';
 
 class App extends Component {
   render() {

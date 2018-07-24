@@ -21,5 +21,6 @@ urlpatterns = [
     url(r'^$', view.hello),
     url(r'^block/$', view.block),
     url(r'^page/$',view.page),
-    url(r'^html2pdf/$',view.html2pdf)
+    url(r'^html2pdf/$',view.html2pdf),
+    url(r'^outputPDF/$',view.outputPDF)
 ]
