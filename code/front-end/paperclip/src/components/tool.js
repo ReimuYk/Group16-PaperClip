@@ -31,7 +31,9 @@ class Tool extends Component{
             isStar:false,
             clickTool:false,
             type:"note",
-            downloadOption:null
+            downloadOption:null,
+            visible:false,
+            value:0
         }
     }
     componentWillMount(){
@@ -118,19 +120,19 @@ class Tool extends Component{
         }
     }
     downloadCheck=(e)=>{
-        console.log(e.target.value);
-        this.setState({downloadOption:e.target.value});
+        this.setState({
+            downloadOption:e.target.value
+        });
     }
     confirmDownload(){
-        
         if(!this.state.downloadOption){
-            message.error("还未选择导出内容,导出失败"); 
-            this.setState({clickTool:false},()=>{this.openDownload()});           
+            message.error("还未选择导出内容,导出失败");
             return;
         }
         this.setState({
             clickTool:false,
-            downloadOption:null
+            downloadOption:null,
+            visible:false
         });
         console.log("ok");
         
@@ -160,29 +162,19 @@ class Tool extends Component{
     }
     cancelDownload(){
         console.log("cancel");
-        this.setState({clickTool:false});
+        this.setState({
+            clickTool:false,
+            visible: false
+        });
     }
     openDownload(){
         if(this.state.clickTool){
             return;
         }
-        this.setState({clickTool:true})
-        let content = (
-            <div>
-                <span>导出设置：</span>
-                <RadioGroup onChange={this.downloadCheck}>
-                    <Radio value="paperOnly">仅论文</Radio>
-                    <Radio value="paperAndPostil">论文及标记的批注</Radio>    
-                </RadioGroup>
-            </div>
-          )
-        confirm({
-            title: '导出设置',
-            content: content,
-            iconType:"setting",
-            onOk:this.confirmDownload,
-            onCancel:this.cancelDownload
-        });        
+        this.setState({
+            clickTool:true,
+            visible: true
+        })
     }
     confirmShare(){
         console.log("ok");
@@ -260,12 +252,31 @@ class Tool extends Component{
             return(<div/>);
         }
         return(
-            <div id="tool" style={{zIndex:"100", position:"fixed",bottom:"5%",left:"2%"}}>
-            <Popover 
-            placement="topRight" content={content} trigger="click">
-                <Button type="primary">
-                <Icon type="tool" />Tool</Button>
-            </Popover>
+            <div>
+                <div id="tool" style={{zIndex:"100", position:"fixed",bottom:"5%",left:"2%"}}>
+                    <Popover
+                        placement="topRight" content={content} trigger="click">
+                        <Button type="primary">
+                            <Icon type="tool" />Tool</Button>
+                    </Popover>
+                </div>
+                <Modal
+                    visible={this.state.visible}
+                    title="导出"
+                    onCancel={this.cancelDownload}
+                    footer={[
+                        <Button key="back" onClick={this.cancelDownload}>取消</Button>,
+                        <Button key="submit" type="primary" onClick={this.confirmDownload}>导出</Button>,
+                    ]}
+                >
+                    <div>
+                        <span>导出设置：</span>
+                        <RadioGroup onChange={this.downloadCheck} value={this.state.downloadOption}>
+                            <Radio value="paperOnly">仅论文</Radio>
+                            <Radio value="paperAndPostil">论文及标记的批注</Radio>
+                        </RadioGroup>
+                    </div>
+                </Modal>
             </div>
         );
     }
