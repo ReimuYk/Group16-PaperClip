@@ -51,8 +51,12 @@ public class DownloadServiceImpl implements DownloadService{
     }
 
     public String getExportPaperUri(JSONObject data){
+        String option = data.getString("option");
         String username = data.getString("username");
         Long paperID = data.getLong("paperID");
+        if (option.equals("paperOnly")){
+            return String.format("./data/pdf/%d.pdf",paperID);
+        }
         //create json_body to POST
         JSONObject json_body = new JSONObject();
         json_body.accumulate("paperID",paperID);
