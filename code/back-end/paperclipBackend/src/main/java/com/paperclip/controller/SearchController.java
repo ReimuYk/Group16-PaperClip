@@ -31,4 +31,39 @@ public class SearchController {
     JSONArray search(@RequestBody JSONObject data) throws UnsupportedEncodingException {
         return searchService.searchPaper(data);
     }
+
+    @RequestMapping(value = "/service/recommendNote",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONArray recommendNote(@RequestBody JSONObject data) throws UnsupportedEncodingException {
+        return searchService.getRecommendNote();
+    }
+
+    @RequestMapping(value = "/service/starNoteNews",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONArray starNoteNews(@RequestBody JSONObject data) throws UnsupportedEncodingException {
+        return searchService.getUserStarNoteNews(data);
+    }
+
+    @RequestMapping(value = "/service/starPaperNews",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONArray starPaperNews(@RequestBody JSONObject data) throws UnsupportedEncodingException {
+        return searchService.getUserStarPaperNews(data);
+    }
+
+    @RequestMapping(value = "/service/likeNoteNews",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONArray likeNoteNews(@RequestBody JSONObject data) throws UnsupportedEncodingException {
+        return searchService.getUserLikeNoteNews(data);
+    }
+
+    @RequestMapping(value = "/service/writeNoteNews",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONArray writeNoteNews(@RequestBody JSONObject data) throws UnsupportedEncodingException {
+        return searchService.getUserWriteNoteNews(data);
+    }
 }

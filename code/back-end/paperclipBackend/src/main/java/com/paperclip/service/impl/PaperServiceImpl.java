@@ -546,11 +546,11 @@ public class PaperServiceImpl implements PaperService {
             note.accumulate("id", n.getId());
             note.accumulate("title", URLDecoder.decode(n.getTitle(), "UTF-8"));
             int end = 20;
-            if (n.getContent().length() < 20) {
-                end = n.getContent().length();
+            String intro = URLDecoder.decode(n.getContent(),"UTF-8");
+            if (intro.length() < 20) {
+                end = intro.length();
             }
-
-            String intro = URLDecoder.decode(n.getContent().substring(0,end).replaceAll("%(?![0-9a-fA-F]{2})", "%25"),"UTF-8");
+            intro = intro.substring(0,end);
             note.accumulate("intro",intro);
 
             datas.add(note);

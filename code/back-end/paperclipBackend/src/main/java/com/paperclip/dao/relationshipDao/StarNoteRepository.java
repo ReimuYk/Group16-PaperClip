@@ -17,4 +17,5 @@ public interface StarNoteRepository extends CrudRepository<StarNote,Long>{
     List<StarNote> findByUser(User user);
     void deleteDistinctByNoteAndUser(Note note, User user);
     StarNote findDistinctByUserAndNote(User user,Note note);
+    List<StarNote> findByUserOrderByIdDesc(User user);
 }
