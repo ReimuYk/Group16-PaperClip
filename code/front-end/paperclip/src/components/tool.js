@@ -3,6 +3,9 @@ import { Divider ,Modal,Avatar,Checkbox,Icon,Button,Popover,Card, message} from 
 import {Link } from 'react-router-dom';
 import emitter from '.././util/events'
 import { IPaddress } from '../App';
+import { Radio } from 'antd';
+
+const RadioGroup = Radio.Group;
 const confirm = Modal.confirm;
 const CheckboxGroup = Checkbox.Group;
 
@@ -27,7 +30,8 @@ class Tool extends Component{
             toolIdx:null,
             isStar:false,
             clickTool:false,
-            type:"note"
+            type:"note",
+            downloadOption:"paperAndPostil"
         }
     }
     componentWillMount(){
@@ -113,8 +117,9 @@ class Tool extends Component{
             this.quitStarPaper();
         }
     }
-    downloadCheck(checkvalue){
-        console.log(checkvalue);
+    downloadCheck=(e)=>{
+        console.log(e.target.value);
+        this.setState({downloadOption:e.target.value},()=>{this.openDownload()});
     }
     confirmDownload(){
         console.log("ok");
@@ -129,13 +134,16 @@ class Tool extends Component{
             return;
         }
         this.setState({clickTool:true})
-        const options=["我的批注","标记的批注"];
-        const content = (
+        let content = (
             <div>
-                <span>批注设置：</span>
-                <CheckboxGroup options={options} onChange={this.downloadCheck} />
+                <span>导出设置：</span>
+                <RadioGroup onChange={this.downloadCheck}>
+                    <Radio value="paperOnly">仅论文</Radio>
+                    <Radio value="paperAndPostil">论文及标记的批注</Radio>    
+                </RadioGroup>
             </div>
           )
+          console.log("我变了")
         confirm({
             title: '导出设置',
             content: content,
