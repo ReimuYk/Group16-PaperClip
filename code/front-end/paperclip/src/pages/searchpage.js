@@ -204,9 +204,9 @@ class Search extends Component{
                 that.setState({
                     recommendData: data[1].recommand
                 })
-            }).catch(function(e){
+            })/*.catch(function(e){
             console.log("Oops, error");
-        })
+        })*/
 
     }
     starnoDESC(){

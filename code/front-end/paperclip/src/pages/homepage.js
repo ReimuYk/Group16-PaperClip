@@ -91,7 +91,7 @@ class Sider extends React.Component {
 class Home extends Component{
     constructor(props){
         super(props);
-        state = {
+        this.state = {
             recommendData: [],
             paperData:[]
         }
