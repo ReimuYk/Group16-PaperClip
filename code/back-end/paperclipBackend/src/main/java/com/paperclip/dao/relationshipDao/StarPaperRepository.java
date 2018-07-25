@@ -18,4 +18,5 @@ public interface StarPaperRepository extends CrudRepository<StarPaper,Long>{
     List<StarPaper> findByUser(User user);
     void deleteDistinctByPaperAndUser(Paper paper, User user);
     StarPaper findDistinctByUserAndPaper(User user,Paper paper);
+    List<StarPaper> findByUserOrderByIdDesc(User user);
 }

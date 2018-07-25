@@ -9,7 +9,11 @@ const Search = Input.Search;
 const Option = Select.Option;
 var username = '';
 var localStorage = '';
-var tags = [];
+var tags = []
+var information={
+    recommendNote:[],
+    recommendPaper:[]
+}
 class Discover extends Component{
     constructor(props){
         super(props);
@@ -42,17 +46,6 @@ class Discover extends Component{
     }
 
     renderRecommendNote(){
-        const listData = [];
-        for (let i = 0; i < 23; i++) {
-            listData.push({
-                href: 'http://ant.design',
-                title: `ant design part ${i}`,
-                avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-                description: 'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-                content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-                key: i
-            });
-        }
         const IconText = ({ type, text }) => (
             <span>
                 <Icon type={type} style={{ marginRight: 8 }} />
@@ -60,7 +53,7 @@ class Discover extends Component{
              </span>
         );
         return (
-            <div style={{ width:"60%", float: "left", marginBottom: "50px"}}>
+            <div style={{ width:"60%", float: "left", marginBottom: "50px", textAlign:'left'}}>
                 <div class="icon" style={{width: "100px", marginBottom: "30px"}}>
                     <Icon type="bars" />
                     <span style={{marginLeft: "20px"}}>推荐笔记</span>
@@ -75,18 +68,17 @@ class Discover extends Component{
                         },
                         pageSize: 3,
                     }}
-                    dataSource={listData}
-                    footer={<div><b>ant design</b> footer part</div>}
+                    dataSource={information.recommendNote}
                     renderItem={item => (
-                        <Link to={"/viewdoc/"+item.key}>
+                        <Link to={"/viewnote?noteID="+item.noteID}>
                             <List.Item
                                 span={16}
                                 key={item.title}
-                                actions={[<IconText type="star-o" text="156" />, <IconText type="like-o" text="156" />, <IconText type="message" text="2" />]}
+                                actions={[<IconText type="star-o" text={item.starno} />, <IconText type="like-o" text={item.likeno} />]}
                             >
                                 <List.Item.Meta
-                                    title={<a href={item.href}>{item.title}</a>}
-                                    description={item.description}
+                                    title={<a href={'/viewnote?noteID=' + item.noteID}>{item.title}</a>}
+                                    description={item.keywords}
                                 />
                                 {item.content}
                             </List.Item>
@@ -98,30 +90,6 @@ class Discover extends Component{
     }
 
     renderRecommendPaper(){
-        const data = [
-            {
-                key: 1,
-                title: '论文1',
-                description:'empty'
-            },
-            {
-                key: 2,
-                title: '论文2',
-                description:'empty'
-            },
-            {
-                key: 3,
-                title: '论文3',
-                description:'empty'
-            },
-            {
-                key: 4,
-                title: '论文4',
-                description:'empty'
-            },
-        ];
-        const {Meta} = Card;
-
         return(
             <div style={{ width: "60%"}}>
                 <div class="icon" style={{width: "100px", marginBottom: "30px"}}>
@@ -129,22 +97,16 @@ class Discover extends Component{
                     <span style={{marginLeft: "20px"}}>推荐论文</span>
                 </div>
                 <List
-                    grid={{ gutter: 16, column: 4 }}
-                    dataSource={data}
+                    pagination={{pageSize: 12}}
+                    dataSource={information.recommendPaper}
                     renderItem={item => (
-                        <List.Item>
-                            <Card
-                                style={{ width: 200 }}
-                                cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
-                            >
-                                <Meta
-                                    title={
-                                        <Link to={"/paper?paperID="+item.key}>
-                                            {item.title}
-                                        </Link>}
-                                    description={item.description}
-                                />
-                            </Card>,
+                        <List.Item
+                            actions={[<span>收藏量：{item.starno}</span>, <span>笔记量：{item.noteno}</span>]}
+                        >
+                            <List.Item.Meta
+                                title={<a href={"/paper?paperID=" + item.paperID}>{item.title}</a>}
+                                description={item.keyword}
+                            />
                         </List.Item>
                     )}
                 />
@@ -181,7 +143,7 @@ class Discover extends Component{
         return(
             <div>
                 <NavBar />
-                <div class="content" style={{marginLeft: "30px", marginTop: "30px", display: "inline-block"}}>
+                <div class="content" style={{width:'100%',marginLeft: "30px", marginTop: "30px", display: "inline-block"}}>
                     {recommendNote}
                     {sidebar}
                     {recommendPaper}
