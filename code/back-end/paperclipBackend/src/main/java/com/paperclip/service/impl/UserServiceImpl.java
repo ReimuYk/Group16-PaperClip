@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
         if(user != null){
             String subject = "PaperClip 找回密码";
             String content = "用户名： "+user.getUsername()+" 密码： +"+user.getPassword();
-            content += "非本人操作请忽略此邮件\n";
+            content += "\n非本人操作请忽略此邮件\n";
             mail.singleMail(userEmail,subject,content);
             result.accumulate("result", "success");
         }else{
