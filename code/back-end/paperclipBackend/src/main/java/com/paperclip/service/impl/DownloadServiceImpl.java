@@ -17,6 +17,10 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.List;
 
 @Service
@@ -50,7 +54,7 @@ public class DownloadServiceImpl implements DownloadService{
         return res;
     }
 
-    public String getExportPaperUri(JSONObject data){
+    public String getExportPaperUri(JSONObject data) throws UnsupportedEncodingException {
         String option = data.getString("option");
         String username = data.getString("username");
         Long paperID = data.getLong("paperID");
@@ -79,7 +83,7 @@ public class DownloadServiceImpl implements DownloadService{
                 JSONObject json_pos = new JSONObject();
                 json_pos.accumulate("order",order);
                 order += 1;
-                json_pos.accumulate("content",up.getPostil().getContent());
+                json_pos.accumulate("content", URLDecoder.decode(up.getPostil().getContent(),"UTF-8"));
                 JSONArray json_blocks = new JSONArray();
                 List<BlockPostil> pos_blk_list = blockPRepo.findByPostil(up.getPostil());
                 for (BlockPostil bp:pos_blk_list){
