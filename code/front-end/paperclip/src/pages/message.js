@@ -163,7 +163,7 @@ class Message extends Component{
         return(
             <div>
             <NavBar />
-            <div style={{width:'60%',marginLeft:'200px'}}>
+            <div style={{width:'60%',marginLeft:'200px', marginTop:'60px'}}>
                 <List
                     style={{textAlign:'left'}}
                     className="demo-loadmore-list"
