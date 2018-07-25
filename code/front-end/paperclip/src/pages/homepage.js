@@ -100,7 +100,7 @@ class Home extends Component{
         let searchContent = '';
         username = sessionStorage.getItem('username');
         if(username!=null){
-            localStorage = localStorage.getItem(username);
+            localStorage = window.localStorage.getItem(username);
             if(localStorage != null){
                 let tags = localStorage.split(';');
                 tags.pop();
