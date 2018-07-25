@@ -183,7 +183,7 @@ public class SearchServiceImpl implements SearchService {
             recommand.accumulate("keyword", URLDecoder.decode(note.getKeyWords(), "UTF-8"));
             recommand.accumulate("likeno", note.getAgreement());
             recommand.accumulate("starno", note.getStar());
-            
+
             recommands.add(recommand);
             if(count >= 8){
                 break;
