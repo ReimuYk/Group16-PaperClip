@@ -45,23 +45,19 @@ public class helloController {
         return "this is a hello world page";
     }
 
-    @RequestMapping(value = "/download",method = RequestMethod.GET)
-    public ResponseEntity<byte[]> download() throws IOException{
+    @RequestMapping(value = "/download",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    ResponseEntity<byte[]> download(@RequestBody  JSONObject data) throws IOException{
+        System.out.println(data);
         File file=new File("./data/pdf/1.pdf");
         HttpHeaders headers = new HttpHeaders();
         String filename = new String("test.pdf".getBytes("UTF-8"),"iso-8859-1");
-        headers.setContentDispositionFormData("attachment",filename);
-        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+//        headers.setContentDispositionFormData("attachment",filename);
+//        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.set("Content-Disposition","attachment;fileName=test.pdf");
         return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),headers,HttpStatus.CREATED);
     }
-
-    @RequestMapping(value = "/daochuPDF",method = RequestMethod.POST)
-    public
-    @ResponseBody
-    String getPaperDetail(@RequestBody JSONObject data) throws UnsupportedEncodingException {
-        return downloadService.getExportPaperUri(data);
-    }
-
 
     /*@RequestMapping(value = "/findtest",method = RequestMethod.GET)
     public
