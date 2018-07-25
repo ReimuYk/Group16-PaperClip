@@ -164,7 +164,8 @@ class Tool extends Component{
         console.log("cancel");
         this.setState({
             clickTool:false,
-            visible: false
+            visible: false,
+            downloadOption:null
         });
     }
     openDownload(){
