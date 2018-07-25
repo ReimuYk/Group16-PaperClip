@@ -1,11 +1,17 @@
 package com.paperclip.controller;
 
+import com.paperclip.service.DownloadService;
 import com.paperclip.service.PaperService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 @CrossOrigin
@@ -14,6 +20,9 @@ public class PaperController {
 
     @Autowired
     PaperService paperService;
+
+    @Autowired
+    DownloadService downloadService;
 
     @RequestMapping(value = "/service/paperDetail",method = RequestMethod.POST)
     public
@@ -90,5 +99,14 @@ public class PaperController {
     @ResponseBody
     JSONArray getBlocksOfPostil(@RequestBody JSONObject data){
         return paperService.getBlocksOfPostil(data);
+    }
+
+    @RequestMapping(value = "/service/exportPaper",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    ResponseEntity<byte[]> exportPaper(@RequestBody JSONObject data) throws IOException {
+        String uri =  downloadService.getExportPaperUri(data);
+        File file=new File(uri);
+        return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),null, HttpStatus.CREATED);
     }
 }

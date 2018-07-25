@@ -123,7 +123,29 @@ class Tool extends Component{
     }
     confirmDownload(){
         console.log("ok");
-        this.setState({clickTool:false});        
+        this.setState({clickTool:false});
+        let that  = this;
+        let jsonbody = {};
+        jsonbody.username = this.state.username;
+        jsonbody.paperID = this.state.paperID;
+        var url = IPaddress+'service/exportPaper';
+        let options={};
+        options.method='POST';
+        options.headers={'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+        .then(response=>response.blob()
+        .then(responseFile=>{
+            var a = document.createElement('a'); 
+            var url = window.URL.createObjectURL(responseFile); 
+            a.href = url;
+            a.download = that.state.username+"-paper"+that.state.paperID.toString()+".pdf";
+            a.click();
+            window.URL.revokeObjectURL(url);
+            console.log("download success");
+        }).catch(function(e){
+            console.log("Oops, error");
+        }))
     }
     cancelDownload(){
         console.log("cancel");
