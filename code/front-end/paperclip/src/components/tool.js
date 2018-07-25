@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Divider ,Modal,Avatar,Checkbox,Icon,Button,Popover,Card, message} from 'antd';
+import { Divider ,Modal,Checkbox,Icon,Button,Popover,Card, message} from 'antd';
 import {Link } from 'react-router-dom';
 import emitter from '.././util/events'
 import { IPaddress } from '../App';
@@ -31,7 +31,7 @@ class Tool extends Component{
             isStar:false,
             clickTool:false,
             type:"note",
-            downloadOption:"paperAndPostil"
+            downloadOption:null
         }
     }
     componentWillMount(){
@@ -119,15 +119,26 @@ class Tool extends Component{
     }
     downloadCheck=(e)=>{
         console.log(e.target.value);
-        this.setState({downloadOption:e.target.value},()=>{this.openDownload()});
+        this.setState({downloadOption:e.target.value});
     }
     confirmDownload(){
+        
+        if(!this.state.downloadOption){
+            message.error("还未选择导出内容,导出失败"); 
+            this.setState({clickTool:false},()=>{this.openDownload()});           
+            return;
+        }
+        this.setState({
+            clickTool:false,
+            downloadOption:null
+        });
         console.log("ok");
-        this.setState({clickTool:false});
+        
         let that  = this;
         let jsonbody = {};
         jsonbody.username = this.state.username;
         jsonbody.paperID = this.state.paperID;
+        jsonbody.option = this.state.downloadOption;
         var url = IPaddress+'service/exportPaper';
         let options={};
         options.method='POST';
@@ -165,7 +176,6 @@ class Tool extends Component{
                 </RadioGroup>
             </div>
           )
-          console.log("我变了")
         confirm({
             title: '导出设置',
             content: content,
