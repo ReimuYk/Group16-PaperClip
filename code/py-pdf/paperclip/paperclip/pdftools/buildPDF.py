@@ -8,6 +8,9 @@ from reportlab.pdfgen import canvas
 from reportlab.platypus import *
 from PyPDF2 import PdfFileWriter, PdfFileReader
 from PIL import Image,ImageDraw,ImageFont
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfbase import pdfmetrics
+pdfmetrics.registerFont(TTFont('msyh', 'MSYHBD.TTF'))
 
 styleSheet = getSampleStyleSheet()
 class PostilBlock:
@@ -24,7 +27,7 @@ class PostilBlock:
     def setNum(self,num):
         self.num = str(num)
     def setContent(self,content):
-        p = Paragraph('<b>%s</b>'%content,style=styleSheet["BodyText"])
+        p = Paragraph('<font name="msyh"><b>%s</b></font>'%content,style=styleSheet["BodyText"])
         self.content = p
     def buildTable(self):
         data=[[self.num,self.content]]
@@ -91,7 +94,7 @@ if __name__=='__main__':
     b1 = {"start":[300,300],"end":[500,500]}
     b2 = {"start":[700,300],"end":[900,500]}
     b3 = {"start":[100,700],"end":[300,900]}
-    p = {"blocks":[b1,b2,b3],"order":1,"content":"this is a first order block"}
+    p = {"blocks":[b1,b2,b3],"order":1,"content":"这是 a first order block"}
     pos = [p]
-    setMark('page-0.jpg','pos.jpg',pos)
+    setPostil('aaa.pdf',pos)
 
