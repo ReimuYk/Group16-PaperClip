@@ -119,7 +119,7 @@ class Invitations extends Component{
             <div>
             <NavBar />
             <UserFloatMenu />
-            <div style={{width:'60%',marginLeft:'200px', paddingTop:'40px'}}>
+            <div style={{width:'60%',marginLeft:'200px', paddingTop:'60px'}}>
                 <List
                     style={{textAlign:'left'}}
                     className="demo-loadmore-list"
