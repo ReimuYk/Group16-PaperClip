@@ -171,10 +171,14 @@ class Search extends Component{
 
                 if((username = sessionStorage.getItem('username')) != null){
                     let localStorage = '';
+                    let tagLength1 = 0;
+                    let tags=[];
                     localStorage = window.localStorage.getItem(username);
-                    let tags = localStorage.split(';');
-                    tags.pop();
-                    let tagLength1 = tags.length;
+                    if(localStorage != null){
+                        tags = localStorage.split(';');
+                        tags.pop();
+                        tagLength1 = tags.length;
+                    }
                     let tagLength2 = tagsFromServer1.length;
                     let local = [];
                     if(tagLength2 >= 5){
