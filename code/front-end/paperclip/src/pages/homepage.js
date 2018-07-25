@@ -4,16 +4,12 @@ import { Input, Select, List, Avatar, Button, Spin, Icon, Menu, Anchor } from 'a
 import NavBar from '../components/nav-bar';
 import reqwest from 'reqwest';
 import { IPaddress } from '../App'
-const fakeDataUrl = 'https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo';
 const MenuItemGroup = Menu.ItemGroup;
-
+var username = ''
+var localStorage =''
+var information = {}
 class Sider extends React.Component {
-    state = {
-        userID: 0,
-    }
-    componentWillMount = () => {
-        /* ask for userID  */
-    }
+
     handleClick = (e) => {
         console.log('click ', e);
     }
@@ -55,12 +51,12 @@ class Sider extends React.Component {
                     <MenuItemGroup key="g1" title="消息提示">
 
                         <Menu.Item key="1">
-                            <Link to={'/user/starpaper?userID='+this.state.userID}>
+                            <Link to={'/user/starpaper?username='+username}>
                                 <Icon type="book" />我收藏的论文
                             </Link>
                         </Menu.Item>
                         <Menu.Item key="2">
-                            <Link to={'/user?userID='+this.state.userID}>
+                            <Link to={'/user?username='+username}>
                                 <Icon type="team" />我关注的用户
                             </Link>
                         </Menu.Item>
@@ -92,142 +88,113 @@ class Sider extends React.Component {
     }
 }
 
-class LoadMoreList extends React.Component {
+class Home extends Component{
     state = {
-        loading: true,
-        loadingMore: false,
-        showLoadingMore: true,
-        data: [],
+        recommendData: [],
+        paperData:[]
     }
-
-    componentDidMount() {
-        this.getData((res) => {
-            this.setState({
-                loading: false,
-                data: res.results,
-            });
-        });
+    constructor(props){
+        super(props);
     }
-
-    getData = (callback) => {
-        reqwest({
-            url: fakeDataUrl,
-            type: 'json',
-            method: 'get',
-            contentType: 'application/json',
-            success: (res) => {
-                callback(res);
-            },
-        });
+    componentWillMount = () =>{
+        let searchContent = '';
+        username = sessionStorage.getItem('username');
+        if(username!=null){
+            localStorage = localStorage.getItem(username);
+            if(localStorage != null){
+                let tags = localStorage.split(';');
+                tags.pop();
+                for(var i=0;i<tags.length; ++i){
+                    searchContent += tags[i] + ' ';
+                }
+            }
+        }
+        /* get info from server */
+        let that = this;
+        /* get search content according to username */
+        let jsonbody = {};
+        jsonbody.searchText = searchContent;
+        let url = IPaddress + 'service/search';
+        let options={};
+        console.log(jsonbody);
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let data = eval(responseJson);
+                console.log(data);
+                let papers = data[0].papers;
+                for(var i = 0; i<papers.length; i++){
+                    if(papers[i].keyword.length > 50){
+                        papers[i].keyword = papers[i].keyword.substring(0,50);
+                        papers[i].keyword += '...';
+                    }
+                    if(papers[i].keyword.length == 0){
+                        papers[i].keyword = 'null';
+                    }
+                }
+                that.setState({
+                    recommendData: data[1].recommand,
+                    paperData: papers
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
     }
-
-    onLoadMore = () => {
-        this.setState({
-            loadingMore: true,
-        });
-        this.getData((res) => {
-            const data = this.state.data.concat(res.results);
-            this.setState({
-                data,
-                loadingMore: false,
-            }, () => {
-                // Resetting window's offsetTop so as to display react-virtualized demo underfloor.
-                // In real scene, you can using public method of react-virtualized:
-                // https://stackoverflow.com/questions/46700726/how-to-use-public-method-updateposition-of-react-virtualized
-                window.dispatchEvent(new Event('resize'));
-            });
-        });
-    }
-
-    render() {
-        const { loading, loadingMore, showLoadingMore, data } = this.state;
-        const loadMore = showLoadingMore ? (
-            <div style={{ textAlign: 'center', marginTop: 12, height: 32, lineHeight: '32px' }}>
-                {loadingMore && <Spin />}
-                {!loadingMore && <Button onClick={this.onLoadMore}>loading more</Button>}
-            </div>
-        ) : null;
-        return (
+    renderRecommend = () =>{
+        return(
             <List
-                className="demo-loadmore-list"
-                loading={loading}
-                itemLayout="horizontal"
-                loadMore={loadMore}
-                dataSource={data}
+                pagination={{pageSize: 12}}
+                dataSource={this.state.recommendData}
                 renderItem={item => (
-                    <List.Item>
+                    <List.Item
+                        actions={[<span>收藏量：{item.starno}</span>, <span>笔记量：{item.noteno}</span>]}
+                    >
                         <List.Item.Meta
-                            avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                            title={<a href="https://ant.design">{item.name.last}</a>}
-                            description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                            title={<a href={"/paper?paperID=" + item.paperID}>{item.title}</a>}
+                            description={item.keyword}
                         />
-                        <div>content</div>
                     </List.Item>
                 )}
             />
-        );
+        )
     }
-}
-class Home extends Component{
-    constructor(props){
-        super(props);       
-        
-    }
-    renderSideBar(){
-        const data = [
-            {
-                title: 'Ant Design Title 1',
-            },
-            {
-                title: 'Ant Design Title 2',
-            },
-            {
-                title: 'Ant Design Title 3',
-            },
-            {
-                title: 'Ant Design Title 4',
-            },
-        ];
+    renderPersonal = () =>{
         return(
-            <div class="sidebar" style={{width: "20%", float: "right", marginRight: "10%"}}>
-                <div class="icon" style={{width: "130px", marginBottom: "30px"}}>
-                    <Icon type="bars" />
-                    <span style={{marginLeft: "20px"}}>我关注的话题</span>
-                </div>
-                <List
-                    itemLayout="horizontal"
-                    dataSource={data}
-                    renderItem={item => (
-                        <List.Item actions={[<a>删除</a>]}>
-                            <List.Item.Meta
-                                avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                                title={<a href="https://ant.design">{item.title}</a>}
-                                description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-                            />
-                        </List.Item>
-                    )}
-                />
-            </div>
+            <List
+                pagination={{pageSize: 12}}
+                dataSource={this.state.paperData}
+                renderItem={item => (
+                    <List.Item
+                        actions={[<span>收藏量：{item.starno}</span>, <span>笔记量：{item.noteno}</span>]}
+                    >
+                        <List.Item.Meta
+                            title={<a href={"/paper?paperID=" + item.paperID}>{item.title}</a>}
+                            description={item.keyword}
+                        />
+                    </List.Item>
+                )}
+            />
         )
     }
     render(){
+        const renderRecommend = this.renderRecommend();
+        const renderPersonal = this.renderPersonal();
         return(
             <div>
                 <NavBar />
                 <div style={{width:"70%"}}>
                     <div className="content" style={{marginTop:"30px", marginLeft:"100px", float:"left"}}>
                         <div className="starTopic" style={{marginTop:"10px", marginLeft:"0px", marginBottom:"10px",textAlign:"left"}}>
-                            <span>你关注的话题：</span>
+                            <span>编辑推荐：</span>
                         </div>
-                        <LoadMoreList/>
+                        {renderRecommend}
                         <div className="starUser" style={{marginTop:"30px", marginLeft:"0px", marginBottom:"10px",textAlign:"left"}}>
-                            <span>你关注的人最近：</span>
+                            <span>你可能感兴趣：</span>
                         </div>
-                        <LoadMoreList/>
-                        <div className="starPaper" style={{marginTop:"30px", marginLeft:"0px", marginBottom:"10px",textAlign:"left"}}>
-                            <span>你收藏的文章最近：</span>
-                        </div>
-                        <LoadMoreList/>
+                        {renderPersonal}
                     </div>
                 </div>
                 <div className="Menu" style={{marginTop:"150px"}}>
