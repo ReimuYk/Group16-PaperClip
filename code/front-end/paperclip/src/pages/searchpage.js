@@ -15,98 +15,6 @@ var tagsFromServer1 = ['tag1-1', 'tag1-2', 'tag1-3', 'tag1-4'];
 const tagsFromServer2 = ['2015年及以后', '2010-2014', '2005-2009', '2004年及以前'];
 var paperData = [];
 var showPaperData = [];
-class MyTag extends React.Component {
-    state = {
-        selectedTags1: [],
-        selectedTags2: [],
-    };
-  
-    handleChange1(tag, checked) {
-        const { selectedTags1 } = this.state;
-        const nextSelectedTags1 = checked
-          ? [...selectedTags1, tag]
-          : selectedTags1.filter(t => t !== tag);
-
-        this.setState({ 
-            selectedTags1: nextSelectedTags1,
-        });
-        console.log('You are interested in tag 1-: ', nextSelectedTags1);
-        /* get data from server that matches checked tags */
-    }
-
-    handleChange2(tag, checked){
-        const { selectedTags2 } = this.state;
-        const nextSelectedTags2 = checked
-            ? [...selectedTags2, tag]
-            : selectedTags2.filter(t => t !== tag);
-        this.setState({
-            selectedTags2: nextSelectedTags2,
-        });
-        showPaperData = [];
-        console.log('You are interested in tag 2-: ', nextSelectedTags2);
-        const selectedTags1 = this.state.selectedTags1;
-
-        if(nextSelectedTags2.length == 0 && selectedTags1.length == 0){
-            showPaperData = paperData;
-            this.setState({});
-            return;
-        }
-        for(var i=0;i<selectedTags1.length;++i){
-            let tmp = paperData;
-            showPaperData = showPaperData.concat(tmp.filter(t => t.source == selectedTags1[i]));
-        }
-        for(var i=0;i<nextSelectedTags2.length; ++i){
-            let tag = nextSelectedTags2[i];
-            let tmp = paperData;
-            if(tag == '2015年及以后'){
-                showPaperData = showPaperData.concat(tmp.filter(t => t.year >= '2015'));
-            }
-            if(tag == '2010-2014'){
-                showPaperData = showPaperData.concat(tmp.filter(t => t.year >= '2014' && t.year <= '2010'));
-            }
-            if(tag == '2005-2009'){
-                showPaperData = showPaperData.concat(tmp.filter(t => t.year >= '2005' && t.year <= '2009'));
-            }
-            if(tag == '2004年及以前'){
-                showPaperData = showPaperData.concat(tmp.filter(t => t.year <= '2004'));
-            }
-        }
-        this.setState({});
-        console.log(nextSelectedTags2);
-        console.log(selectedTags1);
-        console.log(showPaperData);
-    }
-  
-    render() {
-        const { selectedTags1, selectedTags2 } = this.state;
-        return (
-          <div>
-            <h6 style={{ marginRight: 8, display: 'inline' }}>标签1:</h6>
-            {tagsFromServer1.map(tag => (
-              <CheckableTag
-                key={tag}
-                checked={selectedTags1.indexOf(tag) > -1}
-                onChange={checked => this.handleChange1(tag, checked)}
-              >
-                {tag}
-              </CheckableTag>
-            ))}
-            <div></div>
-            <h6 style={{ marginRight: 8, display: 'inline' }}>标签2:</h6>
-            {tagsFromServer2.map(tag => (
-              <CheckableTag
-                key={tag}
-                checked={selectedTags2.indexOf(tag) > -1}
-                onChange={checked => this.handleChange2(tag, checked)}
-              >
-                {tag}
-              </CheckableTag>
-            ))}
-          </div>
-        );
-    }
-    
-}
 
 /* fake data...
  * 
@@ -354,7 +262,7 @@ class Search extends Component{
                     showPaperData = tmp.filter(t => t.year >= '2015');
                 }
                 if(tag == '2010-2014'){
-                    showPaperData = tmp.filter(t => t.year >= '2014' && t.year <= '2010');
+                    showPaperData = tmp.filter(t => t.year <= '2014' && t.year >= '2010');
                 }
                 if(tag == '2005-2009'){
                     showPaperData = tmp.filter(t => t.year >= '2005' && t.year <= '2009');
@@ -424,7 +332,7 @@ class Search extends Component{
                 showPaperData = showPaperData.concat(tmp.filter(t => t.year >= '2015'));
             }
             if(tag == '2010-2014'){
-                showPaperData = showPaperData.concat(tmp.filter(t => t.year >= '2014' && t.year <= '2010'));
+                showPaperData = showPaperData.concat(tmp.filter(t => t.year <= '2014' && t.year >= '2010'));
             }
             if(tag == '2005-2009'){
                 showPaperData = showPaperData.concat(tmp.filter(t => t.year >= '2005' && t.year <= '2009'));
