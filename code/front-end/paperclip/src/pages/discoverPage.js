@@ -33,6 +33,35 @@ class Discover extends Component{
                 this.setState({});
             }
         }
+        let that = this;
+        /* get data according to username */
+        let jsonbody = {};
+        let url = IPaddress + 'service/recommendNote';
+        let options={};
+        options.method='POST';
+        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options.body = JSON.stringify(jsonbody);
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let data = eval(responseJson);
+                information.recommendNote = data;
+                that.setState({
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
+        url = IPaddress + 'service/recommendPaper';
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let data = eval(responseJson);
+                information.recommendPaper = data;
+                that.setState({
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
     }
     changeSearchIdx(e){
         var idx = e.target.value;
@@ -53,34 +82,24 @@ class Discover extends Component{
              </span>
         );
         return (
-            <div style={{ width:"60%", float: "left", marginBottom: "50px", textAlign:'left'}}>
+            <div style={{ width:"60%", float: "left", marginBottom: "50px", textAlign:'left', marginLeft:'40px'}}>
                 <div class="icon" style={{width: "100px", marginBottom: "30px"}}>
                     <Icon type="bars" />
                     <span style={{marginLeft: "20px"}}>推荐笔记</span>
                 </div>
                 <List
-                    span={16}
-                    itemLayout="vertical"
-                    size="small"
-                    pagination={{
-                        onChange: (page) => {
-                            console.log(page);
-                        },
-                        pageSize: 3,
-                    }}
+                    split={true}
+                    pagination={{pageSize: 3}}
                     dataSource={information.recommendNote}
                     renderItem={item => (
                         <Link to={"/viewnote?noteID="+item.noteID}>
                             <List.Item
-                                span={16}
-                                key={item.title}
                                 actions={[<IconText type="star-o" text={item.starno} />, <IconText type="like-o" text={item.likeno} />]}
                             >
                                 <List.Item.Meta
                                     title={<a href={'/viewnote?noteID=' + item.noteID}>{item.title}</a>}
-                                    description={item.keywords}
+                                    description={item.keyword}
                                 />
-                                {item.content}
                             </List.Item>
                         </Link>
                     )}
@@ -90,8 +109,14 @@ class Discover extends Component{
     }
 
     renderRecommendPaper(){
+        const IconText = ({ type, text }) => (
+            <span>
+                <Icon type={type} style={{ marginRight: 8 }} />
+                {text}
+             </span>
+        );
         return(
-            <div style={{ width: "60%"}}>
+            <div style={{ width: "60%", textAlign:'left', marginLeft:'40px'}}>
                 <div class="icon" style={{width: "100px", marginBottom: "30px"}}>
                     <Icon type="bars" />
                     <span style={{marginLeft: "20px"}}>推荐论文</span>
@@ -101,7 +126,7 @@ class Discover extends Component{
                     dataSource={information.recommendPaper}
                     renderItem={item => (
                         <List.Item
-                            actions={[<span>收藏量：{item.starno}</span>, <span>笔记量：{item.noteno}</span>]}
+                            actions={[<IconText type="star-o" text={item.starno} />, <IconText type="edit" text={item.noteno} />]}
                         >
                             <List.Item.Meta
                                 title={<a href={"/paper?paperID=" + item.paperID}>{item.title}</a>}
