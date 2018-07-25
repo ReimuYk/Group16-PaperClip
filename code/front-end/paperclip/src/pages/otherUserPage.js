@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Layout, Icon, Divider, Menu, List, Avatar, Modal, Input, Anchor, Button, message } from 'antd';
+import { Layout, Icon, Divider, Menu, List, Avatar, Modal, Input, Anchor, Button, message, Tabs } from 'antd';
 import { Link } from 'react-router-dom';
 import '../css/style.css';
 import NavBar from '.././components/nav-bar';
 import UserFloatMenu from '../components/userFloatMenu';
 import { IPaddress } from '../App'
 /* should get from server */
-
+const TabPane = Tabs.TabPane;
 var username='';
 var information = {
     avatar:'',
@@ -176,16 +176,104 @@ class OtherUserPage extends Component{
     renderButton = () => {
         if(this.state.ifFollow){
             return(
-                <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary" onClick={this.quitFollow}>取消关注</Button>
+                <Button style={{width:"100px", marginLeft:"10px", marginTop:'40px'}} size="large" type="primary" onClick={this.quitFollow}>取消关注</Button>
             )
         }
         else{
             return(
-                <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary" onClick={this.followUser}><Icon type='plus-square-o' />关注 { (information.fansno) }</Button>
+                <Button style={{width:"100px", marginLeft:"10px", marginTop:'40px'}} size="large" type="primary" onClick={this.followUser}><Icon type='plus-square-o' />关注 { (information.fansno) }</Button>
             )
         }
     }
+    renderMyLike = () =>{
+        return(
+            <div style={{textAlign:'left'}}>
+                <List
+                    itemLayout="horizontal"
+                    dataSource={information.myLike}
+                    renderItem={item => (
+                        <List.Item>
+                            <List.Item.Meta
+                                title={<p>ta点赞了<a href={'/viewnote?noteID=' + item.noteID}>{item.title}</a></p>}
+                            />
+                        </List.Item>
+                    )}
+                />
+            </div>
+        )
+    }
+    renderMyStarNote = () =>{
+        return(
+            <div style={{textAlign:'left'}}>
+                <List
+                    itemLayout="horizontal"
+                    dataSource={information.myStarNote}
+                    renderItem={item => (
+                        <List.Item>
+                            <List.Item.Meta
+                                title={<p>ta收藏了<a href={'/viewnote?noteID=' + item.noteID}>{item.title}</a></p>}
+                            />
+                        </List.Item>
+                    )}
+                />
+            </div>
+        )
+    }
+    renderMyStarPaper = () =>{
+        return(
+            <div style={{textAlign:'left'}}>
+                <List
+                    itemLayout="horizontal"
+                    dataSource={information.myStarPaper}
+                    renderItem={item => (
+                        <List.Item>
+                            <List.Item.Meta
+                                title={<p>ta收藏了<a href={'/paper?paperID=' + item.paperID}>{item.title}</a></p>}
+                            />
+                        </List.Item>
+                    )}
+                />
+            </div>
+        )
+    }
+    renderMyWrite = () =>{
+        return(
+            <div style={{textAlign:'left'}}>
+                <List
+                    itemLayout="horizontal"
+                    dataSource={information.myWrite}
+                    renderItem={item => (
+                        <List.Item
+                            actions={[<p>{item.time}</p>]}
+                        >
+                            <List.Item.Meta
+                                title={<p>ta新建了笔记<a href={'/viewnote?noteID=' + item.noteID}>{item.title}</a></p>}
+                            />
+                        </List.Item>
+                    )}
+                />
+            </div>
+        )
+    }
+    callback = (key) =>{
+        if(key == '0'){
+
+        }
+        if(key == '1'){
+
+        }
+        if(key == '2'){
+
+        }
+        if(key == '3'){
+
+        }
+    }
     render() {
+        const myLike = this.renderMyLike();
+        const myStarNote = this.renderMyStarNote();
+        const myStarPaper = this.renderMyStarPaper();
+        const myWrite = this.renderMyWrite();
         const button = this.renderButton();
         return(
             <div>
@@ -226,35 +314,13 @@ class OtherUserPage extends Component{
                 <Divider style={{width:'80%', display:'center'}}/>
                 <div>
                 <div id='u2'>
-                    <div id='u2-1'>
-                        <Layout className="layout">
-                            {/* <Header> */}
-                            <Menu
-                                theme="light"
-                                mode="horizontal"
-                                defaultSelectedIDs={['2']}
-                                style={{ lineHeight: '50px', width:'100%' }}
-                            >
-                                <Menu.Item ID="1"><a>他的动态</a></Menu.Item>
-                            </Menu>
-                        
-                        <Content style={{backgroundColor:'#ffffff'}}>
-                        <List
-                            style={{textAlign:'left'}}
-                            itemLayout="horizontal"
-                            dataSource={this.state.data}
-                            renderItem={item => (
-                            <List.Item>
-                                <List.Item.Meta
-                                avatar={<Avatar src={item.avatar} />}
-                                title={<a href="/home">{item.title}</a>}
-                                description={item.description}
-                                />
-                            </List.Item>
-                            )}
-                        />
-                        </Content>
-                        </Layout>
+                    <div id='u2-1' style={{textAlign:'left'}}>
+                        <Tabs defaultActiveKey="1" onChange={this.callback}>
+                            <TabPane tab="ta的收藏笔记" key="0">{myStarNote}</TabPane>
+                            <TabPane tab="ta的收藏论文" key="1">{myStarPaper}</TabPane>
+                            <TabPane tab="ta的点赞" key="2">{myLike}</TabPane>
+                            <TabPane tab="ta的创作" key="3">{myWrite}</TabPane>
+                        </Tabs>
                     </div>
                 </div>
                 </div>

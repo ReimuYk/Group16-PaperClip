@@ -100,7 +100,7 @@ class Home extends Component{
         let searchContent = '';
         username = sessionStorage.getItem('username');
         if(username!=null){
-            localStorage = localStorage.getItem(username);
+            localStorage = window.localStorage.getItem(username);
             if(localStorage != null){
                 let tags = localStorage.split(';');
                 tags.pop();
@@ -145,38 +145,42 @@ class Home extends Component{
     }
     renderRecommend = () =>{
         return(
-            <List
-                pagination={{pageSize: 12}}
-                dataSource={this.state.recommendData}
-                renderItem={item => (
-                    <List.Item
-                        actions={[<span>收藏量：{item.starno}</span>, <span>笔记量：{item.noteno}</span>]}
-                    >
-                        <List.Item.Meta
-                            title={<a href={"/paper?paperID=" + item.paperID}>{item.title}</a>}
-                            description={item.keyword}
-                        />
-                    </List.Item>
-                )}
-            />
+            <div style={{textAlign:'left'}}>
+                <List
+                    pagination={{pageSize: 12}}
+                    dataSource={this.state.recommendData}
+                    renderItem={item => (
+                        <List.Item
+                            actions={[<span>收藏量：{item.starno}</span>, <span>笔记量：{item.noteno}</span>]}
+                        >
+                            <List.Item.Meta
+                                title={<a href={"/paper?paperID=" + item.paperID}>{item.title}</a>}
+                                description={item.keyword}
+                            />
+                        </List.Item>
+                    )}
+                />
+            </div>
         )
     }
     renderPersonal = () =>{
         return(
-            <List
-                pagination={{pageSize: 12}}
-                dataSource={this.state.paperData}
-                renderItem={item => (
-                    <List.Item
-                        actions={[<span>收藏量：{item.starno}</span>, <span>笔记量：{item.noteno}</span>]}
-                    >
-                        <List.Item.Meta
-                            title={<a href={"/paper?paperID=" + item.paperID}>{item.title}</a>}
-                            description={item.keyword}
-                        />
-                    </List.Item>
-                )}
-            />
+            <div style={{textAlign:'left'}}>
+                <List
+                    pagination={{pageSize: 12}}
+                    dataSource={this.state.paperData}
+                    renderItem={item => (
+                        <List.Item
+                            actions={[<span>收藏量：{item.starno}</span>, <span>笔记量：{item.noteno}</span>]}
+                        >
+                            <List.Item.Meta
+                                title={<a href={"/paper?paperID=" + item.paperID}>{item.title}</a>}
+                                description={item.keyword}
+                            />
+                        </List.Item>
+                    )}
+                />
+            </div>
         )
     }
     render(){

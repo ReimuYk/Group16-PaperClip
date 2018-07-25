@@ -1,18 +1,22 @@
 import React, { Component } from 'react';
-import { Layout, Icon, Divider, Menu, List, Avatar, Modal, Input, Anchor, Button } from 'antd';
+import { Layout, Icon, Divider, Menu, List, Avatar, Modal, Input, Anchor, Button,Tabs } from 'antd';
 import { Link, Redirect } from 'react-router-dom';
 import '../css/style.css';
 import NavBar from '.././components/nav-bar';
 import UserFloatMenu from '../components/userFloatMenu';
 import { IPaddress } from '../App'
 /* should get from server */
-
+const TabPane = Tabs.TabPane;
 var username = '';
 var information = {
     userheader:'',
     fansno:0,
     followno:0,
-    userDescription:''
+    userDescription:'',
+    myStarNote:[],
+    myStarPaper:[],
+    myLike:[],
+    myWrite:[]
 }
 const { Content } = Layout;
 class User extends Component{
@@ -62,10 +66,98 @@ class User extends Component{
             console.log("Oops, error");
         })
     }
+    renderMyLike = () =>{
+        return(
+            <div style={{textAlign:'left'}}>
+                <List
+                    itemLayout="horizontal"
+                    dataSource={information.myLike}
+                    renderItem={item => (
+                        <List.Item>
+                            <List.Item.Meta
+                                title={<p>你点赞了<a href={'/viewnote?noteID=' + item.noteID}>{item.title}</a></p>}
+                            />
+                        </List.Item>
+                    )}
+                />
+            </div>
+        )
+    }
+    renderMyStarNote = () =>{
+        return(
+            <div style={{textAlign:'left'}}>
+                <List
+                    itemLayout="horizontal"
+                    dataSource={information.myStarNote}
+                    renderItem={item => (
+                        <List.Item>
+                            <List.Item.Meta
+                                title={<p>你收藏了<a href={'/viewnote?noteID=' + item.noteID}>{item.title}</a></p>}
+                            />
+                        </List.Item>
+                    )}
+                />
+            </div>
+        )
+    }
+    renderMyStarPaper = () =>{
+        return(
+            <div style={{textAlign:'left'}}>
+                <List
+                    itemLayout="horizontal"
+                    dataSource={information.myStarPaper}
+                    renderItem={item => (
+                        <List.Item>
+                            <List.Item.Meta
+                                title={<p>你收藏了<a href={'/paper?paperID=' + item.paperID}>{item.title}</a></p>}
+                            />
+                        </List.Item>
+                    )}
+                />
+            </div>
+        )
+    }
+    renderMyWrite = () =>{
+        return(
+            <div style={{textAlign:'left'}}>
+                <List
+                    itemLayout="horizontal"
+                    dataSource={information.myWrite}
+                    renderItem={item => (
+                        <List.Item
+                            actions={[<p>{item.time}</p>]}
+                        >
+                            <List.Item.Meta
+                                title={<p>你新建了笔记<a href={'/viewnote?noteID=' + item.noteID}>{item.title}</a></p>}
+                            />
+                        </List.Item>
+                    )}
+                />
+            </div>
+        )
+    }
+    callback = (key) =>{
+        if(key == '0'){
+
+        }
+        if(key == '1'){
+
+        }
+        if(key == '2'){
+
+        }
+        if(key == '3'){
+
+        }
+    }
     render() {
         if(sessionStorage.getItem('username') == null){
             return <Redirect to="/login"/>;
         }
+        const myLike = this.renderMyLike();
+        const myStarNote = this.renderMyStarNote();
+        const myStarPaper = this.renderMyStarPaper();
+        const myWrite = this.renderMyWrite();
         return(
             <div>
             <NavBar />
@@ -98,39 +190,15 @@ class User extends Component{
                 <Divider style={{width:'80%', display:'center'}}/>
                 <div>
                 <div id='u2'>
-                    <div id='u2-1'>
-                        <Layout className="layout">
+                    <div id='u2-1' style={{textAlign:'left'}}>
                             {/* <Header> */}
-                            <Menu
-                                theme="light"
-                                mode="horizontal"
-                                defaultSelectedIDs={['2']}
-                                style={{ lineHeight: '50px', width:'100%' }}
-                            >
-                                <Menu.Item ID="1"><a onClick={this.showStarUser}>关注的人的动态</a></Menu.Item>
-                                <Menu.Item ID="2"><a onClick={this.showStarPaper}>收藏的论文的动态</a></Menu.Item>
-                                <Menu.Item ID="3"><a onClick={this.showInteract}>最近互动动态</a></Menu.Item>
-                            </Menu>
+                            <Tabs defaultActiveKey="1" onChange={this.callback}>
+                                <TabPane tab="我的收藏笔记" key="0">{myStarNote}</TabPane>
+                                <TabPane tab="我的收藏论文" key="1">{myStarPaper}</TabPane>
+                                <TabPane tab="我的点赞" key="2">{myLike}</TabPane>
+                                <TabPane tab="我的创作" key="3">{myWrite}</TabPane>
+                            </Tabs>
                             {/* </Header> */}
-                        
-                        <Content style={{backgroundColor:'#ffffff'}}>
-                        <List
-                            style={{textAlign:'left'}}
-                            itemLayout="horizontal"
-                            dataSource={this.state.data}
-                            renderItem={item => (
-                            <List.Item>
-                                <List.Item.Meta
-                                avatar={<Avatar/>}
-                                
-                                title={<a href="/home">{item.title}</a>}
-                                description={item.description}
-                                />
-                            </List.Item>
-                            )}
-                        />
-                        </Content>
-                        </Layout>
                     </div>
                    
                     <UserFloatMenu />
