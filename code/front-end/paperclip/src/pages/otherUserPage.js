@@ -13,6 +13,10 @@ var information = {
     username:'',
     fansno:0,
     userDescription:'',
+    myStarNote:[],
+    myStarPaper:[],
+    myLike:[],
+    myWrite:[]
 }
 const { TextArea } = Input;
 const { Header, Content, Footer } = Layout;
@@ -94,6 +98,24 @@ class OtherUserPage extends Component{
                 information.username = data.username;
                 this.setState({
                     ifFollow: data.isStar
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
+        let jsonbody1 = {};
+        jsonbody1.username = information.username;
+        url = IPaddress + 'service/starNoteNews';
+        let options1={};
+        options1.method='POST';
+        options1.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        options1.body = JSON.stringify(jsonbody1);
+        fetch(url, options1)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let data = eval(responseJson);
+                console.log(data);
+                information.myStarNote = data;
+                this.setState({
                 })
             }).catch(function(e){
             console.log("Oops, error");
@@ -194,7 +216,7 @@ class OtherUserPage extends Component{
                     renderItem={item => (
                         <List.Item>
                             <List.Item.Meta
-                                title={<p>ta点赞了<a href={'/viewnote?noteID=' + item.noteID}>{item.title}</a></p>}
+                                title={<p>ta 点赞了 <a href={'/viewnote?noteID=' + item.noteID}>{item.noteTitle}</a></p>}
                             />
                         </List.Item>
                     )}
@@ -211,7 +233,7 @@ class OtherUserPage extends Component{
                     renderItem={item => (
                         <List.Item>
                             <List.Item.Meta
-                                title={<p>ta收藏了<a href={'/viewnote?noteID=' + item.noteID}>{item.title}</a></p>}
+                                title={<p>ta 收藏了 <a href={'/viewnote?noteID=' + item.noteID}>{item.noteTitle}</a></p>}
                             />
                         </List.Item>
                     )}
@@ -228,7 +250,7 @@ class OtherUserPage extends Component{
                     renderItem={item => (
                         <List.Item>
                             <List.Item.Meta
-                                title={<p>ta收藏了<a href={'/paper?paperID=' + item.paperID}>{item.title}</a></p>}
+                                title={<p>ta 收藏了 <a href={'/paper?paperID=' + item.paperID}>{item.paperTitle}</a></p>}
                             />
                         </List.Item>
                     )}
@@ -247,7 +269,7 @@ class OtherUserPage extends Component{
                             actions={[<p>{item.time}</p>]}
                         >
                             <List.Item.Meta
-                                title={<p>ta新建了笔记<a href={'/viewnote?noteID=' + item.noteID}>{item.title}</a></p>}
+                                title={<p>ta 新建了笔记 <a href={'/viewnote?noteID=' + item.noteID}>{item.noteTitle}</a></p>}
                             />
                         </List.Item>
                     )}
@@ -257,16 +279,80 @@ class OtherUserPage extends Component{
     }
     callback = (key) =>{
         if(key == '0'){
-
+            let jsonbody = {};
+            jsonbody.username = information.username;
+            let url = IPaddress + 'service/starNoteNews';
+            let options={};
+            options.method='POST';
+            options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+            options.body = JSON.stringify(jsonbody);
+            fetch(url, options)
+                .then(response=>response.text())
+                .then(responseJson=>{
+                    let data = eval(responseJson);
+                    information.myStarNote = data;
+                    this.setState({
+                    })
+                }).catch(function(e){
+                console.log("Oops, error");
+            })
         }
         if(key == '1'){
-
+            let jsonbody = {};
+            jsonbody.username = information.username;
+            let url = IPaddress + 'service/starPaperNews';
+            let options={};
+            options.method='POST';
+            options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+            options.body = JSON.stringify(jsonbody);
+            fetch(url, options)
+                .then(response=>response.text())
+                .then(responseJson=>{
+                    let data = eval(responseJson);
+                    information.myStarPaper = data;
+                    this.setState({
+                    })
+                }).catch(function(e){
+                console.log("Oops, error");
+            })
         }
         if(key == '2'){
-
+            let jsonbody = {};
+            jsonbody.username = information.username;
+            let url = IPaddress + 'service/likeNoteNews';
+            let options={};
+            options.method='POST';
+            options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+            options.body = JSON.stringify(jsonbody);
+            fetch(url, options)
+                .then(response=>response.text())
+                .then(responseJson=>{
+                    let data = eval(responseJson);
+                    information.myLike = data;
+                    this.setState({
+                    })
+                }).catch(function(e){
+                console.log("Oops, error");
+            })
         }
         if(key == '3'){
-
+            let jsonbody = {};
+            jsonbody.username = information.username;
+            let url = IPaddress + 'service/writeNoteNews';
+            let options={};
+            options.method='POST';
+            options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+            options.body = JSON.stringify(jsonbody);
+            fetch(url, options)
+                .then(response=>response.text())
+                .then(responseJson=>{
+                    let data = eval(responseJson);
+                    information.myWrite = data;
+                    this.setState({
+                    })
+                }).catch(function(e){
+                console.log("Oops, error");
+            })
         }
     }
     render() {
@@ -315,7 +401,7 @@ class OtherUserPage extends Component{
                 <div>
                 <div id='u2'>
                     <div id='u2-1' style={{textAlign:'left'}}>
-                        <Tabs defaultActiveKey="1" onChange={this.callback}>
+                        <Tabs defaultActiveKey="0" onChange={this.callback}>
                             <TabPane tab="ta的收藏笔记" key="0">{myStarNote}</TabPane>
                             <TabPane tab="ta的收藏论文" key="1">{myStarPaper}</TabPane>
                             <TabPane tab="ta的点赞" key="2">{myLike}</TabPane>

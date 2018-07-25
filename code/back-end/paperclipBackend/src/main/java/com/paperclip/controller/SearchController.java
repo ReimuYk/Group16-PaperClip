@@ -32,6 +32,13 @@ public class SearchController {
         return searchService.searchPaper(data);
     }
 
+    @RequestMapping(value = "/service/recommendPaper",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONArray recommendPaper(@RequestBody JSONObject data) throws UnsupportedEncodingException {
+        return searchService.getRecommendPaper();
+    }
+
     @RequestMapping(value = "/service/recommendNote",method = RequestMethod.POST)
     public
     @ResponseBody
