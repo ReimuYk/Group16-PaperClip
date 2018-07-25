@@ -66,15 +66,15 @@ def setMark(infile,outfile,postils):
             #draw lines
             start = block["start"]
             end = block["end"]
-            draw.line((start[0],end[1],end[0],end[1]),fill='red',width=3)
+            draw.line((start[0],end[1],end[0],end[1]),fill='red',width=6)
         for i in range(len(blocks)-1):
             start = blocks[i]["end"]
             end = (blocks[i+1]["start"][0],blocks[i+1]["end"][1])
             if end[0]>start[0]:
-                draw.line((start[0],start[1],end[0],end[1]),fill='red',width=3)
+                draw.line((start[0],start[1],end[0],end[1]),fill='red',width=6)
         numloc = blocks[-1]["end"]
         numloc = (numloc[0]+10,numloc[1]-10)
-        ft=ImageFont.truetype("consola.ttf", 40, encoding="unic")
+        ft=ImageFont.truetype("MSYHBD.TTC", 30)
         draw.text(numloc,str(postil["order"]),fill='red',font=ft)
     in_img.save(outfile)
 def setPostil(outfile,postils):

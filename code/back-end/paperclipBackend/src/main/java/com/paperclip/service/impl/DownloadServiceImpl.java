@@ -101,6 +101,6 @@ public class DownloadServiceImpl implements DownloadService{
         ResponseEntity<JSONObject> resp = restTemplate.exchange(url, HttpMethod.POST, entity, JSONObject.class);
         JSONObject resp_body = resp.getBody();
         System.out.println(resp_body);
-        return "returned string";
+        return String.format("../../py-pdf/paperclip/temp/%d-%s/%d-%s.pdf",paperID,username,paperID,username);
     }
 }
