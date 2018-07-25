@@ -65,6 +65,17 @@ class User extends Component{
             }).catch(function(e){
             console.log("Oops, error");
         })
+        url = IPaddress + 'service/starNoteNews';
+        fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                let data = eval(responseJson);
+                information.myStarNote = data;
+                this.setState({
+                })
+            }).catch(function(e){
+            console.log("Oops, error");
+        })
     }
     renderMyLike = () =>{
         return(
@@ -75,7 +86,7 @@ class User extends Component{
                     renderItem={item => (
                         <List.Item>
                             <List.Item.Meta
-                                title={<p>你点赞了<a href={'/viewnote?noteID=' + item.noteID}>{item.title}</a></p>}
+                                title={<p>你 点赞了 <a href={'/viewnote?noteID=' + item.noteID}>{item.noteTitle}</a></p>}
                             />
                         </List.Item>
                     )}
@@ -92,7 +103,7 @@ class User extends Component{
                     renderItem={item => (
                         <List.Item>
                             <List.Item.Meta
-                                title={<p>你收藏了<a href={'/viewnote?noteID=' + item.noteID}>{item.title}</a></p>}
+                                title={<p>你 收藏了 <a href={'/viewnote?noteID=' + item.noteID}>{item.noteTitle}</a></p>}
                             />
                         </List.Item>
                     )}
@@ -109,7 +120,7 @@ class User extends Component{
                     renderItem={item => (
                         <List.Item>
                             <List.Item.Meta
-                                title={<p>你收藏了<a href={'/paper?paperID=' + item.paperID}>{item.title}</a></p>}
+                                title={<p>你 收藏了 <a href={'/paper?paperID=' + item.paperID}>{item.paperTitle}</a></p>}
                             />
                         </List.Item>
                     )}
@@ -128,7 +139,7 @@ class User extends Component{
                             actions={[<p>{item.time}</p>]}
                         >
                             <List.Item.Meta
-                                title={<p>你新建了笔记<a href={'/viewnote?noteID=' + item.noteID}>{item.title}</a></p>}
+                                title={<p>你 新建了笔记 <a href={'/viewnote?noteID=' + item.noteID}>{item.noteTitle}</a></p>}
                             />
                         </List.Item>
                     )}
@@ -138,16 +149,80 @@ class User extends Component{
     }
     callback = (key) =>{
         if(key == '0'){
-
+            let jsonbody = {};
+            jsonbody.username = username;
+            let url = IPaddress + 'service/starNoteNews';
+            let options={};
+            options.method='POST';
+            options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+            options.body = JSON.stringify(jsonbody);
+            fetch(url, options)
+                .then(response=>response.text())
+                .then(responseJson=>{
+                    let data = eval(responseJson);
+                    information.myStarNote = data;
+                    this.setState({
+                    })
+                }).catch(function(e){
+                console.log("Oops, error");
+            })
         }
         if(key == '1'){
-
+            let jsonbody = {};
+            jsonbody.username = username;
+            let url = IPaddress + 'service/starPaperNews';
+            let options={};
+            options.method='POST';
+            options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+            options.body = JSON.stringify(jsonbody);
+            fetch(url, options)
+                .then(response=>response.text())
+                .then(responseJson=>{
+                    let data = eval(responseJson);
+                    information.myStarPaper = data;
+                    this.setState({
+                    })
+                }).catch(function(e){
+                console.log("Oops, error");
+            })
         }
         if(key == '2'){
-
+            let jsonbody = {};
+            jsonbody.username = username;
+            let url = IPaddress + 'service/likeNoteNews';
+            let options={};
+            options.method='POST';
+            options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+            options.body = JSON.stringify(jsonbody);
+            fetch(url, options)
+                .then(response=>response.text())
+                .then(responseJson=>{
+                    let data = eval(responseJson);
+                    information.myLike = data;
+                    this.setState({
+                    })
+                }).catch(function(e){
+                console.log("Oops, error");
+            })
         }
         if(key == '3'){
-
+            let jsonbody = {};
+            jsonbody.username = username;
+            let url = IPaddress + 'service/writeNoteNews';
+            let options={};
+            options.method='POST';
+            options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+            options.body = JSON.stringify(jsonbody);
+            fetch(url, options)
+                .then(response=>response.text())
+                .then(responseJson=>{
+                    let data = eval(responseJson);
+                    information.myWrite = data;
+                    this.setState({
+                    })
+                }).catch(function(e){
+                console.log("Oops, error");
+            })
         }
     }
     render() {
@@ -192,7 +267,7 @@ class User extends Component{
                 <div id='u2'>
                     <div id='u2-1' style={{textAlign:'left'}}>
                             {/* <Header> */}
-                            <Tabs defaultActiveKey="1" onChange={this.callback}>
+                            <Tabs defaultActiveKey="0" onChange={this.callback} >
                                 <TabPane tab="我的收藏笔记" key="0">{myStarNote}</TabPane>
                                 <TabPane tab="我的收藏论文" key="1">{myStarPaper}</TabPane>
                                 <TabPane tab="我的点赞" key="2">{myLike}</TabPane>

@@ -51,12 +51,12 @@ class Sider extends React.Component {
                     <MenuItemGroup key="g1" title="消息提示">
 
                         <Menu.Item key="1">
-                            <Link to={'/user/starpaper?username='+username}>
+                            <Link to={'/user/starpaper'}>
                                 <Icon type="book" />我收藏的论文
                             </Link>
                         </Menu.Item>
                         <Menu.Item key="2">
-                            <Link to={'/user?username='+username}>
+                            <Link to={'/user/staruser'}>
                                 <Icon type="team" />我关注的用户
                             </Link>
                         </Menu.Item>
