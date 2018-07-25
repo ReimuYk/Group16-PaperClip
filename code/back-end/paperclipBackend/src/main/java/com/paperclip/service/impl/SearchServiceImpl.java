@@ -197,9 +197,12 @@ public class SearchServiceImpl implements SearchService {
     public JSONArray getUserStarPaperNews(JSONObject data) throws UnsupportedEncodingException {
         JSONArray news = new JSONArray();
         String username = data.getString("username");
+
+        username = URLEncoder.encode(username, "UTF-8");
         User user = userRepo.findOne(username);
 
         List<StarPaper> starPapers = starPaperRepo.findByUserOrderByIdDesc(user);
+        int count = 0;
         for(StarPaper starPaper:starPapers){
             JSONObject obj = new JSONObject();
             Paper paper = starPaper.getPaper();
@@ -207,6 +210,10 @@ public class SearchServiceImpl implements SearchService {
             obj.accumulate("paperTitle",URLDecoder.decode(paper.getTitle(),"UTF-8"));
 
             news.add(obj);
+            if(count >= 14){
+                break;
+            }
+            count += 1;
         }
 
         return news;
@@ -216,9 +223,12 @@ public class SearchServiceImpl implements SearchService {
     public JSONArray getUserStarNoteNews(JSONObject data) throws UnsupportedEncodingException {
         JSONArray news = new JSONArray();
         String username = data.getString("username");
+
+        username = URLEncoder.encode(username, "UTF-8");
         User user = userRepo.findOne(username);
 
         List<StarNote> starNotes = starNoteRepo.findByUserOrderByIdDesc(user);
+        int count = 0;
         for(StarNote starNote:starNotes){
             JSONObject obj = new JSONObject();
             Note note = starNote.getNote();
@@ -226,6 +236,10 @@ public class SearchServiceImpl implements SearchService {
             obj.accumulate("noteTitle",URLDecoder.decode(note.getTitle(),"UTF-8"));
 
             news.add(obj);
+            if(count >= 14){
+                break;
+            }
+            count += 1;
         }
 
         return news;
@@ -235,9 +249,12 @@ public class SearchServiceImpl implements SearchService {
     public JSONArray getUserWriteNoteNews(JSONObject data) throws UnsupportedEncodingException {
         JSONArray news = new JSONArray();
         String username = data.getString("username");
+
+        username = URLEncoder.encode(username, "UTF-8");
         User user = userRepo.findOne(username);
 
         List<Note> notes = noteRepo.findByUserOrderByDateDesc(user);
+        int count = 0;
         for(Note note:notes){
             JSONObject obj = new JSONObject();
             obj.accumulate("noteID",note.getId());
@@ -246,6 +263,10 @@ public class SearchServiceImpl implements SearchService {
             obj.accumulate("time",sdf.format(note.getDate()));
 
             news.add(obj);
+            if(count >= 14){
+                break;
+            }
+            count += 1;
         }
 
         return news;
@@ -255,9 +276,12 @@ public class SearchServiceImpl implements SearchService {
     public JSONArray getUserLikeNoteNews(JSONObject data) throws UnsupportedEncodingException {
         JSONArray news = new JSONArray();
         String username = data.getString("username");
+
+        username = URLEncoder.encode(username, "UTF-8");
         User user = userRepo.findOne(username);
 
         List<UserNote> userNotes = userNRepo.findLikesOfUser(user);
+        int count = 0;
         for(UserNote userNote:userNotes){
             JSONObject obj = new JSONObject();
             Note note = userNote.getNote();
@@ -265,6 +289,10 @@ public class SearchServiceImpl implements SearchService {
             obj.accumulate("noteTitle",URLDecoder.decode(note.getTitle(),"UTF-8"));
 
             news.add(obj);
+            if(count >= 14){
+                break;
+            }
+            count += 1;
         }
 
         return news;
