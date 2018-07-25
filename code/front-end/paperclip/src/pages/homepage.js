@@ -56,8 +56,8 @@ class Sider extends React.Component {
                             </Link>
                         </Menu.Item>
                         <Menu.Item key="2">
-                            <Link to={'/user/staruser'}>
-                                <Icon type="team" />我关注的用户
+                            <Link to={'/user/notifications'}>
+                                <Icon type="team" />我的通知
                             </Link>
                         </Menu.Item>
                         <Menu.Item key="3">
@@ -70,7 +70,6 @@ class Sider extends React.Component {
                                 <Icon type="message" />我的私信
                             </Link>
                         </Menu.Item>
-                        <Menu.Item key="5"><Icon type="customer-service" />社区服务中心</Menu.Item>
                     </MenuItemGroup>
                 </Menu>
             )
