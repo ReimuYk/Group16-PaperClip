@@ -93,13 +93,13 @@ class NoteList extends Component{
                 bordered={false}
                 dataSource={this.state.data}
                 renderItem={item => (
-                    <Link to={this.state.type=="note"?'viewNote?noteID='+item.id:'paper?paperID='+item.id}><List.Item>                       
+                    <a href={this.state.type=="note"?'viewNote?noteID='+item.id:'paper?paperID='+item.id}><List.Item>                       
                         <List.Item.Meta          
                         title={item.title}
                         description={<div dangerouslySetInnerHTML={{ __html: item.intro}}></div>}
                         />
                     </List.Item>
-                    </Link>
+                    </a>
                     )}
                 />
         );

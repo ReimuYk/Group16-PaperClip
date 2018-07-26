@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
         if(user != null){
             System.out.println("1");
             String subject = "PaperClip 找回密码";
-            String content = "用户名： "+user.getUsername()+" 密码： "+user.getPassword();
+            String content = "用户名： "+ URLDecoder.decode(user.getUsername(),"UTF-8")+" 密码： "+user.getPassword();
             content += "\n非本人操作请忽略此邮件\n";
             userEmail = URLDecoder.decode(userEmail,"UTF-8");
             mail.singleMail(userEmail,subject,content);
