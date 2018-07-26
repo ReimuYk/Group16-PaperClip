@@ -27,7 +27,7 @@ public class UserController {
     @RequestMapping(value = "/service/findPassword",method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONObject findPassword(@RequestBody JSONObject userEmail){
+    JSONObject findPassword(@RequestBody JSONObject userEmail) throws UnsupportedEncodingException {
         return userService.findPassword(userEmail);
     }
 
