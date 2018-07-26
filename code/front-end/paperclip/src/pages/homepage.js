@@ -174,7 +174,6 @@ class Home extends Component{
                         >
                             <List.Item.Meta
                                 title={<a href={"/paper?paperID=" + item.paperID}>{item.title}</a>}
-                                description={item.keyword}
                             />
                         </List.Item>
                     )}
