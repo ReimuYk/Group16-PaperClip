@@ -71,17 +71,22 @@ public class UserServiceImpl implements UserService {
     private NoteCommentRepository noteCommRepo;
 
 
-    public JSONObject findPassword(JSONObject data) {
+    public JSONObject findPassword(JSONObject data) throws UnsupportedEncodingException {
         String userEmail = data.getString("userEmail");
+
+        userEmail = URLEncoder.encode(userEmail,"UTF-8");
         User user = userRepo.findDistinctByEmail(userEmail);
         JSONObject result = new JSONObject();
         if(user != null){
+            System.out.println("1");
             String subject = "PaperClip 找回密码";
-            String content = "用户名： "+user.getUsername()+" 密码： +"+user.getPassword();
+            String content = "用户名： "+user.getUsername()+" 密码： "+user.getPassword();
             content += "\n非本人操作请忽略此邮件\n";
+            userEmail = URLDecoder.decode(userEmail,"UTF-8");
             mail.singleMail(userEmail,subject,content);
             result.accumulate("result", "success");
         }else{
+            System.out.println("2");
             result.accumulate("result", "fail");
         }
         return result;

@@ -197,7 +197,7 @@ class Notifications extends Component{
                                         actions = {[<p>{item.time}</p>]}
                                     >
                                         <List.Item.Meta
-                                            title={<a href={'/papaer?paperID=' + item.paperID}>{item.paperTitle}</a>}
+                                            title={<a href={'/paper?paperID=' + item.paperID}>{item.paperTitle}</a>}
                                             description={<p><a href={'/viewpage?username=' + item.sender}>{item.sender}</a> 评论了：{item.content}</p>}
                                         />
                                     </List.Item>

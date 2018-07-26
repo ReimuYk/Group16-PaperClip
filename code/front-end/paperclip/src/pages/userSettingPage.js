@@ -18,6 +18,7 @@ class UserSetting extends Component{
         this.beforeUpload = this.beforeUpload.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.uploadAvatar = this.uploadAvatar.bind(this);
+        this.compressImg = this.compressImg.bind(this);
 
         this.state = {
             collapsed: false,
@@ -132,38 +133,81 @@ class UserSetting extends Component{
             console.log("Oops, error: ", e);
         })
     }
+
+    compressImg=(size,path, obj, callback)=>{
+        /*if(size/1024<100){//小于100k的不用压缩
+            callback(path);
+            return;
+        }*/
+        var img = new Image();
+        img.src = path;
+        img.onload = function(){
+            var that = this;
+            // 默认按比例压缩
+            var w = that.width,
+                h = that.height,
+                scale = w / h;
+            w = obj.width || w;
+            h = obj.height || (w / scale);
+            console.log("w:"+w+" h:"+h);
+            var quality = 0.7;  // 默认图片质量为0.7
+            //生成canvas
+            var canvas = document.createElement('canvas');
+            var ctx = canvas.getContext('2d');
+            // 创建属性节点
+            var anw = document.createAttribute("width");
+            anw.nodeValue = w;
+            var anh = document.createAttribute("height");
+            anh.nodeValue = h;
+            canvas.setAttributeNode(anw);
+            canvas.setAttributeNode(anh);
+            ctx.drawImage(that, 0, 0, w, h);
+            // 图像质量
+            if(obj.quality && obj.quality <= 1 && obj.quality > 0){
+                quality = obj.quality;
+            }
+            // quality值越小，所绘制出的图像越模糊
+            var base64 = canvas.toDataURL('image/jpeg', quality);
+            // 回调函数返回base64的值
+            callback(base64);            
+        }
+    }
     uploadAvatar(file){
         let that  = this;
+        var size = file.size;
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = function(e) {
             var base64 = e.target.result;
-            //console.log(base64);
-            let jsonbody = {};
-            jsonbody.username = username;
-            jsonbody.imgStr = base64;
-            var url = IPaddress + 'service/uploadAvatar';
-            let options={};
-            options.method='POST';
-            options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
-            options.body = JSON.stringify(jsonbody);
-            fetch(url, options)
-                .then(response=>response.text())
-                .then(responseJson=>{
-                    console.log(responseJson);
-                    let data = eval('(' + responseJson + ')');
-                    if(data.result == "fail"){
-                        message.error('请上传正确的图片', 3);
-                        return;
-                    }                
-                    that.setState({
-                        imageUrl: base64,
-                        loading: false
+            console.log("old "+base64.length);
+            that.compressImg(size,base64,{width:250,height:250,quality:0.8},function(base64){
+                console.log("new "+ base64.length);
+                let jsonbody = {};
+                jsonbody.username = username;
+                jsonbody.imgStr = base64;
+                var url = IPaddress + 'service/uploadAvatar';
+                let options={};
+                options.method='POST';
+                options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+                options.body = JSON.stringify(jsonbody);
+                fetch(url, options)
+                    .then(response=>response.text())
+                    .then(responseJson=>{
+                        console.log(responseJson);
+                        let data = eval('(' + responseJson + ')');
+                        if(data.result == "fail"){
+                            message.error('请上传正确的图片', 3);
+                            return;
+                        }                
+                        that.setState({
+                            imageUrl: base64,
+                            loading: false
+                        })
+                    }).catch(function(e){
+                        console.log("Oops, error");
                     })
-                }).catch(function(e){
-                    console.log("Oops, error");
-                })
-        }
+                });            
+            }
     }
     handleChange = (info) => {
         if (info.file.status === 'uploading') {

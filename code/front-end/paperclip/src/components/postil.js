@@ -27,6 +27,7 @@ class Postil extends Component{
             postilIdx:null,
             inputValue:"",
             selectid:null,
+            markid:null,
         }
     }
     componentWillMount(){
@@ -139,7 +140,7 @@ class Postil extends Component{
         this.refreshStat(data[idx],[0,0])
 
         var mark={};
-        mark.id=this.state.selectid;
+        mark.id=this.state.markid;
         mark.posID = data[idx].postils.posID
         mark.content=data[idx].postils.content;
         mark.visible=false;
@@ -168,7 +169,8 @@ class Postil extends Component{
         .then(response=>response.text())
         .then(responseJson=>{
             //console.log(responseJson);
-            let data = eval('('+responseJson+')');
+            let data = eval(responseJson);
+            this.setState({markid:data});
             emitter.emit('blocksForPostil',data);
            // console.log(data)
         }).catch(function(e){

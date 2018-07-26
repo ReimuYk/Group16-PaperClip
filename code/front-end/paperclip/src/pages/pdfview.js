@@ -84,9 +84,9 @@ class PDFView extends Component{
                 console.log("marked:"+that.state.marked)
                 that.getPgLoc();
             })
-        })/*catch(function(e){
+        }).catch(function(e){
             console.log("Oops, error");
-        })*/
+        })
     }
 
     getPgLoc(){
@@ -143,18 +143,21 @@ class PDFView extends Component{
         let old = this.state.page
         this.setState({ 
             page: old - 1,
-            isLoading:true
+            isLoading:true,
+            selectid:null
          });
-        this.getData(this.state.paperID,old-1)
+        this.getData(this.state.paperID,old-1);
+        emitter.emit('changePostils',[]);
     }
     handleNext = () => {
         if (this.state.page==this.state.pages) return
         let old = this.state.page
         this.setState({
             page: old + 1,
-            isLoading:true
+            isLoading:true,
         });
-        this.getData(this.state.paperID,old+1)
+        this.getData(this.state.paperID,old+1);
+        emitter.emit('changePostils',[]);
     }
     refreshPostil = (selectid) => {
         let that  = this;
@@ -300,6 +303,9 @@ class PDFView extends Component{
                     item = this.state.blocklist[j]
                     break;
                 }
+            }
+            if(item == null){
+                return;
             }
             var w = item.end[0]-item.start[0]
             var h = item.end[1]-item.start[1]

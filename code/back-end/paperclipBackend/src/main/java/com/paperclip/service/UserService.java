@@ -9,7 +9,7 @@ public interface UserService {
 
 
     // findback
-    JSONObject findPassword(JSONObject data);
+    JSONObject findPassword(JSONObject data) throws UnsupportedEncodingException;
 
     // registerPage
     JSONObject addUser(JSONObject data) throws UnsupportedEncodingException;

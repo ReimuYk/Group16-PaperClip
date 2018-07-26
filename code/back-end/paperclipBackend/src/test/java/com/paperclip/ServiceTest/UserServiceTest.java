@@ -38,7 +38,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testFindPassword() {
+    public void testFindPassword() throws UnsupportedEncodingException {
         JSONObject data = new JSONObject();
         data.accumulate("userEmail", "0@qq.com");
         JSONObject rr = service.findPassword(data);
