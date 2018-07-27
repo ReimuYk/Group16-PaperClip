@@ -16,7 +16,9 @@ class Sider extends React.Component {
 
     renderFooter(){
         return(
-            <div className="footer" style={{marginTop:"50px"}}>
+            <div className="footer" 
+            style={{marginTop:"10px",backgroundColor:"white",boxShadow:"0px 1px 3px #BDBCBC",
+            borderRadius:"2px",padding:"0 20px"}}>
                 <footer className="Footer">
                     <a className="Footer-item" target="_blank" rel="noopener noreferrer" >咩咩咩</a>
                     <Icon type="minus" />
@@ -25,9 +27,7 @@ class Sider extends React.Component {
                     <a className="Footer-item" target="_blank" rel="noopener noreferrer" >喵喵喵</a>
                     <Icon type="minus" />
                     <a className="Footer-item" target="_blank" rel="noopener noreferrer" >卖萌政策</a><br></br>
-                    <a className="Footer-item" target="_blank" >如何卖萌</a>
-                    <Icon type="minus" />
-                    <a className="Footer-item" target="_blank" rel="noopener noreferrer" >工作</a>
+                    <a className="Footer-item" target="_blank" >卖萌</a>
                     <Icon type="minus" />
                     <button type="button" class="Button OrgCreateButton">申请开通PaperClip机构号</button><br></br>
                     <a className="Footer-item" target="_blank" rel="noopener noreferrer" >侵权举报</a>
@@ -46,7 +46,8 @@ class Sider extends React.Component {
             return (
                 <Menu
                     onClick={this.handleClick}
-                    style={{ width: 300 }}
+                    style={{backgroundColor:"white",boxShadow:"0px 1px 3px #BDBCBC",
+                    borderRadius:"2px",padding:"0 20px"}}
                 >
                     <MenuItemGroup key="g1" title="消息提示">
 
@@ -79,7 +80,7 @@ class Sider extends React.Component {
         const renderFooter = this.renderFooter();
         const renderSider = this.renderSider();
         return (
-            <div className="menu" style={{float: "right", marginRight: "10%", textAlign:"left"}}>
+            <div className="menu" style={{width:"300px",marginRight: "10%", textAlign:"left",display:"block"}}>
                 {renderSider}
                 {renderFooter}
             </div>
@@ -144,17 +145,21 @@ class Home extends Component{
     }
     renderRecommend = () =>{
         return(
-            <div style={{textAlign:'left'}}>
+            <div style={{textAlign:'left',backgroundColor:"white",boxShadow:"0px 1px 3px #BDBCBC",borderRadius:"2px",
+            padding:"16px 20px"}}>
                 <List
+                    itemLayout="vertical"
                     pagination={{pageSize: 12}}
                     dataSource={this.state.recommendData}
                     renderItem={item => (
-                        <List.Item
+                        <List.Item 
+                            key={item.paperID}
                             actions={[<span>收藏量：{item.starno}</span>, <span>笔记量：{item.noteno}</span>]}
+                            extra={<img width={222} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
                         >
                             <List.Item.Meta
                                 title={<a href={"/paper?paperID=" + item.paperID}>{item.title}</a>}
-                                description={item.keyword}
+                                description={"玩了几个月，游戏的进度也差不多了，现在回顾这个开场，心里莫名有一丝孤独，旷野之息不像奥德赛，奥德赛是那种时时刻刻都有欢笑的游戏，但旷野之息给我的感觉却带有一些悲怆，在捕鱼逗怪摘苹果的日常之外"}
                             />
                         </List.Item>
                     )}
@@ -164,16 +169,20 @@ class Home extends Component{
     }
     renderPersonal = () =>{
         return(
-            <div style={{textAlign:'left'}}>
+            <div style={{textAlign:'left',backgroundColor:"white",boxShadow:"0px 1px 3px #BDBCBC",borderRadius:"2px",
+            padding:"16px 20px"}}>
                 <List
+                    itemLayout="vertical"
                     pagination={{pageSize: 12}}
                     dataSource={this.state.paperData}
                     renderItem={item => (
                         <List.Item
                             actions={[<span>收藏量：{item.starno}</span>, <span>笔记量：{item.noteno}</span>]}
+                            extra={<img width={222} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
                         >
                             <List.Item.Meta
                                 title={<a href={"/paper?paperID=" + item.paperID}>{item.title}</a>}
+                                description={"玩了几个月，游戏的进度也差不多了，现在回顾这个开场，心里莫名有一丝孤独，旷野之息不像奥德赛，奥德赛是那种时时刻刻都有欢笑的游戏，但旷野之息给我的感觉却带有一些悲怆，在捕鱼逗怪摘苹果的日常之外"}
                             />
                         </List.Item>
                     )}
@@ -187,20 +196,30 @@ class Home extends Component{
         return(
             <div>
                 <NavBar />
-                <div style={{width:"70%"}}>
-                    <div className="content" style={{marginTop:"30px", marginLeft:"100px", float:"left"}}>
-                        <div className="starTopic" style={{marginTop:"10px", marginLeft:"0px", marginBottom:"10px",textAlign:"left"}}>
-                            <span>编辑推荐：</span>
+                <div style={{display:"flex"}}>
+                    <div style={{width:"70%",display:"block"}}>
+                        <div className="content" 
+                        style={{marginTop:"30px",position:"relative",left:"13%",display:"block",width:"83%",
+                        }}>
+                            <div className="starTopic" 
+                            style={{marginTop:"10px", marginLeft:"0px", marginBottom:"10px",textAlign:"left"
+                            ,backgroundColor:"white",lineHeight:"50px",boxShadow:"0px 1px 3px #BDBCBC",
+                            borderRadius:"2px",padding:"0 20px"}}>
+                                <span>编辑推荐：</span>
+                            </div>
+                            {renderRecommend}
+                            <div className="starUser" 
+                            style={{marginTop:"30px", marginLeft:"0px", marginBottom:"10px",textAlign:"left"
+                            ,backgroundColor:"white",lineHeight:"50px",boxShadow:"0px 1px 3px #BDBCBC",
+                            borderRadius:"2px",padding:"0 20px"}}>
+                                <span>你可能感兴趣：</span>
+                            </div>
+                            {renderPersonal}
                         </div>
-                        {renderRecommend}
-                        <div className="starUser" style={{marginTop:"30px", marginLeft:"0px", marginBottom:"10px",textAlign:"left"}}>
-                            <span>你可能感兴趣：</span>
-                        </div>
-                        {renderPersonal}
                     </div>
-                </div>
-                <div className="Menu" style={{marginTop:"150px"}}>
-                    <Sider/>
+                    <div className="Menu" style={{marginTop:"30px",position:"fixed",right:"7%"}}>
+                        <Sider/>
+                    </div>
                 </div>
             </div>
         )

@@ -332,13 +332,21 @@ class NavBar extends Component{
         const info = this.renderInfo();
         if(sessionStorage.getItem('username') != null){
             return(
-                <Anchor>
+                <Anchor style={{lineHeight:"60px",boxShadow:"0px 1px 3px #BDBCBC",
+                borderRadius:"2px",padding:"0 20px",margin:"0 auto"}}>
                     <Row type="flex" align="middle" justify="center">
                         <Col span={3}>
-                            <Link to="/home"><img src={logo} width="50px" height="50px" alt="logo"/>Paperclip</Link>
+                            <Link to="/home">
+                            <img src={logo} width="50px" height="50px" alt="logo"/>
+                            <span style={{color:"#1E90FF",fontSize:"17px",fontFamily:"Microsoft Yahei"}}>Paperclip</span>
+                            </Link>
                         </Col>
-                        <Col span={1}><Link to='/home'>首页</Link></Col>
-                        <Col span={1}><Link to='/discover'>发现</Link></Col>
+                        <Col span={1}>
+                        <Link to='/home' 
+                        style={{color:"black",fontSize:"17px",fontFamily:"Microsoft Yahei"}}>首页</Link></Col>
+                        <Col span={1}>
+                        <Link to='/discover'
+                        style={{color:"#696969",fontSize:"17px",fontFamily:"Microsoft Yahei"}}>发现</Link></Col>
                         <Col span={8} offset={1}>{search}</Col>
                         <Col span={1} offset={4}>
                             <Popover placement="bottom" title="我的消息" content={info} trigger="click">
@@ -363,7 +371,9 @@ class NavBar extends Component{
         else{
             return(
                 <Anchor>
-                    <Row type="flex" align="middle" justify="center">
+                    <Row type="flex" align="middle" justify="center"
+                    style={{backgroundColor:"white",lineHeight:"50px",boxShadow:"0px 1px 3px #BDBCBC",
+                    borderRadius:"2px",padding:"0 20px",margin:"0 auto",alignItems:"center"}}>
                         <Col span={3}><Link to="/home"><img src={logo} width="50px" height="50px" alt="logo"/>Paperclip</Link></Col>
                         <Col span={1}><Link to='/home'>首页</Link></Col>
                         <Col span={1}><Link to='/discover'>发现</Link></Col>

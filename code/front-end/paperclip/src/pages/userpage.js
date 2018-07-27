@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout, Icon, Divider, Menu, List, Avatar, Modal, Input, Anchor, Button,Tabs } from 'antd';
+import { Layout, Icon, Divider, Menu, List, Avatar, Modal, Input, Anchor, Button,Tabs, Card, Row, Col } from 'antd';
 import { Link, Redirect } from 'react-router-dom';
 import '../css/style.css';
 import NavBar from '.././components/nav-bar';
@@ -18,7 +18,34 @@ var information = {
     myLike:[],
     myWrite:[]
 }
-const { Content } = Layout;
+const menu = [
+    {
+        text:'收藏的论文',
+        link:'/user/starpaper',
+        num:0
+    },
+    {
+        text:'收藏的笔记',
+        link:'/user/starnote',
+        num:0,
+    },
+    {
+        text:'写过的笔记',
+        link:'/user/usernote',
+        num:0
+    },
+    {
+        text:'写过的文档',
+        link:'/user/userdoc',
+        num:0
+    },
+    {
+        text:'协作的文档',
+        link:'/user/assistdoc',
+        num:0
+    }
+]
+const { Header, Footer, Sider, Content } = Layout;
 class User extends Component{
     state = {
         visible: false,
@@ -236,51 +263,87 @@ class User extends Component{
         return(
             <div>
             <NavBar />
-            <div id='u'>
-                <div>
-                <div id='u1'>
-                    <div id='u1-1'>
-                        <img alt='' src={ information.userheader }
-                        style={{width:130,height:'130px',borderRadius:'50%',margin:'0 auto',display:'block'}}
-                        />
-                    </div>
-                    
-                    <div id='u1-2'>
-                        <br />
-                        <br />
-                        <br />
-                        <h6>{ username }</h6>
-                        <p>{ information.userDescription }</p>
-                    </div>
-                    <div id='u1-3' style={{marginTop:"40px"}}>
-                        <Link to='/user/staruser'>
-                            <Button style={{width:"100px"}} size="large" type="primary">关注（ { information.followno } ）</Button>
-                        </Link>
-                        <Link to='/user/userfans'>
-                            <Button style={{width:"100px", marginLeft:"10px"}} size="large" type="primary">粉丝 （ { information.fansno} ）</Button>
-                        </Link>
-                    </div>
+                <Card style={{width:'60%', margin:'auto', marginTop:'50px', boxShadow:"0px 1px 3px #BDBCBC",
+                    borderRadius:"2px"}}>
+                    <Layout>
+                        <Sider style={{background:'white'}}>
+                            <img alt='' src={ information.userheader }
+                                 style={{width:130,height:'130px',borderRadius:'50%',margin:'0 auto',display:'block', marginTop:'20px'}}
+                            />
+                        </Sider>
+                        <Layout>
+                            <Content style={{background:'white', textAlign:'left'}}>
+                                <div class="information" style={{marginLeft:'20px', marginTop:'50px'}}>
+                                    <h3>{ username }</h3>
+                                    <span>{ information.userDescription }</span>
+                                </div>
+                            </Content>
+                            <Footer style={{background:'white', textAlign:'right'}}>
+                                <Link to="/user/setting">
+                                    <Button>编辑个人资料</Button>
+                                </Link>
+                            </Footer>
+                        </Layout>
+                    </Layout>
+                </Card>
+                <div style={{width:'16%', position:'absolute', right:'20%', marginTop:'20px',boxShadow:"0px 1px 3px #BDBCBC",
+                    borderRadius:"2px",}}>
+                    <Row>
+                        <Col span={12}>
+                            <Link to="/user/staruser">
+                                <Card>
+                                    <div className="content">
+                                        <h4>关注</h4>
+                                        <span>{information.followno}</span>
+                                    </div>
+                                </Card>
+                            </Link>
+                        </Col>
+                        <Col span={12}>
+                            <Link to="/user/userfans">
+                                <Card>
+                                    <div className="content">
+                                        <h4>粉丝</h4>
+                                        <span>{information.fansno}</span>
+                                    </div>
+                                </Card>
+                            </Link>
+                        </Col>
+                    </Row>
                 </div>
+                <div style={{width:'42%', position:'absolute', left:'20%', marginTop:'20px', marginRight:'20px', textAlign:'left', boxShadow:"0px 1px 3px #BDBCBC",
+                    borderRadius:"2px", paddingRight:'20px', paddingLeft:'20px', paddingBottom:'20px', height:'500px', background:'white'}}>
+                    <Tabs defaultActiveKey="0" onChange={this.callback} >
+                        <TabPane tab="我的收藏笔记" key="0">{myStarNote}</TabPane>
+                        <TabPane tab="我的收藏论文" key="1">{myStarPaper}</TabPane>
+                        <TabPane tab="我的点赞" key="2">{myLike}</TabPane>
+                        <TabPane tab="我的创作" key="3">{myWrite}</TabPane>
+                    </Tabs>
                 </div>
-                <Divider style={{width:'80%', display:'center'}}/>
-                <div>
-                <div id='u2'>
-                    <div id='u2-1' style={{textAlign:'left'}}>
-                            {/* <Header> */}
-                            <Tabs defaultActiveKey="0" onChange={this.callback} >
-                                <TabPane tab="我的收藏笔记" key="0">{myStarNote}</TabPane>
-                                <TabPane tab="我的收藏论文" key="1">{myStarPaper}</TabPane>
-                                <TabPane tab="我的点赞" key="2">{myLike}</TabPane>
-                                <TabPane tab="我的创作" key="3">{myWrite}</TabPane>
-                            </Tabs>
-                            {/* </Header> */}
-                    </div>
-                   
-                    <UserFloatMenu />
-                    
+                <div style={{width:'16%', position:'absolute', right:'20%', marginTop:'130px'}}>
+                    <List
+                        itemLayout="horizontal"
+                        dataSource={menu}
+                        renderItem={item => (
+                            <List.Item>
+                                <List.Item.Meta
+                                    title={
+                                        <Link to={item.link}>
+                                            <Row>
+                                                <Col span={12} style={{textAlign:'left'}}>
+                                                    {item.text}
+                                                </Col>
+                                                <Col span={12} style={{textAlign:'right'}}>
+                                                    {item.num}
+                                                </Col>
+                                            </Row>
+                                        </Link>
+                                    }
+                                />
+                            </List.Item>
+                        )}
+                    />
                 </div>
-                </div>
-            </div>
             </div>
         )
     }

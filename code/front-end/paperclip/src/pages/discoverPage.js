@@ -81,30 +81,35 @@ class Discover extends Component{
                 {text}
              </span>
         );
-        return (
-            <div style={{ width:"60%", float: "left", marginBottom: "50px", textAlign:'left', marginLeft:'40px'}}>
-                <div class="icon" style={{width: "100px", marginBottom: "30px"}}>
-                    <Icon type="bars" />
-                    <span style={{marginLeft: "20px"}}>推荐笔记</span>
-                </div>
-                <List
-                    split={true}
-                    pagination={{pageSize: 3}}
-                    dataSource={information.recommendNote}
-                    renderItem={item => (
-                        <Link to={"/viewnote?noteID="+item.noteID}>
-                            <List.Item
-                                actions={[<IconText type="star-o" text={item.starno} />, <IconText type="like-o" text={item.likeno} />]}
-                            >
-                                <List.Item.Meta
-                                    title={<a href={'/viewnote?noteID=' + item.noteID}>{item.title}</a>}
-                                    description={item.keyword}
-                                />
-                            </List.Item>
-                        </Link>
-                    )}
-                />
+        return (           
+            <div style={{ width: "90%", textAlign:'left', marginLeft:'40px'}}>
+            <div class="icon" style={{marginTop:"10px", marginLeft:"0px", marginBottom:"10px",textAlign:"left"
+                ,backgroundColor:"white",lineHeight:"50px",boxShadow:"0px 1px 3px #BDBCBC",
+                 borderRadius:"2px",padding:"0 20px"}}>
+                <Icon type="bars" />
+                <span style={{marginLeft: "20px"}}>推荐笔记</span>
             </div>
+            <div style={{textAlign:'left',backgroundColor:"white",boxShadow:"0px 1px 3px #BDBCBC",borderRadius:"2px",
+            padding:"16px 20px"}}>
+            <List
+                itemLayout="vertical"
+                pagination={{pageSize: 3}}
+                dataSource={information.recommendNote}
+                renderItem={item => (
+                    <List.Item
+                        key={item.noteID}
+                        actions={[<IconText type="star-o" text={item.starno} />, <IconText type="like-o" text={item.likeno} />]}
+                        extra={<img width={222} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
+                    >
+                        <List.Item.Meta
+                            title={<a href={'/viewnote?noteID=' + item.noteID}>{item.title}</a>}
+                            description={item.author}
+                        />
+                    </List.Item>
+                )}
+            />
+            </div>
+        </div>
         )
     }
 
@@ -116,47 +121,59 @@ class Discover extends Component{
              </span>
         );
         return(
-            <div style={{ width: "60%", textAlign:'left', marginLeft:'40px'}}>
-                <div class="icon" style={{width: "100px", marginBottom: "30px"}}>
+            <div style={{ width: "90%", textAlign:'left', marginLeft:'40px'}}>
+                <div class="icon" style={{marginTop:"10px", marginLeft:"0px", marginBottom:"10px",textAlign:"left"
+                    ,backgroundColor:"white",lineHeight:"50px",boxShadow:"0px 1px 3px #BDBCBC",
+                     borderRadius:"2px",padding:"0 20px"}}>
                     <Icon type="bars" />
                     <span style={{marginLeft: "20px"}}>推荐论文</span>
                 </div>
+                <div style={{textAlign:'left',backgroundColor:"white",boxShadow:"0px 1px 3px #BDBCBC",borderRadius:"2px",
+                padding:"16px 20px"}}>
                 <List
+                    itemLayout="vertical"
                     pagination={{pageSize: 12}}
                     dataSource={information.recommendPaper}
                     renderItem={item => (
                         <List.Item
                             actions={[<IconText type="star-o" text={item.starno} />, <IconText type="edit" text={item.noteno} />]}
-                        >
+                            extra={<img width={222} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
+                            >
                             <List.Item.Meta
                                 title={<a href={"/paper?paperID=" + item.paperID}>{item.title}</a>}
-                                description={item.keyword}
+                                description={item.author}
                             />
                         </List.Item>
                     )}
                 />
+                </div>
             </div>
         )
     }
 
     renderSideBar(){
         return(
-            <div class="sidebar" style={{width: "20%", float: "right", marginRight: "10%", textAlign:'left'}}>
-                <div class="icon" style={{width: "130px", marginBottom: "30px"}}>
+            <div class="sidebar" style={{marginRight: "10%", textAlign:'left'}}>
+                <div class="icon" style={{marginTop:"10px", marginLeft:"0px", marginBottom:"10px",textAlign:"left"
+                    ,backgroundColor:"white",lineHeight:"50px",boxShadow:"0px 1px 3px #BDBCBC",
+                     borderRadius:"2px",padding:"0 20px"}}>
                     <Icon type="bars" />
                     <span style={{marginLeft: "20px"}}>你可能想搜索</span>
                 </div>
+                <div style={{textAlign:'left',backgroundColor:"white",boxShadow:"0px 1px 3px #BDBCBC",borderRadius:"2px",
+                padding:"16px 20px"}}>
                 <List
                     itemLayout="horizontal"
                     dataSource={tags}
                     renderItem={item => (
                         <List.Item>
                             <List.Item.Meta
-                                title={<a href={'/search?content=' + item}>{item}</a>}
+                                title={<a href={'/search?content=' + item}><Icon type="tag" />{item}</a>}
                             />
                         </List.Item>
                     )}
                 />
+                </div>
             </div>
         )
     }
@@ -168,10 +185,14 @@ class Discover extends Component{
         return(
             <div>
                 <NavBar />
-                <div class="content" style={{width:'100%',marginLeft: "30px", marginTop: "30px", display: "inline-block"}}>
-                    {recommendNote}
+                <div class="content" style={{width:'100%',marginLeft: "30px", marginTop: "30px", display: "flex"}}>
+                    <div style={{display:"block",width:"62%",marginLeft:"5%"}}>
+                        {recommendNote}
+                        {recommendPaper}
+                    </div>
+                    <div style={{display:"block",width:"25%"}}>
                     {sidebar}
-                    {recommendPaper}
+                    </div>
                 </div>
             </div>
         )
