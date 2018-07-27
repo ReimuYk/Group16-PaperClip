@@ -149,7 +149,7 @@ class Home extends Component{
             padding:"16px 20px"}}>
                 <List
                     itemLayout="vertical"
-                    pagination={{pageSize: 12}}
+                    pagination={{pageSize: 3}}
                     dataSource={this.state.recommendData}
                     renderItem={item => (
                         <List.Item 
@@ -205,14 +205,16 @@ class Home extends Component{
                             style={{marginTop:"10px", marginLeft:"0px", marginBottom:"10px",textAlign:"left"
                             ,backgroundColor:"white",lineHeight:"50px",boxShadow:"0px 1px 3px #BDBCBC",
                             borderRadius:"2px",padding:"0 20px"}}>
-                                <span>编辑推荐：</span>
+                            <Icon type="star" style={{color:"#FFD700",fontSize:"16px"}}/>
+                            <span style={{marginLeft: "10px",fontFamily:"Microsoft Yahei",fontSize:"17px"}}>{" 编辑推荐："}</span>
                             </div>
                             {renderRecommend}
                             <div className="starUser" 
                             style={{marginTop:"30px", marginLeft:"0px", marginBottom:"10px",textAlign:"left"
                             ,backgroundColor:"white",lineHeight:"50px",boxShadow:"0px 1px 3px #BDBCBC",
                             borderRadius:"2px",padding:"0 20px"}}>
-                                <span>你可能感兴趣：</span>
+                            <Icon type="heart" style={{color:"	#FFB6C1",fontSize:"16px"}}/>
+                            <span style={{marginLeft: "10px",fontFamily:"Microsoft Yahei",fontSize:"17px"}}>{" 你可能感兴趣："}</span>
                             </div>
                             {renderPersonal}
                         </div>

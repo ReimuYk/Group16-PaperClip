@@ -8,7 +8,9 @@ class UserFloatMenu extends Component{
     render() {
         username = sessionStorage.getItem('username');
         return(
-            <div style={{float:'right',marginRight:'10%',marginTop:'5%'}}>
+            <div style={{backgroundColor:"white",lineHeight:"40px",boxShadow:"0px 1px 3px #BDBCBC",
+            borderRadius:"2px",marginTop:"1%",marginBottom:"2%",
+            right:'10%',top:'78px',position:"fixed",width:"10%"}}>
                
                     <Menu>
                         <Menu.Item>
