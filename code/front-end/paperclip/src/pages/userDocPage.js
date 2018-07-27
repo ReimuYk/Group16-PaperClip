@@ -159,10 +159,9 @@ class UserDoc extends Component{
             <div>
                 <NavBar />
             <UserFLoatMenu />
-            <div style={{width:'60%',marginLeft:'200px', float:'left', paddingTop:'60px'}}>
-                {/* <div className="button" style={{height:"50px"}}>
-                    <Button style={{float:"right"}} type="primary" onClick={this.newDoc}>新建文档</Button>
-                </div> */}
+            <div 
+            style={{width:'60%',marginLeft:'200px',paddingTop:'60px',backgroundColor:"white",boxShadow:"0px 1px 3px #BDBCBC",
+            borderRadius:"2px",padding:"10px 20px",marginTop:"3%",marginBottom:"2%"}}>
                 <Table
                     pagination={{defaultPageSize: 8}}
                     style={{textAlign:'center'}} columns={this.state.columns} dataSource={this.state.data} />

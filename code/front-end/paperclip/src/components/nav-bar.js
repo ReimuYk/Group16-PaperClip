@@ -350,12 +350,12 @@ class NavBar extends Component{
                         <Col span={8} offset={1}>{search}</Col>
                         <Col span={1} offset={4}>
                             <Popover placement="bottom" title="我的消息" content={info} trigger="click">
-                                <Icon type="bell" onClick={this.followMessage} style={{ fontSize: 19, color: '#08c' }}/>
+                                <Icon type="bell" onClick={this.followMessage} style={{ fontSize: 21, color: '#FFA500' }}/>
                             </Popover>
                         </Col>
                         <Col span={1}>
                             <Popover placement="bottom" title="我的私信" content={message} trigger="click">
-                                <Icon onClick={this.getUnreadMessage} type="message" style={{ fontSize: 19, color: '#08c' }}/>
+                                <Icon onClick={this.getUnreadMessage} type="message" style={{ fontSize: 21, color: '#00BFFF' }}/>
                             </Popover>
                         </Col>
                         <Col span={1}>
@@ -374,9 +374,18 @@ class NavBar extends Component{
                     <Row type="flex" align="middle" justify="center"
                     style={{backgroundColor:"white",lineHeight:"50px",boxShadow:"0px 1px 3px #BDBCBC",
                     borderRadius:"2px",padding:"0 20px",margin:"0 auto",alignItems:"center"}}>
-                        <Col span={3}><Link to="/home"><img src={logo} width="50px" height="50px" alt="logo"/>Paperclip</Link></Col>
-                        <Col span={1}><Link to='/home'>首页</Link></Col>
-                        <Col span={1}><Link to='/discover'>发现</Link></Col>
+                        <Col span={3}>
+                            <Link to="/home">
+                            <img src={logo} width="50px" height="50px" alt="logo"/>
+                            <span style={{color:"#1E90FF",fontSize:"17px",fontFamily:"Microsoft Yahei"}}>Paperclip</span>
+                            </Link>
+                        </Col>
+                        <Col span={1}>
+                        <Link to='/home' 
+                        style={{color:"black",fontSize:"17px",fontFamily:"Microsoft Yahei"}}>首页</Link></Col>
+                        <Col span={1}>
+                        <Link to='/discover'
+                        style={{color:"#696969",fontSize:"17px",fontFamily:"Microsoft Yahei"}}>发现</Link></Col>
                         <Col span={8} offset={1}>{search}</Col>                        
                         <Col span={1} offset={4}><Avatar icon="user" /></Col>
                         <Col span={1}><Link to="/login">Log in</Link></Col>

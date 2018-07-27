@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Menu, Icon, Dropdown, Tag, Card, List, Avatar } from 'antd';
+import { Menu, Icon, Dropdown, Tag, Card, List, Divider } from 'antd';
 import NavBar from '../components/nav-bar'
 import {Link} from 'react-router-dom';
 import { IPaddress } from '../App'
@@ -167,11 +167,14 @@ class Search extends Component{
     }
     renderSideBar(){
         return(
-            <div class="sidebar" style={{width: "20%", float: "right", marginRight: "10%"}}>
-                <div class="icon" style={{width: "130px", marginBottom: "30px"}}>
-                    <Icon type="bars" />
-                    <span style={{marginLeft: "20px"}}>你可能感兴趣:</span>
+            <div class="sidebar">
+                <div class="icon" style={{backgroundColor:"white",lineHeight:"40px",boxShadow:"0px 1px 3px #BDBCBC",
+                borderRadius:"2px",padding:"0 20px",width:"85%",marginBottom:"1%"}}>
+                    <Icon type="smile" style={{color:"	#5F9EA0"}}/>
+                    <span style={{marginLeft: "10px"}}>你可能感兴趣</span>
                 </div>
+                <div style={{backgroundColor:"white",lineHeight:"40px",boxShadow:"0px 1px 3px #BDBCBC",
+                borderRadius:"2px",padding:"0 20px",width:"85%"}}>
                 <List
                     itemLayout="horizontal"
                     dataSource={this.state.recommendData}
@@ -186,30 +189,35 @@ class Search extends Component{
                         </Link>
                     )}
                 />
+                </div>
             </div>
         )
     }
     renderList(){
         return(
+            <div style={{backgroundColor:"white",lineHeight:"40px",boxShadow:"0px 1px 3px #BDBCBC",
+            borderRadius:"2px",padding:"5px 20px",marginTop:"1%",marginBottom:"2%"}}>
             <List
-                pagination={{pageSize: 12}}
+                pagination={{pageSize: 14}}
                 dataSource={showPaperData}
                 renderItem={item => (
                     <List.Item
                         actions={[<span>收藏量：{item.starno}</span>, <span>笔记量：{item.noteno}</span>]}
                     >
                         <List.Item.Meta
-                            title={<a href={"/paper?paperID=" + item.paperID}>{item.title}</a>}
+                            title={<a href={"/paper?paperID=" + item.paperID}>
+                            <Icon type="file-text" style={{color:"#6495ED"}}/>{item.title}</a>}
                             description={item.keyword}
                         />
                     </List.Item>
                 )}
             />
+            </div>
         )
     }
     renderMenu(){
         const menu = (
-            <Menu>
+            <Menu mode="horizontal" style={{textAlign:"right"}} >
                 <Menu.Item>
                     <a onClick={this.starnoDESC}>按收藏量降序</a>
                 </Menu.Item>
@@ -225,10 +233,13 @@ class Search extends Component{
             </Menu>
         );
         return(
-            <Dropdown overlay={menu}>
-                <a className="ant-dropdown-link" href="#">
+            <Dropdown overlay={menu} >
+                <div className="ant-dropdown-link"
+                style={{backgroundColor:"white",lineHeight:"40px",boxShadow:"0px 1px 3px #BDBCBC",
+                         borderRadius:"2px",padding:"0 20px",lineHeight:"40px",marginTop:"1%",marginBottom:"2%"
+                         ,textAlign:"right"}}>
                     请选择排序方式 <Icon type="down" />
-                </a>
+                </div>
             </Dropdown>
         )
     }
@@ -346,24 +357,33 @@ class Search extends Component{
     renderTags = () =>{
         const { selectedTags1, selectedTags2 } = this.state;
         return (
-            <div>
-                <h6 style={{ marginRight: 8, display: 'inline' }}>标签1:</h6>
+            <div style={{backgroundColor:"white",lineHeight:"40px",boxShadow:"0px 1px 3px #BDBCBC",
+            borderRadius:"2px",padding:"0 20px"}}>
+                <h6 
+                style={{ marginRight:"15",lineHeight:"40px",display: 'inline',fontSize:"14px",fontFamily:"Microsoft Yahei" }}>
+                <Icon type="tag-o" style={{ fontSize: 14, color: '#4682B4' }}/>{" 论文来源 "}</h6>
+                <Divider type="horizonal"/>
                 {tagsFromServer1.map(tag => (
                     <CheckableTag
                         key={tag}
                         checked={selectedTags1.indexOf(tag) > -1}
                         onChange={checked => this.handleChange1(tag, checked)}
+                        style={{fontSize:"12px",fontFamily:"Microsoft JhengHei",padding:"0 5px"}}
                     >
                         {tag}
                     </CheckableTag>
                 ))}
                 <div></div>
-                <h6 style={{ marginRight: 8, display: 'inline' }}>标签2:</h6>
+                <h6 
+                style={{ marginRight:"15",lineHeight:"40px",display: 'inline',fontSize:"14px",fontFamily:"Microsoft Yahei" }}>
+                <Icon type="calendar" style={{ fontSize: 14, color: '#4682B4' }}/>{" 发表年份 "}</h6>
+                <Divider type="horizonal"/>
                 {tagsFromServer2.map(tag => (
                     <CheckableTag
                         key={tag}
                         checked={selectedTags2.indexOf(tag) > -1}
                         onChange={checked => this.handleChange2(tag, checked)}
+                        style={{fontSize:"12px",fontFamily:"Microsoft JhengHei",padding:"0 5px"}}
                     >
                         {tag}
                     </CheckableTag>
@@ -379,17 +399,17 @@ class Search extends Component{
         return(
             <div>
                 <NavBar />
-                <div className="content" style={{display:"inline", textAlign: 'left'}}>
-                    <div className="search" style={{float:"left", width:"60%", marginLeft: "50px", marginTop:"30px"}}>
+                <div className="content" style={{display:"flex", textAlign: 'left'}}>
+                    <div className="search" style={{width:"60%", marginLeft: "8%", marginTop:"30px",display:"block"}}>
                         <div className="tag" style={{marginLeft:"0px"}}>
                             {renderTags}
                         </div>
-                        <div className="menu" style={{marginLeft: "0px", width:"150px", marginTop: "10px", marginBottom:"50px"}}>
+                        <div className="menu" style={{marginLeft: "0px"}}>
                             {renderMenu}
                         </div>
                         {renderList}
                     </div>
-                    <div className="sidebar" style={{marginTop: "70px"}}>
+                    <div className="sidebar" style={{marginTop:"31px",display:"block",width:"25%",marginLeft:"2%"}}>
                         {renderSideBar}
                     </div>
                 </div>
