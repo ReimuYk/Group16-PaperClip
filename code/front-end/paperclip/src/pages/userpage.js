@@ -312,7 +312,7 @@ class User extends Component{
                     </Row>
                 </div>
                 <div style={{width:'42%', position:'fixed', left:'20%', marginTop:'20px', marginRight:'20px', textAlign:'left', boxShadow:"0px 1px 3px #BDBCBC",
-                    borderRadius:"2px", paddingRight:'20px', paddingLeft:'20px', paddingBottom:'20px', height:'500px'}}>
+                    borderRadius:"2px", paddingRight:'20px', paddingLeft:'20px', paddingBottom:'20px', height:'500px', background:'white'}}>
                     <Tabs defaultActiveKey="0" onChange={this.callback} >
                         <TabPane tab="我的收藏笔记" key="0">{myStarNote}</TabPane>
                         <TabPane tab="我的收藏论文" key="1">{myStarPaper}</TabPane>
