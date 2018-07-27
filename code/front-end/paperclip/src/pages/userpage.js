@@ -286,14 +286,14 @@ class User extends Component{
                         </Layout>
                     </Layout>
                 </Card>
-                <div style={{width:'16%', position:'fixed', right:'20%', marginTop:'20px',boxShadow:"0px 1px 3px #BDBCBC",
+                <div style={{width:'16%', position:'absolute', right:'20%', marginTop:'20px',boxShadow:"0px 1px 3px #BDBCBC",
                     borderRadius:"2px",}}>
                     <Row>
                         <Col span={12}>
                             <Link to="/user/staruser">
                                 <Card>
                                     <div className="content">
-                                        <h4>关注了</h4>
+                                        <h4>关注</h4>
                                         <span>{information.followno}</span>
                                     </div>
                                 </Card>
@@ -303,7 +303,7 @@ class User extends Component{
                             <Link to="/user/userfans">
                                 <Card>
                                     <div className="content">
-                                        <h4>关注者</h4>
+                                        <h4>粉丝</h4>
                                         <span>{information.fansno}</span>
                                     </div>
                                 </Card>
@@ -311,7 +311,7 @@ class User extends Component{
                         </Col>
                     </Row>
                 </div>
-                <div style={{width:'42%', position:'fixed', left:'20%', marginTop:'20px', marginRight:'20px', textAlign:'left', boxShadow:"0px 1px 3px #BDBCBC",
+                <div style={{width:'42%', position:'absolute', left:'20%', marginTop:'20px', marginRight:'20px', textAlign:'left', boxShadow:"0px 1px 3px #BDBCBC",
                     borderRadius:"2px", paddingRight:'20px', paddingLeft:'20px', paddingBottom:'20px', height:'500px', background:'white'}}>
                     <Tabs defaultActiveKey="0" onChange={this.callback} >
                         <TabPane tab="我的收藏笔记" key="0">{myStarNote}</TabPane>
@@ -320,7 +320,7 @@ class User extends Component{
                         <TabPane tab="我的创作" key="3">{myWrite}</TabPane>
                     </Tabs>
                 </div>
-                <div style={{width:'16%', position:'fixed', right:'20%', marginTop:'130px'}}>
+                <div style={{width:'16%', position:'absolute', right:'20%', marginTop:'130px'}}>
                     <List
                         itemLayout="horizontal"
                         dataSource={menu}
