@@ -66,7 +66,7 @@ public class DownloadServiceImpl implements DownloadService{
         json_body.accumulate("paperID",paperID);
         json_body.accumulate("username",username);
         JSONArray json_pagelist = new JSONArray();
-        User user = userRepo.findOne(username);
+        User user = userRepo.findOne(URLEncoder.encode(username,"UTF-8"));
         Paper paper = paperRepo.findOne(paperID);
         //create "pagelist" array
         List<PaperPage> pagelist = paperPageRepo.findByPaper(paper);
