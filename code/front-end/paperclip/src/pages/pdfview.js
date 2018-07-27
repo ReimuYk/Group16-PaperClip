@@ -23,70 +23,128 @@ class PDFView extends Component{
             blocklist:[],
             marked_note:[],
             markVisible:true,
-            selectid:null
+            selectid:null,
+            cacheData:[]
         }
         //console.log(this.props.paperID);
         this.getData(this.props.paperID,1)
     }
+    loadCache = (paperID,pagination) =>{
+        let that = this;
+        // //prev page cache
+        // if (pagination-1!=0&&that.state.cacheData[pagination-2]==undefined){
+        //     let jsonbody = {};
+        //     jsonbody.username = this.state.username;
+        //     jsonbody.paperID = paperID;
+        //     jsonbody.pagination = pagination-1;
+        //     var url = IPaddress+'service/paperDetail';
+        //     let options={};
+        //     options.method='POST';
+        //     options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+        //     options.body = JSON.stringify(jsonbody);
+        //     fetch(url, options)
+        //     .then(response=>response.text())
+        //     .then(responseJson=>{
+        //         // console.log(responseJson);
+        //         let data = eval('('+responseJson+')');
+        //         console.log(data);
+        //         that.state.cacheData[pagination-1]=data;
+        //     }).catch(function(e){
+        //         console.log("Oops, error");
+        //     })
+        // }
+        //next page cache
+        if (pagination+1!=that.state.pages&&that.state.cacheData[pagination]==undefined){
+            let jsonbody = {};
+            jsonbody.username = this.state.username;
+            jsonbody.paperID = paperID;
+            jsonbody.pagination = pagination+1;
+            var url = IPaddress+'service/paperDetail';
+            let options={};
+            options.method='POST';
+            options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+            options.body = JSON.stringify(jsonbody);
+            fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                // console.log(responseJson);
+                let data = eval('('+responseJson+')');
+                console.log(data);
+                that.state.cacheData[pagination]=data;
+            }).catch(function(e){
+                console.log("Oops, error");
+            })
+        }
+    }
     getData = (paperID,pagination) =>{
         let that  = this;
-        let jsonbody = {};
-        jsonbody.username = this.state.username;
-        jsonbody.paperID = paperID;
-        jsonbody.pagination = pagination;
-        var url = IPaddress+'service/paperDetail';
-        let options={};
-        options.method='POST';
-        options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
-        options.body = JSON.stringify(jsonbody);
-        fetch(url, options)
-        .then(response=>response.text())
-        .then(responseJson=>{
-            // console.log(responseJson);
-            let data = eval('('+responseJson+')');
-            console.log(data);
+        if (that.state.cacheData[pagination-1]==undefined){
+            let jsonbody = {};
+            jsonbody.username = this.state.username;
+            jsonbody.paperID = paperID;
+            jsonbody.pagination = pagination;
+            var url = IPaddress+'service/paperDetail';
+            let options={};
+            options.method='POST';
+            options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
+            options.body = JSON.stringify(jsonbody);
+            fetch(url, options)
+            .then(response=>response.text())
+            .then(responseJson=>{
+                // console.log(responseJson);
+                let data = eval('('+responseJson+')');
+                console.log(data);
+                that.setState({
+                    //page state
+                    paperID:paperID,
+                    pages:data.pagenum,
+                    b64str:data.b64str,
+                    pageloc: null,
+                    pagesize:[700,1000],
+                    blocklist:data.blocklist,
+                    selectid:[1],
+                    selectRender:null,
+                    marked:data.marked,
+                    marked_note:[
+                    ],
+                    sel_content:[
+                        {ids:[2],like:11,dislike:22,marked:false,content:'this is an unmarked',user:'user1',time:'2019.01.01'}
+                    ],
+                    //mouse state
+                    mousePressing: false,
+                    mouseStart: null,
+                    //comment state
+                    commRender:[
+                        {cid:1,tag:'1',render:[]}
+                    ],
+                    noteRender:[
+                        // {nid:1,tag:'1',render:[]}
+                    ],
+                    isLoading: false
+                },()=>{
+                    console.log("len:",data.b64str.length)
+                    that.state.cacheData[pagination-1]=data
+                    that.getPgLoc();
+                    that.loadCache(paperID,pagination);
+                })
+            }).catch(function(e){
+                console.log("Oops, error");
+            })
+        }else{
+            var data = that.state.cacheData[pagination-1]
             that.setState({
-                //page state
-                paperID:paperID,
-                pages:data.pagenum,
+                pageloc:null,
                 b64str:data.b64str,
-                pageloc: null,
-                pagesize:[700,1000],
-                blocklist:data.blocklist,
                 selectid:[1],
                 selectRender:null,
-                // marked:[
-                //     {id:[2],posID:1,content:'this is id 2 block',visible:false},
-                //     {id:[3],posID:1,content:'this is id 3 block',visible:false},
-                //     {id:[5],posID:1,content:'拥挤的两个批注',visible:false},
-                //     {id:[6],posID:1,content:'拥挤的第二个批注',visible:false}
-                // ],
+                blocklist:data.blocklist,
                 marked:data.marked,
-                marked_note:[
-                    // {id:[4],title:'note4',content:'this is id 4 note addr',visible:false},
-                    // {id:[5],title:'note5',content:'int stands integer',visible:false}
-                ],
-                sel_content:[
-                    {ids:[2],like:11,dislike:22,marked:false,content:'this is an unmarked',user:'user1',time:'2019.01.01'}
-                ],
-                //mouse state
-                mousePressing: false,
-                mouseStart: null,
-                //comment state
-                commRender:[
-                    {cid:1,tag:'1',render:[]}
-                ],
-                noteRender:[
-                    // {nid:1,tag:'1',render:[]}
-                ],
-                isLoading: false,
+                isLoading:false,
             },()=>{
-                console.log("marked:"+that.state.marked)
                 that.getPgLoc();
+                that.loadCache(paperID,pagination)
             })
-        }).catch(function(e){
-            console.log("Oops, error");
-        })
+        }
     }
 
     getPgLoc(){
@@ -145,8 +203,9 @@ class PDFView extends Component{
             page: old - 1,
             isLoading:true,
             selectid:null
-         });
+         })
         this.getData(this.state.paperID,old-1);
+              
         emitter.emit('changePostils',[]);
     }
     handleNext = () => {
@@ -218,10 +277,6 @@ class PDFView extends Component{
     }
     mouseMove = (e) => {
         var pgloc = [e.target.offsetLeft-document.documentElement.scrollLeft,e.target.offsetTop-document.documentElement.scrollTop]
-        //console.log("oldPgLoc:"+pgloc);
-        /*if (pgloc!=this.state.pageloc && this.state.pageloc!=null){
-            this.allocComm()
-        }*/
         this.setState({
             pageloc:pgloc
         });
@@ -248,7 +303,6 @@ class PDFView extends Component{
                 }
             }
         }
-        // console.log(loc)
     }
     findItemId = (loc) => {
         if(this.state.blocklist == null)
@@ -449,7 +503,7 @@ class PDFView extends Component{
                 minWidth:w,
                 minHeight:3,
                 backgroundColor: 'red',
-                opacity: 0.6,
+                opacity: 0.3,
             }
             rend.push(<div key={rend.length+1} width={w} height={3} style={line_stl}/>)
             var tt = this.getTop('r',bitem.end[1]+this.state.pageloc[1]+document.documentElement.scrollTop-3-73-15)
@@ -479,7 +533,7 @@ class PDFView extends Component{
                 minWidth:le,
                 minHeight:3,
                 backgroundColor: 'red',
-                opacity: 0.6,
+                opacity: 0.3,
             }
             rend.push(<div key={rend.length+1} width={40} height={3} style={line_stl2}/>)
 
