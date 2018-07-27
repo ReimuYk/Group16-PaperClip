@@ -93,7 +93,7 @@ class Discover extends Component{
             padding:"16px 20px"}}>
             <List
                 itemLayout="vertical"
-                pagination={{pageSize: 6}}
+                pagination={{pageSize: 3}}
                 dataSource={information.recommendNote}
                 renderItem={item => (
                     <List.Item
