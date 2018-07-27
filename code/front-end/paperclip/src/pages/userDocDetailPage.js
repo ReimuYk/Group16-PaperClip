@@ -234,7 +234,8 @@ class UserDocDetail extends Component{
                 <NavBar />
             
             <UserFloatMenu />
-            <div style={{width:'60%',marginLeft:'200px', paddingTop:'60px', float:'left'}}>
+            <div style={{width:'60%',marginLeft:'200px',paddingTop:'60px',backgroundColor:"white",boxShadow:"0px 1px 3px #BDBCBC",
+            borderRadius:"2px",padding:"10px 20px",marginTop:"3%",marginBottom:"2%"}}>
                 {renderTable}
             </div>
         </div>

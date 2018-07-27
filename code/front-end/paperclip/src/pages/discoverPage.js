@@ -86,8 +86,8 @@ class Discover extends Component{
             <div class="icon" style={{marginTop:"10px", marginLeft:"0px", marginBottom:"10px",textAlign:"left"
                 ,backgroundColor:"white",lineHeight:"50px",boxShadow:"0px 1px 3px #BDBCBC",
                  borderRadius:"2px",padding:"0 20px"}}>
-                <Icon type="bars" />
-                <span style={{marginLeft: "20px"}}>推荐笔记</span>
+                <Icon type="rocket" style={{fontSize:"16px",color:"#F08080"}}/>
+                <span style={{marginLeft: "10px",fontFamily:"Microsoft Yahei",fontSize:"17px"}}>热门笔记</span>
             </div>
             <div style={{textAlign:'left',backgroundColor:"white",boxShadow:"0px 1px 3px #BDBCBC",borderRadius:"2px",
             padding:"16px 20px"}}>
@@ -125,8 +125,8 @@ class Discover extends Component{
                 <div class="icon" style={{marginTop:"10px", marginLeft:"0px", marginBottom:"10px",textAlign:"left"
                     ,backgroundColor:"white",lineHeight:"50px",boxShadow:"0px 1px 3px #BDBCBC",
                      borderRadius:"2px",padding:"0 20px"}}>
-                    <Icon type="bars" />
-                    <span style={{marginLeft: "20px"}}>推荐论文</span>
+                    <Icon type="smile" style={{color:"	#5F9EA0"}}/>
+                    <span style={{marginLeft: "10px",fontFamily:"Microsoft Yahei",fontSize:"17px"}}>热门论文</span>
                 </div>
                 <div style={{textAlign:'left',backgroundColor:"white",boxShadow:"0px 1px 3px #BDBCBC",borderRadius:"2px",
                 padding:"16px 20px"}}>
@@ -168,7 +168,8 @@ class Discover extends Component{
                     renderItem={item => (
                         <List.Item>
                             <List.Item.Meta
-                                title={<a href={'/search?content=' + item}><Icon type="tag" />{item}</a>}
+                                title={<a href={'/search?content=' + item}>
+                                <Icon type="tag" style={{ fontSize: 16, color: '#4682B4'}}/>{item}</a>}
                             />
                         </List.Item>
                     )}
