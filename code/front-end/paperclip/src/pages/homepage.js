@@ -18,25 +18,25 @@ class Sider extends React.Component {
         return(
             <div className="footer" style={{marginTop:"50px"}}>
                 <footer className="Footer">
-                    <a className="Footer-item" target="_blank" rel="noopener noreferrer" href="//liukanshan.zhihu.com/">刘看山</a>
+                    <a className="Footer-item" target="_blank" rel="noopener noreferrer" >咩咩咩</a>
                     <Icon type="minus" />
-                    <a className="Footer-item" target="_blank" rel="noopener noreferrer" href="/question/19581624">知乎指南</a>
+                    <a className="Footer-item" target="_blank" rel="noopener noreferrer" >嘤嘤嘤</a>
                     <Icon type="minus" />
-                    <a className="Footer-item" target="_blank" rel="noopener noreferrer" href="/terms">知乎协议</a>
+                    <a className="Footer-item" target="_blank" rel="noopener noreferrer" >喵喵喵</a>
                     <Icon type="minus" />
-                    <a className="Footer-item" target="_blank" rel="noopener noreferrer" href="/terms/privacy">隐私政策</a><br></br>
-                    <a className="Footer-item" target="_blank" href="/app">应用</a>
+                    <a className="Footer-item" target="_blank" rel="noopener noreferrer" >卖萌政策</a><br></br>
+                    <a className="Footer-item" target="_blank" >如何卖萌</a>
                     <Icon type="minus" />
-                    <a className="Footer-item" target="_blank" rel="noopener noreferrer" href="https://app.mokahr.com/apply/zhihu">工作</a>
+                    <a className="Footer-item" target="_blank" rel="noopener noreferrer" >工作</a>
                     <Icon type="minus" />
-                    <button type="button" class="Button OrgCreateButton">申请开通知乎机构号</button><br></br>
-                    <a className="Footer-item" target="_blank" rel="noopener noreferrer" href="https://zhuanlan.zhihu.com/p/28561671">侵权举报</a>
+                    <button type="button" class="Button OrgCreateButton">申请开通PaperClip机构号</button><br></br>
+                    <a className="Footer-item" target="_blank" rel="noopener noreferrer" >侵权举报</a>
                     <Icon type="minus" />
-                    <a className="Footer-item" target="_blank" rel="noopener noreferrer" href="http://www.12377.cn">网上有害信息举报专区</a><br></br>
-                    <span className="Footer-item">违法和不良信息举报：010-82716601</span><br></br>
-                    <a className="Footer-item" target="_blank" href="/jubao">儿童色情信息举报专区</a><br></br>
-                    <a className="Footer-item" target="_blank" href="/contact">联系我们</a>
-                    <span> © 2018 知乎</span>
+                    <a className="Footer-item" target="_blank" rel="noopener noreferrer" >网上有害信息举报专区</a><br></br>
+                    <span className="Footer-item">违法和不良信息举报：18918928257</span><br></br>
+                    <a className="Footer-item" target="_blank" >儿童色情信息举报专区</a><br></br>
+                    <a className="Footer-item" target="_blank" >联系18918928157</a>
+                    <span> © 2018 PaperClip</span>
                 </footer>
             </div>
         )
