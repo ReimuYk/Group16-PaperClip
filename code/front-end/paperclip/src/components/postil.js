@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Collapse ,List,Input,Icon,Button,Avatar,Divider,Anchor, message} from 'antd';
+import { Collapse ,Card,Input,Icon,Button,Avatar,Divider,Anchor, message} from 'antd';
 import Comment from "./comment";
 import emitter from '.././util/events';
 import { IPaddress } from '../App';
@@ -8,6 +8,7 @@ import {Link} from 'react-router-dom';
 const Panel = Collapse.Panel;
 const Search = Input.Search;
 const ButtonGroup = Button.Group;
+const { Meta } = Card;
 
 
 class Postil extends Component{  
@@ -181,27 +182,47 @@ class Postil extends Component{
         console.log("mouse leave "+posID);
         emitter.emit('blocksForPostil',"clear");
     }
-    getPostil = (item,idx)=>{        
+    getPostil = (item,idx)=>{  
+        const buttons = (
+            <span >
+                <span style={{left:"25px",position:"relative"}}>
+                    <Button type={this.state.username==null || !this.state.data[idx].agreement.agreed?"default":"primary"} 
+                    icon="like" value={idx} 
+                    onClick={this.agree}
+                    size="small"
+                    style={{border:"none"}}
+                    >{this.state.data[idx].postils.agree}</Button>
+                    <Button type={this.state.username==null || !this.state.data[idx].agreement.disagreed?"default":"primary"} 
+                    icon="dislike-o" value={idx} 
+                    onClick={this.disagree}
+                    size="small"
+                    style={{border:"none"}}></Button>
+                </span>
+                <Button type={this.state.username==null || !this.state.data[idx].marked?"default":"primary"} 
+                shape="circle" icon="flag" value={idx} onClick={this.mark} 
+                style={{position:"relative",left:"35px",border:"none"}}/>
+            </span>);
+        
         return(
             <div style={{textAlign:"left"}} 
             onMouseEnter = {()=>this.getBlocksOfPostil(item.postils.posID)} 
             onMouseLeave = {()=>this.clearBlocks(item.postils.posID)}>
-                <p style={{marginLeft:"1%"}}>
-                    <Avatar shape="square" src={item.postils.avatar}/>
-                    <Link to={"/viewpage?username="+item.postils.user}>{item.postils.user}</Link>
-                </p>
-                <p style={{marginTop:"7%"}}>{item.postils.content}</p>  
-                <Divider />  
-                <ButtonGroup>
-                    <Button type={this.state.username==null || !this.state.data[idx].agreement.agreed?"default":"primary"} 
-                    icon="like" value={idx} 
-                    onClick={this.agree}>{this.state.data[idx].postils.agree}</Button>
-                    <Button type={this.state.username==null || !this.state.data[idx].agreement.disagreed?"default":"primary"} 
-                    icon="dislike-o" value={idx} 
-                    onClick={this.disagree}>{this.state.data[idx].postils.disagree}</Button>
-                </ButtonGroup>
-                <Divider type="vertical"/>
-                <Button type={this.state.username==null || !this.state.data[idx].marked?"default":"primary"} shape="circle" icon="flag" value={idx} onClick={this.mark}/>
+                <Card
+                    style={{}}
+                    bordered={false}
+                    cover={<p style={{marginLeft:"1%"}}>
+                    <Avatar src={item.postils.avatar}/>
+                    <Link to={"/viewpage?username="+item.postils.user}
+                    style={{color:"black",marginLeft:"1px"}}>{item.postils.user}</Link>
+                    {buttons}
+                    </p>}
+                >
+                    <Meta 
+                    description={<span style={{color:"black"}}>item.postils.content</span>}
+                    />
+                </Card>      
+                <span style={{position:"relative",left:"150px",fontSize:"14px",color:"lightgray"}}>
+                {"展开评论"}</span>
             </div>
         );
     }
@@ -326,19 +347,9 @@ class Postil extends Component{
             <div id="postil" 
             style={{width:"20%",height:"90%",overflowY:"scroll",
              position:"fixed",right:"0px",marginLeft:"5px"}}>
-                <Anchor offsetTop={"15%"} style={{position:"fixed",zIndex:"1",backgroundColor:"#FFFFFF"}}>
-                    <Search
-                    type="textarea"
-                    placeholder="请输入批注内容"
-                    enterButton={<Icon type="enter" />}
-                    size="default"
-                    value={this.state.inputValue}
-                    onChange={this.changeInputValue}
-                    onSearch={this.handleInput}
-                    />   
-                </Anchor>
+                
                 <Collapse accordion bordered={false} onChange={this.setPostilIdx}
-                 style={{marginTop:"14%"}}>
+                 style={{padding:"0,5px"}}>
                 {
                     data.map((item,idx)=>{
                         var postil = this.getPostil(item,idx);

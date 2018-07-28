@@ -254,7 +254,7 @@ class Tool extends Component{
         }
         return(
             <div>
-                <div id="tool" style={{zIndex:"100", position:"fixed",bottom:"5%",left:"2%"}}>
+                <div id="tool" style={{zIndex:"100", position:"fixed",bottom:"5%",right:"2%"}}>
                     <Popover
                         placement="topRight" content={content} trigger="click">
                         <Button type="primary">

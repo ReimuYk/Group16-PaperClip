@@ -343,10 +343,12 @@ class NavBar extends Component{
                         </Col>
                         <Col span={1}>
                         <Link to='/home' 
-                        style={{color:"black",fontSize:"17px",fontFamily:"Microsoft Yahei"}}>首页</Link></Col>
+                        style={{color:"black",fontSize:"17px",fontFamily:"Microsoft Yahei"}}>
+                        <div style={{width:"50px"}}>首页</div></Link></Col>
                         <Col span={1}>
                         <Link to='/discover'
-                        style={{color:"#696969",fontSize:"17px",fontFamily:"Microsoft Yahei"}}>发现</Link></Col>
+                        style={{color:"#696969",fontSize:"17px",fontFamily:"Microsoft Yahei"}}>
+                        <div style={{width:"50px"}}>发现</div></Link></Col>
                         <Col span={8} offset={1}>{search}</Col>
                         <Col span={1} offset={4}>
                             <Popover placement="bottom" title="我的消息" content={info} trigger="click">

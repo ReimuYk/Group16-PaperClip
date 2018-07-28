@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Divider ,Modal,Avatar,Checkbox,Icon,Button,Popover,Card, message} from 'antd';
+import { Layout, message,Button} from 'antd';
 import {Link } from 'react-router-dom';
 import Postil from '.././components/postil';
 import NavBar from '.././components/nav-bar';
@@ -9,13 +9,17 @@ import Tool from '.././components/tool';
 import emitter from '.././util/events';
 import { IPaddress } from '../App'
 
+const { Header, Content, Footer, Sider } = Layout;
+
 class Paper extends Component{
     constructor(props){
         super(props);
+        this.onCollapse = this.onCollapse.bind(this);
         this.state={
             paperID:this.props.location.search.substring(9),//9 == 'paperID='.length+1,
             username:sessionStorage.getItem('username'),
-            avatar:null
+            avatar:null,
+            collapsed:false
         }
         console.log("paperID:"+this.props.location.search.substring(9));
     }
@@ -44,15 +48,33 @@ class Paper extends Component{
             console.log("Oops, error");
         })
     }    
+
+    onCollapse(){
+        var c = this.state.collapsed;
+        this.setState({collapsed:!c});
+    }
     render() {
         return(
             <div style={{position:"relative"}}>
                 <NavBar />
-                <NoteList paperID={this.state.paperID}/>                
+                <Layout style={{marginTop:"1%"}}>
+                    <Sider
+                        collapsible
+                        collapsed={this.state.collapsed}
+                        onCollapse={this.onCollapse}
+                        width="20%"
+            
+                        collapsedWidth={0}
+                        style={{width:"30%",height:"80%",overflowY:"hide",
+                        backgroundColor:"white", left:"1%",boxShadow:"0px 1px 3px #BDBCBC",
+                        borderRadius:"2px",padding:"10px 20px"}}
+                    >
+                        <NoteList paperID={this.state.paperID}/>   
+                    </Sider>             
                 <PDFView paperID={this.state.paperID}/>        
                 <Postil avatar={this.state.avatar}/>
-                <br/>
                 <Tool paperID={this.state.paperID}/>
+                </Layout>
             </div>
         )
     }

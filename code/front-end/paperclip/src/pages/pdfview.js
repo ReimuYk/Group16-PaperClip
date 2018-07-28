@@ -660,8 +660,8 @@ class PDFView extends Component{
         return(
             this.state.isLoading
             ? <Spin size="large"/>
-            : <div style={{backgroundColor:'white',width:"60%",
-            position:"absolute",left:"22%"}}>
+            : <div style={{backgroundColor:'white',width:"50%",
+            position:"absolute",left:"23%"}}>
                     {changePage}
                     <div>
                     <div id="paperDiv"

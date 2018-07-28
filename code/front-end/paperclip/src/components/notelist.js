@@ -89,6 +89,7 @@ class NoteList extends Component{
         return(
             <List
                 style={{textAlign:"left"}}
+                pagination={{pageSize: 4}}
                 header={<div><Icon type="bars" />{this.state.type=="note"?"相关笔记":"版本列表"}</div>}
                 bordered={false}
                 dataSource={this.state.data}
@@ -123,9 +124,7 @@ class NoteList extends Component{
         const info = this.state.type == "note"?this.renderInfo():<div></div>;
         const notes = this.renderNotes();
         return(
-            <div id="notelist" 
-            style={{position:"fixed",width:"18%",height:"80%",overflowY:"scroll",
-            left:"2%"}}>              
+            <div id="notelist" >              
                     {info}
                     <Divider />
                     {keys}
