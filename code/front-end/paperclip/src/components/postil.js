@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Collapse ,Card,Input,Icon,Button,Avatar,Divider,Anchor, message} from 'antd';
+import { Collapse ,Card,Input,Modal,Button,Avatar,Icon,Divider, message} from 'antd';
 import Comment from "./comment";
 import emitter from '.././util/events';
 import { IPaddress } from '../App';
@@ -9,6 +9,7 @@ const Panel = Collapse.Panel;
 const Search = Input.Search;
 const ButtonGroup = Button.Group;
 const { Meta } = Card;
+const { TextArea } = Input;
 
 
 class Postil extends Component{  
@@ -21,6 +22,9 @@ class Postil extends Component{
         this.agree = this.agree.bind(this);
         this.disagree = this.disagree.bind(this);
         this.mark = this.mark.bind(this);
+        this.handleCommentCancel = this.handleCommentCancel.bind(this);
+        this.handleCommentOk = this.handleCommentOk.bind(this);
+        this.showCommentModal = this.showCommentModal.bind(this);
 
         this.state = {
             username:sessionStorage.getItem('username'),
@@ -29,6 +33,7 @@ class Postil extends Component{
             inputValue:"",
             selectid:null,
             markid:null,
+            commentModalVisible:false
         }
     }
     componentWillMount(){
@@ -42,6 +47,13 @@ class Postil extends Component{
         });
         this.blockEvent = emitter.addListener('getBlockList', (data) =>{
             console.log(data);
+            if(data == "empty"){
+                this.setState({
+                    selectid:null,
+                    data:[]
+                })
+            }
+            else
             this.setState({
                 selectid:data
             })
@@ -151,11 +163,6 @@ class Postil extends Component{
             emitter.emit('deleteMark',mark.posID);
         }
     }
-    getPostil = (item,idx)=>{
-        console.log('postil line 139, this.state.data: ', this.state.data);
-        console.log('idx', idx);
-        console.log('item', item);
-    }
     getBlocksOfPostil(posID){
         console.log("mouse in postil "+posID);
         let that  = this;
@@ -182,33 +189,99 @@ class Postil extends Component{
         console.log("mouse leave "+posID);
         emitter.emit('blocksForPostil',"clear");
     }
+
+    showCommentModal(e){
+        e.stopPropagation();
+        console.log("event:"+e);
+        this.setState({
+          commentModalVisible: true,
+          postilIdx: e.target.id
+        });
+    }
+    
+    handleCommentOk = (e) => {
+        e.stopPropagation();
+        console.log("添加评论："+this.state.inputValue);
+
+        var value = this.state.inputValue;
+        if(this.state.username == null){
+            message.error("请先登录", 3);
+            this.setState({commentModalVisible:false});
+            return;
+        }
+        if(!value){
+            message.error("输入不能为空", 3);
+            this.setState({commentModalVisible:false});
+            return;
+        }
+
+        var name = this.state.username;
+        var obj = new Object();
+        obj.user = name;
+        obj.avatar = this.props.avatar;
+        obj.content = value;
+
+        var data = this.state.data;
+        var idx = this.state.postilIdx;
+
+        data[idx].comments.push(obj);
+        this.addPostilComment(value);
+
+        this.setState({
+            commentModalVisible: false,
+            data:data,
+            inputValue:""
+        });
+      }
+    
+    handleCommentCancel = (e) => {
+        e.stopPropagation();
+        console.log(e);
+        this.setState({
+          commentModalVisible: false,
+        });
+      }
     getPostil = (item,idx)=>{  
         const buttons = (
-            <span >
-                <span style={{left:"25px",position:"relative"}}>
+            <span style={{position:"absolute",width:"200px"}} >
                     <Button type={this.state.username==null || !this.state.data[idx].agreement.agreed?"default":"primary"} 
                     icon="like" value={idx} 
                     onClick={this.agree}
                     size="small"
-                    style={{border:"none"}}
+                    style={{left:"50px"}}
                     >{this.state.data[idx].postils.agree}</Button>
                     <Button type={this.state.username==null || !this.state.data[idx].agreement.disagreed?"default":"primary"} 
                     icon="dislike-o" value={idx} 
                     onClick={this.disagree}
                     size="small"
-                    style={{border:"none"}}></Button>
-                </span>
+                    style={{left:"50px"}}></Button>
                 <Button type={this.state.username==null || !this.state.data[idx].marked?"default":"primary"} 
                 shape="circle" icon="flag" value={idx} onClick={this.mark} 
-                style={{position:"relative",left:"35px",border:"none"}}/>
+                style={{left:"80px"}}/>
             </span>);
+
+        const commentModal =(
+            <span>
+                <Button id={idx} onClick={this.showCommentModal} size="small"><Icon type="plus" />添加评论</Button>
+                <Modal
+                title="添加评论"
+                visible={this.state.commentModalVisible}
+                onOk={this.handleCommentOk}
+                onCancel={this.handleCommentCancel}
+                >
+                <TextArea rows={4} placeholder="Enter text here..." value={this.state.inputValue} onChange={this.changeInputValue}
+                />
+                </Modal> 
+            </span>
+        )
         
         return(
             <div style={{textAlign:"left"}} 
             onMouseEnter = {()=>this.getBlocksOfPostil(item.postils.posID)} 
-            onMouseLeave = {()=>this.clearBlocks(item.postils.posID)}>
+            onMouseLeave = {()=>this.clearBlocks(item.postils.posID)}
+            >
                 <Card
-                    style={{}}
+                    style={{position:"relative"}}
                     bordered={false}
                     cover={<p style={{marginLeft:"1%"}}>
                     <Avatar src={item.postils.avatar}/>
@@ -218,22 +291,32 @@ class Postil extends Component{
                     </p>}
                 >
                     <Meta 
-                    description={<span style={{color:"black"}}>item.postils.content</span>}
+                    description={<span style={{color:"black"}}>{item.postils.content}</span>}
                     />
-                </Card>      
-                <span style={{position:"relative",left:"150px",fontSize:"14px",color:"lightgray"}}>
-                {"展开评论"}</span>
+                </Card> 
+                {commentModal}
+                <span id={idx} onClick={this.setPostilIdx} 
+                style={{position:"relative",left:"90px",fontSize:"14px",color:"gray"}}>
+                {this.state.postilIdx==idx
+                    ?"收起评论"
+                    :"展开评论"}</span>
             </div>
         );
     }
-    setPostilIdx(key){
-        if(!key){
-            key = null;
+    setPostilIdx(e){
+        var key = e.target.id;
+        var idx = this.state.postilIdx;
+        console.log("key:"+key+" idx:"+idx);
+        if(idx == key){
+            this.setState({
+                postilIdx:null
+            });
         }
-        console.log(key);
-        this.setState({
-            postilIdx:key
-        })
+        else{
+            this.setState({
+                postilIdx:key
+            })
+        }
     }
     changeInputValue(e){
         this.setState({inputValue:e.target.value});
@@ -334,22 +417,21 @@ class Postil extends Component{
     }
     
     handleReply(name){
-        //console.log("father:"+name);
         this.setState({
             inputValue:"@"+name+":",
+            commentModalVisible:true
         });
     }
     
     render() {
         const data = this.state.data;
-        console.log('postil.js data: ', data);
+        //console.log('postil.js data: ', data);
         return(
             <div id="postil" 
-            style={{width:"20%",height:"90%",overflowY:"scroll",
-             position:"fixed",right:"0px",marginLeft:"5px"}}>
-                
-                <Collapse accordion bordered={false} onChange={this.setPostilIdx}
-                 style={{padding:"0,5px"}}>
+            style={{width:"23%",height:"90%",overflowY:"scroll",overflowX:"hidden",
+             position:"fixed",right:"0px",marginLeft:"5px",padding:"0,5px"}}>                
+                <Collapse accordion bordered={false} 
+                activeKey={this.state.postilIdx}>
                 {
                     data.map((item,idx)=>{
                         var postil = this.getPostil(item,idx);

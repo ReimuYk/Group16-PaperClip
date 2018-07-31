@@ -21,12 +21,13 @@ class Comment extends Component{
             <List
                 bordered={false}
                 dataSource={comment}
+                size="small"
+                pagination={{pageSize: 3,size:"small"}}
                 renderItem={item => (
                         <List.Item 
                         style={{textAlign:"left"}}
                         actions={[<Button id={item.user} onClick={this.getReplyName}
-                        shape="circle" icon="message"
-                        /> ]}> 
+                        size="small" style={{fontSize:"13px"}}><Icon type="rollback" style={{fontSize:"12px"}}/>回复</Button> ]}> 
                         <List.Item.Meta
                         avatar={<Avatar shape="square" size="small" src={item.avatar} />}
                         title={<a href={"/viewpage?username="+item.user}>{item.user}</a>}

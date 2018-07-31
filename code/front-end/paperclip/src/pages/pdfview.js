@@ -235,7 +235,7 @@ class PDFView extends Component{
         .then(responseJson=>{
             console.log(responseJson);
             let data = eval('('+responseJson+')');
-            console.log(data)
+            //console.log(data)
             emitter.emit("changePostils",data);
         }).catch(function(e){
             console.log("Oops, error");
@@ -261,6 +261,7 @@ class PDFView extends Component{
     mouseUp = (e) => {
         console.log('mouse up')
         this.setState({mousePressing:false})
+        /*
         console.log(e.target)
         console.log(e.target.height)
         console.log('screenX',e.screenX)
@@ -268,11 +269,14 @@ class PDFView extends Component{
         console.log('objy',e.target.getBoundingClientRect().top)
         console.log('scroll top',document.documentElement.scrollTop)
         console.log('clienty-objx',e.clientX-e.target.getBoundingClientRect().left)
-        console.log('clienty-objy',e.clientY-e.target.getBoundingClientRect().top)
+        console.log('clienty-objy',e.clientY-e.target.getBoundingClientRect().top)*/
         // alert(this.state.selectid)
         if (this.state.selectid.length!=0){
             emitter.emit("getBlockList",this.state.selectid);
             this.refreshPostil(this.state.selectid)
+        }
+        else{
+            emitter.emit("getBlockList","empty");
         }
     }
     mouseMove = (e) => {
