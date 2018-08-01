@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Divider ,Modal,Checkbox,Icon,Button,Popover,Card, message} from 'antd';
+import { Divider ,Modal,Checkbox,Icon,Button,Popover,Card, message,Tooltip} from 'antd';
 import {Link } from 'react-router-dom';
 import emitter from '.././util/events'
 import { IPaddress } from '../App';
@@ -254,11 +254,10 @@ class Tool extends Component{
         }
         return(
             <div>
-                <div id="tool" style={{zIndex:"100", position:"fixed",bottom:"5%",right:"2%"}}>
+                <div id="tool" style={{zIndex:"100", position:"fixed",bottom:"5%",left:"2%"}}>
                     <Popover
                         placement="topRight" content={content} trigger="click">
-                        <Button type="primary">
-                            <Icon type="tool" />Tool</Button>
+                        <Button type="primary" icon="tool" >Tool</Button>
                     </Popover>
                 </div>
                 <Modal

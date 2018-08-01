@@ -372,7 +372,8 @@ class NavBar extends Component{
         }
         else{
             return(
-                <Anchor>
+                <Anchor style={{lineHeight:"60px",boxShadow:"0px 1px 3px #BDBCBC",
+                borderRadius:"2px",padding:"0 20px",margin:"0 auto"}}>
                     <Row type="flex" align="middle" justify="center"
                     style={{backgroundColor:"white",lineHeight:"50px",boxShadow:"0px 1px 3px #BDBCBC",
                     borderRadius:"2px",padding:"0 20px",margin:"0 auto",alignItems:"center"}}>

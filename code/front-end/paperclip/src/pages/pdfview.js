@@ -14,6 +14,7 @@ class PDFView extends Component{
         super(props);
         this.changeMarkVisible = this.changeMarkVisible.bind(this);
         this.getPgLoc = this.getPgLoc.bind(this);
+        this.renderPostilButton = this.renderPostilButton.bind(this);
         this.state = {
             isLoading:true,
             page:1,
@@ -24,7 +25,10 @@ class PDFView extends Component{
             marked_note:[],
             markVisible:true,
             selectid:null,
-            cacheData:[]
+            cacheData:[],
+            detailShow: 'none',
+            x: 0,
+            y: 0
         }
         //console.log(this.props.paperID);
         this.getData(this.props.paperID,1)
@@ -181,8 +185,6 @@ class PDFView extends Component{
             })
         });
 
-        //this.allocComm();
-
         this.Event2 = emitter.addListener('blocksForPostil', (data) => {
             if(data == "clear" && (this.state.selectid != null)){                
                 this.putSelect(this.state.selectid);
@@ -250,7 +252,10 @@ class PDFView extends Component{
         let tid = this.findItemId(loc)
         this.setState({
             mousePressing:true,
-            mouseStart:tid
+            mouseStart:tid,
+            detailShow: 'none',
+            x: 0,
+            y: 0
         })
         if (tid!=null){
             this.putSelect([tid])
@@ -260,7 +265,10 @@ class PDFView extends Component{
     }
     mouseUp = (e) => {
         console.log('mouse up')
-        this.setState({mousePressing:false})
+        this.setState({
+            mousePressing:false,
+        })
+        
         /*
         console.log(e.target)
         console.log(e.target.height)
@@ -272,10 +280,20 @@ class PDFView extends Component{
         console.log('clienty-objy',e.clientY-e.target.getBoundingClientRect().top)*/
         // alert(this.state.selectid)
         if (this.state.selectid.length!=0){
+            this.setState({
+                detailShow: 'block',
+                x: e.clientX-e.target.getBoundingClientRect().left+15, 
+                y: e.clientY-e.target.getBoundingClientRect().top+5,
+            })
             emitter.emit("getBlockList",this.state.selectid);
             this.refreshPostil(this.state.selectid)
         }
         else{
+            this.setState({
+                detailShow: 'none',
+                x: 0,
+                y: 0
+            })
             emitter.emit("getBlockList","empty");
         }
     }
@@ -640,7 +658,7 @@ class PDFView extends Component{
     }
     changePage(){
         return(
-            <div style={{zIndex:"100", position:"fixed",bottom:"5%",right:"23%"}}>
+            <div style={{zIndex:"100", position:"fixed",bottom:"5%",right:"24%"}}>
                 <Tooltip placement="right" title="上一页">
                     <Button onClick={this.handlePrevious} icon="up" />
                 </Tooltip>
@@ -659,8 +677,23 @@ class PDFView extends Component{
             </div>
         );
     }
+    renderPostilButton(){        
+        const { x, y , detailShow } = this.state;
+        console.log("detailShow:"+detailShow+"dx: "+x+"dy: "+y);
+        return(
+            <div style={{position:'absolute',top: y, left: x, display:detailShow}}>
+            <Tooltip title="添加批注" placement="right">
+                <Button shape="circle" type="primary" icon="plus" size="small"
+                style={{boxShadow:"0px 1px 3px #BDBCBC"}}
+                onClick={()=>{emitter.emit('addPostils',"ok")}}
+                />
+            </Tooltip>
+            </div>
+            );
+    }
     render(){
         const changePage = this.changePage();
+        const postilButton = this.renderPostilButton();
         return(
             this.state.isLoading
             ? <Spin size="large"/>
@@ -668,15 +701,16 @@ class PDFView extends Component{
             position:"absolute",left:"23%"}}>
                     {changePage}
                     <div>
-                    <div id="paperDiv"
-                    onMouseDown={this.mouseDown} 
-                    onMouseUp={this.mouseUp} 
-                    onMouseMove={this.mouseMove}
-                    style={{width:'700px'}}
-                    >
-                        <img id="pdf-canvas" src={this.state.b64str} width={700} style={{pointerEvents: 'none',userSelect:'none',mozUserSelect:'-moz-none'}}/>
+                        <div id="paperDiv"
+                        onMouseDown={this.mouseDown} 
+                        onMouseUp={this.mouseUp} 
+                        onMouseMove={this.mouseMove}
+                        style={{width:'700px'}}
+                        >
+                            <img id="pdf-canvas" src={this.state.b64str} width={700} style={{pointerEvents: 'none',userSelect:'none',mozUserSelect:'-moz-none'}}/>
+                        </div>
                     </div>
-                    </div>
+                    
                     {this.state.selectRender}
                     {this.state.blocksRender}
                     {this.state.commRender.map((cr)=>(
@@ -685,7 +719,10 @@ class PDFView extends Component{
                     {this.state.noteRender.map((cr)=>(
                         <div>{cr.render}</div>
                     ))}
-            </div>
+                    {postilButton}
+            </div>          
+    
+        
         )
     }
 }
