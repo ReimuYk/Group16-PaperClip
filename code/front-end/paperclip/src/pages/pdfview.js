@@ -204,10 +204,12 @@ class PDFView extends Component{
         this.setState({ 
             page: old - 1,
             isLoading:true,
-            selectid:null
+            selectid:null,
+            x: 0,
+            y: 0,
+            detailShow: 'none'
          })
         this.getData(this.state.paperID,old-1);
-              
         emitter.emit('changePostils',[]);
     }
     handleNext = () => {
@@ -216,6 +218,9 @@ class PDFView extends Component{
         this.setState({
             page: old + 1,
             isLoading:true,
+            x: 0,
+            y: 0,
+            detailShow: 'none'
         });
         this.getData(this.state.paperID,old+1);
         emitter.emit('changePostils',[]);
