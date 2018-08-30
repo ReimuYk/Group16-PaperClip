@@ -11,6 +11,4 @@ import java.util.List;
 @Repository("docRepo")
 public interface DocumentRepository extends CrudRepository<Document,Long>{
     List<Document> findByUser(User user);
-
-    Long getByUser(User user);
 }

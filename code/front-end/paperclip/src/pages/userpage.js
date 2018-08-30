@@ -18,7 +18,7 @@ var information = {
     myLike:[],
     myWrite:[]
 }
-const menu = [
+var menu = [
     {
         text:'收藏的论文',
         link:'/user/starpaper',
@@ -86,6 +86,11 @@ class User extends Component{
                 information.fansno = data.fansno;
                 information.followno = data.followno;
                 information.userDescription = data.userDescription;
+                menu[0].num = data.starPaperNo
+                menu[1].num = data.starNoteNo
+                menu[2].num = data.writeNoteNo
+                menu[3].num = data.writeDocNo
+                menu[4].num = data.assistNo
                 that.setState({
 
                 })
