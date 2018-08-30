@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
+import javax.validation.constraints.Null;
 import java.io.*;
 import java.net.URLEncoder;
 
@@ -49,7 +50,7 @@ public class ImgServiceImpl implements ImgService {
         String username = data.getString("username");
         username = URLEncoder.encode(username, "UTF-8");
         String imgStr = data.getString("imgStr");
-        
+
         int pos = imgStr.indexOf(",");
         imgStr = imgStr.substring(pos+1);
 
@@ -174,5 +175,31 @@ public class ImgServiceImpl implements ImgService {
             e.printStackTrace();
             return "";
         }
+    }
+
+    public String getPaperAbstract(Paper paper) {
+        String filePath = "./data/pdf-txt/"+ paper.getId()+".txt";
+        String result = "";
+        try {
+            File file = new File(filePath);
+            if(file.isFile() && file.exists()) {
+                InputStreamReader isr = new InputStreamReader(new FileInputStream(file), "utf-8");
+                BufferedReader br = new BufferedReader(isr);
+                String lineTxt = null;
+                while ((lineTxt = br.readLine()) != null) {
+                    result += lineTxt;
+                }
+                br.close();
+            } else {
+                System.out.println("文件不存在!");
+            }
+        } catch (Exception e) {
+            System.out.println("文件读取错误!");
+        }
+        if (result.length() < 280){
+            return result;
+        }
+        return result.substring(0,280)+"...";
+
     }
 }

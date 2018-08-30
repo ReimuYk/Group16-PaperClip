@@ -11,4 +11,5 @@ public interface ImgService {
     JSONObject getAvatar(JSONObject data);
     String getUserHeader(User user);
     String getPdfImg(Paper paper);
+    String getPaperAbstract(Paper paper);
 }

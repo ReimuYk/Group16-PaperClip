@@ -83,6 +83,7 @@ public class SearchServiceImpl implements SearchService {
 
                 JSONObject paper = new JSONObject();
                 paper.accumulate("paperID", p.getId());
+                paper.accumulate("abstract",imgService.getPaperAbstract(p));
                 paper.accumulate("paperImg", imgService.getPdfImg(p));
                 paper.accumulate("title", URLDecoder.decode(p.getTitle(), "UTF-8"));
                 paper.accumulate("author", URLDecoder.decode(p.getAuthor(), "UTF-8"));
@@ -160,6 +161,7 @@ public class SearchServiceImpl implements SearchService {
             }
             JSONObject recommand = new JSONObject();
             recommand.accumulate("paperID", paper.getId());
+            recommand.accumulate("abstract", imgService.getPaperAbstract(paper));
             recommand.accumulate("paperImg", imgService.getPdfImg(paper));
             recommand.accumulate("title", URLDecoder.decode(paper.getTitle(), "UTF-8"));
             recommand.accumulate("author", URLDecoder.decode(paper.getAuthor(), "UTF-8"));
