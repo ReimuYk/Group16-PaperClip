@@ -1,3 +1,4 @@
+#coding:utf-8
 import sys
 import importlib
 import re
@@ -83,6 +84,34 @@ def getPageSize(page):
                     return eval(res)
                 res = res+pageinfo[k]
     return ''
+
+def getAbstract(path):
+    fp = open(path, 'rb')
+    praser = PDFParser(fp)
+    doc = PDFDocument()
+    praser.set_document(doc)
+    doc.set_parser(praser)
+    doc.initialize()
+    if not doc.is_extractable:
+        raise PDFTextExtractionNotAllowed
+    else:
+        rsrcmgr = PDFResourceManager()
+        laparams = LAParams()
+        device = PDFPageAggregator(rsrcmgr, laparams=laparams)
+        interpreter = PDFPageInterpreter(rsrcmgr, device)
+        txt = ""
+        for page in doc.get_pages(): # doc.get_pages() 获取page列表
+            interpreter.process_page(page)
+            layout = device.get_result()
+            # 这里layout是一个LTPage对象 里面存放着 这个page解析出的各种对象 一般包括LTTextBox, LTFigure, LTImage, LTTextBoxHorizontal 等等 想要获取文本就获得对象的text属性，
+            for x in layout:
+                if (isinstance(x, LTTextBoxHorizontal)):
+                    results = x.get_text()
+                    txt += (results + ' ')
+            break
+        txt = txt.replace('\n',' ')
+        abst = re.findall(r'[Aa][Bb][Ss][Tt][Rr][Aa][Cc][Tt].{500}',txt)[0]
+        return abst
 
 '''
  解析pdf 文本，保存到txt文件中
