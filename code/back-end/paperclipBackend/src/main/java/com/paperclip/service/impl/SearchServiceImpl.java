@@ -14,6 +14,7 @@ import com.paperclip.model.Entity.User;
 import com.paperclip.model.Relationship.StarNote;
 import com.paperclip.model.Relationship.StarPaper;
 import com.paperclip.model.Relationship.UserNote;
+import com.paperclip.service.ImgService;
 import com.paperclip.service.SearchService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -53,6 +54,9 @@ public class SearchServiceImpl implements SearchService {
     @Autowired
     private UserNoteRepository userNRepo;
 
+    @Autowired
+    private ImgService imgService;
+
 
     public JSONArray searchPaper(JSONObject data1) throws UnsupportedEncodingException {
         String searchText = data1.getString("searchText");
@@ -79,6 +83,7 @@ public class SearchServiceImpl implements SearchService {
 
                 JSONObject paper = new JSONObject();
                 paper.accumulate("paperID", p.getId());
+                paper.accumulate("paperImg", imgService.getPdfImg(p));
                 paper.accumulate("title", URLDecoder.decode(p.getTitle(), "UTF-8"));
                 paper.accumulate("author", URLDecoder.decode(p.getAuthor(), "UTF-8"));
                 paper.accumulate("keyword", URLDecoder.decode(p.getKeyWords(), "UTF-8"));
@@ -155,6 +160,7 @@ public class SearchServiceImpl implements SearchService {
             }
             JSONObject recommand = new JSONObject();
             recommand.accumulate("paperID", paper.getId());
+            recommand.accumulate("paperImg", imgService.getPdfImg(paper));
             recommand.accumulate("title", URLDecoder.decode(paper.getTitle(), "UTF-8"));
             recommand.accumulate("author", URLDecoder.decode(paper.getAuthor(), "UTF-8"));
             recommand.accumulate("keyword", URLDecoder.decode(paper.getKeyWords(), "UTF-8"));
@@ -178,6 +184,7 @@ public class SearchServiceImpl implements SearchService {
         for(Note note:notes) {
             JSONObject recommand = new JSONObject();
             recommand.accumulate("noteID", note.getId());
+            recommand.accumulate("noteImg",imgService.getPdfImg(note.getPaper()));
             recommand.accumulate("title", URLDecoder.decode(note.getTitle(), "UTF-8"));
             recommand.accumulate("author", URLDecoder.decode(note.getUser().getUsername(), "UTF-8"));
             recommand.accumulate("keyword", URLDecoder.decode(note.getKeyWords(), "UTF-8"));

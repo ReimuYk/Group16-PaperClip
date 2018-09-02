@@ -1,8 +1,12 @@
 package com.paperclip.service.impl;
 
 import com.paperclip.dao.entityDao.DocumentRepository;
+import com.paperclip.dao.entityDao.NoteRepository;
 import com.paperclip.dao.entityDao.UserRepository;
+import com.paperclip.dao.relationshipDao.AssistRepository;
 import com.paperclip.dao.relationshipDao.FollowRepository;
+import com.paperclip.dao.relationshipDao.StarNoteRepository;
+import com.paperclip.dao.relationshipDao.StarPaperRepository;
 import com.paperclip.model.Entity.Document;
 import com.paperclip.model.Entity.User;
 import com.paperclip.model.Relationship.Follow;
@@ -146,6 +150,17 @@ public class ViewInfoServiceImpl implements ViewInfoService {
         return homeinfo;
     }
 
+    @Autowired
+    private StarPaperRepository starPaperRepo;
+
+    @Autowired
+    private StarNoteRepository starNoteRepo;
+
+    @Autowired
+    private NoteRepository noteRepo;
+
+    @Autowired
+    private AssistRepository assistRepo;
 
     public JSONObject getHostInfo(JSONObject data) throws UnsupportedEncodingException {
         System.out.println("\n\n====getHostInfo==== \n get data: "+data);
@@ -184,6 +199,13 @@ public class ViewInfoServiceImpl implements ViewInfoService {
         user.accumulate("userheader", avatar);
         user.accumulate("fansno", host.getFollower());
         user.accumulate("followno", host.getFollowing());
+
+        user.accumulate("starPaperNo", starPaperRepo.findByUser(host).size());
+        user.accumulate("starNoteNo", starNoteRepo.findByUser(host).size());
+        user.accumulate("writeNoteNo", noteRepo.findByUser(host).size());
+        user.accumulate("writeDocNo", docRepo.findByUser(host).size());
+        user.accumulate("assistNo", assistRepo.findByUser(host).size());
+
         user.accumulate("userInfo", userInfo);
         user.accumulate("userDescription", URLDecoder.decode(host.getDescription(), "UTF-8"));
         System.out.println("return: "+user);

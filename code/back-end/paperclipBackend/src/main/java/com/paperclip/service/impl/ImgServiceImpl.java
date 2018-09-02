@@ -1,6 +1,7 @@
 package com.paperclip.service.impl;
 
 import com.paperclip.dao.entityDao.UserRepository;
+import com.paperclip.model.Entity.Paper;
 import com.paperclip.model.Entity.User;
 import com.paperclip.service.ImgService;
 import net.sf.json.JSONObject;
@@ -48,6 +49,7 @@ public class ImgServiceImpl implements ImgService {
         String username = data.getString("username");
         username = URLEncoder.encode(username, "UTF-8");
         String imgStr = data.getString("imgStr");
+        
         int pos = imgStr.indexOf(",");
         imgStr = imgStr.substring(pos+1);
 
@@ -133,6 +135,44 @@ public class ImgServiceImpl implements ImgService {
         {
             e.printStackTrace();
             return defaultAvatar;
+        }
+    }
+
+    public String getPdfImg(Paper paper){
+        String path = "./data/pdf-jpg";
+        Long id = paper.getId();
+        String path1 = path + "\\" + id+  ".jpg";
+        String path2 = path + "\\" + id+  "..jpg";
+        InputStream in = null;
+        byte[] data=null;
+        try
+        {
+            in = new FileInputStream(path1);
+            data = new byte[in.available()];
+            in.read(data);
+            in.close();
+            //对字节数组Base64编码
+            BASE64Encoder encoder = new BASE64Encoder();
+            return "data:image/jpeg;base64,"+encoder.encode(data);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        try
+        {
+            in = new FileInputStream(path2);
+            data = new byte[in.available()];
+            in.read(data);
+            in.close();
+            //对字节数组Base64编码
+            BASE64Encoder encoder = new BASE64Encoder();
+            return "data:image/jpeg;base64,"+encoder.encode(data);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            return "";
         }
     }
 }

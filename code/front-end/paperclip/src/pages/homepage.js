@@ -155,7 +155,7 @@ class Home extends Component{
                         <List.Item 
                             key={item.paperID}
                             actions={[<span>收藏量：{item.starno}</span>, <span>笔记量：{item.noteno}</span>]}
-                            extra={<img width={222} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
+                            extra={<img width={222} height={150} alt="logo" src={item.paperImg} />}
                         >
                             <List.Item.Meta
                                 title={<a href={"/paper?paperID=" + item.paperID}>{item.title}</a>}
@@ -178,7 +178,7 @@ class Home extends Component{
                     renderItem={item => (
                         <List.Item
                             actions={[<span>收藏量：{item.starno}</span>, <span>笔记量：{item.noteno}</span>]}
-                            extra={<img width={222} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
+                            extra={<img width={222} height={150} alt="logo" src={item.paperImg} />}
                         >
                             <List.Item.Meta
                                 title={<a href={"/paper?paperID=" + item.paperID}>{item.title}</a>}

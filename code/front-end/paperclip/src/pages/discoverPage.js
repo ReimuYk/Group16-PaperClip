@@ -99,7 +99,7 @@ class Discover extends Component{
                     <List.Item
                         key={item.noteID}
                         actions={[<IconText type="star-o" text={item.starno} />, <IconText type="like-o" text={item.likeno} />]}
-                        extra={<img width={222} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
+                        extra={<img width={160} height={100} alt="logo" src={item.noteImg} />}
                     >
                         <List.Item.Meta
                             title={<a href={'/viewnote?noteID=' + item.noteID}>{item.title}</a>}
@@ -137,7 +137,7 @@ class Discover extends Component{
                     renderItem={item => (
                         <List.Item
                             actions={[<IconText type="star-o" text={item.starno} />, <IconText type="edit" text={item.noteno} />]}
-                            extra={<img width={222} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
+                            extra={<img width={160} height={100} alt="logo" src={item.paperImg} />}
                             >
                             <List.Item.Meta
                                 title={<a href={"/paper?paperID=" + item.paperID}>{item.title}</a>}
