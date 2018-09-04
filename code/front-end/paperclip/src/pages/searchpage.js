@@ -50,6 +50,7 @@ class Search extends Component{
         /* get search content according to username */
         let jsonbody = {};
         jsonbody.searchText = searchContent;
+        jsonbody.needImg = 0;
         let url = IPaddress + 'service/search';
         let options={};
         console.log(jsonbody);

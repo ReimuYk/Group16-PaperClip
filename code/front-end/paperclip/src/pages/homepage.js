@@ -114,6 +114,7 @@ class Home extends Component{
         /* get search content according to username */
         let jsonbody = {};
         jsonbody.searchText = searchContent;
+        jsonbody.needImg = 1;
         let url = IPaddress + 'service/search';
         let options={};
         console.log(jsonbody);
