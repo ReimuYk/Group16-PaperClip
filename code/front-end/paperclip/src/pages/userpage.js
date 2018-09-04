@@ -258,9 +258,6 @@ class User extends Component{
         }
     }
     render() {
-        if(sessionStorage.getItem('username') == null){
-            return <Redirect to="/login"/>;
-        }
         const myLike = this.renderMyLike();
         const myStarNote = this.renderMyStarNote();
         const myStarPaper = this.renderMyStarPaper();
