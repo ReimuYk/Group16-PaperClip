@@ -10,7 +10,7 @@ from PyPDF2 import PdfFileWriter, PdfFileReader
 from PIL import Image,ImageDraw,ImageFont
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
-pdfmetrics.registerFont(TTFont('msyh', 'MSYHBD.TTF'))
+pdfmetrics.registerFont(TTFont('msyh', 'MSYHBD.TTC'))
 
 styleSheet = getSampleStyleSheet()
 class PostilBlock:

@@ -257,7 +257,7 @@ class Postil extends Component{
         //console.log("event:"+e);
         this.setState({
           postilModalVisible: true,
-        });
+        },()=>{console.log("change")});
     }
     
     handlePostilOk = (e) => {
@@ -328,7 +328,7 @@ class Postil extends Component{
                 style={{left:"60px"}}/>
             </span>);
 
-        const commentModal =(
+        /*const commentModal =(
             <span>
                 <Button id={idx} onClick={this.showCommentModal} size="small" type="primary" ghost><Icon type="plus" />添加评论</Button>
                 <Modal
@@ -342,6 +342,7 @@ class Postil extends Component{
                 </Modal> 
             </span>
         )
+        console.log("refresh")
         const postilModal =(
             <span>
                 <Modal
@@ -354,7 +355,7 @@ class Postil extends Component{
                 />
                 </Modal> 
             </span>
-        )
+        )*/
         
         return(
             <div style={{textAlign:"left"}} 
@@ -375,8 +376,10 @@ class Postil extends Component{
                     description={<span style={{color:"black"}}>{item.postils.content}</span>}
                     />
                 </Card> 
-                {commentModal}
-                {postilModal}
+                <Button id={idx} onClick={this.showCommentModal} size="small" type="primary" ghost><Icon type="plus" />
+                添加评论</Button>
+                {/*commentModal*/}
+                {/*postilModal*/}
                 <span id={idx} onClick={this.setPostilIdx} 
                 style={{position:"relative",left:"90px",fontSize:"14px",color:"gray"}}>
                 {this.state.postilIdx==idx
@@ -507,6 +510,32 @@ class Postil extends Component{
     
     render() {
         const data = this.state.data;
+        const commentModal =(
+            <span>
+                <Modal
+                title="添加评论"
+                visible={this.state.commentModalVisible}
+                onOk={this.handleCommentOk}
+                onCancel={this.handleCommentCancel}
+                >
+                <TextArea rows={4} placeholder="Enter text here..." value={this.state.inputValue} onChange={this.changeInputValue}
+                />
+                </Modal> 
+            </span>
+        )
+        const postilModal =(
+            <span>
+                <Modal
+                title="添加批注"
+                visible={this.state.postilModalVisible}
+                onOk={this.handlePostilOk}
+                onCancel={this.handlePostilCancel}
+                >
+                <TextArea rows={4} placeholder="Enter text here..." value={this.state.inputValue} onChange={this.changeInputValue}
+                />
+                </Modal> 
+            </span>
+        );
         //console.log('postil.js data: ', data);
         return(
             <div id="postil" 
@@ -524,7 +553,9 @@ class Postil extends Component{
                         );
                     },this)
                 }
-                </Collapse>                             
+                </Collapse> 
+                {commentModal}
+                {postilModal}                            
           </div>          
         );
     }
