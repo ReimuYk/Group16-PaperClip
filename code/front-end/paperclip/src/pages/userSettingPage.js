@@ -179,9 +179,7 @@ class UserSetting extends Component{
         reader.readAsDataURL(file);
         reader.onload = function(e) {
             var base64 = e.target.result;
-            console.log("old "+base64.length);
             that.compressImg(size,base64,{width:250,height:250,quality:0.8},function(base64){
-                console.log("new "+ base64.length);
                 console.log(base64);
                 let jsonbody = {};
                 jsonbody.username = username;

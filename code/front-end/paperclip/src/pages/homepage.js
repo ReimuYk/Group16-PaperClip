@@ -114,6 +114,7 @@ class Home extends Component{
         /* get search content according to username */
         let jsonbody = {};
         jsonbody.searchText = searchContent;
+        jsonbody.needImg = 1;
         let url = IPaddress + 'service/search';
         let options={};
         console.log(jsonbody);
@@ -159,7 +160,7 @@ class Home extends Component{
                         >
                             <List.Item.Meta
                                 title={<a href={"/paper?paperID=" + item.paperID}>{item.title}</a>}
-                                description={"玩了几个月，游戏的进度也差不多了，现在回顾这个开场，心里莫名有一丝孤独，旷野之息不像奥德赛，奥德赛是那种时时刻刻都有欢笑的游戏，但旷野之息给我的感觉却带有一些悲怆，在捕鱼逗怪摘苹果的日常之外"}
+                                description={item.abstract}
                             />
                         </List.Item>
                     )}
@@ -182,7 +183,7 @@ class Home extends Component{
                         >
                             <List.Item.Meta
                                 title={<a href={"/paper?paperID=" + item.paperID}>{item.title}</a>}
-                                description={"玩了几个月，游戏的进度也差不多了，现在回顾这个开场，心里莫名有一丝孤独，旷野之息不像奥德赛，奥德赛是那种时时刻刻都有欢笑的游戏，但旷野之息给我的感觉却带有一些悲怆，在捕鱼逗怪摘苹果的日常之外"}
+                                description={item.abstract}
                             />
                         </List.Item>
                     )}

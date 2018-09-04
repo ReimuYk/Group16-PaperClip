@@ -124,6 +124,7 @@ public class PaperServiceImpl implements PaperService {
         Paper p = paperRepo.findOne(paperID);
         List<PaperPage> pagelist = paperPageRepo.findByPaper(p);
         PaperPage page = null;
+
         for (PaperPage pp:pagelist){
             if (pp.getPagination()==pagination){
                 page = pp;

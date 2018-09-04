@@ -60,6 +60,7 @@ public class SearchServiceImpl implements SearchService {
 
     public JSONArray searchPaper(JSONObject data1) throws UnsupportedEncodingException {
         String searchText = data1.getString("searchText");
+        Integer needImg = data1.getInt("needImg");
         searchText = URLDecoder.decode(searchText, "UTF-8");
 
         JSONArray data = new JSONArray();
@@ -83,7 +84,10 @@ public class SearchServiceImpl implements SearchService {
 
                 JSONObject paper = new JSONObject();
                 paper.accumulate("paperID", p.getId());
-                paper.accumulate("paperImg", imgService.getPdfImg(p));
+                paper.accumulate("abstract",imgService.getPaperAbstract(p));
+                if(needImg == 1) {
+                    paper.accumulate("paperImg", imgService.getPdfImg(p));
+                }
                 paper.accumulate("title", URLDecoder.decode(p.getTitle(), "UTF-8"));
                 paper.accumulate("author", URLDecoder.decode(p.getAuthor(), "UTF-8"));
                 paper.accumulate("keyword", URLDecoder.decode(p.getKeyWords(), "UTF-8"));
@@ -96,7 +100,7 @@ public class SearchServiceImpl implements SearchService {
             }
         }
 
-        JSONArray recommands = getRecommendPaper();
+        JSONArray recommands = getRecommendPaper(needImg);
 
         JSONObject paperObject = new JSONObject();
         paperObject.accumulate("papers", papers);
@@ -160,7 +164,38 @@ public class SearchServiceImpl implements SearchService {
             }
             JSONObject recommand = new JSONObject();
             recommand.accumulate("paperID", paper.getId());
+            recommand.accumulate("abstract", imgService.getPaperAbstract(paper));
             recommand.accumulate("paperImg", imgService.getPdfImg(paper));
+            recommand.accumulate("title", URLDecoder.decode(paper.getTitle(), "UTF-8"));
+            recommand.accumulate("author", URLDecoder.decode(paper.getAuthor(), "UTF-8"));
+            recommand.accumulate("keyword", URLDecoder.decode(paper.getKeyWords(), "UTF-8"));
+            recommand.accumulate("noteno", noteRepo.findByPaper(paper).size());
+            recommand.accumulate("starno", starPaperRepo.findByPaper(paper).size());
+            recommands.add(recommand);
+            if(count >= 14){
+                break;
+            }
+            count += 1;
+        }
+
+        return  recommands;
+    }
+
+    public JSONArray getRecommendPaper(Integer needImg) throws UnsupportedEncodingException {
+        JSONArray recommands = new JSONArray();
+
+        List<Paper> papers = paperRepo.getRecommendPaper();
+        int count = 0;
+        for(Paper paper:papers) {
+            if(docPdfRepo.findOne(paper.getId())!=null){
+                continue;
+            }
+            JSONObject recommand = new JSONObject();
+            recommand.accumulate("paperID", paper.getId());
+            if(needImg == 1){
+                recommand.accumulate("abstract", imgService.getPaperAbstract(paper));
+                recommand.accumulate("paperImg", imgService.getPdfImg(paper));
+            }
             recommand.accumulate("title", URLDecoder.decode(paper.getTitle(), "UTF-8"));
             recommand.accumulate("author", URLDecoder.decode(paper.getAuthor(), "UTF-8"));
             recommand.accumulate("keyword", URLDecoder.decode(paper.getKeyWords(), "UTF-8"));

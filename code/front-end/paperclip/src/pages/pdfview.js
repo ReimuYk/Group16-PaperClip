@@ -81,6 +81,7 @@ class PDFView extends Component{
         }
     }
     getData = (paperID,pagination) =>{
+        console.log("1page:"+pagination);
         let that  = this;
         if (that.state.cacheData[pagination-1]==undefined){
             let jsonbody = {};
@@ -92,6 +93,7 @@ class PDFView extends Component{
             options.method='POST';
             options.headers={ 'Accept': 'application/json', 'Content-Type': 'application/json'};
             options.body = JSON.stringify(jsonbody);
+            console.log("2page:"+pagination);
             fetch(url, options)
             .then(response=>response.text())
             .then(responseJson=>{
