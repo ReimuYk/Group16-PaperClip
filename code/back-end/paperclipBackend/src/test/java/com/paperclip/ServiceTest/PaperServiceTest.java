@@ -1,14 +1,11 @@
 package com.paperclip.ServiceTest;
 
 import com.paperclip.dao.entityDao.PaperRepository;
-import com.paperclip.model.Entity.Paper;
-import com.paperclip.service.SearchService;
-import com.paperclip.service.UserService;
-import com.paperclip.service.UserStarService;
+import com.paperclip.service.PaperService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,9 +23,9 @@ import java.util.List;
 @Transactional
 @SpringBootTest
 @Rollback(false)
-public class SearchServiceTest {
+public class PaperServiceTest {
     @Autowired
-    private SearchService service;
+    private PaperService service;
 
     @Autowired
     private PaperRepository paperRepo;
@@ -44,12 +41,27 @@ public class SearchServiceTest {
     }
 
     @Test
-    public void testSearchPaper() throws UnsupportedEncodingException {
+    public void testGetPaperDetail() throws UnsupportedEncodingException {
         JSONObject data = new JSONObject();
-        data.accumulate("searchText","2");
-        data.accumulate("needImg",1);
-        JSONArray a = service.searchPaper(data);
-        System.out.println(a.toString());
+        data.accumulate("paperID",1);
+        data.accumulate("pagination",1);
+        JSONObject a = service.getPaperDetail(data);
+        Assert.assertEquals(5,a.getInt("pagenum"));
+        data.accumulate("username","user1");
+        a = service.getPaperDetail(data);
+        Assert.assertEquals(5,a.getInt("pagenum"));
     }
 
+    @Test
+    public void testGetBlockPostils () throws UnsupportedEncodingException {
+        JSONObject data = new JSONObject();
+        data.accumulate("paperID",1);
+        data.accumulate("pagination",1);
+        JSONArray sel = new JSONArray();
+        sel.add(5);
+        data.accumulate("selectid",sel);
+        data.accumulate("username","user1");
+        JSONArray res = service.getBlockPostils(data);
+        System.out.println(res);
+    }
 }
