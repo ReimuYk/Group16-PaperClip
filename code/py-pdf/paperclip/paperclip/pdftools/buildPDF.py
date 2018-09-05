@@ -77,7 +77,7 @@ def setMark(infile,outfile,postils):
                 draw.line((start[0],start[1],end[0],end[1]),fill='red',width=6)
         numloc = blocks[-1]["end"]
         numloc = (numloc[0]+10,numloc[1]-10)
-        ft=ImageFont.truetype("MSYH.TTC", 30)
+        ft=ImageFont.truetype("msyh.ttc", 30)
         draw.text(numloc,str(postil["order"]),fill='red',font=ft)
     in_img.save(outfile)
 def setPostil(outfile,postils):
