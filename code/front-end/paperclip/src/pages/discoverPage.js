@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import { Input, Select, Carousel, List, Avatar, Card, Icon } from 'antd';
+import { Input, Select, Spin, List, Avatar, Card, Icon } from 'antd';
 import { Row, Col } from 'antd';
 import NavBar from '.././components/nav-bar';
 import { IPaddress } from '../App'
@@ -22,7 +22,9 @@ class Discover extends Component{
         this.selectChange = this.selectChange.bind(this);
 
         this.state = {
-            searchIdx: "empty"
+            searchIdx: "empty",
+            loadingNote:true,
+            loadingPaper:true
         }
     }
     componentWillMount = () =>{
@@ -47,6 +49,7 @@ class Discover extends Component{
                 let data = eval(responseJson);
                 information.recommendNote = data;
                 that.setState({
+                    loadingNote:false
                 })
             }).catch(function(e){
             console.log("Oops, error");
@@ -58,6 +61,7 @@ class Discover extends Component{
                 let data = eval(responseJson);
                 information.recommendPaper = data;
                 that.setState({
+                    loadingPaper:false
                 })
             }).catch(function(e){
             console.log("Oops, error");
@@ -75,6 +79,22 @@ class Discover extends Component{
     }
 
     renderRecommendNote(){
+        if (this.state.loadingNote){
+            return(
+                <div style={{ width: "90%", textAlign:'left', marginLeft:'40px'}}>
+                    <div class="icon" style={{marginTop:"10px", marginLeft:"0px", marginBottom:"10px",textAlign:"left"
+                    ,backgroundColor:"white",lineHeight:"50px",boxShadow:"0px 1px 3px #BDBCBC",
+                    borderRadius:"2px",padding:"0 20px"}}>
+                    <Icon type="rocket" style={{fontSize:"16px",color:"#F08080"}}/>
+                    <span style={{marginLeft: "10px",fontFamily:"Microsoft Yahei",fontSize:"17px"}}>热门笔记</span>
+                </div>
+                    <div style={{textAlign:'left',backgroundColor:"white",boxShadow:"0px 1px 3px #BDBCBC",borderRadius:"2px",
+                    padding:"16px 20px"}}>
+                        <Spin size="large" />
+                    </div>
+                </div>
+            );
+        }
         const IconText = ({ type, text }) => (
             <span>
                 <Icon type={type} style={{ marginRight: 8 }} />
@@ -114,6 +134,22 @@ class Discover extends Component{
     }
 
     renderRecommendPaper(){
+        if (this.state.loadingPaper){
+            return(
+                <div style={{ width: "90%", textAlign:'left', marginLeft:'40px'}}>
+                    <div class="icon" style={{marginTop:"10px", marginLeft:"0px", marginBottom:"10px",textAlign:"left"
+                        ,backgroundColor:"white",lineHeight:"50px",boxShadow:"0px 1px 3px #BDBCBC",
+                        borderRadius:"2px",padding:"0 20px"}}>
+                        <Icon type="smile" style={{color:"	#5F9EA0"}}/>
+                        <span style={{marginLeft: "10px",fontFamily:"Microsoft Yahei",fontSize:"17px"}}>热门论文</span>
+                    </div>
+                    <div style={{textAlign:'left',backgroundColor:"white",boxShadow:"0px 1px 3px #BDBCBC",borderRadius:"2px",
+                    padding:"16px 20px"}}>
+                        <Spin size="large" />
+                    </div>
+                </div>
+            );
+        }
         const IconText = ({ type, text }) => (
             <span>
                 <Icon type={type} style={{ marginRight: 8 }} />

@@ -12,6 +12,7 @@ import sun.misc.BASE64Encoder;
 
 import javax.validation.constraints.Null;
 import java.io.*;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 @Service
@@ -191,7 +192,7 @@ public class ImgServiceImpl implements ImgService {
                 BufferedReader br = new BufferedReader(isr);
                 String lineTxt = null;
                 while ((lineTxt = br.readLine()) != null) {
-                    result += lineTxt;
+                    result += URLDecoder.decode(lineTxt,"UTF-8");
                 }
                 br.close();
             } else {

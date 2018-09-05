@@ -91,7 +91,8 @@ class Sider extends React.Component {
 class Home extends Component{
     state = {
         recommendData: [],
-        paperData:[]
+        paperData:[],
+        isLoading:true
     }
     constructor(props){
         super(props);
@@ -138,13 +139,22 @@ class Home extends Component{
                 }
                 that.setState({
                     recommendData: data[1].recommand,
-                    paperData: papers
+                    paperData: papers,
+                    isLoading:false
                 })
             }).catch(function(e){
             console.log("Oops, error");
         })
     }
     renderRecommend = () =>{
+        if (this.state.isLoading){
+            return(
+                <div style={{textAlign:'left',backgroundColor:"white",boxShadow:"0px 1px 3px #BDBCBC",borderRadius:"2px",
+                padding:"16px 20px"}}>
+                    <Spin size="large" />
+                </div>
+            );
+        }
         return(
             <div style={{textAlign:'left',backgroundColor:"white",boxShadow:"0px 1px 3px #BDBCBC",borderRadius:"2px",
             padding:"16px 20px"}}>
@@ -169,12 +179,20 @@ class Home extends Component{
         )
     }
     renderPersonal = () =>{
+        if (this.state.isLoading){
+            return(
+                <div style={{textAlign:'left',backgroundColor:"white",boxShadow:"0px 1px 3px #BDBCBC",borderRadius:"2px",
+                padding:"16px 20px"}}>
+                    <Spin size="large" />
+                </div>
+            );
+        }
         return(
             <div style={{textAlign:'left',backgroundColor:"white",boxShadow:"0px 1px 3px #BDBCBC",borderRadius:"2px",
             padding:"16px 20px"}}>
                 <List
                     itemLayout="vertical"
-                    pagination={{pageSize: 12}}
+                    pagination={{pageSize: 5}}
                     dataSource={this.state.paperData}
                     renderItem={item => (
                         <List.Item
