@@ -1,5 +1,6 @@
 package com.paperclip.service.impl;
 
+import com.paperclip.dao.entityDao.PaperRepository;
 import com.paperclip.dao.entityDao.UserRepository;
 import com.paperclip.model.Entity.Paper;
 import com.paperclip.model.Entity.User;
@@ -14,6 +15,9 @@ import javax.validation.constraints.Null;
 import java.io.*;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class ImgServiceImpl implements ImgService {
@@ -44,8 +48,15 @@ public class ImgServiceImpl implements ImgService {
             +"XZPH4OcyR4bgniLLuLtcXXhSfK/a117KOn+kubW159NnRuOwuLxsnLH460tpPvKlRjFv6per/E2BAm+onLlEy3HoT4fp5qZyvvwKl4f8HqFOp"+
             "Crnr510tP2FsuWLfTacn1a7rok/Us3EYmww1orXGWtK2orrywXWT1rbfdvour6maCkqa2ep/ddfu2ci5p6KCm/abbv28wACKS"+
             "gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//Z";
+
+    private static Map imgMap = new HashMap();
+    private static Map abstractMap = new HashMap();
+
     @Autowired
     private UserRepository userRepo;
+
+    @Autowired
+    private PaperRepository paperRepo;
 
     //输入:username,imgStr-------------base64字符串转图片保存在服务器
     public JSONObject uploadAvatar(JSONObject data) throws UnsupportedEncodingException {
@@ -145,8 +156,17 @@ public class ImgServiceImpl implements ImgService {
     }
 
     public String getPdfImg(Paper paper){
+        if (imgMap.isEmpty()){
+            List<Paper> papers = (List<Paper>) paperRepo.findAll();
+            for(Paper pp: papers){
+                String img = getPdfImg(pp.getId());
+                imgMap.put(pp.getId(),img);
+            }
+        }
+        return (String)imgMap.get(paper.getId());
+    }
+    public String getPdfImg(Long id){
         String path = "./data/pdf-jpg";
-        Long id = paper.getId();
         String path1 = path + "\\" + id+  ".jpg";
         String path2 = path + "\\" + id+  "..jpg";
         InputStream in = null;
@@ -183,7 +203,20 @@ public class ImgServiceImpl implements ImgService {
     }
 
     public String getPaperAbstract(Paper paper) {
-        String filePath = "./data/pdf-txt/"+ paper.getId()+".txt";
+        if (abstractMap.isEmpty()) {
+            System.out.println("empty map");
+            List<Paper> papers = (List<Paper>) paperRepo.findAll();
+            for (Paper pp : papers) {
+                String abstact = getPaperAbstract(pp.getId());
+                abstractMap.put(pp.getId(), abstact);
+            }
+        }
+
+        return (String) abstractMap.get(paper.getId());
+    }
+
+    public String getPaperAbstract(Long id) {
+        String filePath = "./data/pdf-txt/"+ id+".txt";
         String result = "";
         try {
             File file = new File(filePath);

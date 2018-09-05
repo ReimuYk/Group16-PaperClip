@@ -88,9 +88,9 @@ public class SearchServiceImpl implements SearchService {
 
                 JSONObject paper = new JSONObject();
                 paper.accumulate("paperID", p.getId());
-                paper.accumulate("abstract",imgService.getPaperAbstract(p));
                 if(needImg == 1) {
                     paper.accumulate("paperImg", imgService.getPdfImg(p));
+                    paper.accumulate("abstract",imgService.getPaperAbstract(p));
                 }
                 paper.accumulate("title", URLDecoder.decode(p.getTitle(), "UTF-8"));
                 paper.accumulate("author", URLDecoder.decode(p.getAuthor(), "UTF-8"));
