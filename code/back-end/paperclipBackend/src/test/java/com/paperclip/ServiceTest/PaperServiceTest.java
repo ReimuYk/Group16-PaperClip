@@ -27,9 +27,6 @@ public class PaperServiceTest {
     @Autowired
     private PaperService service;
 
-    @Autowired
-    private PaperRepository paperRepo;
-
     @Before
     public void before() {
         System.out.println("test begin!");
