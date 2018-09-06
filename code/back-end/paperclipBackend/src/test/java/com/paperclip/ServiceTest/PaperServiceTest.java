@@ -22,7 +22,7 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 @SpringBootTest
-@Rollback(false)
+@Rollback(true)
 public class PaperServiceTest {
     @Autowired
     private PaperService service;
@@ -62,6 +62,46 @@ public class PaperServiceTest {
         data.accumulate("selectid",sel);
         data.accumulate("username","user1");
         JSONArray res = service.getBlockPostils(data);
+        System.out.println(res);
+    }
+
+    @Test
+    public void testAddPostilComment () throws UnsupportedEncodingException {
+        JSONObject data = new JSONObject();
+        data.accumulate("posID",1);
+        data.accumulate("username","user1");
+        data.accumulate("content","this is a unit test content");
+        JSONObject res = service.addPostilComment(data);
+        System.out.println(res);
+    }
+
+    @Test
+    public void testAddPostil () throws UnsupportedEncodingException {
+        JSONObject data = new JSONObject();
+        data.accumulate("username","user1");
+        data.accumulate("content","this is a unit test postil");
+        JSONArray ja = new JSONArray();
+        ja.add(1);
+        ja.add(2);
+        ja.add(3);
+        data.accumulate("blockList",ja);
+        JSONObject res = service.addPostil(data);
+        System.out.println(res);
+    }
+
+    @Test
+    public void testGetNoteList () throws UnsupportedEncodingException {
+        JSONObject data = new JSONObject();
+        data.accumulate("paperID",1);
+        JSONObject res = service.getNoteList(data);
+        System.out.println(res);
+    }
+
+    @Test
+    public void testGetBlocksOfPostil () throws UnsupportedEncodingException{
+        JSONObject data = new JSONObject();
+        data.accumulate("posID",1);
+        JSONArray res = service.getBlocksOfPostil(data);
         System.out.println(res);
     }
 }
