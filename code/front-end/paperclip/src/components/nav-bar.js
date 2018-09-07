@@ -21,13 +21,15 @@ var information = {
 const Search = Input.Search;
 const TabPane = Tabs.TabPane
 
+
 class NavBar extends Component{
     constructor(props){
         super(props);
         this.state = {
             isLog:false,
-            searchIdx:"empty"
+            searchIdx:""
         }
+
     }
 
     logout = () =>{
@@ -308,11 +310,16 @@ class NavBar extends Component{
             );
     }
 
+    changeSearchIdx(e){
+        var value = e.target.value
+        //searchText = value;
+        console.log("search value:"+value);
+    }
     render() {
 
         const search = (
                 <Search
-                placeholder="input search text"
+                placeholder={"input search text"}
                 onChange={this.changeSearchIdx}
                 onSearch={value => window.location.href = '/search?content=' + value}
                 />
