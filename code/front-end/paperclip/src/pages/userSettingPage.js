@@ -81,8 +81,10 @@ class UserSetting extends Component{
         if (!isLt2M) {
           message.error('头像必须小于6M！', 3);
         }        
-        this.uploadAvatar(file);
-        return isJPG && isLt2M;
+        if(isJPG && isLt2M){
+            this.uploadAvatar(file);
+        }
+        //return isJPG && isLt2M;
     }
 
     toggle = () => {

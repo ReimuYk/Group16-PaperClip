@@ -71,7 +71,11 @@ public class SearchServiceImpl implements SearchService {
 
         Iterable<Paper> allPaper = paperRepo.findAll();
 
+        Integer count = 0;
         for(Paper p: allPaper){
+            if(needImg == 1 && count > 9){  //首页：你可能感兴趣--限制数目以提高速度
+                break;
+            }
             if (docPdfRepo.findOne(p.getId()) == null && match(searchText,p)) {
                 String tag = URLDecoder.decode(p.getTag(),"UTF-8");
                 String[] taglist = tag.split(";");
@@ -84,9 +88,9 @@ public class SearchServiceImpl implements SearchService {
 
                 JSONObject paper = new JSONObject();
                 paper.accumulate("paperID", p.getId());
-                paper.accumulate("abstract",imgService.getPaperAbstract(p));
                 if(needImg == 1) {
                     paper.accumulate("paperImg", imgService.getPdfImg(p));
+                    paper.accumulate("abstract",imgService.getPaperAbstract(p));
                 }
                 paper.accumulate("title", URLDecoder.decode(p.getTitle(), "UTF-8"));
                 paper.accumulate("author", URLDecoder.decode(p.getAuthor(), "UTF-8"));
@@ -97,6 +101,7 @@ public class SearchServiceImpl implements SearchService {
                 paper.accumulate("source",taglist[1]);
                 //System.out.println(paper.toString());
                 papers.add(paper);
+                count++;
             }
         }
 

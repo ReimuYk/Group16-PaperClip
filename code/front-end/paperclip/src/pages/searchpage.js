@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Menu, Icon, Dropdown, Tag, Card, List, Divider } from 'antd';
+import { Menu, Icon, Dropdown, Tag, Card, List, Divider ,Spin} from 'antd';
 import NavBar from '../components/nav-bar'
 import {Link} from 'react-router-dom';
 import { IPaddress } from '../App'
@@ -28,6 +28,7 @@ class Search extends Component{
         recommendData: [],
         selectedTags1: [],
         selectedTags2: [],
+        isLoading:true
     }
     constructor(props) {
         super(props);
@@ -115,7 +116,8 @@ class Search extends Component{
                 }
 
                 that.setState({
-                    recommendData: data[1].recommand
+                    recommendData: data[1].recommand,
+                    isLoading:false
                 })
             })/*.catch(function(e){
             console.log("Oops, error");
@@ -195,6 +197,14 @@ class Search extends Component{
         )
     }
     renderList(){
+        if(this.state.isLoading){
+            return(
+                <div style={{backgroundColor:"white",lineHeight:"40px",boxShadow:"0px 1px 3px #BDBCBC",
+                borderRadius:"2px",padding:"5px 20px",marginTop:"1%",marginBottom:"2%"}}>
+                <Spin size="large" />
+                </div>
+            );
+        }
         return(
             <div style={{backgroundColor:"white",lineHeight:"40px",boxShadow:"0px 1px 3px #BDBCBC",
             borderRadius:"2px",padding:"5px 20px",marginTop:"1%",marginBottom:"2%"}}>
